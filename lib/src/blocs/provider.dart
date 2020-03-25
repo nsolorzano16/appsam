@@ -1,6 +1,7 @@
 import 'package:appsam/src/blocs/asistentes_bloc.dart';
 import 'package:appsam/src/blocs/asistentes_bloc/create_edit_asistentes.dart';
 import 'package:appsam/src/blocs/asistentes_bloc/resetPassword_bloc.dart';
+import 'package:appsam/src/blocs/consulta_bloc.dart';
 import 'package:appsam/src/blocs/login_bloc.dart';
 import 'package:appsam/src/blocs/pacientes_bloc.dart';
 import 'package:appsam/src/blocs/preclinica_bloc.dart';
@@ -15,6 +16,7 @@ class Provider extends InheritedWidget {
   final _pacientesBloc = new PacientesBloc();
   final _preclinicaBloc = new PreclinicaBloc();
   final blocTheme = new ThemeBloc();
+  final _consultaBloc = new ConsultaBloc();
 
   static Provider _instancia;
 
@@ -68,5 +70,9 @@ class Provider extends InheritedWidget {
     return context
         .dependOnInheritedWidgetOfExactType<Provider>()
         ._preclinicaBloc;
+  }
+
+  static ConsultaBloc consultaBloc(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<Provider>()._consultaBloc;
   }
 }

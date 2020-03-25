@@ -49,8 +49,7 @@ class _CrearAsistentesPageState extends State<CrearAsistentesPage> {
         mask: '####-####', filter: {"#": RegExp(r'[0-9]')});
     MaskTextInputFormatter maskTelefono2 = new MaskTextInputFormatter(
         mask: '####-####', filter: {"#": RegExp(r'[0-9]')});
-    MaskTextInputFormatter maskIdentificacion = new MaskTextInputFormatter(
-        mask: '####-####-#####', filter: {"#": RegExp(r'[0-9]')});
+
     final bloc = Provider.crearEditarAsistentesBloc(context);
 
     return Scaffold(
@@ -60,67 +59,52 @@ class _CrearAsistentesPageState extends State<CrearAsistentesPage> {
         ),
         drawer: MenuWidget(),
         body: SingleChildScrollView(
-          child: Container(
-            margin: EdgeInsets.only(
-                top: 10.0, left: 10.0, right: 10.0, bottom: 10.0),
-            child: Card(
-              elevation: 6.0,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30.0)),
+          child: Form(
+              key: _formKey,
               child: Column(
                 children: <Widget>[
-                  SizedBox(
-                    height: 15,
+                  _espacio(),
+                  _crearCampoNombre(_asistente),
+                  _espacio(),
+                  _crearCampoPrimerAppellido(_asistente),
+                  _espacio(),
+                  _crearCampoSegundoAppellido(_asistente),
+                  _espacio(),
+                  _crearCampoIdentificacion(_asistente),
+                  _espacio(),
+                  _crearFecha(context, bloc.fechaNacimientoStream,
+                      bloc.changeFechaNacimiento),
+                  _espacio(),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Container(
+                          padding: EdgeInsets.only(left: 25),
+                          child: Text(
+                            'Genero',
+                            style: TextStyle(fontSize: 16.0),
+                          ))
+                    ],
                   ),
-                  Form(
-                      key: _formKey,
-                      child: Column(
-                        children: <Widget>[
-                          _crearCampoNombre(_asistente),
-                          _espacio(),
-                          _crearCampoPrimerAppellido(_asistente),
-                          _espacio(),
-                          _crearCampoSegundoAppellido(_asistente),
-                          _espacio(),
-                          _crearCampoIdentificacion(
-                              maskIdentificacion, _asistente),
-                          _espacio(),
-                          _crearFecha(context, bloc.fechaNacimientoStream,
-                              bloc.changeFechaNacimiento),
-                          _espacio(),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Container(
-                                  padding: EdgeInsets.only(left: 25),
-                                  child: Text(
-                                    'Genero',
-                                    style: TextStyle(fontSize: 16.0),
-                                  ))
-                            ],
-                          ),
-                          _crearSexo('M', 'Masculino'),
-                          _crearSexo('F', 'Femenino'),
-                          _crearCampoTelefono1(maskTelefono1, _asistente),
-                          _espacio(),
-                          _crearCampoTelefono2(maskTelefono2, _asistente),
-                          _espacio(),
-                          _crearCampoColegioNumero(_asistente),
-                          _espacio(),
-                          _crearCampoEmail(_asistente),
-                          _espacio(),
-                          _crearCampoUsuario(_asistente),
-                          _espacio(),
-                          _crearCampoPassword(_asistente),
-                          _espacio(),
-                          _crearCampoNotas(_asistente),
-                          _crearBotones(_asistente, bloc),
-                        ],
-                      )),
+                  _crearSexo('M', 'Masculino'),
+                  _crearSexo('F', 'Femenino'),
+                  _crearCampoTelefono1(maskTelefono1, _asistente),
+                  _espacio(),
+                  _crearCampoTelefono2(maskTelefono2, _asistente),
+                  _espacio(),
+                  _crearCampoColegioNumero(_asistente),
+                  _espacio(),
+                  _crearCampoEmail(_asistente),
+                  _espacio(),
+                  _crearCampoUsuario(_asistente),
+                  _espacio(),
+                  _crearCampoPassword(_asistente),
+                  _espacio(),
+                  _crearCampoNotas(_asistente),
+                  _espacio(),
+                  _crearBotones(_asistente, bloc),
                 ],
-              ),
-            ),
-          ),
+              )),
         ));
   } // fin build
 
@@ -136,7 +120,7 @@ class _CrearAsistentesPageState extends State<CrearAsistentesPage> {
 
   String validaTexto(String value) {
     if (value.length <= 3) {
-      return 'mas de 3 caracteres';
+      return 'Campo obligatorio';
     } else {
       return null;
     }
@@ -146,16 +130,10 @@ class _CrearAsistentesPageState extends State<CrearAsistentesPage> {
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
+        autovalidate: true,
         controller: _txtControllerNombres,
         validator: validaTexto,
-        decoration: InputDecoration(
-          prefixIcon: Icon(
-            Icons.person,
-            color: Colors.red,
-          ),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
-          labelText: 'Nombres',
-        ),
+        decoration: inputsDecorations('Nombre', Icons.person),
         onSaved: (value) => _asistente.nombres = value,
       ),
     );
@@ -165,16 +143,10 @@ class _CrearAsistentesPageState extends State<CrearAsistentesPage> {
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
+        autovalidate: true,
         validator: validaTexto,
         controller: _txtControllerPrimerApellido,
-        decoration: InputDecoration(
-          prefixIcon: Icon(
-            Icons.person,
-            color: Colors.red,
-          ),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
-          labelText: 'Primer Apellido',
-        ),
+        decoration: inputsDecorations('Primer Apellido', Icons.person),
         onSaved: (value) => _asistente.primerApellido = value,
       ),
     );
@@ -184,15 +156,9 @@ class _CrearAsistentesPageState extends State<CrearAsistentesPage> {
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
+        autovalidate: true,
         validator: validaTexto,
-        decoration: InputDecoration(
-          prefixIcon: Icon(
-            Icons.person,
-            color: Colors.red,
-          ),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
-          labelText: 'Segundo apellido',
-        ),
+        decoration: inputsDecorations('Segundo Apellido', Icons.person),
         onSaved: (value) => _asistente.segundoApellido = value,
       ),
     );
@@ -200,33 +166,26 @@ class _CrearAsistentesPageState extends State<CrearAsistentesPage> {
 
   Widget _espacio() {
     return SizedBox(
-      height: 8.0,
+      height: 10.0,
     );
   }
 
-  _crearCampoIdentificacion(
-      MaskTextInputFormatter mask, UsuarioModel _asistente) {
+  _crearCampoIdentificacion(UsuarioModel _asistente) {
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
         controller: _txtControllerIdentificacion,
+        autovalidate: true,
+        maxLength: 13,
         validator: (value) {
           if (value.length <= 13) {
-            return 'Campo incompleto';
+            return 'Campo obligatorio';
           } else {
             return null;
           }
         },
         keyboardType: TextInputType.number,
-        inputFormatters: [mask],
-        decoration: InputDecoration(
-          prefixIcon: Icon(
-            Icons.credit_card,
-            color: Colors.red,
-          ),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
-          labelText: 'Identificación',
-        ),
+        decoration: inputsDecorations('Identificación', Icons.credit_card),
         onSaved: (value) => _asistente.identificacion = value,
       ),
     );
@@ -236,6 +195,7 @@ class _CrearAsistentesPageState extends State<CrearAsistentesPage> {
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
+        autovalidate: true,
         validator: (value) {
           if (value.length <= 8) {
             return 'Campo incompleto';
@@ -245,14 +205,7 @@ class _CrearAsistentesPageState extends State<CrearAsistentesPage> {
         },
         keyboardType: TextInputType.number,
         inputFormatters: [mask],
-        decoration: InputDecoration(
-          prefixIcon: Icon(
-            Icons.phone_android,
-            color: Colors.red,
-          ),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
-          labelText: 'Teléfono',
-        ),
+        decoration: inputsDecorations('Teléfono', Icons.phone_android),
         onSaved: (value) => _asistente.telefono1 = value,
       ),
     );
@@ -264,14 +217,8 @@ class _CrearAsistentesPageState extends State<CrearAsistentesPage> {
       child: TextFormField(
         keyboardType: TextInputType.number,
         inputFormatters: [mask],
-        decoration: InputDecoration(
-          prefixIcon: Icon(
-            Icons.phone_iphone,
-            color: Colors.red,
-          ),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
-          labelText: 'Teléfono secundario',
-        ),
+        decoration:
+            inputsDecorations('Teléfono Secundario', Icons.phone_iphone),
         onSaved: (value) => _asistente.telefono2 = value,
       ),
     );
@@ -281,14 +228,8 @@ class _CrearAsistentesPageState extends State<CrearAsistentesPage> {
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
-        decoration: InputDecoration(
-          prefixIcon: Icon(
-            Icons.confirmation_number,
-            color: Colors.red,
-          ),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
-          labelText: 'Numero colegiado',
-        ),
+        decoration:
+            inputsDecorations('Numero Colegiado', Icons.confirmation_number),
         onSaved: (value) => _asistente.colegioNumero = value,
       ),
     );
@@ -300,14 +241,7 @@ class _CrearAsistentesPageState extends State<CrearAsistentesPage> {
       child: TextFormField(
         validator: validateEmail,
         keyboardType: TextInputType.emailAddress,
-        decoration: InputDecoration(
-          prefixIcon: Icon(
-            Icons.email,
-            color: Colors.red,
-          ),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
-          labelText: 'Email',
-        ),
+        decoration: inputsDecorations('Email', Icons.email),
         onSaved: (value) => _asistente.email = value,
       ),
     );
@@ -317,13 +251,17 @@ class _CrearAsistentesPageState extends State<CrearAsistentesPage> {
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
+        autovalidate: true,
         validator: validaTexto,
         readOnly: true,
         controller: _controllerUsuario,
         keyboardType: TextInputType.text,
         decoration: InputDecoration(
           suffixIcon: IconButton(
-              icon: Icon(Icons.replay),
+              icon: Icon(
+                Icons.replay,
+                color: Colors.blue,
+              ),
               onPressed: () {
                 final String val = generateUser(
                     _txtControllerNombres.text,
@@ -337,6 +275,7 @@ class _CrearAsistentesPageState extends State<CrearAsistentesPage> {
           ),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
           labelText: 'Usuario',
+          isDense: true,
         ),
         onSaved: (value) => _asistente.userName = value,
       ),
@@ -351,19 +290,24 @@ class _CrearAsistentesPageState extends State<CrearAsistentesPage> {
         controller: _txtControllerPass,
         keyboardType: TextInputType.text,
         decoration: InputDecoration(
-          suffixIcon: IconButton(
-              icon: Icon(Icons.replay),
-              onPressed: () {
-                final String val = generatePassword(true, true, true, false, 8);
-                _txtControllerPass.text = val;
-              }),
-          prefixIcon: Icon(
-            Icons.lock,
-            color: Colors.red,
-          ),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
-          labelText: 'Contraseña',
-        ),
+            suffixIcon: IconButton(
+                icon: Icon(
+                  Icons.replay,
+                  color: Colors.blue,
+                ),
+                onPressed: () {
+                  final String val =
+                      generatePassword(true, true, true, false, 8);
+                  _txtControllerPass.text = val;
+                }),
+            prefixIcon: Icon(
+              Icons.lock,
+              color: Colors.red,
+            ),
+            border:
+                OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
+            labelText: 'Contraseña',
+            isDense: true),
         onSaved: (value) => _asistente.password = value,
       ),
     );
@@ -373,15 +317,7 @@ class _CrearAsistentesPageState extends State<CrearAsistentesPage> {
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
-        maxLines: 2,
-        decoration: InputDecoration(
-          prefixIcon: Icon(
-            Icons.confirmation_number,
-            color: Colors.red,
-          ),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
-          labelText: 'Notas',
-        ),
+        decoration: inputsDecorations('Notas', Icons.person),
         onSaved: (value) => _asistente.notas = value,
       ),
     );
@@ -395,14 +331,7 @@ class _CrearAsistentesPageState extends State<CrearAsistentesPage> {
         keyboardType: TextInputType.number,
         enableInteractiveSelection: false,
         controller: _inputFieldDateController,
-        decoration: InputDecoration(
-          prefixIcon: Icon(
-            Icons.calendar_today,
-            color: Colors.red,
-          ),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
-          labelText: 'Fecha de Nacimiento',
-        ),
+        decoration: inputsDecorations('Fecha Nacimiento', Icons.calendar_today),
         onTap: () {
           FocusScope.of(context).requestFocus(new FocusNode());
           _selectDate(context);
@@ -476,14 +405,15 @@ class _CrearAsistentesPageState extends State<CrearAsistentesPage> {
                   label: Text('Guardar'),
                   onPressed: () {
                     if (!_formKey.currentState.validate()) {
-                      Flushbar(
-                        title: 'Información',
-                        message: 'Rellene todos los campos',
-                        duration: Duration(seconds: 2),
-                        icon: Icon(
+                      mostrarFlushBar(
+                          context,
+                          Colors.redAccent,
+                          'Información',
+                          'Rellene todos los campos',
+                          2,
+                          FlushbarPosition.BOTTOM,
                           Icons.info,
-                        ),
-                      )..show(context);
+                          Colors.black);
                     } else {
                       _formKey.currentState.save();
                       final ProgressDialog _pr = new ProgressDialog(

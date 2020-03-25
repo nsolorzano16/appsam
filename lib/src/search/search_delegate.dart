@@ -1,6 +1,6 @@
 import 'package:appsam/src/blocs/provider.dart';
 import 'package:appsam/src/models/usuario_model.dart';
-import 'package:appsam/src/pages/detalle_asistente.dart';
+import 'package:appsam/src/pages/asistentes/detalle_asistente.dart';
 import 'package:appsam/src/utils/storage_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';

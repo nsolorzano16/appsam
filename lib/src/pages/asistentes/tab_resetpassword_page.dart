@@ -2,6 +2,7 @@ import 'package:appsam/src/blocs/asistentes_bloc/create_edit_asistentes.dart';
 import 'package:appsam/src/blocs/asistentes_bloc/resetPassword_bloc.dart';
 import 'package:appsam/src/models/usuario_model.dart';
 import 'package:appsam/src/utils/storage_util.dart';
+import 'package:appsam/src/utils/utils.dart';
 import 'package:appsam/src/widgets/drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:progress_dialog/progress_dialog.dart';
@@ -15,17 +16,11 @@ class ResetPasswordPage extends StatelessWidget {
     final _resetPasswordBloc = new ResetPasswordBloc();
     final blocService = new CrearEditarAsistentesBloc();
     return Scaffold(
-      drawer: MenuWidget(),
-      appBar: AppBar(
-        title: Text('Resetear Contraseña'),
-      ),
-      body: Container(
-        margin:
-            EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0, bottom: 10.0),
-        child: Card(
-          elevation: 6.0,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
+        drawer: MenuWidget(),
+        appBar: AppBar(
+          title: Text('Resetear Contraseña'),
+        ),
+        body: SingleChildScrollView(
           child: Column(
             children: <Widget>[
               SizedBox(
@@ -42,9 +37,7 @@ class ResetPasswordPage extends StatelessWidget {
               _crearBoton(_resetPasswordBloc, blocService, _asistente)
             ],
           ),
-        ),
-      ),
-    );
+        ));
   }
 
   Widget _crearCampoPassword1(BuildContext context, ResetPasswordBloc bloc) {
@@ -55,16 +48,8 @@ class ResetPasswordPage extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 20.0),
           child: TextField(
               keyboardType: TextInputType.text,
-              decoration: InputDecoration(
-                prefixIcon: Icon(
-                  Icons.lock_outline,
-                  color: Colors.redAccent,
-                ),
-                border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20.0)),
-                labelText: 'Nueva contraseña',
-                errorText: snapshot.error,
-              ),
+              decoration:
+                  inputsDecorations('Nueva Contraseña', Icons.lock_outline),
               onChanged: bloc.onPasswordChanged),
         );
       },
@@ -79,16 +64,8 @@ class ResetPasswordPage extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 20.0),
           child: TextField(
               keyboardType: TextInputType.text,
-              decoration: InputDecoration(
-                prefixIcon: Icon(
-                  Icons.lock_outline,
-                  color: Colors.redAccent,
-                ),
-                border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20.0)),
-                labelText: 'Repetir Contraseña',
-                errorText: snapshot.error,
-              ),
+              decoration:
+                  inputsDecorations('Repetir Contraseña', Icons.lock_outline),
               onChanged: bloc.onRetypePasswordChanged),
         );
       },

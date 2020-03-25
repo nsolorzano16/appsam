@@ -1,9 +1,9 @@
 import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 import 'package:appsam/src/models/paginados/preclinica_paginadoVM.dart';
 import 'package:appsam/src/utils/storage_util.dart';
 import 'package:appsam/src/utils/utils.dart';
-import 'package:http/http.dart' as http;
 
 class PreclinicaService {
   final _apiURL = EnviromentVariables().getApiURL();

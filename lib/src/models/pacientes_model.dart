@@ -1,55 +1,25 @@
 // To parse this JSON data, do
 //
-//     final pacientePaginadoModel = pacientePaginadoModelFromJson(jsonString);
+//     final pacienteModel = pacienteModelFromJson(jsonString);
 
 import 'dart:convert';
 
-PacientePaginadoModel pacientePaginadoModelFromJson(String str) =>
-    PacientePaginadoModel.fromJson(json.decode(str));
+PacienteModel pacienteModelFromJson(String str) =>
+    PacienteModel.fromJson(json.decode(str));
 
-String pacientePaginadoModelToJson(PacientePaginadoModel data) =>
-    json.encode(data.toJson());
+String pacienteModelToJson(PacienteModel data) => json.encode(data.toJson());
 
-Paciente pacienteFromJson(String str) => Paciente.fromJson(json.decode(str));
-
-String pacienteToJson(Paciente data) => json.encode(data.toJson());
-
-class PacientePaginadoModel {
-  int totalItems;
-  int totalPages;
-  int currentPage;
-  int itemCount;
-  List<Paciente> items;
-
-  PacientePaginadoModel({
-    this.totalItems,
-    this.totalPages,
-    this.currentPage,
-    this.itemCount,
-    this.items,
-  });
-
-  factory PacientePaginadoModel.fromJson(Map<String, dynamic> json) =>
-      PacientePaginadoModel(
-        totalItems: json["totalItems"],
-        totalPages: json["totalPages"],
-        currentPage: json["currentPage"],
-        itemCount: json["itemCount"],
-        items:
-            List<Paciente>.from(json["items"].map((x) => Paciente.fromJson(x))),
-      );
-
-  Map<String, dynamic> toJson() => {
-        "totalItems": totalItems,
-        "totalPages": totalPages,
-        "currentPage": currentPage,
-        "itemCount": itemCount,
-        "items": List<dynamic>.from(items.map((x) => x.toJson())),
-      };
-}
-
-class Paciente {
+class PacienteModel {
   int pacienteId;
+  int doctorId;
+  int paisId;
+  int profesionId;
+  int escolaridadId;
+  int religionId;
+  int grupoSanguineoId;
+  int grupoEtnicoId;
+  int departamentoId;
+  int municipioId;
   String nombres;
   String primerApellido;
   String segundoApellido;
@@ -81,8 +51,17 @@ class Paciente {
   DateTime modificadoFecha;
   String notas;
 
-  Paciente({
+  PacienteModel({
     this.pacienteId,
+    this.doctorId,
+    this.paisId,
+    this.profesionId,
+    this.escolaridadId,
+    this.religionId,
+    this.grupoSanguineoId,
+    this.grupoEtnicoId,
+    this.departamentoId,
+    this.municipioId,
     this.nombres,
     this.primerApellido,
     this.segundoApellido,
@@ -115,8 +94,17 @@ class Paciente {
     this.notas,
   });
 
-  factory Paciente.fromJson(Map<String, dynamic> json) => Paciente(
+  factory PacienteModel.fromJson(Map<String, dynamic> json) => PacienteModel(
         pacienteId: json["pacienteId"],
+        doctorId: json["doctorId"],
+        paisId: json["paisId"],
+        profesionId: json["profesionId"],
+        escolaridadId: json["escolaridadId"],
+        religionId: json["religionId"],
+        grupoSanguineoId: json["grupoSanguineoId"],
+        grupoEtnicoId: json["grupoEtnicoId"],
+        departamentoId: json["departamentoId"],
+        municipioId: json["municipioId"],
         nombres: json["nombres"],
         primerApellido: json["primerApellido"],
         segundoApellido: json["segundoApellido"],
@@ -151,6 +139,15 @@ class Paciente {
 
   Map<String, dynamic> toJson() => {
         "pacienteId": pacienteId,
+        "doctorId": doctorId,
+        "paisId": paisId,
+        "profesionId": profesionId,
+        "escolaridadId": escolaridadId,
+        "religionId": religionId,
+        "grupoSanguineoId": grupoSanguineoId,
+        "grupoEtnicoId": grupoEtnicoId,
+        "departamentoId": departamentoId,
+        "municipioId": municipioId,
         "nombres": nombres,
         "primerApellido": primerApellido,
         "segundoApellido": segundoApellido,

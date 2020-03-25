@@ -2,16 +2,25 @@ import 'dart:async';
 
 import 'package:appsam/src/blocs/pacientes_bloc.dart';
 import 'package:appsam/src/blocs/provider.dart';
+import 'package:appsam/src/models/departamento_model.dart';
+import 'package:appsam/src/models/escolaridad_model.dart';
 import 'package:appsam/src/models/estadocivil_model.dart';
-import 'package:appsam/src/models/paciente_model.dart';
+import 'package:appsam/src/models/grupoEtnico_model.dart';
+import 'package:appsam/src/models/grupoSanguineo_model.dart';
+import 'package:appsam/src/models/municipio_model.dart';
+import 'package:appsam/src/models/pacientes_model.dart';
+import 'package:appsam/src/models/pais_model.dart';
 import 'package:appsam/src/models/parentesco_model.dart';
-import 'package:appsam/src/models/tiposangre_model.dart';
+import 'package:appsam/src/models/profesion_model.dart';
+import 'package:appsam/src/models/religion_model.dart';
 import 'package:appsam/src/models/usuario_model.dart';
+import 'package:appsam/src/providers/combos_service.dart';
 import 'package:appsam/src/utils/storage_util.dart';
 import 'package:appsam/src/utils/utils.dart';
 import 'package:appsam/src/widgets/drawer.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:progress_dialog/progress_dialog.dart';
@@ -27,14 +36,25 @@ class _CrearPacientePageState extends State<CrearPacientePage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   String _sexo = 'M';
   DateTime picked;
-  String _tipoSangre = 'A+';
+
   String _estadoCivil = 'S';
   String _parentesco = 'otro';
+  int _profesion = 1;
+  int _pais = 83;
+  int _escolaridad = 11;
+  int _religion = 5;
+  int _grupoSanguineo = 9;
+  int _grupoEtnico = 11;
+  int _departamento = 8;
+  int _municipio;
+
   bool _menorDeEdad = false;
-  Paciente _paciente = new Paciente();
+
+  PacienteModel _paciente = new PacienteModel();
 
   TextEditingController _inputFieldDateController = new TextEditingController();
   final PacientesBloc pacientesBloc = new PacientesBloc();
+  final comboService = CombosService();
   FocusNode myFocusNode;
 
   @override
@@ -42,6 +62,7 @@ class _CrearPacientePageState extends State<CrearPacientePage> {
     super.dispose();
 
     myFocusNode.dispose();
+    pacientesBloc.dispose();
   }
 
   @override
@@ -57,14 +78,24 @@ class _CrearPacientePageState extends State<CrearPacientePage> {
     _paciente.menorDeEdad = false;
     _paciente.sexo = _sexo;
     _paciente.estadoCivil = _estadoCivil;
-    _paciente.tipoDeSangre = _tipoSangre;
+    _paciente.profesionId = _profesion;
+    _paciente.paisId = _pais;
+    _paciente.escolaridadId = _escolaridad;
+    _paciente.religionId = _religion;
+    _paciente.grupoSanguineoId = _grupoSanguineo;
+    _paciente.grupoEtnicoId = _grupoEtnico;
+    _paciente.departamentoId = _departamento;
+    _paciente.parentesco = _parentesco;
 
     MaskTextInputFormatter maskTelefono1 = new MaskTextInputFormatter(
         mask: '####-####', filter: {"#": RegExp(r'[0-9]')});
 
     MaskTextInputFormatter maskTelefono2 = new MaskTextInputFormatter(
         mask: '####-####', filter: {"#": RegExp(r'[0-9]')});
+    MaskTextInputFormatter maskIdentificacion = new MaskTextInputFormatter(
+        mask: '#############', filter: {"#": RegExp(r'[0-9]')});
     final blocPacientes = Provider.pacientesBloc(context);
+    blocPacientes.cargarMunicipios(_departamento);
 
     return Scaffold(
         key: _scaffoldKey,
@@ -76,73 +107,85 @@ class _CrearPacientePageState extends State<CrearPacientePage> {
           child: Container(
             margin: EdgeInsets.only(
                 top: 10.0, left: 10.0, right: 10.0, bottom: 10.0),
-            child: Card(
-              elevation: 6.0,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30.0)),
-              child: Column(
-                children: <Widget>[
-                  SizedBox(
-                    height: 15,
-                  ),
-                  Form(
-                      key: _formKey,
-                      child: Column(
-                        children: <Widget>[
-                          _crearCampoNombre(_paciente),
-                          _espacio(),
-                          _crearCampoPrimerApellido(_paciente),
-                          _espacio(),
-                          _crearCampoSegundoApellido(_paciente),
-                          _espacio(),
-                          _crearCampoIdentificacion(_paciente),
-                          _espacio(),
-                          _crearFecha(context, _paciente),
-                          _espacio(),
-                          _crearCampoEstadoCivil(_paciente),
-                          _espacio(),
-                          _crearCampoTipoSangre(_paciente),
-                          _espacio(),
-                          _texto('Genero'),
-                          _crearSexo('M', 'Masculino', _paciente),
-                          _crearSexo('F', 'Femenino', _paciente),
-                          _crearCampoTelefono1(maskTelefono1, _paciente),
-                          _espacio(),
-                          _crearCampoNombreEmergencia(_paciente),
-                          _espacio(),
-                          _crearCampoTelefonoEmergencia(
-                              maskTelefono2, _paciente),
-                          _espacio(),
-                          _crearCampoParentesco(_paciente),
-                          _espacio(),
-                          _crearCampoMenorDeEdad(
-                            _paciente,
-                          ),
-                          _espacio(),
-                          _crearCamposMenorDeEdad(_paciente, _menorDeEdad),
-                          _espacio(),
-                          _crearCampoNotas(_paciente),
-                          _espacio(),
-                          _crearBotones(_paciente, blocPacientes, context,
-                              _usuario, _scaffoldKey)
-                        ],
-                      ))
-                ],
-              ),
+            child: Column(
+              children: <Widget>[
+                _espacio(),
+                Form(
+                    key: _formKey,
+                    child: Column(
+                      children: <Widget>[
+                        _crearCampoNombre(_paciente),
+                        _espacio(),
+                        _crearCampoPrimerApellido(_paciente),
+                        _espacio(),
+                        _crearCampoSegundoApellido(_paciente),
+                        _espacio(),
+                        _crearCampoIdentificacion(
+                            _paciente, maskIdentificacion),
+                        _espacio(),
+                        _crearFecha(context, _paciente),
+                        _espacio(),
+                        _crearCampoEstadoCivil(_paciente),
+                        _espacio(),
+                        _crearDropDownProfesion(),
+                        _espacio(),
+                        _crearDropDownPais(),
+                        _espacio(),
+                        (_pais == 83)
+                            ? _crearDropDownDepartamento(blocPacientes)
+                            : Container(),
+                        _espacio(),
+                        (_pais == 83)
+                            ? _crearDropDownMunicipio(
+                                _departamento, blocPacientes)
+                            : Container(),
+                        _espacio(),
+                        _crearDropDownEscolaridad(),
+                        _espacio(),
+                        _crearDropDownReligion(),
+                        _espacio(),
+                        _crearDropDownGrupSanguineo(),
+                        _espacio(),
+                        _crearDropDownGrupoEtnico(),
+                        _espacio(),
+                        _texto('Genero'),
+                        _crearSexo('M', 'Masculino', _paciente),
+                        _crearSexo('F', 'Femenino', _paciente),
+                        _crearCampoTelefono1(maskTelefono1, _paciente),
+                        _espacio(),
+                        _crearCampoNombreEmergencia(_paciente),
+                        _espacio(),
+                        _crearCampoTelefonoEmergencia(maskTelefono2, _paciente),
+                        _espacio(),
+                        _crearCampoParentesco(_paciente),
+                        _espacio(),
+                        _crearCampoMenorDeEdad(
+                          _paciente,
+                        ),
+                        _espacio(),
+                        _crearCamposMenorDeEdad(_paciente, _menorDeEdad),
+                        _espacio(),
+                        _crearCampoNotas(_paciente),
+                        _espacio(),
+                        _crearBotones(_paciente, blocPacientes, context,
+                            _usuario, _scaffoldKey)
+                      ],
+                    ))
+              ],
             ),
           ),
         ));
   } // fin build
 
   String validaTexto(String value) {
-    if (value.length <= 3) {
+    if (value.length < 3) {
       return 'Campo obligatorio';
     } else {
       return null;
     }
   }
 
-  Widget _crearCampoNombre(Paciente _paciente) {
+  Widget _crearCampoNombre(PacienteModel _paciente) {
     return Padding(
       padding: EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
@@ -151,20 +194,12 @@ class _CrearPacientePageState extends State<CrearPacientePage> {
         validator: validaTexto,
         onSaved: (value) => _paciente.nombres = value,
         keyboardType: TextInputType.text,
-        decoration: InputDecoration(
-            prefixIcon: Icon(
-              Icons.account_circle,
-              color: Colors.redAccent,
-            ),
-            border:
-                OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
-            labelText: 'Nombres',
-            isDense: true),
+        decoration: inputsDecorations('Nombres', Icons.person),
       ),
     );
   }
 
-  Widget _crearCampoPrimerApellido(Paciente _paciente) {
+  Widget _crearCampoPrimerApellido(PacienteModel _paciente) {
     return Padding(
       padding: EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
@@ -172,20 +207,12 @@ class _CrearPacientePageState extends State<CrearPacientePage> {
         validator: validaTexto,
         onSaved: (value) => _paciente.primerApellido = value,
         keyboardType: TextInputType.text,
-        decoration: InputDecoration(
-            prefixIcon: Icon(
-              Icons.account_circle,
-              color: Colors.redAccent,
-            ),
-            border:
-                OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
-            labelText: 'Primer Apellido',
-            isDense: true),
+        decoration: inputsDecorations('Primer Apellido', Icons.person),
       ),
     );
   }
 
-  Widget _crearCampoSegundoApellido(Paciente _paciente) {
+  Widget _crearCampoSegundoApellido(PacienteModel _paciente) {
     return Padding(
       padding: EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
@@ -193,49 +220,33 @@ class _CrearPacientePageState extends State<CrearPacientePage> {
         validator: validaTexto,
         onSaved: (value) => _paciente.segundoApellido = value,
         keyboardType: TextInputType.text,
-        decoration: InputDecoration(
-            prefixIcon: Icon(
-              Icons.account_circle,
-              color: Colors.redAccent,
-            ),
-            border:
-                OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
-            labelText: 'Segundo Apellido',
-            isDense: true),
+        decoration: inputsDecorations('Segundo Apellido', Icons.person),
       ),
     );
   }
 
   Widget _espacio() {
     return SizedBox(
-      height: 8.0,
+      height: 10.0,
     );
   }
 
-  Widget _crearCampoIdentificacion(Paciente _paciente) {
+  Widget _crearCampoIdentificacion(
+      PacienteModel _paciente, TextInputFormatter mask) {
     return Padding(
       padding: EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
-        autovalidate: true,
-        validator: validaTexto,
-        onSaved: (value) => _paciente.identificacion = value,
-        maxLength: 13,
-        keyboardType: TextInputType.number,
-        decoration: InputDecoration(
-            prefixIcon: Icon(
-              Icons.credit_card,
-              color: Colors.redAccent,
-            ),
-            border:
-                OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
-            labelText: 'Identificación',
-            isDense: true,
-            hintText: 'Sin guiones'),
-      ),
+          autovalidate: true,
+          validator: validaTexto,
+          inputFormatters: [mask],
+          onSaved: (value) => _paciente.identificacion = value,
+          maxLength: 13,
+          keyboardType: TextInputType.number,
+          decoration: inputsDecorations('Identificación', Icons.credit_card)),
     );
   }
 
-  Widget _crearFecha(BuildContext context, Paciente _paciente) {
+  Widget _crearFecha(BuildContext context, PacienteModel _paciente) {
     return Padding(
       padding: EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
@@ -243,15 +254,8 @@ class _CrearPacientePageState extends State<CrearPacientePage> {
         validator: validaTexto,
         enableInteractiveSelection: false,
         controller: _inputFieldDateController,
-        decoration: InputDecoration(
-            prefixIcon: Icon(
-              Icons.calendar_today,
-              color: Colors.red,
-            ),
-            border:
-                OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
-            labelText: 'Fecha de Nacimiento',
-            isDense: true),
+        decoration:
+            inputsDecorations('Fecha de Nacimiento', Icons.calendar_today),
         onTap: () {
           FocusScope.of(context).requestFocus(new FocusNode());
           _selectDate(context, _paciente);
@@ -261,7 +265,7 @@ class _CrearPacientePageState extends State<CrearPacientePage> {
     );
   }
 
-  _selectDate(BuildContext context, Paciente _paciente) async {
+  _selectDate(BuildContext context, PacienteModel _paciente) async {
     picked = await showDatePicker(
         context: context,
         initialDate: new DateTime.now(),
@@ -276,7 +280,7 @@ class _CrearPacientePageState extends State<CrearPacientePage> {
     }
   }
 
-  _crearSexo(value, String title, Paciente _paciente) {
+  _crearSexo(value, String title, PacienteModel _paciente) {
     return RadioListTile(
         title: (Text(title)),
         value: value,
@@ -288,7 +292,7 @@ class _CrearPacientePageState extends State<CrearPacientePage> {
         });
   }
 
-  _crearCampoTelefono1(MaskTextInputFormatter mask, Paciente _paciente) {
+  _crearCampoTelefono1(MaskTextInputFormatter mask, PacienteModel _paciente) {
     return Padding(
       padding: EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
@@ -297,20 +301,12 @@ class _CrearPacientePageState extends State<CrearPacientePage> {
         onSaved: (value) => _paciente.telefono1 = value,
         keyboardType: TextInputType.number,
         inputFormatters: [mask],
-        decoration: InputDecoration(
-            prefixIcon: Icon(
-              Icons.phone,
-              color: Colors.redAccent,
-            ),
-            border:
-                OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
-            labelText: 'Teléfono',
-            isDense: true),
+        decoration: inputsDecorations('Teléfono', Icons.phone_android),
       ),
     );
   }
 
-  Widget _crearCampoNombreEmergencia(Paciente _paciente) {
+  Widget _crearCampoNombreEmergencia(PacienteModel _paciente) {
     return Padding(
       padding: EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
@@ -318,21 +314,13 @@ class _CrearPacientePageState extends State<CrearPacientePage> {
         validator: validaTexto,
         onSaved: (value) => _paciente.nombreEmergencia = value,
         keyboardType: TextInputType.text,
-        decoration: InputDecoration(
-            prefixIcon: Icon(
-              Icons.account_circle,
-              color: Colors.redAccent,
-            ),
-            border:
-                OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
-            labelText: 'Contacto Emergencia',
-            isDense: true),
+        decoration: inputsDecorations('Contacto Emergencia', Icons.person),
       ),
     );
   }
 
   _crearCampoTelefonoEmergencia(
-      MaskTextInputFormatter mask, Paciente _paciente) {
+      MaskTextInputFormatter mask, PacienteModel _paciente) {
     return Padding(
       padding: EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
@@ -341,20 +329,13 @@ class _CrearPacientePageState extends State<CrearPacientePage> {
         onSaved: (value) => _paciente.telefonoEmergencia = value,
         keyboardType: TextInputType.number,
         inputFormatters: [mask],
-        decoration: InputDecoration(
-            prefixIcon: Icon(
-              Icons.phone,
-              color: Colors.redAccent,
-            ),
-            border:
-                OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
-            labelText: 'Teléfono contacto emergencia',
-            isDense: true),
+        decoration:
+            inputsDecorations('Teléfono Contacto Emergencia', Icons.phone),
       ),
     );
   }
 
-  Widget _crearCampoParentesco(Paciente _paciente) {
+  Widget _crearCampoParentesco(PacienteModel _paciente) {
     final parentescoLista = new List<ParentescoModel>();
     parentescoLista.add(new ParentescoModel(texto: 'Hij@', valor: 'hij@'));
     parentescoLista.add(new ParentescoModel(texto: 'Madre', valor: 'madre'));
@@ -364,13 +345,7 @@ class _CrearPacientePageState extends State<CrearPacientePage> {
     return Padding(
       padding: EdgeInsets.only(left: 8.0, right: 8.0),
       child: InputDecorator(
-          decoration: InputDecoration(
-            labelText: 'Parentesco',
-            isDense: true,
-            prefixIcon: Icon(Icons.face, color: Colors.red),
-            border:
-                OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
-          ),
+          decoration: inputsDecorations('Parentesco', Icons.people),
           child: DropdownButtonHideUnderline(
               child: DropdownButton(
             value: _parentesco,
@@ -391,7 +366,7 @@ class _CrearPacientePageState extends State<CrearPacientePage> {
     );
   }
 
-  Widget _crearCampoEstadoCivil(Paciente _paciente) {
+  Widget _crearCampoEstadoCivil(PacienteModel _paciente) {
     final estadoCivilLista = new List<EstadoCivilModel>();
     estadoCivilLista.add(new EstadoCivilModel(texto: 'Solter@', valor: 'S'));
     estadoCivilLista.add(new EstadoCivilModel(texto: 'Casad@', valor: 'C'));
@@ -402,13 +377,7 @@ class _CrearPacientePageState extends State<CrearPacientePage> {
     return Padding(
       padding: EdgeInsets.only(left: 8.0, right: 8.0),
       child: InputDecorator(
-          decoration: InputDecoration(
-            labelText: 'Estado Civil',
-            isDense: true,
-            prefixIcon: Icon(Icons.face, color: Colors.red),
-            border:
-                OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
-          ),
+          decoration: inputsDecorations('Estado Civil', Icons.face),
           child: DropdownButtonHideUnderline(
               child: DropdownButton(
             value: _estadoCivil,
@@ -429,51 +398,8 @@ class _CrearPacientePageState extends State<CrearPacientePage> {
     );
   }
 
-  Widget _crearCampoTipoSangre(Paciente _paciente) {
-    final tipoSangreLista = new List<TipoSangreModel>();
-    tipoSangreLista.add(new TipoSangreModel(texto: 'A+', valor: 'A+'));
-    tipoSangreLista.add(new TipoSangreModel(texto: 'A-', valor: 'A-'));
-    tipoSangreLista.add(new TipoSangreModel(texto: 'O+', valor: 'O+'));
-    tipoSangreLista.add(new TipoSangreModel(texto: 'O-', valor: 'O-'));
-    tipoSangreLista.add(new TipoSangreModel(texto: 'B+', valor: 'B+'));
-    tipoSangreLista.add(new TipoSangreModel(texto: 'B-', valor: 'B-'));
-    tipoSangreLista.add(new TipoSangreModel(texto: 'AB+', valor: 'AB+'));
-    tipoSangreLista.add(new TipoSangreModel(texto: 'AB-', valor: 'AB-'));
-    tipoSangreLista.add(new TipoSangreModel(
-        texto: 'EL PACIENTE NO SABE', valor: 'EL PACIENTE NO SABE'));
-
-    return Padding(
-      padding: EdgeInsets.only(left: 8.0, right: 8.0),
-      child: InputDecorator(
-          decoration: InputDecoration(
-            labelText: 'Tipo de Sangre',
-            isDense: true,
-            prefixIcon: Icon(Icons.face, color: Colors.red),
-            border:
-                OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
-          ),
-          child: DropdownButtonHideUnderline(
-              child: DropdownButton(
-            value: _tipoSangre,
-            isDense: true,
-            onChanged: (value) {
-              setState(() {
-                _tipoSangre = value;
-                _paciente.tipoDeSangre = _tipoSangre;
-              });
-            },
-            items: tipoSangreLista.map((p) {
-              return DropdownMenuItem(
-                value: p.valor,
-                child: Text(p.texto),
-              );
-            }).toList(),
-          ))),
-    );
-  }
-
   Widget _crearCampoMenorDeEdad(
-    Paciente _paciente,
+    PacienteModel _paciente,
   ) {
     return SwitchListTile(
         title: Text('Menor de Edad'),
@@ -487,7 +413,7 @@ class _CrearPacientePageState extends State<CrearPacientePage> {
         });
   }
 
-  Widget _crearCamposMenorDeEdad(Paciente _paciente, bool esMenorEdad) {
+  Widget _crearCamposMenorDeEdad(PacienteModel _paciente, bool esMenorEdad) {
     if (esMenorEdad) {
       return Container(
         child: Column(
@@ -509,102 +435,60 @@ class _CrearPacientePageState extends State<CrearPacientePage> {
     }
   }
 
-  Widget _crearCampoNombreMadre(Paciente _paciente) {
+  Widget _crearCampoNombreMadre(PacienteModel _paciente) {
     return Padding(
       padding: EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
         onSaved: (value) => _paciente.nombreMadre = value,
         keyboardType: TextInputType.text,
-        decoration: InputDecoration(
-            prefixIcon: Icon(
-              Icons.account_circle,
-              color: Colors.redAccent,
-            ),
-            border:
-                OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
-            labelText: 'Nombre Madre',
-            isDense: true),
+        decoration: inputsDecorations('Nombre Madre', Icons.person),
       ),
     );
   }
 
-  Widget _crearCampoIdentificacionMadre(Paciente _paciente) {
+  Widget _crearCampoIdentificacionMadre(PacienteModel _paciente) {
     return Padding(
       padding: EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
         onSaved: (value) => _paciente.identificacionMadre = value,
         maxLength: 13,
         keyboardType: TextInputType.number,
-        decoration: InputDecoration(
-            prefixIcon: Icon(
-              Icons.credit_card,
-              color: Colors.redAccent,
-            ),
-            border:
-                OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
-            labelText: 'Identificación Madre',
-            isDense: true,
-            hintText: 'Sin guiones'),
+        decoration: inputsDecorations('Identificación Madre', Icons.person),
       ),
     );
   }
 
-  Widget _crearCampoNombrePadre(Paciente _paciente) {
+  Widget _crearCampoNombrePadre(PacienteModel _paciente) {
     return Padding(
       padding: EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
         onSaved: (value) => _paciente.nombrePadre = value,
         keyboardType: TextInputType.text,
-        decoration: InputDecoration(
-            prefixIcon: Icon(
-              Icons.account_circle,
-              color: Colors.redAccent,
-            ),
-            border:
-                OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
-            labelText: 'Nombre Padre',
-            isDense: true),
+        decoration: inputsDecorations('Nombre Pare', Icons.person),
       ),
     );
   }
 
-  Widget _crearCampoIdentificacionPadre(Paciente _paciente) {
+  Widget _crearCampoIdentificacionPadre(PacienteModel _paciente) {
     return Padding(
       padding: EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
         onSaved: (value) => _paciente.identificacionPadre = value,
         maxLength: 13,
         keyboardType: TextInputType.number,
-        decoration: InputDecoration(
-            prefixIcon: Icon(
-              Icons.credit_card,
-              color: Colors.redAccent,
-            ),
-            border:
-                OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
-            labelText: 'Identificación Padre',
-            isDense: true,
-            hintText: 'Sin guiones'),
+        decoration: inputsDecorations('Identificación Padre', Icons.person),
       ),
     );
   }
 
-  Widget _crearCampoNotas(Paciente _paciente) {
+  Widget _crearCampoNotas(PacienteModel _paciente) {
     return Padding(
       padding: EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
         onSaved: (value) => _paciente.notas = value,
         keyboardType: TextInputType.text,
         maxLines: 2,
-        decoration: InputDecoration(
-          prefixIcon: Icon(
-            Icons.credit_card,
-            color: Colors.redAccent,
-          ),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
-          labelText: 'Notas',
-          isDense: true,
-        ),
+        decoration: inputsDecorations('Notas', Icons.note),
       ),
     );
   }
@@ -623,27 +507,19 @@ class _CrearPacientePageState extends State<CrearPacientePage> {
     );
   }
 
-  Widget _crearCampoCarneVacuna(Paciente _paciente) {
+  Widget _crearCampoCarneVacuna(PacienteModel _paciente) {
     return Padding(
       padding: EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
         onSaved: (value) => _paciente.carneVacuna = value,
         keyboardType: TextInputType.text,
-        decoration: InputDecoration(
-            prefixIcon: Icon(
-              Icons.account_circle,
-              color: Colors.redAccent,
-            ),
-            border:
-                OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
-            labelText: 'Carné Vacuna',
-            isDense: true),
+        decoration: inputsDecorations('Carné de Vacuno', Icons.person),
       ),
     );
   }
 
   Widget _crearBotones(
-      Paciente _paciente,
+      PacienteModel _paciente,
       PacientesBloc blocPaciente,
       BuildContext context,
       UsuarioModel _usuario,
@@ -662,10 +538,318 @@ class _CrearPacientePageState extends State<CrearPacientePage> {
                 blocPaciente, context, _paciente, _usuario, _scaffoldKey)));
   }
 
+  Widget _crearDropDownProfesion() {
+    return FutureBuilder(
+      future: comboService.getProfesiones(),
+      builder:
+          (BuildContext context, AsyncSnapshot<List<ProfesionModel>> snapshot) {
+        final lista = snapshot.data;
+
+        if (lista != null) {
+          return Padding(
+            padding: EdgeInsets.only(left: 8.0, right: 8.0),
+            child: InputDecorator(
+                decoration: inputsDecorations('Profesión', Icons.people),
+                child: DropdownButtonHideUnderline(
+                    child: DropdownButton(
+                  value: _profesion,
+                  isDense: true,
+                  onChanged: (value) {
+                    setState(() {
+                      _profesion = value;
+                    });
+                  },
+                  items: lista.map((x) {
+                    return DropdownMenuItem(
+                      value: x.profesionId,
+                      child: Text(x.nombre),
+                    );
+                  }).toList(),
+                ))),
+          );
+        } else {
+          return CircularProgressIndicator();
+        }
+      },
+    );
+  }
+
+  Widget _crearDropDownPais() {
+    return FutureBuilder(
+      future: comboService.getPaises(),
+      builder: (BuildContext context, AsyncSnapshot<List<PaisModel>> snapshot) {
+        final lista = snapshot.data;
+
+        if (lista != null) {
+          return Padding(
+            padding: EdgeInsets.only(left: 8.0, right: 8.0),
+            child: InputDecorator(
+                decoration: inputsDecorations('Pais', Icons.people),
+                child: DropdownButtonHideUnderline(
+                    child: DropdownButton(
+                  value: _pais,
+                  isDense: true,
+                  onChanged: (value) {
+                    setState(() {
+                      _pais = value;
+                    });
+                  },
+                  items: lista.map((x) {
+                    return DropdownMenuItem(
+                      value: x.paisId,
+                      child: Text(
+                        x.nombre,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    );
+                  }).toList(),
+                ))),
+          );
+        } else {
+          return CircularProgressIndicator();
+        }
+      },
+    );
+  }
+
+  Widget _crearDropDownEscolaridad() {
+    return FutureBuilder(
+      future: comboService.getEscolaridades(),
+      builder: (BuildContext context,
+          AsyncSnapshot<List<EscolaridadModel>> snapshot) {
+        final lista = snapshot.data;
+
+        if (lista != null) {
+          return Padding(
+            padding: EdgeInsets.only(left: 8.0, right: 8.0),
+            child: InputDecorator(
+                decoration: inputsDecorations('Escolaridad', Icons.people),
+                child: DropdownButtonHideUnderline(
+                    child: DropdownButton(
+                  value: _escolaridad,
+                  isDense: true,
+                  onChanged: (value) {
+                    setState(() {
+                      _escolaridad = value;
+                    });
+                  },
+                  items: lista.map((x) {
+                    return DropdownMenuItem(
+                      value: x.escolaridadId,
+                      child: Text(
+                        x.nombre,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    );
+                  }).toList(),
+                ))),
+          );
+        } else {
+          return CircularProgressIndicator();
+        }
+      },
+    );
+  }
+
+  Widget _crearDropDownReligion() {
+    return FutureBuilder(
+      future: comboService.getReligiones(),
+      builder:
+          (BuildContext context, AsyncSnapshot<List<ReligionModel>> snapshot) {
+        final lista = snapshot.data;
+        if (lista != null) {
+          return Padding(
+            padding: EdgeInsets.only(left: 8.0, right: 8.0),
+            child: InputDecorator(
+                decoration: inputsDecorations('Religion', Icons.people),
+                child: DropdownButtonHideUnderline(
+                    child: DropdownButton(
+                  value: _religion,
+                  isDense: true,
+                  onChanged: (value) {
+                    setState(() {
+                      _religion = value;
+                    });
+                  },
+                  items: lista.map((x) {
+                    return DropdownMenuItem(
+                      value: x.religionId,
+                      child: Text(
+                        x.nombre,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    );
+                  }).toList(),
+                ))),
+          );
+        } else {
+          return CircularProgressIndicator();
+        }
+      },
+    );
+  }
+
+  Widget _crearDropDownGrupSanguineo() {
+    return FutureBuilder(
+      future: comboService.getGrupoSanguineos(),
+      builder: (BuildContext context,
+          AsyncSnapshot<List<GrupoSanguineoModel>> snapshot) {
+        final lista = snapshot.data;
+        if (lista != null) {
+          return Padding(
+            padding: EdgeInsets.only(left: 8.0, right: 8.0),
+            child: InputDecorator(
+                decoration: inputsDecorations('Tipo de Sangre', Icons.people),
+                child: DropdownButtonHideUnderline(
+                    child: DropdownButton(
+                  value: _grupoSanguineo,
+                  isDense: true,
+                  onChanged: (value) {
+                    setState(() {
+                      _grupoSanguineo = value;
+                    });
+                  },
+                  items: lista.map((x) {
+                    return DropdownMenuItem(
+                      value: x.grupoSanguineoId,
+                      child: Text(
+                        x.nombre,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    );
+                  }).toList(),
+                ))),
+          );
+        } else {
+          return CircularProgressIndicator();
+        }
+      },
+    );
+  }
+
+  Widget _crearDropDownGrupoEtnico() {
+    return FutureBuilder(
+      future: comboService.getGruposEtnicos(),
+      builder: (BuildContext context,
+          AsyncSnapshot<List<GrupoEtnicoModel>> snapshot) {
+        final lista = snapshot.data;
+        if (lista != null) {
+          return Padding(
+            padding: EdgeInsets.only(left: 8.0, right: 8.0),
+            child: InputDecorator(
+                decoration: inputsDecorations('Grupo Etnico', Icons.people),
+                child: DropdownButtonHideUnderline(
+                    child: DropdownButton(
+                  value: _grupoEtnico,
+                  isDense: true,
+                  onChanged: (value) {
+                    setState(() {
+                      _grupoEtnico = value;
+                    });
+                  },
+                  items: lista.map((x) {
+                    return DropdownMenuItem(
+                      value: x.grupoEtnicoId,
+                      child: Text(
+                        x.nombre,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    );
+                  }).toList(),
+                ))),
+          );
+        } else {
+          return CircularProgressIndicator();
+        }
+      },
+    );
+  }
+
+  Widget _crearDropDownDepartamento(PacientesBloc bloc) {
+    return FutureBuilder(
+      future: comboService.getDepartamentos(),
+      builder: (BuildContext context,
+          AsyncSnapshot<List<DepartamentoModel>> snapshot) {
+        final lista = snapshot.data;
+        if (lista != null) {
+          return Padding(
+            padding: EdgeInsets.only(left: 8.0, right: 8.0),
+            child: InputDecorator(
+                decoration: inputsDecorations('Departamento', Icons.map),
+                child: DropdownButtonHideUnderline(
+                    child: DropdownButton(
+                  value: _departamento,
+                  isDense: true,
+                  onChanged: (value) {
+                    _municipio = null;
+                    setState(() {
+                      _departamento = value;
+                      _crearDropDownMunicipio(_departamento, bloc);
+                    });
+                  },
+                  items: lista.map((x) {
+                    return DropdownMenuItem(
+                      value: x.departamentoId,
+                      child: Text(
+                        x.nombre,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    );
+                  }).toList(),
+                ))),
+          );
+        } else {
+          return CircularProgressIndicator();
+        }
+      },
+    );
+  }
+
+  Widget _crearDropDownMunicipio(int deptoId, PacientesBloc bloq) {
+    return StreamBuilder(
+      stream: bloq.municipiosListStream,
+      builder:
+          (BuildContext context, AsyncSnapshot<List<MunicipioModel>> snapshot) {
+        if (snapshot.data == null) {
+          return CircularProgressIndicator();
+        } else {
+          final lista = snapshot.data;
+          _municipio = lista[0].municipioId;
+          return Padding(
+              padding: EdgeInsets.only(left: 8.0, right: 8.0),
+              child: InputDecorator(
+                  decoration: inputsDecorations('Municipio', Icons.map),
+                  child: DropdownButtonHideUnderline(
+                      child: DropdownButton(
+                    isDense: true,
+                    value: lista[0].municipioId,
+                    onChanged:
+                        (!bloq.cargando) ? _esperoCargarMunicipios : null,
+                    items: lista.map((x) {
+                      return DropdownMenuItem(
+                        value: x.municipioId,
+                        child: Text(
+                          x.nombre,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      );
+                    }).toList(),
+                  ))));
+        }
+      },
+    );
+  }
+
+  void _esperoCargarMunicipios(int value) {
+    setState(() {
+      _municipio = value;
+    });
+  }
+
   void _guardaPaciente(
       PacientesBloc blocPaciente,
       BuildContext context,
-      Paciente _paciente,
+      PacienteModel _paciente,
       UsuarioModel _usuario,
       GlobalKey<ScaffoldState> _scaffoldKey) async {
     //_paciente.pacienteId = 0;
@@ -674,6 +858,13 @@ class _CrearPacientePageState extends State<CrearPacientePage> {
     _paciente.creadoFecha = DateTime.now();
     _paciente.modificadoPor = _usuario.userName;
     _paciente.modificadoFecha = DateTime.now();
+    _paciente.doctorId = _usuario.usuarioId;
+    _paciente.pacienteId = 0;
+    _paciente.municipioId = _municipio;
+    if (_paciente.paisId != 83) {
+      _paciente.departamentoId = null;
+      _paciente.municipioId = null;
+    }
 
     if (!_formKey.currentState.validate()) {
       Flushbar(
@@ -686,7 +877,8 @@ class _CrearPacientePageState extends State<CrearPacientePage> {
       )..show(context);
     } else {
       _formKey.currentState.save();
-      //_paciente.pacienteId = 0;
+
+      print(pacienteModelToJson(_paciente));
       _formKey.currentState.save();
       final ProgressDialog _pr = new ProgressDialog(
         context,
@@ -707,8 +899,7 @@ class _CrearPacientePageState extends State<CrearPacientePage> {
       );
       await _pr.show();
       _inputFieldDateController.text = "";
-      print(pacienteToJson(_paciente));
-      print('============');
+
       final bool resp = await blocPaciente.addPaciente(_paciente);
       _pr.hide();
       if (resp) {
@@ -725,16 +916,15 @@ class _CrearPacientePageState extends State<CrearPacientePage> {
           Navigator.pushReplacementNamed(context, 'home');
         });
       } else {
-        _scaffoldKey.currentState.showSnackBar(SnackBar(
-          backgroundColor: Colors.red,
-          content: Row(
-            children: <Widget>[
-              Icon(Icons.error),
-              Text('Ha ocurrido un error o el paciente ya existe')
-            ],
-          ),
-          duration: Duration(seconds: 3),
-        ));
+        mostrarFlushBar(
+            context,
+            Colors.red,
+            'Info',
+            'Ha ocurrido un error o el paciente ya existe',
+            3,
+            FlushbarPosition.BOTTOM,
+            Icons.info,
+            Colors.black);
       }
       _formKey.currentState.reset();
 

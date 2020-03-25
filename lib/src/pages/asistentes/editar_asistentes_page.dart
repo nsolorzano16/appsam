@@ -26,23 +26,6 @@ class _EditarAsistentesPageState extends State<EditarAsistentesPage> {
       ),
       body: SingleChildScrollView(
           child: (_currentIndex == 0) ? FormEditarPage() : Container()),
-      bottomNavigationBar: _bottomMenu(),
-    );
-  }
-
-  Widget _bottomMenu() {
-    return BottomNavigationBar(
-      backgroundColor: Theme.of(context).primaryColor,
-      selectedItemColor: Colors.white,
-      unselectedItemColor: Colors.black,
-      currentIndex: _currentIndex,
-      onTap: onTabTapped,
-      items: [
-        BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline), title: Text('Editar Asistente')),
-        BottomNavigationBarItem(
-            icon: Icon(Icons.lock), title: Text('Resetear Contraseña')),
-      ],
     );
   }
 

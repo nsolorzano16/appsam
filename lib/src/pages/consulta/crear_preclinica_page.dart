@@ -1,5 +1,7 @@
+import 'dart:async';
+
+import 'package:appsam/src/blocs/consulta_bloc.dart';
 import 'package:appsam/src/blocs/preclinica_bloc.dart';
-import 'package:appsam/src/blocs/provider.dart';
 import 'package:appsam/src/models/consulta_model.dart';
 import 'package:appsam/src/models/preclinica_model.dart';
 import 'package:appsam/src/models/usuario_model.dart';
@@ -19,6 +21,7 @@ class CrearPreclinicaPage extends StatefulWidget {
 
 class _CrearPreclinicaPageState extends State<CrearPreclinicaPage> {
   PreclinicaBloc bloc = new PreclinicaBloc();
+  ConsultaBloc blocConsulta = new ConsultaBloc();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final UsuarioModel _usuario =
@@ -33,7 +36,6 @@ class _CrearPreclinicaPageState extends State<CrearPreclinicaPage> {
 
   @override
   Widget build(BuildContext context) {
-    PreclinicaBloc bloc = Provider.preclinicaBloc(context);
     return Scaffold(
         drawer: MenuWidget(),
         appBar: AppBar(
@@ -226,30 +228,9 @@ class _CrearPreclinicaPageState extends State<CrearPreclinicaPage> {
                           Colors.black);
                     } else {
                       _formKey.currentState.save();
-                      final ProgressDialog _pr = new ProgressDialog(
-                        context,
-                        type: ProgressDialogType.Normal,
-                        isDismissible: false,
-                        showLogs: false,
-                      );
-                      _pr.update(
-                        progress: 50.0,
-                        message: "Espere...",
-                        progressWidget: Container(
-                            padding: EdgeInsets.all(8.0),
-                            child: CircularProgressIndicator()),
-                        maxProgress: 100.0,
-                        progressTextStyle: TextStyle(
-                            color: Colors.black,
-                            fontSize: 13.0,
-                            fontWeight: FontWeight.w400),
-                        messageTextStyle: TextStyle(
-                            color: Colors.black,
-                            fontSize: 19.0,
-                            fontWeight: FontWeight.w600),
-                      );
-                      //_pr.show();
 
+                      _guardaConsulta();
+                      _formKey.currentState.reset();
                       // Timer(Duration(seconds: 2), () {
                       //   _asistente.fechaNacimiento = picked;
                       //   bloc.addUser(_asistente);
@@ -269,6 +250,47 @@ class _CrearPreclinicaPageState extends State<CrearPreclinicaPage> {
       );
     } else {
       return Container();
+    }
+  }
+
+  void _guardaConsulta() async {
+    final ProgressDialog _pr = new ProgressDialog(
+      context,
+      type: ProgressDialogType.Normal,
+      isDismissible: false,
+      showLogs: false,
+    );
+    _pr.update(
+      progress: 50.0,
+      message: "Espere...",
+      progressWidget: Container(
+          padding: EdgeInsets.all(8.0), child: CircularProgressIndicator()),
+      maxProgress: 100.0,
+      progressTextStyle: TextStyle(
+          color: Colors.black, fontSize: 13.0, fontWeight: FontWeight.w400),
+      messageTextStyle: TextStyle(
+          color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600),
+    );
+    _pr.show();
+    _consulta.preclinica = _preclinica;
+    final bool resp = await blocConsulta.addConsulta(_consulta);
+    _pr.hide();
+    if (resp) {
+      mostrarFlushBar(
+          context,
+          Colors.green,
+          'Info',
+          'Preclinica creada correctamente',
+          3,
+          FlushbarPosition.TOP,
+          Icons.info,
+          Colors.black);
+      Timer(Duration(seconds: 3), () {
+        Navigator.pushReplacementNamed(context, 'home');
+      });
+    } else {
+      mostrarFlushBar(context, Colors.red, 'Info', 'Ha ocurrido un error', 3,
+          FlushbarPosition.BOTTOM, Icons.info, Colors.black);
     }
   }
 }

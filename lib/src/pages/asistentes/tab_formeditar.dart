@@ -2,6 +2,7 @@
 
 import 'package:appsam/src/blocs/asistentes_bloc/create_edit_asistentes.dart';
 import 'package:appsam/src/models/usuario_model.dart';
+import 'package:appsam/src/utils/utils.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -30,142 +31,128 @@ class _FormEditarPageState extends State<FormEditarPage> {
         mask: '####-####', filter: {"#": RegExp(r'[0-9]')});
     MaskTextInputFormatter maskTelefono2 = new MaskTextInputFormatter(
         mask: '####-####', filter: {"#": RegExp(r'[0-9]')});
-    MaskTextInputFormatter maskIdentificacion = new MaskTextInputFormatter(
-        mask: '####-####-#####', filter: {"#": RegExp(r'[0-9]')});
     final bloc = new CrearEditarAsistentesBloc();
 
-    return Container(
-      margin: EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0, bottom: 10.0),
-      child: Card(
-        elevation: 6.0,
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
-        child: Column(
-          children: <Widget>[
-            SizedBox(
-              height: 15,
-            ),
-            Form(
-                key: _formKey,
-                child: Column(
-                  children: <Widget>[
-                    _crearCampoNombre(_asistente),
-                    _espacio(),
-                    _crearCampoPrimerAppellido(_asistente),
-                    _espacio(),
-                    _crearCampoSegundoAppellido(_asistente),
-                    _espacio(),
-                    _crearCampoIdentificacion(maskIdentificacion, _asistente),
-                    _espacio(),
-                    _crearFecha(context, _asistente),
-                    _espacio(),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Container(
-                            padding: EdgeInsets.only(left: 25),
-                            child: Text(
-                              'Genero',
-                              style: TextStyle(fontSize: 16.0),
-                            ))
-                      ],
-                    ),
-                    _crearSexo('M', 'Masculino', _asistente),
-                    _crearSexo('F', 'Femenino', _asistente),
-                    _crearCampoTelefono1(maskTelefono1, _asistente),
-                    _espacio(),
-                    _crearCampoTelefono2(maskTelefono2, _asistente),
-                    _espacio(),
-                    _crearCampoColegioNumero(_asistente),
-                    _espacio(),
-                    _crearCampoEmail(_asistente),
-                    _espacio(),
-                    _crearCampoNotas(_asistente),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Padding(
-                          padding: EdgeInsets.only(left: 25.0, bottom: 10.0),
-                          child: RaisedButton.icon(
-                              elevation: 5.0,
-                              textColor: Colors.white,
-                              color: Colors.blueGrey,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20.0)),
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              icon: Icon(Icons.clear),
-                              label: Text('Cancelar')),
-                        ),
-                        Padding(
-                            padding: EdgeInsets.only(right: 25.0, bottom: 10.0),
-                            child: RaisedButton.icon(
-                                elevation: 5.0,
-                                textColor: Colors.white,
-                                color: Theme.of(context).primaryColor,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20.0)),
-                                icon: Icon(Icons.save),
-                                label: Text('Guardar'),
-                                onPressed: () {
-                                  if (!_formKey.currentState.validate()) {
-                                    Flushbar(
-                                      title: 'Información',
-                                      message: 'Rellene todos los campos',
-                                      duration: Duration(seconds: 2),
-                                      icon: Icon(
-                                        Icons.info,
-                                      ),
-                                    )..show(context);
-                                  } else {
-                                    _formKey.currentState.save();
-                                    _asistente.identificacion =
-                                        _txtControllerIdentificacion.text;
-                                    final ProgressDialog _pr =
-                                        new ProgressDialog(
-                                      context,
-                                      type: ProgressDialogType.Normal,
-                                      isDismissible: false,
-                                      showLogs: false,
-                                    );
-                                    _pr.update(
-                                      progress: 50.0,
-                                      message: "Espere...",
-                                      progressWidget: Container(
-                                          padding: EdgeInsets.all(8.0),
-                                          child: CircularProgressIndicator()),
-                                      maxProgress: 100.0,
-                                      progressTextStyle: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 13.0,
-                                          fontWeight: FontWeight.w400),
-                                      messageTextStyle: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 19.0,
-                                          fontWeight: FontWeight.w600),
-                                    );
-                                    _pr.show();
-                                    bloc.updateUser(_asistente).then((user) {
-                                      _pr.hide();
-                                      Navigator.pushReplacementNamed(
-                                          context, 'asistente_detalle',
-                                          arguments: user);
-                                    });
-                                    // Timer(Duration(seconds: 2), () {
+    return SingleChildScrollView(
+      child: Form(
+          key: _formKey,
+          child: Column(
+            children: <Widget>[
+              _espacio(),
+              _crearCampoNombre(_asistente),
+              _espacio(),
+              _crearCampoPrimerAppellido(_asistente),
+              _espacio(),
+              _crearCampoSegundoAppellido(_asistente),
+              _espacio(),
+              _crearCampoIdentificacion(_asistente),
+              _espacio(),
+              _crearFecha(context, _asistente),
+              _espacio(),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Container(
+                      padding: EdgeInsets.only(left: 25),
+                      child: Text(
+                        'Genero',
+                        style: TextStyle(fontSize: 16.0),
+                      ))
+                ],
+              ),
+              _crearSexo('M', 'Masculino', _asistente),
+              _crearSexo('F', 'Femenino', _asistente),
+              _crearCampoTelefono1(maskTelefono1, _asistente),
+              _espacio(),
+              _crearCampoTelefono2(maskTelefono2, _asistente),
+              _espacio(),
+              _crearCampoColegioNumero(_asistente),
+              _espacio(),
+              _crearCampoEmail(_asistente),
+              _espacio(),
+              _crearCampoNotas(_asistente),
+              _espacio(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.only(left: 25.0, bottom: 10.0),
+                    child: RaisedButton.icon(
+                        elevation: 5.0,
+                        textColor: Colors.white,
+                        color: Colors.blueGrey,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20.0)),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        icon: Icon(Icons.clear),
+                        label: Text('Cancelar')),
+                  ),
+                  Padding(
+                      padding: EdgeInsets.only(right: 25.0, bottom: 10.0),
+                      child: RaisedButton.icon(
+                          elevation: 5.0,
+                          textColor: Colors.white,
+                          color: Theme.of(context).primaryColor,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20.0)),
+                          icon: Icon(Icons.save),
+                          label: Text('Guardar'),
+                          onPressed: () {
+                            if (!_formKey.currentState.validate()) {
+                              Flushbar(
+                                title: 'Información',
+                                message: 'Rellene todos los campos',
+                                duration: Duration(seconds: 2),
+                                icon: Icon(
+                                  Icons.info,
+                                ),
+                              )..show(context);
+                            } else {
+                              _formKey.currentState.save();
+                              _asistente.identificacion =
+                                  _txtControllerIdentificacion.text;
+                              final ProgressDialog _pr = new ProgressDialog(
+                                context,
+                                type: ProgressDialogType.Normal,
+                                isDismissible: false,
+                                showLogs: false,
+                              );
+                              _pr.update(
+                                progress: 50.0,
+                                message: "Espere...",
+                                progressWidget: Container(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: CircularProgressIndicator()),
+                                maxProgress: 100.0,
+                                progressTextStyle: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 13.0,
+                                    fontWeight: FontWeight.w400),
+                                messageTextStyle: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 19.0,
+                                    fontWeight: FontWeight.w600),
+                              );
+                              _pr.show();
+                              bloc.updateUser(_asistente).then((user) {
+                                _pr.hide();
+                                Navigator.pushReplacementNamed(
+                                    context, 'asistente_detalle',
+                                    arguments: user);
+                              });
+                              // Timer(Duration(seconds: 2), () {
 
-                                    //   // Navigator.pushReplacementNamed(
-                                    //   //     context, 'asistente_detalle');
-                                    // });
-                                  }
-                                }))
-                      ],
-                    )
-                  ],
-                )),
-          ],
-        ),
-      ),
+                              //   // Navigator.pushReplacementNamed(
+                              //   //     context, 'asistente_detalle');
+                              // });
+                            }
+                          }))
+                ],
+              )
+            ],
+          )),
     );
   }
 
@@ -191,16 +178,10 @@ class _FormEditarPageState extends State<FormEditarPage> {
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
+        autovalidate: true,
         validator: validaTexto,
         initialValue: _asistente.nombres,
-        decoration: InputDecoration(
-          prefixIcon: Icon(
-            Icons.person,
-            color: Colors.red,
-          ),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
-          labelText: 'Nombres',
-        ),
+        decoration: inputsDecorations('Nombres', Icons.person),
         onSaved: (value) => _asistente.nombres = value,
       ),
     );
@@ -210,16 +191,10 @@ class _FormEditarPageState extends State<FormEditarPage> {
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
+        autovalidate: true,
         validator: validaTexto,
         initialValue: _asistente.primerApellido,
-        decoration: InputDecoration(
-          prefixIcon: Icon(
-            Icons.person,
-            color: Colors.red,
-          ),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
-          labelText: 'Primer Apellido',
-        ),
+        decoration: inputsDecorations('Primer Apellido', Icons.person),
         onSaved: (value) => _asistente.primerApellido = value,
       ),
     );
@@ -229,16 +204,10 @@ class _FormEditarPageState extends State<FormEditarPage> {
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
+        autovalidate: true,
         validator: validaTexto,
         initialValue: _asistente.segundoApellido,
-        decoration: InputDecoration(
-          prefixIcon: Icon(
-            Icons.person,
-            color: Colors.red,
-          ),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
-          labelText: 'Segundo apellido',
-        ),
+        decoration: inputsDecorations('Segundo Apellido', Icons.person),
         onSaved: (value) => _asistente.segundoApellido = value,
       ),
     );
@@ -246,34 +215,20 @@ class _FormEditarPageState extends State<FormEditarPage> {
 
   Widget _espacio() {
     return SizedBox(
-      height: 8.0,
+      height: 10.0,
     );
   }
 
-  _crearCampoIdentificacion(
-      MaskTextInputFormatter mask, UsuarioModel _asistente) {
+  _crearCampoIdentificacion(UsuarioModel _asistente) {
     _txtControllerIdentificacion.text = _asistente.identificacion;
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
         controller: _txtControllerIdentificacion,
-        validator: (value) {
-          if (value.length <= 13) {
-            return 'Campo incompleto';
-          } else {
-            return null;
-          }
-        },
+        autovalidate: true,
+        readOnly: true,
         keyboardType: TextInputType.number,
-        inputFormatters: [mask],
-        decoration: InputDecoration(
-          prefixIcon: Icon(
-            Icons.credit_card,
-            color: Colors.red,
-          ),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
-          labelText: 'Identificación',
-        ),
+        decoration: inputsDecorations('Identificación', Icons.credit_card),
         onSaved: (value) => _asistente.identificacion = value,
       ),
     );
@@ -283,6 +238,7 @@ class _FormEditarPageState extends State<FormEditarPage> {
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
+        autovalidate: true,
         validator: (value) {
           if (value.length <= 8) {
             return 'Campo incompleto';
@@ -293,14 +249,7 @@ class _FormEditarPageState extends State<FormEditarPage> {
         initialValue: _asistente.telefono1,
         keyboardType: TextInputType.number,
         inputFormatters: [mask],
-        decoration: InputDecoration(
-          prefixIcon: Icon(
-            Icons.phone_android,
-            color: Colors.red,
-          ),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
-          labelText: 'Teléfono',
-        ),
+        decoration: inputsDecorations('Teléfono', Icons.phone_android),
         onSaved: (value) => _asistente.telefono1 = value,
       ),
     );
@@ -314,14 +263,8 @@ class _FormEditarPageState extends State<FormEditarPage> {
         inputFormatters: [mask],
         initialValue:
             (_asistente.telefono2 != null) ? _asistente.telefono2 : '',
-        decoration: InputDecoration(
-          prefixIcon: Icon(
-            Icons.phone_iphone,
-            color: Colors.red,
-          ),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
-          labelText: 'Teléfono secundario',
-        ),
+        decoration:
+            inputsDecorations('Teléfono Secundario', Icons.phone_iphone),
         onSaved: (value) => _asistente.telefono2 = value,
       ),
     );
@@ -331,14 +274,8 @@ class _FormEditarPageState extends State<FormEditarPage> {
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
-        decoration: InputDecoration(
-          prefixIcon: Icon(
-            Icons.confirmation_number,
-            color: Colors.red,
-          ),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
-          labelText: 'Numero colegiado',
-        ),
+        decoration:
+            inputsDecorations('Numero Colegiado', Icons.confirmation_number),
         initialValue:
             (_asistente.colegioNumero != null) ? _asistente.colegioNumero : '',
         onSaved: (value) => _asistente.colegioNumero = value,
@@ -351,16 +288,10 @@ class _FormEditarPageState extends State<FormEditarPage> {
       padding: const EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
         initialValue: (_asistente.email != null) ? _asistente.email : '',
+        autovalidate: true,
         validator: validateEmail,
         keyboardType: TextInputType.emailAddress,
-        decoration: InputDecoration(
-          prefixIcon: Icon(
-            Icons.email,
-            color: Colors.red,
-          ),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
-          labelText: 'Email',
-        ),
+        decoration: inputsDecorations('Email', Icons.email),
         onSaved: (value) => _asistente.email = value,
       ),
     );
@@ -372,14 +303,7 @@ class _FormEditarPageState extends State<FormEditarPage> {
       child: TextFormField(
         initialValue: (_asistente.notas != null) ? _asistente.notas : '',
         maxLines: 2,
-        decoration: InputDecoration(
-          prefixIcon: Icon(
-            Icons.confirmation_number,
-            color: Colors.red,
-          ),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
-          labelText: 'Notas',
-        ),
+        decoration: inputsDecorations('Notas', Icons.note),
         onSaved: (value) => _asistente.notas = value,
       ),
     );
@@ -395,14 +319,8 @@ class _FormEditarPageState extends State<FormEditarPage> {
         keyboardType: TextInputType.number,
         enableInteractiveSelection: false,
         controller: _inputFieldDateController,
-        decoration: InputDecoration(
-          prefixIcon: Icon(
-            Icons.calendar_today,
-            color: Colors.red,
-          ),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
-          labelText: 'Fecha de Nacimiento',
-        ),
+        decoration:
+            inputsDecorations('Fecha de Nacimiento', Icons.calendar_today),
         onTap: () {
           FocusScope.of(context).requestFocus(new FocusNode());
           _selectDate(context, _asistente);

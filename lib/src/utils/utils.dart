@@ -62,7 +62,6 @@ InputDecoration inputsDecorations(String label, IconData icon) {
         color: Colors.redAccent,
       ),
       border: OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
-      focusedBorder: InputBorder.none,
       labelText: label,
       isDense: true);
 }

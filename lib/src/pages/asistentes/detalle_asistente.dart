@@ -5,6 +5,7 @@ import 'package:appsam/src/models/usuario_model.dart';
 import 'package:appsam/src/utils/storage_util.dart';
 import 'package:appsam/src/widgets/drawer.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 
@@ -144,7 +145,7 @@ class _AsistenteDetalleState extends State<AsistenteDetalle> {
               dense: true,
               leading: Icon(
                 Icons.perm_identity,
-                color: Colors.blue,
+                color: Colors.red,
                 size: 22.0,
               ),
               title: Text(
@@ -155,7 +156,7 @@ class _AsistenteDetalleState extends State<AsistenteDetalle> {
               dense: true,
               leading: Icon(
                 Icons.account_circle,
-                color: Colors.blue,
+                color: Colors.red,
                 size: 22.0,
               ),
               title: Text('${usuario.userName}'),
@@ -163,52 +164,59 @@ class _AsistenteDetalleState extends State<AsistenteDetalle> {
             ),
             ListTile(
               dense: true,
-              leading: Icon(Icons.chrome_reader_mode,
-                  color: Colors.blue, size: 22.0),
+              leading:
+                  Icon(Icons.chrome_reader_mode, color: Colors.red, size: 22.0),
               title: Text('${usuario.identificacion}'),
               subtitle: Text('Identificación'),
             ),
             ListTile(
               dense: true,
-              leading: Icon(Icons.date_range, color: Colors.blue, size: 22.0),
+              leading: Icon(Icons.date_range, color: Colors.red, size: 22.0),
               title: Text('$_fechaNac'),
               subtitle: Text('Fecha de Nacimiento'),
             ),
             ListTile(
               dense: true,
-              leading: Icon(Icons.face, color: Colors.blue, size: 22.0),
+              leading: Icon(Icons.face, color: Colors.red, size: 22.0),
               title: Text('${usuario.sexo}'),
               subtitle: Text('Sexo'),
             ),
             ListTile(
               dense: true,
-              leading: Icon(Icons.phone, color: Colors.blue, size: 22.0),
+              leading: FaIcon(FontAwesomeIcons.hashtag,
+                  color: Colors.red, size: 22.0),
+              title: Text('${usuario.edad}'),
+              subtitle: Text('Edad'),
+            ),
+            ListTile(
+              dense: true,
+              leading: Icon(Icons.phone, color: Colors.red, size: 22.0),
               title: Text('${usuario.telefono1}'),
               subtitle: Text('Telefono'),
             ),
             ListTile(
               dense: true,
-              leading: Icon(Icons.phone_iphone, color: Colors.blue, size: 22.0),
+              leading: Icon(Icons.phone_iphone, color: Colors.red, size: 22.0),
               title: Text('${usuario.telefono2}'),
               subtitle: Text('Telefono Secundario'),
             ),
             ListTile(
               dense: true,
               leading: Icon(Icons.format_list_numbered,
-                  color: Colors.blue, size: 22.0),
+                  color: Colors.red, size: 22.0),
               title: Text('${usuario.colegioNumero}'),
               subtitle: Text('Numero colegiación'),
             ),
             ListTile(
               dense: true,
-              leading: Icon(Icons.email, color: Colors.blue, size: 22.0),
+              leading: Icon(Icons.email, color: Colors.red, size: 22.0),
               title: Text('${usuario.email}'),
               subtitle: Text('Email'),
             ),
             ListTile(
               dense: true,
               leading: Icon((usuario.activo) ? Icons.check_circle : Icons.close,
-                  color: Colors.blue, size: 22.0),
+                  color: Colors.red, size: 22.0),
               title: (usuario.activo) ? Text('Activado') : Text('Desactivado'),
               subtitle: Text('Estado'),
             ),
@@ -216,7 +224,7 @@ class _AsistenteDetalleState extends State<AsistenteDetalle> {
               padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
               child: ListTile(
                 dense: true,
-                leading: Icon(Icons.note, color: Colors.blue, size: 22.0),
+                leading: Icon(Icons.note, color: Colors.red, size: 22.0),
                 title: Text(
                   '${usuario.notas}',
                   textAlign: TextAlign.justify,
