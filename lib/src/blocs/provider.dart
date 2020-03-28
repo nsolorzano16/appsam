@@ -3,7 +3,7 @@ import 'package:appsam/src/blocs/asistentes_bloc/create_edit_asistentes.dart';
 import 'package:appsam/src/blocs/asistentes_bloc/resetPassword_bloc.dart';
 import 'package:appsam/src/blocs/consulta_bloc.dart';
 import 'package:appsam/src/blocs/login_bloc.dart';
-import 'package:appsam/src/blocs/pacientes_bloc.dart';
+import 'package:appsam/src/blocs/pacientes_bloc/pacientes_bloc.dart';
 import 'package:appsam/src/blocs/preclinica_bloc.dart';
 import 'package:appsam/src/blocs/theme_bloc.dart';
 import 'package:flutter/material.dart';

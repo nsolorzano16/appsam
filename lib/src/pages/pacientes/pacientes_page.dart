@@ -1,6 +1,7 @@
 import 'dart:async';
 
-import 'package:appsam/src/blocs/pacientes_bloc.dart';
+import 'package:appsam/src/blocs/pacientes_bloc/pacientes_bloc.dart';
+import 'package:appsam/src/models/paginados/pacientesPaginado_model.dart';
 import 'package:appsam/src/models/usuario_model.dart';
 import 'package:appsam/src/search/search_pacientes.dart';
 import 'package:appsam/src/utils/storage_util.dart';
@@ -19,6 +20,8 @@ class PacientesPage extends StatefulWidget {
 class _PacientesPageState extends State<PacientesPage> {
   PacientesBloc _pacientesBloc = new PacientesBloc();
   ScrollController _scrollController = new ScrollController();
+  final UsuarioModel _usuario =
+      usuarioModelFromJson(StorageUtil.getString('usuarioGlobal'));
 
   int totalPages = 0;
   int page = 1;
@@ -33,7 +36,11 @@ class _PacientesPageState extends State<PacientesPage> {
   void initState() {
     super.initState();
     StorageUtil.putString('ultimaPagina', PacientesPage.routeName);
-    _pacientesBloc.cargarPacientesPaginado(1, '');
+    if (_usuario.rolId == 3) {
+      _pacientesBloc.cargarPacientesPaginado(1, '', _usuario.asistenteId);
+    } else {
+      _pacientesBloc.cargarPacientesPaginado(1, '', _usuario.usuarioId);
+    }
   }
 
   @override
@@ -69,7 +76,7 @@ class _PacientesPageState extends State<PacientesPage> {
       ),
       body: Stack(
         children: <Widget>[
-          //_crearListaPacientes(),
+          _crearListaPacientes(),
         ],
       ),
       floatingActionButton: FloatingActionButton(
@@ -81,7 +88,12 @@ class _PacientesPageState extends State<PacientesPage> {
   }
 
   Future<Null> fetchData(int page) async {
-    _pacientesBloc.cargarPacientesPaginado(page, '');
+    if (_usuario.rolId == 3) {
+      _pacientesBloc.cargarPacientesPaginado(1, '', _usuario.asistenteId);
+    } else {
+      _pacientesBloc.cargarPacientesPaginado(1, '', _usuario.usuarioId);
+    }
+
     final ProgressDialog pd = new ProgressDialog(
       context,
       type: ProgressDialogType.Normal,
@@ -104,80 +116,81 @@ class _PacientesPageState extends State<PacientesPage> {
     });
   }
 
-  // Widget _crearListaPacientes() {
-  //   return StreamBuilder(
-  //     stream: _pacientesBloc.pacientesListStream,
-  //     builder: (BuildContext context, AsyncSnapshot<List<Paciente>> snapshot) {
-  //       if (snapshot.hasError) {
-  //         return Text('Error: ${snapshot.error}');
-  //       }
-  //       switch (snapshot.connectionState) {
-  //         case ConnectionState.waiting:
-  //           return Center(
-  //             child: SpinKitWave(
-  //               color: Theme.of(context).primaryColor,
-  //             ),
-  //           );
+  Widget _crearListaPacientes() {
+    return StreamBuilder(
+      stream: _pacientesBloc.pacientesListStream,
+      builder: (BuildContext context,
+          AsyncSnapshot<List<PacientesViewModel>> snapshot) {
+        if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        }
+        switch (snapshot.connectionState) {
+          case ConnectionState.waiting:
+            return Center(
+              child: SpinKitWave(
+                color: Theme.of(context).primaryColor,
+              ),
+            );
 
-  //         default:
-  //           final asistentes = snapshot.data;
+          default:
+            final asistentes = snapshot.data;
 
-  //           return ListView.builder(
-  //               controller: _scrollController,
-  //               itemCount: asistentes.length,
-  //               itemBuilder: (BuildContext context, int index) {
-  //                 return _crearItem(context, asistentes[index]);
-  //               });
-  //       }
-  //     },
-  //   );
-  // }
+            return ListView.builder(
+                controller: _scrollController,
+                itemCount: asistentes.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return _crearItem(context, asistentes[index]);
+                });
+        }
+      },
+    );
+  }
 
-  // Widget _crearItem(
-  //   BuildContext context,
-  //   Paciente paciente,
-  // ) {
-  //   return Card(
-  //     elevation: 3.0,
-  //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-  //     child: ListTile(
-  //         dense: true,
-  //         onTap: () {
-  //           Navigator.pushReplacementNamed(context, 'paciente_detalle',
-  //               arguments: paciente);
-  //         },
-  //         contentPadding: EdgeInsets.symmetric(
-  //           horizontal: 10.0,
-  //         ),
-  //         leading: Container(
-  //             padding: EdgeInsets.only(right: 5.0),
-  //             decoration: BoxDecoration(
-  //                 border: Border(
-  //                     right: BorderSide(width: 1.0, color: Colors.black))),
-  //             child: ClipRRect(
-  //               borderRadius: BorderRadius.circular(30.0),
-  //               child: FadeInImage(
-  //                   width: 40.0,
-  //                   height: 40.0,
-  //                   placeholder: AssetImage('assets/jar-loading.gif'),
-  //                   image: NetworkImage(paciente.fotoUrl)),
-  //             )),
-  //         title: Container(
-  //           child: Text(
-  //             '${paciente.nombres} ${paciente.primerApellido} ${paciente.segundoApellido}',
-  //             overflow: TextOverflow.ellipsis,
-  //           ),
-  //         ),
-  //         subtitle: Text('Identificación: ${paciente.identificacion}'),
-  //         trailing: IconButton(
-  //             icon: FaIcon(
-  //               FontAwesomeIcons.fileMedical,
-  //               size: 20.0,
-  //               color: Theme.of(context).primaryColor,
-  //             ),
-  //             onPressed: () {})),
-  //   );
-  // }
+  Widget _crearItem(
+    BuildContext context,
+    PacientesViewModel paciente,
+  ) {
+    return Card(
+      elevation: 3.0,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+      child: ListTile(
+          dense: true,
+          onTap: () {
+            Navigator.pushReplacementNamed(context, 'paciente_detalle',
+                arguments: paciente);
+          },
+          contentPadding: EdgeInsets.symmetric(
+            horizontal: 10.0,
+          ),
+          leading: Container(
+              padding: EdgeInsets.only(right: 5.0),
+              decoration: BoxDecoration(
+                  border: Border(
+                      right: BorderSide(width: 1.0, color: Colors.black))),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(30.0),
+                child: FadeInImage(
+                    width: 40.0,
+                    height: 40.0,
+                    placeholder: AssetImage('assets/jar-loading.gif'),
+                    image: NetworkImage(paciente.fotoUrl)),
+              )),
+          title: Container(
+            child: Text(
+              '${paciente.nombres} ${paciente.primerApellido} ${paciente.segundoApellido}',
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+          subtitle: Text('Identificación: ${paciente.identificacion}'),
+          trailing: IconButton(
+              icon: FaIcon(
+                FontAwesomeIcons.fileMedical,
+                size: 20.0,
+                color: Theme.of(context).primaryColor,
+              ),
+              onPressed: () {})),
+    );
+  }
 
   void _goToCrearPaciente(UsuarioModel usuario) {
     Navigator.pushReplacementNamed(context, 'crear_paciente',

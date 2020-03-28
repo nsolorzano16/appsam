@@ -49,8 +49,6 @@ class _AsistentesPageState extends State<AsistentesPage> {
           _scrollController.position.maxScrollExtent) {
         page++;
         totalPages = asistentesBloc.ultimaPagina;
-        print(totalPages);
-        print(page);
 
         if (page <= totalPages) {
           fetchData(page, _usuario.usuarioId);

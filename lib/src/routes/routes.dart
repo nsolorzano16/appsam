@@ -11,6 +11,7 @@ import 'package:appsam/src/pages/consulta/preclinica_page.dart';
 import 'package:appsam/src/pages/login_page.dart';
 import 'package:appsam/src/pages/my_profile_page.dart';
 import 'package:appsam/src/pages/pacientes/crear_paciente_page.dart';
+import 'package:appsam/src/pages/pacientes/edit_paciente.dart';
 import 'package:appsam/src/pages/pacientes/paciente_detalle_page.dart';
 import 'package:appsam/src/pages/pacientes/pacientes_page.dart';
 import 'package:appsam/src/pages/resetmy_pass_page.dart';
@@ -42,5 +43,7 @@ Map<String, WidgetBuilder> getApplicationRoutes(ThemeBloc bloc) {
         PreclinicaDetallePage(),
     CrearPreclinicaPage.routeName: (BuildContext context) =>
         CrearPreclinicaPage(),
+    EditarPacientePage.routeName: (BuildContext context) =>
+        EditarPacientePage(),
   };
 }

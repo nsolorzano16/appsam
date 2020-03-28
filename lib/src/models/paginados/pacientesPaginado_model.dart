@@ -1,15 +1,56 @@
 // To parse this JSON data, do
 //
-//     final pacienteModel = pacienteModelFromJson(jsonString);
+//     final pacientesPaginadoModel = pacientesPaginadoModelFromJson(jsonString);
 
 import 'dart:convert';
 
-PacienteModel pacienteModelFromJson(String str) =>
-    PacienteModel.fromJson(json.decode(str));
+PacientesPaginadoModel pacientesPaginadoModelFromJson(String str) =>
+    PacientesPaginadoModel.fromJson(json.decode(str));
 
-String pacienteModelToJson(PacienteModel data) => json.encode(data.toJson());
+String pacientesPaginadoModelToJson(PacientesPaginadoModel data) =>
+    json.encode(data.toJson());
 
-class PacienteModel {
+PacientesViewModel pacientesViewModelFromJson(String str) =>
+    PacientesViewModel.fromJson(json.decode(str));
+
+String pacientesViewModelToJson(PacientesViewModel data) =>
+    json.encode(data.toJson());
+
+class PacientesPaginadoModel {
+  int totalItems;
+  int totalPages;
+  int currentPage;
+  int itemCount;
+  List<PacientesViewModel> items;
+
+  PacientesPaginadoModel({
+    this.totalItems,
+    this.totalPages,
+    this.currentPage,
+    this.itemCount,
+    this.items,
+  });
+
+  factory PacientesPaginadoModel.fromJson(Map<String, dynamic> json) =>
+      PacientesPaginadoModel(
+        totalItems: json["totalItems"],
+        totalPages: json["totalPages"],
+        currentPage: json["currentPage"],
+        itemCount: json["itemCount"],
+        items: List<PacientesViewModel>.from(
+            json["items"].map((x) => PacientesViewModel.fromJson(x))),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "totalItems": totalItems,
+        "totalPages": totalPages,
+        "currentPage": currentPage,
+        "itemCount": itemCount,
+        "items": List<dynamic>.from(items.map((x) => x.toJson())),
+      };
+}
+
+class PacientesViewModel {
   int pacienteId;
   int doctorId;
   int paisId;
@@ -20,30 +61,39 @@ class PacienteModel {
   int grupoEtnicoId;
   int departamentoId;
   int municipioId;
-  int departamentoResidenciaId;
-  int municipioResidenciaId;
   String nombres;
   String primerApellido;
   String segundoApellido;
   String identificacion;
-  String email;
+  dynamic email;
   String sexo;
   DateTime fechaNacimiento;
-  String estadoCivil;
+  dynamic estadoCivil;
+  dynamic lugarNacimiento;
   int edad;
-  String direccion;
+  dynamic direccion;
   String telefono1;
-  String telefono2;
+  dynamic telefono2;
   String nombreEmergencia;
   String telefonoEmergencia;
   String parentesco;
   bool menorDeEdad;
-  String nombreMadre;
-  String identificacionMadre;
-  String nombrePadre;
-  String identificacionPadre;
-  String carneVacuna;
+  dynamic nombreMadre;
+  dynamic identificacionMadre;
+  dynamic nombrePadre;
+  dynamic identificacionPadre;
+  dynamic carneVacuna;
   String fotoUrl;
+  String pais;
+  String profesion;
+  String escolaridad;
+  String religion;
+  String grupoSanguineo;
+  String grupoEtnico;
+  String departamento;
+  String municipio;
+  String departamentoResidencia;
+  String municipioResidencia;
   bool activo;
   String creadoPor;
   DateTime creadoFecha;
@@ -51,7 +101,7 @@ class PacienteModel {
   DateTime modificadoFecha;
   String notas;
 
-  PacienteModel({
+  PacientesViewModel({
     this.pacienteId,
     this.doctorId,
     this.paisId,
@@ -62,8 +112,6 @@ class PacienteModel {
     this.grupoEtnicoId,
     this.departamentoId,
     this.municipioId,
-    this.departamentoResidenciaId,
-    this.municipioResidenciaId,
     this.nombres,
     this.primerApellido,
     this.segundoApellido,
@@ -72,6 +120,7 @@ class PacienteModel {
     this.sexo,
     this.fechaNacimiento,
     this.estadoCivil,
+    this.lugarNacimiento,
     this.edad,
     this.direccion,
     this.telefono1,
@@ -86,6 +135,16 @@ class PacienteModel {
     this.identificacionPadre,
     this.carneVacuna,
     this.fotoUrl,
+    this.pais,
+    this.profesion,
+    this.escolaridad,
+    this.religion,
+    this.grupoSanguineo,
+    this.grupoEtnico,
+    this.departamento,
+    this.municipio,
+    this.departamentoResidencia,
+    this.municipioResidencia,
     this.activo,
     this.creadoPor,
     this.creadoFecha,
@@ -94,7 +153,8 @@ class PacienteModel {
     this.notas,
   });
 
-  factory PacienteModel.fromJson(Map<String, dynamic> json) => PacienteModel(
+  factory PacientesViewModel.fromJson(Map<String, dynamic> json) =>
+      PacientesViewModel(
         pacienteId: json["pacienteId"],
         doctorId: json["doctorId"],
         paisId: json["paisId"],
@@ -105,8 +165,6 @@ class PacienteModel {
         grupoEtnicoId: json["grupoEtnicoId"],
         departamentoId: json["departamentoId"],
         municipioId: json["municipioId"],
-        departamentoResidenciaId: json["departamentoResidenciaId"],
-        municipioResidenciaId: json["municipioResidenciaId"],
         nombres: json["nombres"],
         primerApellido: json["primerApellido"],
         segundoApellido: json["segundoApellido"],
@@ -115,13 +173,14 @@ class PacienteModel {
         sexo: json["sexo"],
         fechaNacimiento: DateTime.parse(json["fechaNacimiento"]),
         estadoCivil: json["estadoCivil"],
+        lugarNacimiento: json["lugarNacimiento"],
         edad: json["edad"],
         direccion: json["direccion"],
         telefono1: json["telefono1"],
         telefono2: json["telefono2"],
         nombreEmergencia: json["nombreEmergencia"],
         telefonoEmergencia: json["telefonoEmergencia"],
-        parentesco: json["parentesco"],
+        parentesco: json["parentesco"] == null ? null : json["parentesco"],
         menorDeEdad: json["menorDeEdad"],
         nombreMadre: json["nombreMadre"],
         identificacionMadre: json["identificacionMadre"],
@@ -129,6 +188,21 @@ class PacienteModel {
         identificacionPadre: json["identificacionPadre"],
         carneVacuna: json["carneVacuna"],
         fotoUrl: json["fotoUrl"],
+        pais: json["pais"],
+        profesion: json["profesion"],
+        escolaridad: json["escolaridad"],
+        religion: json["religion"],
+        grupoSanguineo: json["grupoSanguineo"],
+        grupoEtnico: json["grupoEtnico"],
+        departamento:
+            json["departamento"] == null ? null : json["departamento"],
+        municipio: json["municipio"] == null ? null : json["municipio"],
+        departamentoResidencia: json["departamentoResidencia"] == null
+            ? null
+            : json["departamentoResidencia"],
+        municipioResidencia: json["municipioResidencia"] == null
+            ? null
+            : json["municipioResidencia"],
         activo: json["activo"],
         creadoPor: json["creadoPor"],
         creadoFecha: DateTime.parse(json["creadoFecha"]),
@@ -148,8 +222,6 @@ class PacienteModel {
         "grupoEtnicoId": grupoEtnicoId,
         "departamentoId": departamentoId,
         "municipioId": municipioId,
-        "departamentoResidenciaId": departamentoResidenciaId,
-        "municipioResidenciaId": municipioResidenciaId,
         "nombres": nombres,
         "primerApellido": primerApellido,
         "segundoApellido": segundoApellido,
@@ -158,13 +230,14 @@ class PacienteModel {
         "sexo": sexo,
         "fechaNacimiento": fechaNacimiento.toIso8601String(),
         "estadoCivil": estadoCivil,
+        "lugarNacimiento": lugarNacimiento,
         "edad": edad,
         "direccion": direccion,
         "telefono1": telefono1,
         "telefono2": telefono2,
         "nombreEmergencia": nombreEmergencia,
         "telefonoEmergencia": telefonoEmergencia,
-        "parentesco": parentesco,
+        "parentesco": parentesco == null ? null : parentesco,
         "menorDeEdad": menorDeEdad,
         "nombreMadre": nombreMadre,
         "identificacionMadre": identificacionMadre,
@@ -172,6 +245,18 @@ class PacienteModel {
         "identificacionPadre": identificacionPadre,
         "carneVacuna": carneVacuna,
         "fotoUrl": fotoUrl,
+        "pais": pais,
+        "profesion": profesion,
+        "escolaridad": escolaridad,
+        "religion": religion,
+        "grupoSanguineo": grupoSanguineo,
+        "grupoEtnico": grupoEtnico,
+        "departamento": departamento == null ? null : departamento,
+        "municipio": municipio == null ? null : municipio,
+        "departamentoResidencia":
+            departamentoResidencia == null ? null : departamentoResidencia,
+        "municipioResidencia":
+            municipioResidencia == null ? null : municipioResidencia,
         "activo": activo,
         "creadoPor": creadoPor,
         "creadoFecha": creadoFecha.toIso8601String(),
