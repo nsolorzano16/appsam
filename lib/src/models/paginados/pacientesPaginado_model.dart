@@ -61,28 +61,29 @@ class PacientesViewModel {
   int grupoEtnicoId;
   int departamentoId;
   int municipioId;
+  int departamentoResidenciaId;
+  int municipioResidenciaId;
   String nombres;
   String primerApellido;
   String segundoApellido;
   String identificacion;
-  dynamic email;
+  String email;
   String sexo;
   DateTime fechaNacimiento;
-  dynamic estadoCivil;
-  dynamic lugarNacimiento;
+  String estadoCivil;
   int edad;
-  dynamic direccion;
+  String direccion;
   String telefono1;
-  dynamic telefono2;
+  String telefono2;
   String nombreEmergencia;
   String telefonoEmergencia;
   String parentesco;
   bool menorDeEdad;
-  dynamic nombreMadre;
-  dynamic identificacionMadre;
-  dynamic nombrePadre;
-  dynamic identificacionPadre;
-  dynamic carneVacuna;
+  String nombreMadre;
+  String identificacionMadre;
+  String nombrePadre;
+  String identificacionPadre;
+  String carneVacuna;
   String fotoUrl;
   String pais;
   String profesion;
@@ -112,6 +113,8 @@ class PacientesViewModel {
     this.grupoEtnicoId,
     this.departamentoId,
     this.municipioId,
+    this.departamentoResidenciaId,
+    this.municipioResidenciaId,
     this.nombres,
     this.primerApellido,
     this.segundoApellido,
@@ -120,7 +123,6 @@ class PacientesViewModel {
     this.sexo,
     this.fechaNacimiento,
     this.estadoCivil,
-    this.lugarNacimiento,
     this.edad,
     this.direccion,
     this.telefono1,
@@ -165,6 +167,10 @@ class PacientesViewModel {
         grupoEtnicoId: json["grupoEtnicoId"],
         departamentoId: json["departamentoId"],
         municipioId: json["municipioId"],
+        departamentoResidenciaId: json["departamentoResidenciaId"],
+        municipioResidenciaId: json["municipioResidenciaId"] == null
+            ? null
+            : json["municipioResidenciaId"],
         nombres: json["nombres"],
         primerApellido: json["primerApellido"],
         segundoApellido: json["segundoApellido"],
@@ -173,20 +179,21 @@ class PacientesViewModel {
         sexo: json["sexo"],
         fechaNacimiento: DateTime.parse(json["fechaNacimiento"]),
         estadoCivil: json["estadoCivil"],
-        lugarNacimiento: json["lugarNacimiento"],
         edad: json["edad"],
         direccion: json["direccion"],
         telefono1: json["telefono1"],
         telefono2: json["telefono2"],
         nombreEmergencia: json["nombreEmergencia"],
         telefonoEmergencia: json["telefonoEmergencia"],
-        parentesco: json["parentesco"] == null ? null : json["parentesco"],
+        parentesco: json["parentesco"],
         menorDeEdad: json["menorDeEdad"],
         nombreMadre: json["nombreMadre"],
         identificacionMadre: json["identificacionMadre"],
         nombrePadre: json["nombrePadre"],
-        identificacionPadre: json["identificacionPadre"],
-        carneVacuna: json["carneVacuna"],
+        identificacionPadre: json["identificacionPadre"] == null
+            ? null
+            : json["identificacionPadre"],
+        carneVacuna: json["carneVacuna"] == null ? null : json["carneVacuna"],
         fotoUrl: json["fotoUrl"],
         pais: json["pais"],
         profesion: json["profesion"],
@@ -194,12 +201,9 @@ class PacientesViewModel {
         religion: json["religion"],
         grupoSanguineo: json["grupoSanguineo"],
         grupoEtnico: json["grupoEtnico"],
-        departamento:
-            json["departamento"] == null ? null : json["departamento"],
-        municipio: json["municipio"] == null ? null : json["municipio"],
-        departamentoResidencia: json["departamentoResidencia"] == null
-            ? null
-            : json["departamentoResidencia"],
+        departamento: json["departamento"],
+        municipio: json["municipio"],
+        departamentoResidencia: json["departamentoResidencia"],
         municipioResidencia: json["municipioResidencia"] == null
             ? null
             : json["municipioResidencia"],
@@ -222,6 +226,9 @@ class PacientesViewModel {
         "grupoEtnicoId": grupoEtnicoId,
         "departamentoId": departamentoId,
         "municipioId": municipioId,
+        "departamentoResidenciaId": departamentoResidenciaId,
+        "municipioResidenciaId":
+            municipioResidenciaId == null ? null : municipioResidenciaId,
         "nombres": nombres,
         "primerApellido": primerApellido,
         "segundoApellido": segundoApellido,
@@ -230,20 +237,20 @@ class PacientesViewModel {
         "sexo": sexo,
         "fechaNacimiento": fechaNacimiento.toIso8601String(),
         "estadoCivil": estadoCivil,
-        "lugarNacimiento": lugarNacimiento,
         "edad": edad,
         "direccion": direccion,
         "telefono1": telefono1,
         "telefono2": telefono2,
         "nombreEmergencia": nombreEmergencia,
         "telefonoEmergencia": telefonoEmergencia,
-        "parentesco": parentesco == null ? null : parentesco,
+        "parentesco": parentesco,
         "menorDeEdad": menorDeEdad,
         "nombreMadre": nombreMadre,
         "identificacionMadre": identificacionMadre,
         "nombrePadre": nombrePadre,
-        "identificacionPadre": identificacionPadre,
-        "carneVacuna": carneVacuna,
+        "identificacionPadre":
+            identificacionPadre == null ? null : identificacionPadre,
+        "carneVacuna": carneVacuna == null ? null : carneVacuna,
         "fotoUrl": fotoUrl,
         "pais": pais,
         "profesion": profesion,
@@ -251,10 +258,9 @@ class PacientesViewModel {
         "religion": religion,
         "grupoSanguineo": grupoSanguineo,
         "grupoEtnico": grupoEtnico,
-        "departamento": departamento == null ? null : departamento,
-        "municipio": municipio == null ? null : municipio,
-        "departamentoResidencia":
-            departamentoResidencia == null ? null : departamentoResidencia,
+        "departamento": departamento,
+        "municipio": municipio,
+        "departamentoResidencia": departamentoResidencia,
         "municipioResidencia":
             municipioResidencia == null ? null : municipioResidencia,
         "activo": activo,

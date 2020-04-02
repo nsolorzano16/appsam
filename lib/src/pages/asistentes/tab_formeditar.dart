@@ -341,7 +341,7 @@ class _FormEditarPageState extends State<FormEditarPage> {
       setState(() {
         var format = DateFormat('dd/MM/yyyy');
         final _fecha = format.format(picked);
-        print(_fecha);
+
         _asistente.fechaNacimiento = picked;
 
         _inputFieldDateController.text = _fecha;

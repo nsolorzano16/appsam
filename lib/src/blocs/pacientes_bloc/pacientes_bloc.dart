@@ -19,6 +19,7 @@ class PacientesBloc with Validators {
   final listPacientes = new List<PacientesViewModel>();
 
   final _cargandoMunicipiosController = BehaviorSubject<bool>();
+  final _cargandoMunicipiosResiController = BehaviorSubject<bool>();
 
   Stream<List<PacientesViewModel>> get pacientesListStream =>
       _pacientesController.stream;
@@ -52,10 +53,10 @@ class PacientesBloc with Validators {
   }
 
   cargarMunicipiosResi(int deptoId) async {
-    _cargandoMunicipiosController.sink.add(true);
+    _cargandoMunicipiosResiController.sink.add(true);
     final municipios = await _comboService.getMunicipiosXDepartamento(deptoId);
     onChangeListMunicipiosResi(municipios);
-    _cargandoMunicipiosController.sink.add(false);
+    _cargandoMunicipiosResiController.sink.add(false);
   }
 
   cargarPacientesPaginado(int page, String filter, int doctorId) async {
@@ -67,9 +68,10 @@ class PacientesBloc with Validators {
     onChangePacientesLista(listPacientes);
   }
 
-  cargarPacientesPaginadoBusqueda(int page, String filter) async {
-    // final pacientes = await _pacienteService.getPacientesPaginado(page, filter);
-    // onChangePacientesBusqueda(pacientes.items);
+  cargarPacientesPaginadoBusqueda(int page, String filter, int doctorId) async {
+    final pacientes =
+        await _pacienteService.getPacientesPaginado(page, filter, doctorId);
+    onChangePacientesBusqueda(pacientes.items);
   }
 
   Future<bool> addPaciente(PacienteModel paciente) async {
@@ -88,8 +90,10 @@ class PacientesBloc with Validators {
     _municipiosController?.close();
     _cargandoMunicipiosController?.close();
     _municipiosResidenciaController?.close();
+    _cargandoMunicipiosResiController?.close();
   }
 
   int get ultimaPagina => _ultimaPaginaController.value;
   bool get cargando => _cargandoMunicipiosController.value;
+  bool get cargandoMunicipiosResi => _cargandoMunicipiosResiController.value;
 }
