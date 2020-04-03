@@ -1,9 +1,11 @@
 import 'dart:convert';
 
-AntecedentesFamiliaresPersonales consultaFromJson(String str) =>
+AntecedentesFamiliaresPersonales antecedentesFamiliaresPersonalesFromJson(
+        String str) =>
     AntecedentesFamiliaresPersonales.fromJson(json.decode(str));
 
-String consultaToJson(AntecedentesFamiliaresPersonales data) =>
+String antecedentesFamiliaresPersonalesToJson(
+        AntecedentesFamiliaresPersonales data) =>
     json.encode(data.toJson());
 
 class AntecedentesFamiliaresPersonales {

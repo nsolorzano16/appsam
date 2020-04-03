@@ -62,7 +62,7 @@ class PacientesService {
     final resp = await http.put(url,
         headers: headers, body: pacientesViewModelToJson(paciente));
     final decodedData = json.decode(resp.body);
-    print('ESTATUS CODE ---- ${resp.statusCode.toString()}');
+
     if (resp.statusCode == 200) {
       final usuario = new PacientesViewModel.fromJson(decodedData);
       return usuario;

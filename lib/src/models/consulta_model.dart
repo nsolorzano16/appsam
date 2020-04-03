@@ -11,6 +11,7 @@ import 'package:appsam/src/models/examenFisico_model.dart';
 import 'package:appsam/src/models/farmacosUsoActual_model.dart';
 import 'package:appsam/src/models/habitos_model.dart';
 import 'package:appsam/src/models/historialGinecoObstetra_model.dart';
+import 'package:appsam/src/models/notas_model.dart';
 import 'package:appsam/src/models/preclinica_model.dart';
 
 ConsultaModel consultaFromJson(String str) =>
@@ -27,7 +28,7 @@ class ConsultaModel {
   ExamenFisico examenFisico;
   ExamenFisicoGinecologico examenFisicoGinecologico;
   List<Diagnosticos> diagnosticos;
-  List<Diagnosticos> notas;
+  List<Notas> notas;
 
   ConsultaModel({
     this.preclinica,
@@ -57,21 +58,31 @@ class ConsultaModel {
             ExamenFisicoGinecologico.fromJson(json["examenFisicoGinecologico"]),
         diagnosticos: List<Diagnosticos>.from(
             json["diagnosticos"].map((x) => Diagnosticos.fromJson(x))),
-        notas: List<Diagnosticos>.from(
-            json["notas"].map((x) => Diagnosticos.fromJson(x))),
+        notas: List<Notas>.from(json["notas"].map((x) => Notas.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
-        "preclinica": preclinica.toJson(),
+        "preclinica": preclinica == null ? null : preclinica.toJson(),
         "antecedentesFamiliaresPersonales":
-            antecedentesFamiliaresPersonales.toJson(),
-        "habitos": habitos.toJson(),
-        "historialGinecoObstetra": historialGinecoObstetra.toJson(),
-        "farmacosUsoActual":
-            List<dynamic>.from(farmacosUsoActual.map((x) => x.toJson())),
-        "examenFisico": examenFisico.toJson(),
-        "examenFisicoGinecologico": examenFisicoGinecologico.toJson(),
-        "diagnosticos": List<dynamic>.from(diagnosticos.map((x) => x.toJson())),
-        "notas": List<dynamic>.from(notas.map((x) => x.toJson())),
+            antecedentesFamiliaresPersonales == null
+                ? null
+                : antecedentesFamiliaresPersonales.toJson(),
+        "habitos": habitos == null ? null : habitos.toJson(),
+        "historialGinecoObstetra": historialGinecoObstetra == null
+            ? null
+            : historialGinecoObstetra.toJson(),
+        "farmacosUsoActual": farmacosUsoActual == null
+            ? null
+            : List<dynamic>.from(farmacosUsoActual.map((x) => x.toJson())),
+        "examenFisico": examenFisico == null ? null : examenFisico.toJson(),
+        "examenFisicoGinecologico": examenFisicoGinecologico == null
+            ? null
+            : examenFisicoGinecologico.toJson(),
+        "diagnosticos": diagnosticos == null
+            ? null
+            : List<dynamic>.from(diagnosticos.map((x) => x.toJson())),
+        "notas": notas == null
+            ? null
+            : List<dynamic>.from(notas.map((x) => x.toJson())),
       };
 }

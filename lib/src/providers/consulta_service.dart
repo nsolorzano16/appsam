@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:http/http.dart' as http;
 import 'package:appsam/src/models/consulta_model.dart';
 import 'package:appsam/src/utils/storage_util.dart';
@@ -16,7 +18,8 @@ class ConsultaService {
     final url = '$_apiURL/api/Consulta';
     final resp =
         await http.post(url, headers: headers, body: consultaToJson(consulta));
-    //Map<String, dynamic> decodeResp = json.decode(resp.body);
+
+    //print(resp.body);
     if (resp.statusCode == 200) {
       return true;
     }

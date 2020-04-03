@@ -1,7 +1,6 @@
 import 'package:appsam/src/blocs/provider.dart';
 import 'package:appsam/src/models/paginados/pacientesPaginado_model.dart';
 import 'package:appsam/src/models/usuario_model.dart';
-import 'package:appsam/src/pages/pacientes/paciente_detalle_page.dart';
 import 'package:appsam/src/utils/storage_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';

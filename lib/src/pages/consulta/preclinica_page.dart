@@ -128,7 +128,6 @@ class _PreclinicaPageState extends State<PreclinicaPage> {
     PreclinicaViewModel preclinica,
   ) {
     return Card(
-      color: Colors.lightBlue,
       elevation: 3.0,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
       child: ListTile(
@@ -153,16 +152,12 @@ class _PreclinicaPageState extends State<PreclinicaPage> {
           child: Text(
             '${preclinica.nombres} ${preclinica.primerApellido} ${preclinica.segundoApellido}',
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
           ),
         ),
         subtitle: Row(
           children: <Widget>[
             Text(
               'Identificación: ${preclinica.identificacion}',
-              style: TextStyle(
-                color: Colors.white,
-              ),
             ),
           ],
         ),
@@ -172,11 +167,10 @@ class _PreclinicaPageState extends State<PreclinicaPage> {
             IconButton(
                 icon: Icon(
                   Icons.edit,
-                  color: Colors.white,
                 ),
                 onPressed: () {}),
             IconButton(
-                icon: Icon(Icons.arrow_forward_ios, color: Colors.white),
+                icon: Icon(Icons.arrow_forward_ios),
                 onPressed: () => Navigator.pushNamed(
                     context, 'preclinica_detalle',
                     arguments: preclinica))

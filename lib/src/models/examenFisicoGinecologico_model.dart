@@ -1,9 +1,9 @@
 import 'dart:convert';
 
-ExamenFisicoGinecologico consultaFromJson(String str) =>
+ExamenFisicoGinecologico examenFisicoGinecologicoFromJson(String str) =>
     ExamenFisicoGinecologico.fromJson(json.decode(str));
 
-String consultaToJson(ExamenFisicoGinecologico data) =>
+String examenFisicoGinecologicoToJson(ExamenFisicoGinecologico data) =>
     json.encode(data.toJson());
 
 class ExamenFisicoGinecologico {

@@ -68,6 +68,15 @@ class PacientesBloc with Validators {
     onChangePacientesLista(listPacientes);
   }
 
+  cargarPacientesPaginadoRefresh(int page, String filter, int doctorId) async {
+    final pacientes =
+        await _pacienteService.getPacientesPaginado(page, filter, doctorId);
+    _ultimaPaginaController.add(pacientes.totalPages);
+    listPacientes.clear();
+    listPacientes.addAll(pacientes.items);
+    onChangePacientesLista(listPacientes);
+  }
+
   cargarPacientesPaginadoBusqueda(int page, String filter, int doctorId) async {
     final pacientes =
         await _pacienteService.getPacientesPaginado(page, filter, doctorId);

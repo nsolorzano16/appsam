@@ -1,15 +1,14 @@
 import 'dart:convert';
 
-Diagnosticos diagnosticosFromJson(String str) =>
-    Diagnosticos.fromJson(json.decode(str));
+Notas notasFromJson(String str) => Notas.fromJson(json.decode(str));
 
-String diagnosticosToJson(Diagnosticos data) => json.encode(data.toJson());
+String notasToJson(Notas data) => json.encode(data.toJson());
 
-class Diagnosticos {
+class Notas {
   int diagnosticoId;
   int pacienteId;
   int doctorId;
-  String problemasClinicos;
+
   bool activo;
   String creadoPor;
   DateTime creadoFecha;
@@ -17,11 +16,10 @@ class Diagnosticos {
   DateTime modificadoFecha;
   String notas;
 
-  Diagnosticos({
+  Notas({
     this.diagnosticoId,
     this.pacienteId,
     this.doctorId,
-    this.problemasClinicos,
     this.activo,
     this.creadoPor,
     this.creadoFecha,
@@ -30,14 +28,11 @@ class Diagnosticos {
     this.notas,
   });
 
-  factory Diagnosticos.fromJson(Map<String, dynamic> json) => Diagnosticos(
+  factory Notas.fromJson(Map<String, dynamic> json) => Notas(
         diagnosticoId:
             json["diagnosticoId"] == null ? null : json["diagnosticoId"],
         pacienteId: json["pacienteId"],
         doctorId: json["doctorId"],
-        problemasClinicos: json["problemasClinicos"] == null
-            ? null
-            : json["problemasClinicos"],
         activo: json["activo"],
         creadoPor: json["creadoPor"],
         creadoFecha: DateTime.parse(json["creadoFecha"]),
@@ -50,8 +45,6 @@ class Diagnosticos {
         "diagnosticoId": diagnosticoId == null ? null : diagnosticoId,
         "pacienteId": pacienteId,
         "doctorId": doctorId,
-        "problemasClinicos":
-            problemasClinicos == null ? null : problemasClinicos,
         "activo": activo,
         "creadoPor": creadoPor,
         "creadoFecha": creadoFecha.toIso8601String(),

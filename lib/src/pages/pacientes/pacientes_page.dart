@@ -51,8 +51,6 @@ class _PacientesPageState extends State<PacientesPage> {
           _scrollController.position.maxScrollExtent) {
         page++;
         totalPages = _pacientesBloc.ultimaPagina;
-        print(totalPages);
-        print(page);
 
         if (page <= totalPages) {
           fetchData(
@@ -76,7 +74,9 @@ class _PacientesPageState extends State<PacientesPage> {
       ),
       body: Stack(
         children: <Widget>[
-          _crearListaPacientes(),
+          RefreshIndicator(
+              child: _crearListaPacientes(),
+              onRefresh: () => fetchDataRefresh(1))
         ],
       ),
       floatingActionButton: FloatingActionButton(
@@ -89,9 +89,40 @@ class _PacientesPageState extends State<PacientesPage> {
 
   Future<Null> fetchData(int page) async {
     if (_usuario.rolId == 3) {
-      _pacientesBloc.cargarPacientesPaginado(1, '', _usuario.asistenteId);
+      _pacientesBloc.cargarPacientesPaginado(page, '', _usuario.asistenteId);
     } else {
-      _pacientesBloc.cargarPacientesPaginado(1, '', _usuario.usuarioId);
+      _pacientesBloc.cargarPacientesPaginado(page, '', _usuario.usuarioId);
+    }
+
+    final ProgressDialog pd = new ProgressDialog(
+      context,
+      type: ProgressDialogType.Normal,
+      isDismissible: false,
+      showLogs: false,
+    );
+    pd.update(
+      progress: 50.0,
+      message: "Espere...",
+      progressWidget: Container(child: CircularProgressIndicator()),
+      maxProgress: 100.0,
+      progressTextStyle:
+          TextStyle(color: Colors.black, fontWeight: FontWeight.w400),
+      messageTextStyle:
+          TextStyle(color: Colors.black, fontWeight: FontWeight.w600),
+    );
+    pd.show();
+    Timer(Duration(seconds: 2), () {
+      pd.hide();
+    });
+  }
+
+  Future<Null> fetchDataRefresh(int page) async {
+    if (_usuario.rolId == 3) {
+      _pacientesBloc.cargarPacientesPaginadoRefresh(
+          page, '', _usuario.asistenteId);
+    } else {
+      _pacientesBloc.cargarPacientesPaginadoRefresh(
+          page, '', _usuario.usuarioId);
     }
 
     final ProgressDialog pd = new ProgressDialog(
@@ -188,7 +219,10 @@ class _PacientesPageState extends State<PacientesPage> {
                 size: 20.0,
                 color: Theme.of(context).primaryColor,
               ),
-              onPressed: () {})),
+              onPressed: () {
+                Navigator.pushNamed(context, 'crear_preclinica',
+                    arguments: paciente);
+              })),
     );
   }
 

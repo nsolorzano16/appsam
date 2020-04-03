@@ -53,7 +53,8 @@ void mostrarFlushBar(
   )..show(context);
 }
 
-InputDecoration inputsDecorations(String label, IconData icon) {
+InputDecoration inputsDecorations(String label, IconData icon,
+    {String helperTexto = '', String hintTexto = ''}) {
   return InputDecoration(
       filled: true,
       fillColor: Colors.white,
@@ -63,6 +64,8 @@ InputDecoration inputsDecorations(String label, IconData icon) {
       ),
       border: OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
       labelText: label,
+      helperText: helperTexto,
+      hintText: hintTexto,
       isDense: true);
 }
 

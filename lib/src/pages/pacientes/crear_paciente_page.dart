@@ -1252,7 +1252,7 @@ class _CrearPacientePageState extends State<CrearPacientePage> {
         _paciente.municipioResidenciaId = null;
       }
 
-      print(pacienteModelToJson(_paciente));
+      // print(pacienteModelToJson(_paciente));
 
       final ProgressDialog _pr = new ProgressDialog(
         context,

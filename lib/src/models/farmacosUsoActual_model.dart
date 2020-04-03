@@ -1,9 +1,10 @@
 import 'dart:convert';
 
-FarmacosUsoActual consultaFromJson(String str) =>
+FarmacosUsoActual farmacosUsoActualFromJson(String str) =>
     FarmacosUsoActual.fromJson(json.decode(str));
 
-String consultaToJson(FarmacosUsoActual data) => json.encode(data.toJson());
+String farmacosUsoActualToJson(FarmacosUsoActual data) =>
+    json.encode(data.toJson());
 
 class FarmacosUsoActual {
   int farmacoId;

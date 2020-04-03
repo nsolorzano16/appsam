@@ -1,8 +1,8 @@
 import 'dart:convert';
 
-Habitos consultaFromJson(String str) => Habitos.fromJson(json.decode(str));
+Habitos habitosFromJson(String str) => Habitos.fromJson(json.decode(str));
 
-String consultaToJson(Habitos data) => json.encode(data.toJson());
+String habitosToJson(Habitos data) => json.encode(data.toJson());
 
 class Habitos {
   int habitoId;

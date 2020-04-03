@@ -54,7 +54,7 @@ class PreclinicaViewModel {
   int ritmoCardiaco;
   int presionSistolica;
   int presionDiastolica;
-  int imc;
+  double imc;
   bool atendida;
   String pesoDescripcion;
   String nombres;
@@ -65,7 +65,6 @@ class PreclinicaViewModel {
   String sexo;
   DateTime fechaNacimiento;
   String estadoCivil;
-  String tipoDeSangre;
   int edad;
   bool menorDeEdad;
   dynamic nombreMadre;
@@ -103,7 +102,6 @@ class PreclinicaViewModel {
     this.sexo,
     this.fechaNacimiento,
     this.estadoCivil,
-    this.tipoDeSangre,
     this.edad,
     this.menorDeEdad,
     this.nombreMadre,
@@ -143,7 +141,6 @@ class PreclinicaViewModel {
         sexo: json["sexo"],
         fechaNacimiento: DateTime.parse(json["fechaNacimiento"]),
         estadoCivil: json["estadoCivil"],
-        tipoDeSangre: json["tipoDeSangre"],
         edad: json["edad"],
         menorDeEdad: json["menorDeEdad"],
         nombreMadre: json["nombreMadre"],
@@ -182,7 +179,6 @@ class PreclinicaViewModel {
         "sexo": sexo,
         "fechaNacimiento": fechaNacimiento.toIso8601String(),
         "estadoCivil": estadoCivil,
-        "tipoDeSangre": tipoDeSangre,
         "edad": edad,
         "menorDeEdad": menorDeEdad,
         "nombreMadre": nombreMadre,

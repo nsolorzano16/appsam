@@ -2,6 +2,7 @@ import 'package:appsam/src/models/paginados/preclinica_paginadoVM.dart';
 import 'package:appsam/src/utils/storage_util.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:getflutter/getflutter.dart';
 
 import 'package:intl/intl.dart';
 
@@ -14,93 +15,54 @@ class PreclinicaDetallePage extends StatelessWidget {
         ModalRoute.of(context).settings.arguments;
     //final _screenSize = MediaQuery.of(context).size;
     return Scaffold(
-        appBar: AppBar(
-          title: Text('Preclinica Detalle'),
-        ),
-        body: Stack(
-          children: <Widget>[
-            _crearFondo(context),
-            SingleChildScrollView(
-              child: Column(
-                children: <Widget>[
-                  _crearDatosPaciente(_preclinica),
-                  SizedBox(
-                    height: 10.0,
-                  ),
-                  _crearDatosPreclinica(_preclinica),
-                  SizedBox(
-                    height: 10.0,
-                  ),
-                  _crearNotasPaciente(_preclinica),
-                  SizedBox(
-                    height: 10.0,
-                  ),
-                  _crearNotasPreclinica(_preclinica),
-                  SizedBox(
-                    height: 10.0,
-                  ),
-                ],
-              ),
-            )
-          ],
-        ));
-  }
-
-  Widget _crearFondo(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    final fondoMorado = Container(
-      height: size.height,
-      width: double.infinity,
-      decoration: BoxDecoration(
-          gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: <Color>[
-            Color.fromRGBO(0, 0, 77, 1.0),
-            Color.fromRGBO(255, 0, 0, 1.0),
-          ])),
-    );
-    final circulo = Container(
-      width: 100.0,
-      height: 100.0,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(100.0),
-          color: Color.fromRGBO(255, 255, 255, 0.1)),
-    );
-    return Stack(
-      children: <Widget>[
-        fondoMorado,
-        Positioned(top: 90.0, left: 30.0, child: circulo),
-        Positioned(top: -40.0, left: -30.0, child: circulo),
-        Positioned(bottom: -50, right: -10, child: circulo),
-        Positioned(bottom: 120, right: 20.0, child: circulo),
-        Positioned(bottom: -50.0, left: -20.0, child: circulo),
-      ],
+      appBar: AppBar(
+        title: Text('Preclinica Detalle'),
+      ),
+      body: Stack(
+        children: <Widget>[
+          SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                _crearDatosPaciente(_preclinica),
+                _crearDatosPreclinica(_preclinica),
+                _crearNotasPreclinica(_preclinica),
+                _crearNotasPaciente(_preclinica),
+              ],
+            ),
+          )
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        child: FaIcon(FontAwesomeIcons.notesMedical),
+        backgroundColor: Theme.of(context).primaryColor,
+      ),
     );
   }
 
   Widget _crearDatosPaciente(PreclinicaViewModel preclinica) {
-    return Card(
-        elevation: 7.0,
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-        child: ListTile(
-          leading: _fotoPerfil(preclinica),
-          title: _infoPaciente(preclinica),
-        ));
-  }
-
-  Widget _fotoPerfil(PreclinicaViewModel preclinica) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(100.0),
-      child: FadeInImage(
-          placeholder: AssetImage('assets/jar-loading.gif'),
-          image: NetworkImage(preclinica.fotoUrl)),
+    return GFCard(
+      elevation: 5.0,
+      title: GFListTile(
+        avatar: ClipRRect(
+          borderRadius: BorderRadius.circular(100.0),
+          child: FadeInImage(
+              width: 100,
+              height: 100,
+              placeholder: AssetImage('assets/jar-loading.gif'),
+              image: NetworkImage(preclinica.fotoUrl)),
+        ),
+        title: Text(
+            '${preclinica.nombres} ${preclinica.primerApellido} ${preclinica.segundoApellido}'),
+        subTitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text('Identificación: ${preclinica.identificacion}'),
+          ],
+        ),
+      ),
+      content: Table(children: _camposPaciente(preclinica)),
     );
-  }
-
-  Widget _infoPaciente(PreclinicaViewModel preclinica) {
-    return Table(children: _camposPaciente(preclinica));
   }
 
   String _estadocivil(String estadoCivil) {
@@ -119,9 +81,10 @@ class PreclinicaDetallePage extends StatelessWidget {
 
   List<TableRow> _camposPaciente(PreclinicaViewModel preclinica) {
     final TextStyle _estiloSubt =
-        new TextStyle(fontSize: 12.0, color: Colors.indigo);
-    final TextStyle estiloDatos =
-        new TextStyle(fontSize: 14.0, color: Colors.black);
+        new TextStyle(fontSize: 12.0, color: Colors.grey);
+    final TextStyle estiloDatos = new TextStyle(
+      fontSize: 14.0,
+    );
     final format = DateFormat.yMMMEd('es_Es');
     final _fechaNac = format.format(preclinica.fechaNacimiento);
     final lista = [
@@ -222,40 +185,6 @@ class PreclinicaDetallePage extends StatelessWidget {
             ),
             Text(
               'Estado Civil',
-              textAlign: TextAlign.left,
-              style: _estiloSubt,
-            ),
-            Divider()
-          ],
-        )
-      ]),
-      TableRow(children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(
-              '${preclinica.tipoDeSangre}',
-              textAlign: TextAlign.justify,
-              style: estiloDatos,
-            ),
-            Text(
-              'Tipo de Sangre',
-              textAlign: TextAlign.left,
-              style: _estiloSubt,
-            ),
-            Divider()
-          ],
-        ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(
-              '${(preclinica.email != null) ? preclinica.email : '- -'}',
-              textAlign: TextAlign.justify,
-              style: estiloDatos,
-            ),
-            Text(
-              'Email',
               textAlign: TextAlign.left,
               style: _estiloSubt,
             ),
@@ -372,13 +301,10 @@ class PreclinicaDetallePage extends StatelessWidget {
   }
 
   Widget _crearDatosPreclinica(PreclinicaViewModel preclinica) {
-    return Card(
-        elevation: 7.0,
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-        child: ListTile(
-          title: _infoPreclinica(preclinica),
-        ));
+    return GFCard(
+      elevation: 5.0,
+      content: _infoPreclinica(preclinica),
+    );
   }
 
   Widget _infoPreclinica(PreclinicaViewModel preclinica) {
@@ -387,7 +313,7 @@ class PreclinicaDetallePage extends StatelessWidget {
 
   List<TableRow> _camposPreclinica(PreclinicaViewModel preclinica) {
     final TextStyle _estiloSubt =
-        new TextStyle(fontSize: 12.0, color: Colors.indigo);
+        new TextStyle(fontSize: 12.0, color: Colors.grey);
     final TextStyle estiloDatos =
         new TextStyle(fontSize: 14.0, color: Colors.black);
 
@@ -501,43 +427,51 @@ class PreclinicaDetallePage extends StatelessWidget {
 
   Widget _crearNotasPaciente(PreclinicaViewModel preclinica) {
     final TextStyle _estiloSubt =
-        new TextStyle(fontSize: 12.0, color: Colors.indigo);
+        new TextStyle(fontSize: 12.0, color: Colors.grey);
     final TextStyle estiloDatos =
         new TextStyle(fontSize: 14.0, color: Colors.black);
-    return Card(
-        elevation: 7.0,
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-        child: ListTile(
-          leading: FaIcon(FontAwesomeIcons.notesMedical),
-          title: Text(
-            '${preclinica.notasPaciente}',
-            style: estiloDatos,
-          ),
-          subtitle: Text(
-            'Notas Paciente',
-            style: _estiloSubt,
-            textAlign: TextAlign.justify,
-          ),
-        ));
+
+    return GFCard(
+      elevation: 5.0,
+      padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 4.0),
+      content: ListTile(
+        leading: FaIcon(
+          FontAwesomeIcons.stickyNote,
+          color: Colors.red,
+        ),
+        title: Text(
+          '${preclinica.notasPaciente}',
+          style: estiloDatos,
+        ),
+        subtitle: Text(
+          'Notas Paciente',
+          style: _estiloSubt,
+          textAlign: TextAlign.justify,
+        ),
+      ),
+    );
   }
 
   Widget _crearNotasPreclinica(PreclinicaViewModel preclinica) {
     final TextStyle _estiloSubt =
-        new TextStyle(fontSize: 12.0, color: Colors.indigo);
+        new TextStyle(fontSize: 12.0, color: Colors.grey);
     final TextStyle estiloDatos =
         new TextStyle(fontSize: 14.0, color: Colors.black);
-    return Card(
+    return GFCard(
         elevation: 5.0,
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-        child: ListTile(
-          leading: FaIcon(FontAwesomeIcons.notesMedical),
-          title: Text(
-            '${preclinica.notas}',
-            style: estiloDatos,
-            textAlign: TextAlign.justify,
+        padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 4.0),
+        content: ListTile(
+          leading: FaIcon(
+            FontAwesomeIcons.stickyNote,
+            color: Colors.red,
           ),
+          title: (preclinica.notas != null)
+              ? Text(
+                  '${preclinica.notas}',
+                  style: estiloDatos,
+                  textAlign: TextAlign.justify,
+                )
+              : Text('*****'),
           subtitle: Text(
             'Notas Preclinica',
             style: _estiloSubt,

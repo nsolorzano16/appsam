@@ -1,9 +1,9 @@
 import 'dart:convert';
 
-HistorialGinecoObstetra consultaFromJson(String str) =>
+HistorialGinecoObstetra historialGinecoObstetraFromJson(String str) =>
     HistorialGinecoObstetra.fromJson(json.decode(str));
 
-String consultaToJson(HistorialGinecoObstetra data) =>
+String historialGinecoObstetraToJson(HistorialGinecoObstetra data) =>
     json.encode(data.toJson());
 
 class HistorialGinecoObstetra {

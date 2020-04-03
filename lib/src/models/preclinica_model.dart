@@ -1,9 +1,9 @@
 import 'dart:convert';
 
-Preclinica consultaFromJson(String str) =>
+Preclinica preclinicaromJson(String str) =>
     Preclinica.fromJson(json.decode(str));
 
-String consultaToJson(Preclinica data) => json.encode(data.toJson());
+String preclinicaToJson(Preclinica data) => json.encode(data.toJson());
 
 class Preclinica {
   int preclinicaId;
