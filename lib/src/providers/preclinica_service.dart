@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:appsam/src/models/preclinica_model.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:appsam/src/models/paginados/preclinica_paginadoVM.dart';
@@ -25,6 +26,47 @@ class PreclinicaService {
     if (resp.statusCode == 200 && preclinicas != null) {
       return preclinicas;
     }
+    return null;
+  }
+
+  Future<bool> addPreclinica(Preclinica preclinica) async {
+    final String token = StorageUtil.getString('token');
+    final headers = {
+      "content-type": "application/json",
+      "accept": "application/json",
+      'authorization': 'Bearer $token',
+    };
+    final url = '$_apiURL/api/Preclinica';
+    final resp = await http.post(url,
+        headers: headers, body: preclinicaToJson(preclinica));
+
+    //print(resp.body);
+    if (resp.statusCode == 200) {
+      return true;
+    }
+    return false;
+  }
+
+  Future<PreclinicaViewModel> updatePreclinica(
+      PreclinicaViewModel preclinica) async {
+    final String token = StorageUtil.getString('token');
+    final headers = {
+      "content-type": "application/json",
+      "accept": "application/json",
+      'authorization': 'Bearer $token',
+    };
+    final url = '$_apiURL/api/Preclinica';
+
+    //print(usuarioModelToJson(usuario));
+    final resp = await http.put(url,
+        headers: headers, body: preclinicaViewModelToJson(preclinica));
+    final decodedData = json.decode(resp.body);
+
+    if (resp.statusCode == 200) {
+      final preclinica = new PreclinicaViewModel.fromJson(decodedData);
+      return preclinica;
+    }
+
     return null;
   }
 }

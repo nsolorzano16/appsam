@@ -10,6 +10,12 @@ PreclinicaPaginadoViewModel preclinicaPaginadoViewModelFromJson(String str) =>
 String preclinicaPaginadoViewModelToJson(PreclinicaPaginadoViewModel data) =>
     json.encode(data.toJson());
 
+PreclinicaViewModel preclinicaViewModelFromJson(String str) =>
+    PreclinicaViewModel.fromJson(json.decode(str));
+
+String preclinicaViewModelToJson(PreclinicaViewModel data) =>
+    json.encode(data.toJson());
+
 class PreclinicaPaginadoViewModel {
   int totalItems;
   int totalPages;
@@ -48,15 +54,15 @@ class PreclinicaViewModel {
   int preclinicaId;
   int pacienteId;
   int doctorId;
-  int peso;
-  int altura;
+  double peso;
+  double altura;
   int frecuenciaRespiratoria;
   int ritmoCardiaco;
   int presionSistolica;
   int presionDiastolica;
   double imc;
   bool atendida;
-  String pesoDescripcion;
+  dynamic pesoDescripcion;
   String nombres;
   String primerApellido;
   String segundoApellido;
@@ -67,11 +73,11 @@ class PreclinicaViewModel {
   String estadoCivil;
   int edad;
   bool menorDeEdad;
-  dynamic nombreMadre;
-  dynamic identificacionMadre;
-  dynamic nombrePadre;
-  dynamic identificacionPadre;
-  dynamic carneVacuna;
+  String nombreMadre;
+  String identificacionMadre;
+  String nombrePadre;
+  String identificacionPadre;
+  String carneVacuna;
   String fotoUrl;
   String notasPaciente;
   bool activo;
@@ -124,13 +130,13 @@ class PreclinicaViewModel {
         preclinicaId: json["preclinicaId"],
         pacienteId: json["pacienteId"],
         doctorId: json["doctorId"],
-        peso: json["peso"],
-        altura: json["altura"],
+        peso: json["peso"].toDouble(),
+        altura: json["altura"].toDouble(),
         frecuenciaRespiratoria: json["frecuenciaRespiratoria"],
         ritmoCardiaco: json["ritmoCardiaco"],
         presionSistolica: json["presionSistolica"],
         presionDiastolica: json["presionDiastolica"],
-        imc: json["imc"],
+        imc: json["imc"].toDouble(),
         atendida: json["atendida"],
         pesoDescripcion: json["pesoDescripcion"],
         nombres: json["nombres"],
@@ -155,7 +161,7 @@ class PreclinicaViewModel {
         creadoFecha: DateTime.parse(json["creadoFecha"]),
         modificadoPor: json["modificadoPor"],
         modificadoFecha: DateTime.parse(json["modificadoFecha"]),
-        notas: json["notas"],
+        notas: json["notas"] == null ? null : json["notas"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -193,6 +199,6 @@ class PreclinicaViewModel {
         "creadoFecha": creadoFecha.toIso8601String(),
         "modificadoPor": modificadoPor,
         "modificadoFecha": modificadoFecha.toIso8601String(),
-        "notas": notas,
+        "notas": notas == null ? null : notas,
       };
 }

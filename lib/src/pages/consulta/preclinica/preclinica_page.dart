@@ -131,52 +131,39 @@ class _PreclinicaPageState extends State<PreclinicaPage> {
       elevation: 3.0,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
       child: ListTile(
-        dense: true,
-        contentPadding: EdgeInsets.symmetric(
-          horizontal: 10.0,
-        ),
-        leading: Container(
-            padding: EdgeInsets.only(right: 5.0),
-            decoration: BoxDecoration(
-                border:
-                    Border(right: BorderSide(width: 1.0, color: Colors.black))),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(30.0),
-              child: FadeInImage(
-                  width: 40.0,
-                  height: 40.0,
-                  placeholder: AssetImage('assets/jar-loading.gif'),
-                  image: NetworkImage(preclinica.fotoUrl)),
-            )),
-        title: Container(
-          child: Text(
-            '${preclinica.nombres} ${preclinica.primerApellido} ${preclinica.segundoApellido}',
-            overflow: TextOverflow.ellipsis,
+          onTap: () => Navigator.pushNamed(context, 'preclinica_detalle',
+              arguments: preclinica),
+          dense: true,
+          contentPadding: EdgeInsets.symmetric(
+            horizontal: 10.0,
           ),
-        ),
-        subtitle: Row(
-          children: <Widget>[
-            Text(
-              'Identificación: ${preclinica.identificacion}',
+          leading: Container(
+              padding: EdgeInsets.only(right: 5.0),
+              decoration: BoxDecoration(
+                  border: Border(
+                      right: BorderSide(width: 1.0, color: Colors.black))),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(30.0),
+                child: FadeInImage(
+                    width: 40.0,
+                    height: 40.0,
+                    placeholder: AssetImage('assets/jar-loading.gif'),
+                    image: NetworkImage(preclinica.fotoUrl)),
+              )),
+          title: Container(
+            child: Text(
+              '${preclinica.nombres} ${preclinica.primerApellido} ${preclinica.segundoApellido}',
+              overflow: TextOverflow.ellipsis,
             ),
-          ],
-        ),
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            IconButton(
-                icon: Icon(
-                  Icons.edit,
-                ),
-                onPressed: () {}),
-            IconButton(
-                icon: Icon(Icons.arrow_forward_ios),
-                onPressed: () => Navigator.pushNamed(
-                    context, 'preclinica_detalle',
-                    arguments: preclinica))
-          ],
-        ),
-      ),
+          ),
+          subtitle: Row(
+            children: <Widget>[
+              Text(
+                'Identificación: ${preclinica.identificacion}',
+              ),
+            ],
+          ),
+          trailing: Icon(Icons.arrow_forward_ios)),
     );
   }
 }

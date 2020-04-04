@@ -1,5 +1,6 @@
 import 'package:appsam/src/blocs/validators.dart';
 import 'package:appsam/src/models/paginados/preclinica_paginadoVM.dart';
+import 'package:appsam/src/models/preclinica_model.dart';
 import 'package:appsam/src/providers/preclinica_service.dart';
 import 'package:rxdart/subjects.dart';
 
@@ -21,6 +22,15 @@ class PreclinicaBloc with Validators {
     _ultimaPaginaController.sink.add(preclinicas.totalPages);
     listPreclinicas.addAll(preclinicas.items);
     preclinicasSink(listPreclinicas);
+  }
+
+  Future<bool> addPreclinica(Preclinica preclinica) async {
+    return await _preclinicaService.addPreclinica(preclinica);
+  }
+
+  Future<PreclinicaViewModel> updatePreclinica(
+      PreclinicaViewModel preclinica) async {
+    return await _preclinicaService.updatePreclinica(preclinica);
   }
 
   dispose() {

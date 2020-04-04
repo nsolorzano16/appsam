@@ -17,6 +17,12 @@ class PreclinicaDetallePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Preclinica Detalle'),
+        actions: <Widget>[
+          IconButton(
+              icon: Icon(Icons.edit),
+              onPressed: () => Navigator.pushNamed(context, 'editar_preclinica',
+                  arguments: _preclinica))
+        ],
       ),
       body: Stack(
         children: <Widget>[

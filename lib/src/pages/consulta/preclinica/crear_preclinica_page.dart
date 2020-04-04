@@ -1,7 +1,5 @@
 import 'dart:async';
-import 'dart:convert';
 
-import 'package:appsam/src/blocs/consulta_bloc.dart';
 import 'package:appsam/src/blocs/preclinica_bloc.dart';
 import 'package:appsam/src/models/consulta_model.dart';
 import 'package:appsam/src/models/paginados/pacientesPaginado_model.dart';
@@ -23,7 +21,6 @@ class CrearPreclinicaPage extends StatefulWidget {
 
 class _CrearPreclinicaPageState extends State<CrearPreclinicaPage> {
   PreclinicaBloc bloc = new PreclinicaBloc();
-  ConsultaBloc blocConsulta = new ConsultaBloc();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final UsuarioModel _usuario =
@@ -124,7 +121,7 @@ class _CrearPreclinicaPageState extends State<CrearPreclinicaPage> {
       child: TextFormField(
         autovalidate: true,
         validator: isNumeric,
-        onSaved: (value) => _preclinica.peso = int.parse(value),
+        onSaved: (value) => _preclinica.peso = double.parse(value),
         keyboardType: TextInputType.numberWithOptions(decimal: true),
         decoration: inputsDecorations('Peso', Icons.account_circle,
             hintTexto: 'Libras'),
@@ -304,7 +301,7 @@ class _CrearPreclinicaPageState extends State<CrearPreclinicaPage> {
     _preclinica.modificadoFecha = DateTime.now();
     _consulta.preclinica = _preclinica;
     print(consultaToJson(_consulta));
-    final bool resp = await blocConsulta.addConsulta(_consulta);
+    final bool resp = await bloc.addPreclinica(_preclinica);
 
     _pr.hide();
     if (resp) {

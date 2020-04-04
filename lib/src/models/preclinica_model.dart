@@ -9,7 +9,7 @@ class Preclinica {
   int preclinicaId;
   int pacienteId;
   int doctorId;
-  int peso;
+  double peso;
   double altura;
   int frecuenciaRespiratoria;
   int ritmoCardiaco;
