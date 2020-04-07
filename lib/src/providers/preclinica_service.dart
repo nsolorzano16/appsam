@@ -1,7 +1,7 @@
 import 'dart:convert';
-import 'package:appsam/src/models/preclinica_model.dart';
 import 'package:http/http.dart' as http;
 
+import 'package:appsam/src/models/preclinica_model.dart';
 import 'package:appsam/src/models/paginados/preclinica_paginadoVM.dart';
 import 'package:appsam/src/utils/storage_util.dart';
 import 'package:appsam/src/utils/utils.dart';

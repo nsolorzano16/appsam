@@ -4,6 +4,7 @@ import 'package:appsam/src/pages/asistentes/crear_asistentes_page.dart';
 import 'package:appsam/src/pages/asistentes/detalle_asistente.dart';
 import 'package:appsam/src/pages/asistentes/editar_asistentes_page.dart';
 import 'package:appsam/src/pages/asistentes/tab_resetpassword_page.dart';
+import 'package:appsam/src/pages/consulta/antecedentesFamiliares/crear_antecedentes.dart';
 import 'package:appsam/src/pages/consulta/preclinica/crear_preclinica_page.dart';
 import 'package:appsam/src/pages/consulta/preclinica/edit_preclinica_page.dart';
 import 'package:appsam/src/pages/consulta/preclinica/preclinica_detalle.dart';
@@ -48,5 +49,7 @@ Map<String, WidgetBuilder> getApplicationRoutes(ThemeBloc bloc) {
         EditarPacientePage(),
     EditarPreclinicaPage.routeName: (BuildContext context) =>
         EditarPreclinicaPage(),
+    CrearAntecedentesPage.routeName: (BuildContext context) =>
+        CrearAntecedentesPage(),
   };
 }

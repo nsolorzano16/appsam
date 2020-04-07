@@ -1,17 +1,16 @@
 import 'dart:async';
+import 'package:flushbar/flushbar.dart';
+import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:progress_dialog/progress_dialog.dart';
+import 'package:getflutter/getflutter.dart';
 
 import 'package:appsam/src/blocs/preclinica_bloc.dart';
-import 'package:appsam/src/models/consulta_model.dart';
 import 'package:appsam/src/models/paginados/pacientesPaginado_model.dart';
 import 'package:appsam/src/models/preclinica_model.dart';
 import 'package:appsam/src/models/usuario_model.dart';
 import 'package:appsam/src/utils/storage_util.dart';
 import 'package:appsam/src/utils/utils.dart';
-import 'package:flushbar/flushbar.dart';
-import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:getflutter/getflutter.dart';
-import 'package:progress_dialog/progress_dialog.dart';
 
 class CrearPreclinicaPage extends StatefulWidget {
   static final String routeName = 'crear_preclinica';
@@ -25,7 +24,7 @@ class _CrearPreclinicaPageState extends State<CrearPreclinicaPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final UsuarioModel _usuario =
       usuarioModelFromJson(StorageUtil.getString('usuarioGlobal'));
-  final ConsultaModel _consulta = new ConsultaModel();
+
   final Preclinica _preclinica = new Preclinica();
 
   @override
@@ -299,8 +298,7 @@ class _CrearPreclinicaPageState extends State<CrearPreclinicaPage> {
     _preclinica.creadoFecha = DateTime.now();
     _preclinica.modificadoPor = _usuario.userName;
     _preclinica.modificadoFecha = DateTime.now();
-    _consulta.preclinica = _preclinica;
-    print(consultaToJson(_consulta));
+
     final bool resp = await bloc.addPreclinica(_preclinica);
 
     _pr.hide();

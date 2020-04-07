@@ -14,7 +14,7 @@ class PreclinicaBloc with Validators {
       _preclinicaController.stream;
 
   Function(List<PreclinicaViewModel>) get preclinicasSink =>
-      _preclinicaController.add;
+      _preclinicaController.sink.add;
 
   cargarPreclinicasPaginado(int page, int doctorId) async {
     final preclinicas =

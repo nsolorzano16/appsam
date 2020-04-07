@@ -11,6 +11,7 @@ class PreclinicaDetallePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     StorageUtil.putString('ultimaPagina', PreclinicaDetallePage.routeName);
+
     final PreclinicaViewModel _preclinica =
         ModalRoute.of(context).settings.arguments;
     //final _screenSize = MediaQuery.of(context).size;
@@ -39,7 +40,9 @@ class PreclinicaDetallePage extends StatelessWidget {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () => Navigator.pushReplacementNamed(
+            context, 'crear_antecedentes',
+            arguments: _preclinica),
         child: FaIcon(FontAwesomeIcons.notesMedical),
         backgroundColor: Theme.of(context).primaryColor,
       ),
