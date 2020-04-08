@@ -26,6 +26,12 @@ class _CrearAntecedentesPageState extends State<CrearAntecedentesPage> {
       usuarioModelFromJson(StorageUtil.getString('usuarioGlobal'));
   bool quieroEditar = true;
   String labelBoton = 'Guardar';
+
+  final _antPatologicosFamiCtrl = new TextEditingController();
+  final _antPatologicosPersCtrl = new TextEditingController();
+  final _antNoPatologicosFamiCtrl = new TextEditingController();
+  final _antNoPatologicosPersCtrl = new TextEditingController();
+  final _antInmunoAlergicosCtrl = new TextEditingController();
   @override
   void initState() {
     super.initState();
@@ -39,6 +45,16 @@ class _CrearAntecedentesPageState extends State<CrearAntecedentesPage> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    _antPatologicosFamiCtrl.dispose();
+    _antPatologicosPersCtrl.dispose();
+    _antNoPatologicosFamiCtrl.dispose();
+    _antNoPatologicosPersCtrl.dispose();
+    _antInmunoAlergicosCtrl.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final PreclinicaViewModel _preclinica =
         ModalRoute.of(context).settings.arguments;
@@ -47,6 +63,19 @@ class _CrearAntecedentesPageState extends State<CrearAntecedentesPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Consulta'),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(
+              Icons.arrow_forward_ios,
+              color: Colors.white,
+            ),
+            tooltip: 'Siguiente pagina',
+            onPressed: () {
+              Navigator.pushReplacementNamed(context, 'crear_habitos',
+                  arguments: _preclinica);
+            },
+          )
+        ],
       ),
       drawer: MenuWidget(),
       body: SingleChildScrollView(
@@ -59,15 +88,19 @@ class _CrearAntecedentesPageState extends State<CrearAntecedentesPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   mainAxisSize: MainAxisSize.max,
                   children: <Widget>[
-                    Text('Antecedentes Familiares Personales'),
+                    Text(
+                      'Antecedentes Familiares Personales',
+                      style: TextStyle(fontSize: 16.0),
+                    ),
                     IconButton(
                         icon: Icon(Icons.edit),
                         onPressed: () {
-                          print('Editar');
-                          setState(() {
-                            quieroEditar = true;
-                            labelBoton = 'Editar';
-                          });
+                          if (!quieroEditar) {
+                            setState(() {
+                              quieroEditar = true;
+                              labelBoton = 'Editar';
+                            });
+                          }
                         })
                   ],
                 ),
@@ -81,17 +114,12 @@ class _CrearAntecedentesPageState extends State<CrearAntecedentesPage> {
                       _campoAntecedentesNoPatologicosFamiliares(),
                       _campoAntecedentesNoPatologicosPersonales(),
                       _campoAntecedentesInmunoAlergicosPersonales(),
-                      _crearBotones(),
+                      _crearBotones(context),
                     ],
                   )),
             )
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        backgroundColor: Theme.of(context).primaryColor,
-        child: Icon(Icons.arrow_forward_ios),
       ),
     );
   }
@@ -100,6 +128,7 @@ class _CrearAntecedentesPageState extends State<CrearAntecedentesPage> {
     return Padding(
       padding: EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
+        controller: _antPatologicosFamiCtrl,
         initialValue: _antecedentes.antecedentesPatologicosFamiliares,
         onSaved: (value) =>
             _antecedentes.antecedentesPatologicosFamiliares = value,
@@ -116,6 +145,7 @@ class _CrearAntecedentesPageState extends State<CrearAntecedentesPage> {
     return Padding(
       padding: EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
+        controller: _antPatologicosPersCtrl,
         initialValue: _antecedentes.antecedentesPatologicosPersonales,
         onSaved: (value) =>
             _antecedentes.antecedentesPatologicosPersonales = value,
@@ -132,6 +162,7 @@ class _CrearAntecedentesPageState extends State<CrearAntecedentesPage> {
     return Padding(
       padding: EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
+        controller: _antNoPatologicosFamiCtrl,
         initialValue: _antecedentes.antecedentesNoPatologicosFamiliares,
         onSaved: (value) =>
             _antecedentes.antecedentesNoPatologicosFamiliares = value,
@@ -148,6 +179,7 @@ class _CrearAntecedentesPageState extends State<CrearAntecedentesPage> {
     return Padding(
       padding: EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
+        controller: _antNoPatologicosPersCtrl,
         initialValue: _antecedentes.antecedentesNoPatologicosPersonales,
         onSaved: (value) =>
             _antecedentes.antecedentesNoPatologicosPersonales = value,
@@ -176,13 +208,13 @@ class _CrearAntecedentesPageState extends State<CrearAntecedentesPage> {
     );
   }
 
-  Widget _crearBotones() {
+  Widget _crearBotones(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         RaisedButton.icon(
             color: Theme.of(context).primaryColor,
-            onPressed: _guardar,
+            onPressed: () => _guardar(context),
             textColor: Colors.white,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20.0)),
@@ -195,7 +227,7 @@ class _CrearAntecedentesPageState extends State<CrearAntecedentesPage> {
     );
   }
 
-  void _guardar() async {
+  void _guardar(BuildContext context) async {
     final ProgressDialog _pr = new ProgressDialog(
       context,
       type: ProgressDialogType.Normal,
@@ -213,35 +245,54 @@ class _CrearAntecedentesPageState extends State<CrearAntecedentesPage> {
       messageTextStyle: TextStyle(
           color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600),
     );
-    _formkey.currentState.save();
-    await _pr.show();
-
-    AntecedentesFamiliaresPersonales _antecedentesGuardado;
-    if (_antecedentes.antecedentesFamiliaresPersonalesId == 0) {
-      //guarda
-      _antecedentesGuardado =
-          await _antecedentesBloc.addAntecedentes(_antecedentes);
+    if (_antPatologicosFamiCtrl.text.isEmpty &&
+        _antPatologicosPersCtrl.text.isEmpty &&
+        _antNoPatologicosFamiCtrl.text.isEmpty &&
+        _antNoPatologicosPersCtrl.text.isEmpty &&
+        _antInmunoAlergicosCtrl.text.isEmpty) {
+      mostrarFlushBar(
+          context,
+          Colors.black,
+          'Info',
+          'El formulario no puede estar vacio',
+          3,
+          FlushbarPosition.BOTTOM,
+          Icons.info,
+          Colors.white);
     } else {
-      // edita
-      _antecedentesGuardado =
-          await _antecedentesBloc.updateAntecedentes(_antecedentes);
-    }
+      _formkey.currentState.save();
+      await _pr.show();
 
-    if (_antecedentesGuardado != null) {
-      _pr.hide();
-      mostrarFlushBar(context, Colors.green, 'Info', 'Datos Guardados', 2,
-          FlushbarPosition.TOP, Icons.info, Colors.black);
-      _antecedentes.antecedentesFamiliaresPersonalesId =
-          _antecedentesGuardado.antecedentesFamiliaresPersonalesId;
-      _antecedentes.creadoFecha = _antecedentesGuardado.creadoFecha;
-      _antecedentes.creadoPor = _antecedentesGuardado.creadoPor;
-      _antecedentes.modificadoPor = _antecedentesGuardado.modificadoPor;
-      _antecedentesGuardado.modificadoFecha =
-          _antecedentesGuardado.modificadoFecha;
-      setState(() {
-        quieroEditar = false;
-        labelBoton = 'Editar';
-      });
+      AntecedentesFamiliaresPersonales _antecedentesGuardado;
+      if (_antecedentes.antecedentesFamiliaresPersonalesId == 0) {
+        //guarda
+        _antecedentesGuardado =
+            await _antecedentesBloc.addAntecedentes(_antecedentes);
+      } else {
+        // edita
+        _antecedentesGuardado =
+            await _antecedentesBloc.updateAntecedentes(_antecedentes);
+      }
+
+      if (_antecedentesGuardado != null) {
+        _pr.hide();
+        mostrarFlushBar(context, Colors.green, 'Info', 'Datos Guardados', 2,
+            FlushbarPosition.TOP, Icons.info, Colors.black);
+        _antecedentes.antecedentesFamiliaresPersonalesId =
+            _antecedentesGuardado.antecedentesFamiliaresPersonalesId;
+        _antecedentes.creadoFecha = _antecedentesGuardado.creadoFecha;
+        _antecedentes.creadoPor = _antecedentesGuardado.creadoPor;
+        _antecedentes.modificadoPor = _antecedentesGuardado.modificadoPor;
+        _antecedentesGuardado.modificadoFecha =
+            _antecedentesGuardado.modificadoFecha;
+        setState(() {
+          quieroEditar = false;
+          labelBoton = 'Editar';
+        });
+      } else {
+        mostrarFlushBar(context, Colors.red, 'Info', 'Ha ocurrido un error', 2,
+            FlushbarPosition.TOP, Icons.info, Colors.white);
+      }
     }
   }
 }
