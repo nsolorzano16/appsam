@@ -4,17 +4,21 @@ import 'package:appsam/src/pages/asistentes/crear_asistentes_page.dart';
 import 'package:appsam/src/pages/asistentes/detalle_asistente.dart';
 import 'package:appsam/src/pages/asistentes/editar_asistentes_page.dart';
 import 'package:appsam/src/pages/asistentes/tab_resetpassword_page.dart';
-import 'package:appsam/src/pages/consulta/antecedentesFamiliares/crear_antecedentes.dart';
-import 'package:appsam/src/pages/consulta/habitos/crear_habitos.dart';
+import 'package:appsam/src/pages/consulta/antecedentesFamiliares/crear_antecedentes_page.dart';
+import 'package:appsam/src/pages/consulta/habitos/crear_habitos_page.dart';
+import 'package:appsam/src/pages/consulta/historialGinecoObstetra/crear_HistorialGineco_page.dart';
+
 import 'package:appsam/src/pages/consulta/preclinica/crear_preclinica_page.dart';
 import 'package:appsam/src/pages/consulta/preclinica/edit_preclinica_page.dart';
-import 'package:appsam/src/pages/consulta/preclinica/preclinica_detalle.dart';
+import 'package:appsam/src/pages/consulta/preclinica/preclinica_detalle_page.dart';
+
 import 'package:appsam/src/pages/consulta/preclinica/preclinica_page.dart';
 
 import 'package:appsam/src/pages/login_page.dart';
 import 'package:appsam/src/pages/my_profile_page.dart';
 import 'package:appsam/src/pages/pacientes/crear_paciente_page.dart';
-import 'package:appsam/src/pages/pacientes/edit_paciente.dart';
+import 'package:appsam/src/pages/pacientes/edit_paciente_page.dart';
+
 import 'package:appsam/src/pages/pacientes/paciente_detalle_page.dart';
 import 'package:appsam/src/pages/pacientes/pacientes_page.dart';
 import 'package:appsam/src/pages/resetmy_pass_page.dart';
@@ -53,5 +57,7 @@ Map<String, WidgetBuilder> getApplicationRoutes(ThemeBloc bloc) {
     CrearAntecedentesPage.routeName: (BuildContext context) =>
         CrearAntecedentesPage(),
     CrearHabitosPage.routeName: (BuildContext context) => CrearHabitosPage(),
+    CrearHistorialGinecoObstetraPage.routeName: (BuildContext context) =>
+        CrearHistorialGinecoObstetraPage(),
   };
 }

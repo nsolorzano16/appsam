@@ -71,8 +71,7 @@ class _CrearAntecedentesPageState extends State<CrearAntecedentesPage> {
             ),
             tooltip: 'Siguiente pagina',
             onPressed: () {
-              Navigator.pushReplacementNamed(context, 'crear_habitos',
-                  arguments: _preclinica);
+              showConfirmDialog(context, 'crear_habitos', _preclinica);
             },
           )
         ],
@@ -214,7 +213,7 @@ class _CrearAntecedentesPageState extends State<CrearAntecedentesPage> {
       children: <Widget>[
         RaisedButton.icon(
             color: Theme.of(context).primaryColor,
-            onPressed: () => _guardar(context),
+            onPressed: (quieroEditar) ? () => _guardar(context) : null,
             textColor: Colors.white,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20.0)),
@@ -294,5 +293,47 @@ class _CrearAntecedentesPageState extends State<CrearAntecedentesPage> {
             FlushbarPosition.TOP, Icons.info, Colors.white);
       }
     }
+  }
+
+  showConfirmDialog(
+      BuildContext context, String ruta, PreclinicaViewModel args) {
+    // set up the buttons
+    Widget cancelButton = FlatButton(
+      child: Text('Cancelar'),
+      onPressed: () {
+        Navigator.pop(context);
+      },
+    );
+    Widget continueButton = FlatButton(
+      child: Text('Ok'),
+      onPressed: () {
+        Navigator.pushReplacementNamed(context, ruta, arguments: args);
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Información"),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Text('Desea continuar a la siguiente pagina?'),
+          Text('Esta acción no se podra deshacer.')
+        ],
+      ),
+      elevation: 24.0,
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return alert;
+        },
+        barrierDismissible: false);
   }
 }
