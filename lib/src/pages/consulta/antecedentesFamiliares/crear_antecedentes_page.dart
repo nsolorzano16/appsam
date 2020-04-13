@@ -128,7 +128,6 @@ class _CrearAntecedentesPageState extends State<CrearAntecedentesPage> {
       padding: EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
         controller: _antPatologicosFamiCtrl,
-        initialValue: _antecedentes.antecedentesPatologicosFamiliares,
         onSaved: (value) =>
             _antecedentes.antecedentesPatologicosFamiliares = value,
         maxLines: 3,
@@ -145,7 +144,6 @@ class _CrearAntecedentesPageState extends State<CrearAntecedentesPage> {
       padding: EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
         controller: _antPatologicosPersCtrl,
-        initialValue: _antecedentes.antecedentesPatologicosPersonales,
         onSaved: (value) =>
             _antecedentes.antecedentesPatologicosPersonales = value,
         maxLines: 3,
@@ -162,7 +160,6 @@ class _CrearAntecedentesPageState extends State<CrearAntecedentesPage> {
       padding: EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
         controller: _antNoPatologicosFamiCtrl,
-        initialValue: _antecedentes.antecedentesNoPatologicosFamiliares,
         onSaved: (value) =>
             _antecedentes.antecedentesNoPatologicosFamiliares = value,
         maxLines: 3,
@@ -179,7 +176,6 @@ class _CrearAntecedentesPageState extends State<CrearAntecedentesPage> {
       padding: EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
         controller: _antNoPatologicosPersCtrl,
-        initialValue: _antecedentes.antecedentesNoPatologicosPersonales,
         onSaved: (value) =>
             _antecedentes.antecedentesNoPatologicosPersonales = value,
         maxLines: 3,
@@ -195,7 +191,6 @@ class _CrearAntecedentesPageState extends State<CrearAntecedentesPage> {
     return Padding(
       padding: EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
-        initialValue: _antecedentes.antecedentesInmunoAlergicosPersonales,
         onSaved: (value) =>
             _antecedentes.antecedentesInmunoAlergicosPersonales = value,
         maxLines: 3,

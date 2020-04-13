@@ -69,7 +69,12 @@ class _CrearHistorialGinecoObstetraPageState
       appBar: AppBar(
         title: Text('Consulta'),
         actions: <Widget>[
-          IconButton(icon: Icon(Icons.arrow_forward_ios), onPressed: () {})
+          IconButton(
+              icon: Icon(Icons.arrow_forward_ios),
+              onPressed: () {
+                showConfirmDialog(
+                    context, 'crear_farmacos_uso_actual', _preclinica);
+              })
         ],
       ),
       drawer: MenuWidget(),

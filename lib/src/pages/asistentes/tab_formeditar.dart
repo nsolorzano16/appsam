@@ -5,6 +5,7 @@ import 'package:appsam/src/models/usuario_model.dart';
 import 'package:appsam/src/utils/utils.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
+import 'package:getflutter/getflutter.dart';
 import 'package:intl/intl.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
@@ -36,122 +37,124 @@ class _FormEditarPageState extends State<FormEditarPage> {
     return SingleChildScrollView(
       child: Form(
           key: _formKey,
-          child: Column(
-            children: <Widget>[
-              _espacio(),
-              _crearCampoNombre(_asistente),
-              _espacio(),
-              _crearCampoPrimerAppellido(_asistente),
-              _espacio(),
-              _crearCampoSegundoAppellido(_asistente),
-              _espacio(),
-              _crearCampoIdentificacion(_asistente),
-              _espacio(),
-              _crearFecha(context, _asistente),
-              _espacio(),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Container(
-                      padding: EdgeInsets.only(left: 25),
-                      child: Text(
-                        'Genero',
-                        style: TextStyle(fontSize: 16.0),
-                      ))
-                ],
-              ),
-              _crearSexo('M', 'Masculino', _asistente),
-              _crearSexo('F', 'Femenino', _asistente),
-              _crearCampoTelefono1(maskTelefono1, _asistente),
-              _espacio(),
-              _crearCampoTelefono2(maskTelefono2, _asistente),
-              _espacio(),
-              _crearCampoColegioNumero(_asistente),
-              _espacio(),
-              _crearCampoEmail(_asistente),
-              _espacio(),
-              _crearCampoNotas(_asistente),
-              _espacio(),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.only(left: 25.0, bottom: 10.0),
-                    child: RaisedButton.icon(
-                        elevation: 5.0,
-                        textColor: Colors.white,
-                        color: Colors.blueGrey,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20.0)),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        icon: Icon(Icons.clear),
-                        label: Text('Cancelar')),
-                  ),
-                  Padding(
-                      padding: EdgeInsets.only(right: 25.0, bottom: 10.0),
+          child: GFCard(
+            content: Column(
+              children: <Widget>[
+                _espacio(),
+                _crearCampoNombre(_asistente),
+                _espacio(),
+                _crearCampoPrimerAppellido(_asistente),
+                _espacio(),
+                _crearCampoSegundoAppellido(_asistente),
+                _espacio(),
+                _crearCampoIdentificacion(_asistente),
+                _espacio(),
+                _crearFecha(context, _asistente),
+                _espacio(),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Container(
+                        padding: EdgeInsets.only(left: 25),
+                        child: Text(
+                          'Genero',
+                          style: TextStyle(fontSize: 16.0),
+                        ))
+                  ],
+                ),
+                _crearSexo('M', 'Masculino', _asistente),
+                _crearSexo('F', 'Femenino', _asistente),
+                _crearCampoTelefono1(maskTelefono1, _asistente),
+                _espacio(),
+                _crearCampoTelefono2(maskTelefono2, _asistente),
+                _espacio(),
+                _crearCampoColegioNumero(_asistente),
+                _espacio(),
+                _crearCampoEmail(_asistente),
+                _espacio(),
+                _crearCampoNotas(_asistente),
+                _espacio(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.only(left: 25.0, bottom: 10.0),
                       child: RaisedButton.icon(
                           elevation: 5.0,
                           textColor: Colors.white,
-                          color: Theme.of(context).primaryColor,
+                          color: Colors.blueGrey,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20.0)),
-                          icon: Icon(Icons.save),
-                          label: Text('Guardar'),
                           onPressed: () {
-                            if (!_formKey.currentState.validate()) {
-                              Flushbar(
-                                title: 'Información',
-                                message: 'Rellene todos los campos',
-                                duration: Duration(seconds: 2),
-                                icon: Icon(
-                                  Icons.info,
-                                ),
-                              )..show(context);
-                            } else {
-                              _formKey.currentState.save();
-                              _asistente.identificacion =
-                                  _txtControllerIdentificacion.text;
-                              final ProgressDialog _pr = new ProgressDialog(
-                                context,
-                                type: ProgressDialogType.Normal,
-                                isDismissible: false,
-                                showLogs: false,
-                              );
-                              _pr.update(
-                                progress: 50.0,
-                                message: "Espere...",
-                                progressWidget: Container(
-                                    padding: EdgeInsets.all(8.0),
-                                    child: CircularProgressIndicator()),
-                                maxProgress: 100.0,
-                                progressTextStyle: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 13.0,
-                                    fontWeight: FontWeight.w400),
-                                messageTextStyle: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 19.0,
-                                    fontWeight: FontWeight.w600),
-                              );
-                              _pr.show();
-                              bloc.updateUser(_asistente).then((user) {
-                                _pr.hide();
-                                Navigator.pushReplacementNamed(
-                                    context, 'asistente_detalle',
-                                    arguments: user);
-                              });
-                              // Timer(Duration(seconds: 2), () {
+                            Navigator.pop(context);
+                          },
+                          icon: Icon(Icons.clear),
+                          label: Text('Cancelar')),
+                    ),
+                    Padding(
+                        padding: EdgeInsets.only(right: 25.0, bottom: 10.0),
+                        child: RaisedButton.icon(
+                            elevation: 5.0,
+                            textColor: Colors.white,
+                            color: Theme.of(context).primaryColor,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20.0)),
+                            icon: Icon(Icons.save),
+                            label: Text('Guardar'),
+                            onPressed: () {
+                              if (!_formKey.currentState.validate()) {
+                                Flushbar(
+                                  title: 'Información',
+                                  message: 'Rellene todos los campos',
+                                  duration: Duration(seconds: 2),
+                                  icon: Icon(
+                                    Icons.info,
+                                  ),
+                                )..show(context);
+                              } else {
+                                _formKey.currentState.save();
+                                _asistente.identificacion =
+                                    _txtControllerIdentificacion.text;
+                                final ProgressDialog _pr = new ProgressDialog(
+                                  context,
+                                  type: ProgressDialogType.Normal,
+                                  isDismissible: false,
+                                  showLogs: false,
+                                );
+                                _pr.update(
+                                  progress: 50.0,
+                                  message: "Espere...",
+                                  progressWidget: Container(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: CircularProgressIndicator()),
+                                  maxProgress: 100.0,
+                                  progressTextStyle: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 13.0,
+                                      fontWeight: FontWeight.w400),
+                                  messageTextStyle: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 19.0,
+                                      fontWeight: FontWeight.w600),
+                                );
+                                _pr.show();
+                                bloc.updateUser(_asistente).then((user) {
+                                  _pr.hide();
+                                  Navigator.pushReplacementNamed(
+                                      context, 'asistente_detalle',
+                                      arguments: user);
+                                });
+                                // Timer(Duration(seconds: 2), () {
 
-                              //   // Navigator.pushReplacementNamed(
-                              //   //     context, 'asistente_detalle');
-                              // });
-                            }
-                          }))
-                ],
-              )
-            ],
+                                //   // Navigator.pushReplacementNamed(
+                                //   //     context, 'asistente_detalle');
+                                // });
+                              }
+                            }))
+                  ],
+                )
+              ],
+            ),
           )),
     );
   }

@@ -8,19 +8,68 @@ class MenuWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      child: Container(child: _lista()),
-    );
+        child: Column(
+      children: <Widget>[
+        Expanded(child: _lista()),
+        Divider(),
+        ListTile(
+          title: Row(
+            children: <Widget>[
+              Icon(Icons.gesture),
+              Padding(
+                padding: EdgeInsets.only(left: 8.0),
+                child: Text('Salir'),
+              ),
+            ],
+          ),
+          onTap: () {
+            // set up the AlertDialog
+            AlertDialog alert = AlertDialog(
+              title: Text("Información"),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Text('Desea completar esta acción?'),
+                ],
+              ),
+              elevation: 24.0,
+              actions: [
+                FlatButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: Text('Cancelar')),
+                FlatButton(
+                    onPressed: () =>
+                        Navigator.pushReplacementNamed(context, 'login'),
+                    child: Text('Aceptar'))
+              ],
+            );
+
+            // show the dialog
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return alert;
+                },
+                barrierDismissible: false);
+          },
+        ),
+      ],
+    ));
   }
 
   Widget _lista() {
     // menuProvider.cargarData()
     return FutureBuilder(
       future: menuProvider.cargarData(),
-      initialData: new List<Ruta>(),
+      //initialData: new List<Ruta>(),
       builder: (context, AsyncSnapshot<List<Ruta>> snapshot) {
-        return ListView(
-          children: _listaItems(snapshot.data, context),
-        );
+        if (snapshot.data != null) {
+          return ListView(
+            children: _listaItems(snapshot.data, context),
+          );
+        } else {
+          return Container();
+        }
       },
     );
   }
@@ -52,13 +101,12 @@ class MenuWidget extends StatelessWidget {
   }
 
   List<Widget> _listaItems(List<Ruta> data, BuildContext context) {
-    // rol 1 => lenght = 2
-    // rol 2 => lenght = 1
     final UsuarioModel usuario =
         usuarioModelFromJson(StorageUtil.getString('usuarioGlobal'));
     final List<Widget> opciones = [];
     opciones.add(_fotoDelDrawer());
     var widgetTemp;
+
     data.forEach((opt) {
       opt.roles.forEach((rol) {
         if (rol.autorizados == usuario.rolId) {
@@ -73,10 +121,6 @@ class MenuWidget extends StatelessWidget {
               ],
             ),
             onTap: () {
-              if (opt.ruta.toString().contains('login')) {
-                mostrarDialogConfirm(context, 'Desea completar esta acción',
-                    opt.ruta.toString());
-              }
               Navigator.pushReplacementNamed(context, opt.ruta.toString(),
                   arguments: usuario);
             },
@@ -90,29 +134,46 @@ class MenuWidget extends StatelessWidget {
     return opciones;
   }
 
-  void mostrarDialogConfirm(BuildContext context, String mensaje, String ruta) {
+  showConfirmDialog(BuildContext context, String ruta) {
+    // set up the buttons
+    Widget cancelButton = FlatButton(
+      child: Text('Cancelar'),
+      onPressed: () {
+        Navigator.pop(context);
+      },
+    );
+    Widget continueButton = FlatButton(
+      child: Text('Ok'),
+      onPressed: () {
+        StorageUtil.removeAll();
+        StorageUtil.removeUsuario();
+        StorageUtil.putString('ultimaPagina', ruta);
+        Navigator.pushReplacementNamed(context, ruta);
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Información"),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Text('Desea completar esta acción?'),
+        ],
+      ),
+      elevation: 24.0,
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    // show the dialog
     showDialog(
         context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text('Información'),
-            content: Text(mensaje),
-            actions: <Widget>[
-              FlatButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Text('No')),
-              FlatButton(
-                  onPressed: () {
-                    StorageUtil.removeAll();
-                    StorageUtil.removeUsuario();
-                    Navigator.pushReplacementNamed(context, ruta);
-                    StorageUtil.putString('ultimaPagina', ruta);
-                  },
-                  child: Text('Si')),
-            ],
-          );
-        });
+        builder: (BuildContext context) {
+          return alert;
+        },
+        barrierDismissible: false);
   }
 }

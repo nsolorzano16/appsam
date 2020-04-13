@@ -58,8 +58,10 @@ class HistorialGinecoObstetra {
         historialId: json["historialId"],
         pacienteId: json["pacienteId"],
         doctorId: json["doctorId"],
-        menarquia: DateTime.parse(json["menarquia"]),
-        fur: DateTime.parse(json["fur"]),
+        menarquia: json["menarquia"] == null
+            ? null
+            : DateTime.parse(json["menarquia"]),
+        fur: json["fur"] == null ? null : DateTime.parse(json["fur"]),
         sg: json["sg"],
         g: json["g"],
         p: json["p"],
@@ -67,7 +69,9 @@ class HistorialGinecoObstetra {
         hv: json["hv"],
         fpp: json["fpp"],
         uc: json["uc"],
-        fechaMenopausia: DateTime.parse(json["fechaMenopausia"]),
+        fechaMenopausia: json["fechaMenopausia"] == null
+            ? null
+            : DateTime.parse(json["fechaMenopausia"]),
         anticonceptivo: json["anticonceptivo"],
         vacunacion: json["vacunacion"],
         activo: json["activo"],
@@ -82,8 +86,8 @@ class HistorialGinecoObstetra {
         "historialId": historialId,
         "pacienteId": pacienteId,
         "doctorId": doctorId,
-        "menarquia": menarquia.toIso8601String(),
-        "fur": fur.toIso8601String(),
+        "menarquia": menarquia == null ? null : menarquia.toIso8601String(),
+        "fur": fur == null ? null : fur.toIso8601String(),
         "sg": sg,
         "g": g,
         "p": p,
@@ -91,7 +95,8 @@ class HistorialGinecoObstetra {
         "hv": hv,
         "fpp": fpp,
         "uc": uc,
-        "fechaMenopausia": fechaMenopausia.toIso8601String(),
+        "fechaMenopausia":
+            fechaMenopausia == null ? null : fechaMenopausia.toIso8601String(),
         "anticonceptivo": anticonceptivo,
         "vacunacion": vacunacion,
         "activo": activo,

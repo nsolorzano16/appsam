@@ -241,6 +241,31 @@ class _PacienteDetalleState extends State<PacienteDetalle> {
               ),
             ],
           ),
+          Divider(),
+          Row(
+            children: <Widget>[
+              Text(
+                'Otra Información',
+                style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(
+                height: 30.0,
+              ),
+            ],
+          ),
+          Divider(),
+          Table(
+            children: [
+              TableRow(
+                children: [
+                  Text('Notas:'),
+                  (paciente.departamento != null)
+                      ? Text('${paciente.notas}')
+                      : Text('*****')
+                ],
+              ),
+            ],
+          ),
           (paciente.menorDeEdad) ? _tablaMenorEdad(paciente) : Container()
         ],
       ),

@@ -72,19 +72,6 @@
           "autorizados": 3
         }
       ]
-    },
-    {
-      "ruta": "login",
-      "icon": "do_not_disturb_alt",
-      "texto": "Salir",
-      "roles": [
-        {
-          "autorizados": 2
-        },
-        {
-          "autorizados": 3
-        }
-      ]
     }
   ]
 }

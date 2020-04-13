@@ -6,6 +6,9 @@ FarmacosUsoActual farmacosUsoActualFromJson(String str) =>
 String farmacosUsoActualToJson(FarmacosUsoActual data) =>
     json.encode(data.toJson());
 
+String farmacosUsoActualToJsonList(List<FarmacosUsoActual> data) =>
+    json.encode(data);
+
 class FarmacosUsoActual {
   int farmacoId;
   int pacienteId;

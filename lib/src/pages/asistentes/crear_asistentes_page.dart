@@ -1,4 +1,10 @@
+import 'package:flutter/material.dart';
 import 'dart:async';
+import 'package:getflutter/getflutter.dart';
+import 'package:intl/intl.dart';
+import 'package:flushbar/flushbar.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 
 import 'package:appsam/src/blocs/asistentes_bloc/create_edit_asistentes.dart';
 import 'package:appsam/src/blocs/provider.dart';
@@ -6,11 +12,6 @@ import 'package:appsam/src/models/usuario_model.dart';
 import 'package:appsam/src/utils/storage_util.dart';
 import 'package:appsam/src/utils/utils.dart';
 import 'package:appsam/src/widgets/drawer.dart';
-import 'package:flushbar/flushbar.dart';
-import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
-import 'package:progress_dialog/progress_dialog.dart';
 
 class CrearAsistentesPage extends StatefulWidget {
   static final String routeName = 'crear-editar-asistente';
@@ -61,49 +62,51 @@ class _CrearAsistentesPageState extends State<CrearAsistentesPage> {
         body: SingleChildScrollView(
           child: Form(
               key: _formKey,
-              child: Column(
-                children: <Widget>[
-                  _espacio(),
-                  _crearCampoNombre(_asistente),
-                  _espacio(),
-                  _crearCampoPrimerAppellido(_asistente),
-                  _espacio(),
-                  _crearCampoSegundoAppellido(_asistente),
-                  _espacio(),
-                  _crearCampoIdentificacion(_asistente),
-                  _espacio(),
-                  _crearFecha(context, bloc.fechaNacimientoStream,
-                      bloc.changeFechaNacimiento),
-                  _espacio(),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Container(
-                          padding: EdgeInsets.only(left: 25),
-                          child: Text(
-                            'Genero',
-                            style: TextStyle(fontSize: 16.0),
-                          ))
-                    ],
-                  ),
-                  _crearSexo('M', 'Masculino'),
-                  _crearSexo('F', 'Femenino'),
-                  _crearCampoTelefono1(maskTelefono1, _asistente),
-                  _espacio(),
-                  _crearCampoTelefono2(maskTelefono2, _asistente),
-                  _espacio(),
-                  _crearCampoColegioNumero(_asistente),
-                  _espacio(),
-                  _crearCampoEmail(_asistente),
-                  _espacio(),
-                  _crearCampoUsuario(_asistente),
-                  _espacio(),
-                  _crearCampoPassword(_asistente),
-                  _espacio(),
-                  _crearCampoNotas(_asistente),
-                  _espacio(),
-                  _crearBotones(_asistente, bloc),
-                ],
+              child: GFCard(
+                content: Column(
+                  children: <Widget>[
+                    _espacio(),
+                    _crearCampoNombre(_asistente),
+                    _espacio(),
+                    _crearCampoPrimerAppellido(_asistente),
+                    _espacio(),
+                    _crearCampoSegundoAppellido(_asistente),
+                    _espacio(),
+                    _crearCampoIdentificacion(_asistente),
+                    _espacio(),
+                    _crearFecha(context, bloc.fechaNacimientoStream,
+                        bloc.changeFechaNacimiento),
+                    _espacio(),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Container(
+                            padding: EdgeInsets.only(left: 25),
+                            child: Text(
+                              'Genero',
+                              style: TextStyle(fontSize: 16.0),
+                            ))
+                      ],
+                    ),
+                    _crearSexo('M', 'Masculino'),
+                    _crearSexo('F', 'Femenino'),
+                    _crearCampoTelefono1(maskTelefono1, _asistente),
+                    _espacio(),
+                    _crearCampoTelefono2(maskTelefono2, _asistente),
+                    _espacio(),
+                    _crearCampoColegioNumero(_asistente),
+                    _espacio(),
+                    _crearCampoEmail(_asistente),
+                    _espacio(),
+                    _crearCampoUsuario(_asistente),
+                    _espacio(),
+                    _crearCampoPassword(_asistente),
+                    _espacio(),
+                    _crearCampoNotas(_asistente),
+                    _espacio(),
+                    _crearBotones(_asistente, bloc),
+                  ],
+                ),
               )),
         ));
   } // fin build

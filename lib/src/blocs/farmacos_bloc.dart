@@ -1,0 +1,19 @@
+import 'package:appsam/src/blocs/validators.dart';
+import 'package:appsam/src/models/farmacosUsoActual_model.dart';
+import 'package:appsam/src/providers/farmacos_service.dart';
+
+class FarmacosUsoActualBloc with Validators {
+  final _farmacosService = new FarmacosUsoActualService();
+
+  Future<List<FarmacosUsoActual>> addListaFarmacos(
+      List<FarmacosUsoActual> farmacos) async {
+    return await _farmacosService.addListaFarmacos(farmacos);
+  }
+
+  Future<List<FarmacosUsoActual>> updateListaFarmacos(
+      List<FarmacosUsoActual> farmacos) async {
+    return await _farmacosService.updateListaFarmacos(farmacos);
+  }
+
+  dispose() {}
+}
