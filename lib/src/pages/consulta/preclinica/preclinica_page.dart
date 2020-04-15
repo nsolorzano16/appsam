@@ -131,8 +131,8 @@ class _PreclinicaPageState extends State<PreclinicaPage> {
       elevation: 3.0,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
       child: ListTile(
-          onTap: () => Navigator.pushNamed(context, 'preclinica_detalle',
-              arguments: preclinica),
+          onTap: () => Navigator.pushReplacementNamed(
+              context, 'preclinica_detalle', arguments: preclinica),
           dense: true,
           contentPadding: EdgeInsets.symmetric(
             horizontal: 10.0,

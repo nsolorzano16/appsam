@@ -62,4 +62,26 @@ class FarmacosUsoActualService {
 
     return [];
   }
+
+  Future<bool> desactivar(FarmacosUsoActual farmaco) async {
+    final String token = StorageUtil.getString('token');
+    final headers = {
+      "content-type": "application/json",
+      "accept": "application/json",
+      'authorization': 'Bearer $token',
+    };
+    final url = '$_apiURL/api/FarmacosUsoActual/desactivar';
+
+    //print(usuarioModelToJson(usuario));
+    final resp = await http.put(url,
+        headers: headers, body: farmacosUsoActualToJson(farmaco));
+
+    // final decodedData = json.decode(resp.body);
+
+    // print(decodedData);
+
+    if (resp.statusCode == 200) return true;
+
+    return false;
+  }
 }

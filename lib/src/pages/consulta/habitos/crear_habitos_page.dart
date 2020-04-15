@@ -27,9 +27,12 @@ class _CrearHabitosPageState extends State<CrearHabitosPage> {
   String labelBoton = 'Guardar';
   bool _consumeCafe = false;
   bool _consumeCigarros = false;
-  int _tazasCafe = 0;
-  int _cantidadCigarros = 0;
 
+  final TextEditingController _tazasCafeController =
+      new TextEditingController();
+  final TextEditingController _cantidadCigarrosController =
+      new TextEditingController();
+  final TextEditingController _notasController = new TextEditingController();
   @override
   void initState() {
     super.initState();
@@ -42,8 +45,10 @@ class _CrearHabitosPageState extends State<CrearHabitosPage> {
     _habitos.modificadoFecha = DateTime.now();
     _habitos.cafe = _consumeCafe;
     _habitos.cigarrillo = _consumeCigarros;
-    _habitos.tazasCafe = _tazasCafe;
-    _habitos.cantidadCigarrillo = _cantidadCigarros;
+    _habitos.tazasCafe = 0;
+    _habitos.cantidadCigarrillo = 0;
+    _tazasCafeController.text = '0';
+    _cantidadCigarrosController.text = '0';
   }
 
   @override
@@ -73,7 +78,6 @@ class _CrearHabitosPageState extends State<CrearHabitosPage> {
               elevation: 6.0,
               title: GFListTile(
                 title: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   mainAxisSize: MainAxisSize.max,
                   children: <Widget>[
                     Text(
@@ -81,7 +85,8 @@ class _CrearHabitosPageState extends State<CrearHabitosPage> {
                       style: TextStyle(fontSize: 16.0),
                     ),
                     IconButton(
-                        icon: Icon(Icons.edit),
+                        icon: Icon(Icons.edit,
+                            color: Theme.of(context).primaryColor),
                         onPressed: () {
                           if (!quieroEditar) {
                             setState(() {
@@ -89,7 +94,12 @@ class _CrearHabitosPageState extends State<CrearHabitosPage> {
                               labelBoton = 'Editar';
                             });
                           }
-                        })
+                        }),
+                    IconButton(
+                      icon: Icon(Icons.delete,
+                          color: Theme.of(context).primaryColor),
+                      onPressed: (!quieroEditar) ? _desactivar : () {},
+                    )
                   ],
                 ),
               ),
@@ -114,6 +124,54 @@ class _CrearHabitosPageState extends State<CrearHabitosPage> {
     );
   }
 
+  void _desactivar() async {
+    if (_habitos.habitoId != 0) {
+      final ProgressDialog _pr = new ProgressDialog(
+        context,
+        type: ProgressDialogType.Normal,
+        isDismissible: false,
+        showLogs: false,
+      );
+      _pr.update(
+        progress: 50.0,
+        message: "Espere...",
+        progressWidget: Container(
+            padding: EdgeInsets.all(8.0), child: CircularProgressIndicator()),
+        maxProgress: 100.0,
+        progressTextStyle: TextStyle(
+            color: Colors.black, fontSize: 13.0, fontWeight: FontWeight.w400),
+        messageTextStyle: TextStyle(
+            color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600),
+      );
+      await _pr.show();
+      Habitos _habitoGuardado;
+      _habitos.activo = false;
+      _habitoGuardado = await _habitosBloc.updateHabitos(_habitos);
+      if (_habitoGuardado != null) {
+        _pr.hide();
+        mostrarFlushBar(context, Colors.green, 'Info', 'Datos Guardados', 2,
+            FlushbarPosition.TOP, Icons.info, Colors.black);
+        _habitos.habitoId = 0;
+        _habitos.activo = true;
+        _tazasCafeController.text = '0';
+        _cantidadCigarrosController.text = '0';
+        _notasController.text = '';
+        _consumeCafe = false;
+        _consumeCigarros = false;
+
+        setState(() {
+          quieroEditar = true;
+          labelBoton = 'Guardar';
+        });
+      } else {
+        mostrarFlushBar(context, Colors.red, 'Info', 'Ha ocurrido un error', 2,
+            FlushbarPosition.TOP, Icons.info, Colors.white);
+      }
+    } else {
+      print('nada');
+    }
+  }
+
   Widget _campoConsumeCafe() {
     return SwitchListTile(
         title: Text('Consume usted café'),
@@ -124,7 +182,7 @@ class _CrearHabitosPageState extends State<CrearHabitosPage> {
                   _consumeCafe = value;
                   _habitos.cafe = value;
                   if (!value) {
-                    _tazasCafe = 0;
+                    _tazasCafeController.text = '0';
                     _habitos.tazasCafe = 0;
                   }
                 });
@@ -142,7 +200,7 @@ class _CrearHabitosPageState extends State<CrearHabitosPage> {
                   _consumeCigarros = value;
                   _habitos.cigarrillo = value;
                   if (!value) {
-                    _cantidadCigarros = 0;
+                    _cantidadCigarrosController.text = '0';
                     _habitos.cantidadCigarrillo = 0;
                   }
                 });
@@ -154,7 +212,7 @@ class _CrearHabitosPageState extends State<CrearHabitosPage> {
     return Padding(
       padding: EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
-        initialValue: _tazasCafe.toString(),
+        controller: _tazasCafeController,
         onSaved: (value) => _habitos.tazasCafe = int.parse(value),
         keyboardType: TextInputType.number,
         decoration:
@@ -168,7 +226,7 @@ class _CrearHabitosPageState extends State<CrearHabitosPage> {
     return Padding(
       padding: EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
-        initialValue: _cantidadCigarros.toString(),
+        controller: _cantidadCigarrosController,
         onSaved: (value) => _habitos.cantidadCigarrillo = int.parse(value),
         keyboardType: TextInputType.number,
         decoration:
@@ -182,7 +240,7 @@ class _CrearHabitosPageState extends State<CrearHabitosPage> {
     return Padding(
       padding: EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
-        initialValue: _habitos.notas,
+        controller: _notasController,
         onSaved: (value) => _habitos.notas = value,
         keyboardType: TextInputType.text,
         maxLines: 2,
@@ -244,13 +302,15 @@ class _CrearHabitosPageState extends State<CrearHabitosPage> {
       _pr.hide();
       mostrarFlushBar(context, Colors.green, 'Info', 'Datos Guardados', 2,
           FlushbarPosition.TOP, Icons.info, Colors.black);
+      _habitos.activo = true;
       _habitos.habitoId = _habitosGuardado.habitoId;
       _habitos.creadoFecha = _habitosGuardado.creadoFecha;
       _habitos.modificadoFecha = _habitosGuardado.modificadoFecha;
       _consumeCafe = _habitosGuardado.cafe;
       _consumeCigarros = _habitosGuardado.cigarrillo;
-      _tazasCafe = _habitosGuardado.tazasCafe;
-      _cantidadCigarros = _habitosGuardado.cantidadCigarrillo;
+      _tazasCafeController.text = _habitosGuardado.tazasCafe.toString();
+      _cantidadCigarrosController.text =
+          _habitosGuardado.cantidadCigarrillo.toString();
       _habitos.notas = _habitosGuardado.notas;
 
       setState(() {

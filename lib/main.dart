@@ -1,15 +1,20 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
 import 'package:appsam/src/blocs/provider.dart';
 import 'package:appsam/src/blocs/theme_bloc.dart';
 import 'package:appsam/src/pages/error404_page.dart';
 import 'package:appsam/src/routes/routes.dart';
 import 'package:appsam/src/utils/storage_util.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await StorageUtil.getInstance();
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(
+    statusBarColor: Colors.red,
+  ));
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((_) {
     runApp(MyApp());

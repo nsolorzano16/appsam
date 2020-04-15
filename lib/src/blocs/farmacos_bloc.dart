@@ -15,5 +15,9 @@ class FarmacosUsoActualBloc with Validators {
     return await _farmacosService.updateListaFarmacos(farmacos);
   }
 
+  Future<bool> desactivar(FarmacosUsoActual farmaco) async {
+    return await _farmacosService.desactivar(farmaco);
+  }
+
   dispose() {}
 }

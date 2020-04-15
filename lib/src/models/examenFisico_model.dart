@@ -16,7 +16,7 @@ class ExamenFisico {
   String pulso;
   String pabd;
   String ptorax;
-  String bbservaciones;
+  String observaciones;
   bool dolorAusente;
   bool dolorPresente;
   bool dolorPresenteLeve;
@@ -63,7 +63,7 @@ class ExamenFisico {
     this.pulso,
     this.pabd,
     this.ptorax,
-    this.bbservaciones,
+    this.observaciones,
     this.dolorAusente,
     this.dolorPresente,
     this.dolorPresenteLeve,
@@ -105,19 +105,20 @@ class ExamenFisico {
         pacienteId: json["pacienteId"],
         doctorId: json["doctorId"],
         aspectoGeneral: json["aspectoGeneral"],
-        edadAparente: json["edadAparente"],
+        edadAparente:
+            json["edadAparente"] == null ? null : json["edadAparente"],
         marcha: json["marcha"],
         orientaciones: json["orientaciones"],
         pulso: json["pulso"],
         pabd: json["pabd"],
         ptorax: json["ptorax"],
-        bbservaciones: json["bbservaciones"],
+        observaciones: json["observaciones"],
         dolorAusente: json["dolorAusente"],
         dolorPresente: json["dolorPresente"],
         dolorPresenteLeve: json["dolorPresenteLeve"],
         dolorPresenteModerado: json["dolorPresenteModerado"],
         dolorPresenteSevero: json["dolorPresenteSevero"],
-        imc: json["imc"].toDouble(),
+        imc: json["imc"] == null ? null : json["imc"].toDouble(),
         pesoIdeal: json["pesoIdeal"],
         interpretacion: json["interpretacion"],
         excesoDePeso: json["excesoDePeso"],
@@ -159,7 +160,7 @@ class ExamenFisico {
         "pulso": pulso,
         "pabd": pabd,
         "ptorax": ptorax,
-        "bbservaciones": bbservaciones,
+        "observaciones": observaciones,
         "dolorAusente": dolorAusente,
         "dolorPresente": dolorPresente,
         "dolorPresenteLeve": dolorPresenteLeve,

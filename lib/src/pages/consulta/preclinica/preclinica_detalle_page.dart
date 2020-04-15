@@ -1,5 +1,6 @@
 import 'package:appsam/src/models/paginados/preclinica_paginadoVM.dart';
 import 'package:appsam/src/utils/storage_util.dart';
+import 'package:appsam/src/widgets/drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:getflutter/getflutter.dart';
@@ -25,6 +26,7 @@ class PreclinicaDetallePage extends StatelessWidget {
                   arguments: _preclinica))
         ],
       ),
+      drawer: MenuWidget(),
       body: Stack(
         children: <Widget>[
           SingleChildScrollView(

@@ -84,15 +84,15 @@ class _CrearAntecedentesPageState extends State<CrearAntecedentesPage> {
               elevation: 6.0,
               title: GFListTile(
                 title: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   mainAxisSize: MainAxisSize.max,
                   children: <Widget>[
                     Text(
-                      'Antecedentes Familiares Personales',
+                      'Antecedentes Personales',
                       style: TextStyle(fontSize: 16.0),
                     ),
                     IconButton(
-                        icon: Icon(Icons.edit),
+                        icon: Icon(Icons.edit,
+                            color: Theme.of(context).primaryColor),
                         onPressed: () {
                           if (!quieroEditar) {
                             setState(() {
@@ -100,7 +100,14 @@ class _CrearAntecedentesPageState extends State<CrearAntecedentesPage> {
                               labelBoton = 'Editar';
                             });
                           }
-                        })
+                        }),
+                    IconButton(
+                      icon: Icon(
+                        Icons.delete,
+                        color: Theme.of(context).primaryColor,
+                      ),
+                      onPressed: (!quieroEditar) ? _desactivar : () {},
+                    )
                   ],
                 ),
               ),
@@ -121,6 +128,54 @@ class _CrearAntecedentesPageState extends State<CrearAntecedentesPage> {
         ),
       ),
     );
+  }
+
+  void _desactivar() async {
+    if (_antecedentes.antecedentesFamiliaresPersonalesId != 0) {
+      final ProgressDialog _pr = new ProgressDialog(
+        context,
+        type: ProgressDialogType.Normal,
+        isDismissible: false,
+        showLogs: false,
+      );
+      _pr.update(
+        progress: 50.0,
+        message: "Espere...",
+        progressWidget: Container(
+            padding: EdgeInsets.all(8.0), child: CircularProgressIndicator()),
+        maxProgress: 100.0,
+        progressTextStyle: TextStyle(
+            color: Colors.black, fontSize: 13.0, fontWeight: FontWeight.w400),
+        messageTextStyle: TextStyle(
+            color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600),
+      );
+      await _pr.show();
+      AntecedentesFamiliaresPersonales _antecedentesGuardado;
+      _antecedentes.activo = false;
+      _antecedentesGuardado =
+          await _antecedentesBloc.updateAntecedentes(_antecedentes);
+      if (_antecedentesGuardado != null) {
+        _pr.hide();
+        mostrarFlushBar(context, Colors.green, 'Info', 'Datos Guardados', 2,
+            FlushbarPosition.TOP, Icons.info, Colors.black);
+        _antecedentes.antecedentesFamiliaresPersonalesId = 0;
+        _antecedentes.activo = true;
+        _antPatologicosFamiCtrl.text = '';
+        _antPatologicosPersCtrl.text = '';
+        _antNoPatologicosFamiCtrl.text = '';
+        _antNoPatologicosPersCtrl.text = '';
+        _antInmunoAlergicosCtrl.text = '';
+        setState(() {
+          quieroEditar = true;
+          labelBoton = 'Guardar';
+        });
+      } else {
+        mostrarFlushBar(context, Colors.red, 'Info', 'Ha ocurrido un error', 2,
+            FlushbarPosition.TOP, Icons.info, Colors.white);
+      }
+    } else {
+      print('nada');
+    }
   }
 
   Widget _campoAntecedentesPatologicosFamiliares() {
@@ -191,6 +246,7 @@ class _CrearAntecedentesPageState extends State<CrearAntecedentesPage> {
     return Padding(
       padding: EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
+        controller: _antInmunoAlergicosCtrl,
         onSaved: (value) =>
             _antecedentes.antecedentesInmunoAlergicosPersonales = value,
         maxLines: 3,

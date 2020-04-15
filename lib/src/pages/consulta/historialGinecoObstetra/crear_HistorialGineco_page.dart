@@ -85,7 +85,6 @@ class _CrearHistorialGinecoObstetraPageState
               elevation: 6.0,
               title: GFListTile(
                 title: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   mainAxisSize: MainAxisSize.max,
                   children: <Widget>[
                     Text(
@@ -93,7 +92,10 @@ class _CrearHistorialGinecoObstetraPageState
                       style: TextStyle(fontSize: 16.0),
                     ),
                     IconButton(
-                        icon: Icon(Icons.edit),
+                        icon: Icon(
+                          Icons.edit,
+                          color: Theme.of(context).primaryColor,
+                        ),
                         onPressed: () {
                           if (!quieroEditar) {
                             setState(() {
@@ -101,7 +103,14 @@ class _CrearHistorialGinecoObstetraPageState
                               labelBoton = 'Editar';
                             });
                           }
-                        })
+                        }),
+                    IconButton(
+                      icon: Icon(
+                        Icons.delete,
+                        color: Theme.of(context).primaryColor,
+                      ),
+                      onPressed: (!quieroEditar) ? _desactivar : () {},
+                    )
                   ],
                 ),
               ),
@@ -189,6 +198,63 @@ class _CrearHistorialGinecoObstetraPageState
         ),
       ),
     );
+  }
+
+  void _desactivar() async {
+    if (_historial.historialId != 0) {
+      final ProgressDialog _pr = new ProgressDialog(
+        context,
+        type: ProgressDialogType.Normal,
+        isDismissible: false,
+        showLogs: false,
+      );
+      _pr.update(
+        progress: 50.0,
+        message: "Espere...",
+        progressWidget: Container(
+            padding: EdgeInsets.all(8.0), child: CircularProgressIndicator()),
+        maxProgress: 100.0,
+        progressTextStyle: TextStyle(
+            color: Colors.black, fontSize: 13.0, fontWeight: FontWeight.w400),
+        messageTextStyle: TextStyle(
+            color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600),
+      );
+      await _pr.show();
+      HistorialGinecoObstetra _historialGuardado;
+      _historial.activo = false;
+      _historialGuardado = await _historialBloc.updateHistorial(_historial);
+      if (_historialGuardado != null) {
+        _pr.hide();
+        mostrarFlushBar(context, Colors.green, 'Info', 'Datos Guardados', 2,
+            FlushbarPosition.TOP, Icons.info, Colors.black);
+        _historial.historialId = 0;
+        _historial.activo = true;
+        // limpia controllers
+        _menarquiaController.text = '';
+        _furController.text = '';
+        _sgController.text = '';
+        _gController.text = '';
+        _pController.text = '';
+        _cController.text = '';
+        _hvController.text = '';
+        _fppController.text = '';
+        _ucController.text = '';
+        _menopausiaController.text = '';
+        _anticonceptivoController.text = '';
+        _vacunacionController.text = '';
+        _notasController.text = '';
+
+        setState(() {
+          quieroEditar = true;
+          labelBoton = 'Guardar';
+        });
+      } else {
+        mostrarFlushBar(context, Colors.red, 'Info', 'Ha ocurrido un error', 2,
+            FlushbarPosition.TOP, Icons.info, Colors.white);
+      }
+    } else {
+      print('nada');
+    }
   }
 
   Widget _campoMenarquia(BuildContext context) {
