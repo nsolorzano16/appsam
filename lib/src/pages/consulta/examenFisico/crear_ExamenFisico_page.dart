@@ -1,3 +1,10 @@
+import 'package:flushbar/flushbar.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:getflutter/getflutter.dart';
+import 'package:progress_dialog/progress_dialog.dart';
+import 'package:unicorndial/unicorndial.dart';
+
 import 'package:appsam/src/blocs/examenFisico_bloc.dart';
 import 'package:appsam/src/models/examenFisico_model.dart';
 import 'package:appsam/src/models/paginados/preclinica_paginadoVM.dart';
@@ -5,12 +12,6 @@ import 'package:appsam/src/models/usuario_model.dart';
 import 'package:appsam/src/utils/storage_util.dart';
 import 'package:appsam/src/utils/utils.dart';
 import 'package:appsam/src/widgets/drawer.dart';
-import 'package:flushbar/flushbar.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:getflutter/getflutter.dart';
-import 'package:progress_dialog/progress_dialog.dart';
-import 'package:unicorndial/unicorndial.dart';
 
 class CrearExamenFisicoPage extends StatefulWidget {
   static final String routeName = 'crear_examen_fisico';
@@ -178,7 +179,9 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
       backgroundColor: Colors.redAccent,
       mini: true,
       child: Icon(Icons.delete),
-      onPressed: (!quieroEditar) ? _desactivar : () {},
+      onPressed: (!quieroEditar)
+          ? () => confirmAction(context, 'Desea eliminar el registro')
+          : () {},
     )));
 
     childButtons.add(UnicornButton(
@@ -1084,5 +1087,50 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
     _dolorPresenteModerado = false;
     _dolorPresenteSevero = false;
     _excesoDePeso = false;
+  }
+
+  void confirmAction(
+    BuildContext context,
+    String texto,
+  ) {
+    // set up the buttons
+    Widget cancelButton = FlatButton(
+      child: Text('Cancelar'),
+      onPressed: () {
+        Navigator.pop(context);
+      },
+    );
+    Widget continueButton = FlatButton(
+      child: Text('Ok'),
+      onPressed: () {
+        Navigator.pop(context);
+        _desactivar();
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Información"),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Text(texto),
+          Text('Esta acción no se podra deshacer.')
+        ],
+      ),
+      elevation: 24.0,
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return alert;
+        },
+        barrierDismissible: false);
   }
 }

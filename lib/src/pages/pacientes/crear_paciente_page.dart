@@ -1,8 +1,15 @@
 import 'dart:async';
+import 'package:flushbar/flushbar.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:getflutter/getflutter.dart';
+import 'package:intl/intl.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 
-import 'package:appsam/src/blocs/pacientes_bloc/formPacientes_bloc.dart';
 import 'package:appsam/src/blocs/pacientes_bloc/pacientes_bloc.dart';
-
+import 'package:appsam/src/blocs/pacientes_bloc/formPacientes_bloc.dart';
 import 'package:appsam/src/models/departamento_model.dart';
 import 'package:appsam/src/models/escolaridad_model.dart';
 import 'package:appsam/src/models/estadocivil_model.dart';
@@ -19,15 +26,6 @@ import 'package:appsam/src/providers/combos_service.dart';
 import 'package:appsam/src/utils/storage_util.dart';
 import 'package:appsam/src/utils/utils.dart';
 import 'package:appsam/src/widgets/drawer.dart';
-import 'package:flushbar/flushbar.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:getflutter/getflutter.dart';
-import 'package:intl/intl.dart';
-import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
-import 'package:progress_dialog/progress_dialog.dart';
 
 class CrearPacientePage extends StatefulWidget {
   static final String routeName = 'crear_paciente';

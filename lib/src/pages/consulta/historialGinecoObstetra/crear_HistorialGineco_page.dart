@@ -109,7 +109,10 @@ class _CrearHistorialGinecoObstetraPageState
                         Icons.delete,
                         color: Theme.of(context).primaryColor,
                       ),
-                      onPressed: (!quieroEditar) ? _desactivar : () {},
+                      onPressed: (!quieroEditar)
+                          ? () => confirmAction(
+                              context, 'Desea eliminar el registro')
+                          : () {},
                     )
                   ],
                 ),
@@ -608,6 +611,51 @@ class _CrearHistorialGinecoObstetraPageState
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Text('Desea continuar a la siguiente pagina?'),
+          Text('Esta acción no se podra deshacer.')
+        ],
+      ),
+      elevation: 24.0,
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return alert;
+        },
+        barrierDismissible: false);
+  }
+
+  void confirmAction(
+    BuildContext context,
+    String texto,
+  ) {
+    // set up the buttons
+    Widget cancelButton = FlatButton(
+      child: Text('Cancelar'),
+      onPressed: () {
+        Navigator.pop(context);
+      },
+    );
+    Widget continueButton = FlatButton(
+      child: Text('Ok'),
+      onPressed: () {
+        Navigator.pop(context);
+        _desactivar();
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Información"),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Text(texto),
           Text('Esta acción no se podra deshacer.')
         ],
       ),

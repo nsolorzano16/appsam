@@ -1,9 +1,10 @@
+import 'package:flutter/material.dart';
+import 'package:progress_dialog/progress_dialog.dart';
+
 import 'package:appsam/src/models/usuario_model.dart';
 import 'package:appsam/src/providers/usuario_provider.dart';
 import 'package:appsam/src/utils/storage_util.dart';
 import 'package:appsam/src/utils/utils.dart';
-import 'package:flutter/material.dart';
-import 'package:progress_dialog/progress_dialog.dart';
 
 class LoginPage extends StatefulWidget {
   static final String routeName = 'login';

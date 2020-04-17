@@ -1,3 +1,7 @@
+import 'package:flushbar/flushbar.dart';
+import 'package:flutter/material.dart';
+import 'package:progress_dialog/progress_dialog.dart';
+
 import 'package:appsam/src/blocs/farmacos_bloc.dart';
 import 'package:appsam/src/models/farmacosUsoActual_model.dart';
 import 'package:appsam/src/models/paginados/preclinica_paginadoVM.dart';
@@ -5,9 +9,6 @@ import 'package:appsam/src/models/usuario_model.dart';
 import 'package:appsam/src/utils/storage_util.dart';
 import 'package:appsam/src/utils/utils.dart';
 import 'package:appsam/src/widgets/drawer.dart';
-import 'package:flushbar/flushbar.dart';
-import 'package:flutter/material.dart';
-import 'package:progress_dialog/progress_dialog.dart';
 
 class CrearFarmacosUsoActualPage extends StatefulWidget {
   static final String routeName = 'crear_farmacos_uso_actual';
@@ -92,6 +93,7 @@ class _CrearFarmacosUsoActualPageState
           ],
         ),
         floatingActionButton: FloatingActionButton(
+          backgroundColor: Theme.of(context).primaryColor,
           onPressed: () => _dialogAdd(context, _preclinica),
           child: Icon(Icons.add),
         ));
@@ -122,7 +124,8 @@ class _CrearFarmacosUsoActualPageState
                     color: Theme.of(context).primaryColor,
                     size: 16.0,
                   ),
-                  onPressed: () => _desactivar(f),
+                  onPressed: () =>
+                      confirmAction(context, 'Desea eliminar el registro', f),
                 )
               ],
             ),
@@ -631,5 +634,47 @@ class _CrearFarmacosUsoActualPageState
           FlushbarPosition.BOTTOM, Icons.info, Colors.black);
     }
     setState(() {});
+  }
+
+  void confirmAction(BuildContext context, String texto, FarmacosUsoActual f) {
+    // set up the buttons
+    Widget cancelButton = FlatButton(
+      child: Text('Cancelar'),
+      onPressed: () {
+        Navigator.pop(context);
+      },
+    );
+    Widget continueButton = FlatButton(
+      child: Text('Ok'),
+      onPressed: () {
+        Navigator.pop(context);
+        _desactivar(f);
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Información"),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Text(texto),
+          Text('Esta acción no se podra deshacer.')
+        ],
+      ),
+      elevation: 24.0,
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return alert;
+        },
+        barrierDismissible: false);
   }
 }

@@ -1,3 +1,6 @@
+import 'package:flutter/material.dart';
+import 'package:appsam/src/pages/home_page.dart';
+
 import 'package:appsam/src/blocs/theme_bloc.dart';
 import 'package:appsam/src/pages/asistentes/asistentes_page.dart';
 import 'package:appsam/src/pages/asistentes/crear_asistentes_page.dart';
@@ -25,9 +28,6 @@ import 'package:appsam/src/pages/pacientes/paciente_detalle_page.dart';
 import 'package:appsam/src/pages/pacientes/pacientes_page.dart';
 import 'package:appsam/src/pages/resetmy_pass_page.dart';
 import 'package:appsam/src/pages/settings_page.dart';
-import 'package:flutter/material.dart';
-
-import '../pages/home_page.dart';
 
 Map<String, WidgetBuilder> getApplicationRoutes(ThemeBloc bloc) {
   return <String, WidgetBuilder>{

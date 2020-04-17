@@ -1,10 +1,10 @@
 import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 import 'package:appsam/src/models/pacientes_model.dart';
 import 'package:appsam/src/models/paginados/pacientesPaginado_model.dart';
 import 'package:appsam/src/utils/storage_util.dart';
 import 'package:appsam/src/utils/utils.dart';
-import 'package:http/http.dart' as http;
 
 class PacientesService {
   final _apiURL = EnviromentVariables().getApiURL();

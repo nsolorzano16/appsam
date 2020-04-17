@@ -1,8 +1,8 @@
 import 'dart:convert';
-import 'package:appsam/src/models/farmacosUsoActual_model.dart';
 import 'package:http/http.dart' as http;
-import 'package:appsam/src/utils/storage_util.dart';
 
+import 'package:appsam/src/utils/storage_util.dart';
+import 'package:appsam/src/models/farmacosUsoActual_model.dart';
 import 'package:appsam/src/utils/utils.dart';
 
 class FarmacosUsoActualService {

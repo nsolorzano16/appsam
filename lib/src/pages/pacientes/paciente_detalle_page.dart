@@ -1,11 +1,11 @@
-import 'package:appsam/src/models/paginados/pacientesPaginado_model.dart';
-import 'package:appsam/src/pages/pacientes/edit_paciente_page.dart';
-
-import 'package:appsam/src/utils/storage_util.dart';
-import 'package:appsam/src/widgets/drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:getflutter/getflutter.dart';
 import 'package:intl/intl.dart';
+
+import 'package:appsam/src/models/paginados/pacientesPaginado_model.dart';
+import 'package:appsam/src/pages/pacientes/edit_paciente_page.dart';
+import 'package:appsam/src/utils/storage_util.dart';
+import 'package:appsam/src/widgets/drawer.dart';
 
 class PacienteDetalle extends StatefulWidget {
   static final String routeName = 'paciente_detalle';

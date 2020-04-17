@@ -1,9 +1,9 @@
 import 'dart:async';
+import 'package:rxdart/rxdart.dart';
 
 import 'package:appsam/src/blocs/validators.dart';
 import 'package:appsam/src/models/usuario_model.dart';
 import 'package:appsam/src/providers/usuario_provider.dart';
-import 'package:rxdart/rxdart.dart';
 
 class AsistentesBloc with Validators {
 // LISTA DE ASISTENTES

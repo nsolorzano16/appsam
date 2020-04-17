@@ -1,6 +1,6 @@
 import 'dart:async';
-import 'package:appsam/src/blocs/validators.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:appsam/src/blocs/validators.dart';
 
 class LoginBloc with Validators {
   // final _emailController = BehaviorSubject<String>();

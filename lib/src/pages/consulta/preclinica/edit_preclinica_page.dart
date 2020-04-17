@@ -1,17 +1,16 @@
 import 'dart:async';
-
-import 'package:appsam/src/blocs/consulta_bloc.dart';
-import 'package:appsam/src/blocs/preclinica_bloc.dart';
-import 'package:appsam/src/models/paginados/preclinica_paginadoVM.dart';
-
-import 'package:appsam/src/models/usuario_model.dart';
-import 'package:appsam/src/utils/storage_util.dart';
-import 'package:appsam/src/utils/utils.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:getflutter/getflutter.dart';
 import 'package:progress_dialog/progress_dialog.dart';
+
+import 'package:appsam/src/blocs/consulta_bloc.dart';
+import 'package:appsam/src/blocs/preclinica_bloc.dart';
+import 'package:appsam/src/models/paginados/preclinica_paginadoVM.dart';
+import 'package:appsam/src/models/usuario_model.dart';
+import 'package:appsam/src/utils/storage_util.dart';
+import 'package:appsam/src/utils/utils.dart';
 
 class EditarPreclinicaPage extends StatefulWidget {
   static final String routeName = 'editar_preclinica';

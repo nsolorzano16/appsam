@@ -1,4 +1,7 @@
 import 'dart:async';
+import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 
 import 'package:appsam/src/blocs/preclinica_bloc.dart';
 import 'package:appsam/src/blocs/provider.dart';
@@ -6,9 +9,6 @@ import 'package:appsam/src/models/paginados/preclinica_paginadoVM.dart';
 import 'package:appsam/src/models/usuario_model.dart';
 import 'package:appsam/src/utils/storage_util.dart';
 import 'package:appsam/src/widgets/drawer.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:progress_dialog/progress_dialog.dart';
 
 class PreclinicaPage extends StatefulWidget {
   static final String routeName = 'preclinica';

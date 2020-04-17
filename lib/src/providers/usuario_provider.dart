@@ -1,13 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
+import 'package:mime_type/mime_type.dart';
 
 import 'package:appsam/src/models/asistentes_paginado_model.dart';
 import 'package:appsam/src/models/usuario_model.dart';
 import 'package:appsam/src/utils/storage_util.dart';
 import 'package:appsam/src/utils/utils.dart';
-import 'package:http/http.dart' as http;
-import 'package:http_parser/http_parser.dart';
-import 'package:mime_type/mime_type.dart';
 
 class UsuarioProvider {
   final _apiURL = EnviromentVariables().getApiURL();

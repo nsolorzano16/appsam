@@ -1,5 +1,5 @@
-import 'package:appsam/src/models/menu_model.dart';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:appsam/src/models/menu_model.dart';
 
 class _MenuProvider {
   var opciones = new List<Ruta>();

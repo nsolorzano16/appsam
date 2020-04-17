@@ -1,9 +1,10 @@
+import 'package:flutter/material.dart';
+import 'package:progress_dialog/progress_dialog.dart';
+
 import 'package:appsam/src/blocs/asistentes_bloc/create_edit_asistentes.dart';
 import 'package:appsam/src/blocs/asistentes_bloc/resetPassword_bloc.dart';
 import 'package:appsam/src/utils/storage_util.dart';
 import 'package:appsam/src/widgets/drawer.dart';
-import 'package:flutter/material.dart';
-import 'package:progress_dialog/progress_dialog.dart';
 
 class ResetMyPasswordPage extends StatelessWidget {
   static final String routeName = 'reset-my-pass';

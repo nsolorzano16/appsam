@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'package:appsam/src/blocs/provider.dart';
 import 'package:appsam/src/blocs/theme_bloc.dart';
 import 'package:appsam/src/pages/error404_page.dart';
 import 'package:appsam/src/routes/routes.dart';
 import 'package:appsam/src/utils/storage_util.dart';
-
-import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

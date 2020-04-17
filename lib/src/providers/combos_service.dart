@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 import 'package:appsam/src/models/departamento_model.dart';
 import 'package:appsam/src/models/escolaridad_model.dart';
@@ -8,9 +9,6 @@ import 'package:appsam/src/models/municipio_model.dart';
 import 'package:appsam/src/models/pais_model.dart';
 import 'package:appsam/src/models/profesion_model.dart';
 import 'package:appsam/src/models/religion_model.dart';
-
-import 'package:http/http.dart' as http;
-
 import 'package:appsam/src/utils/utils.dart';
 
 class CombosService {

@@ -1,9 +1,9 @@
 import 'dart:io';
+import 'package:rxdart/rxdart.dart';
 
 import 'package:appsam/src/blocs/validators.dart';
 import 'package:appsam/src/models/usuario_model.dart';
 import 'package:appsam/src/providers/usuario_provider.dart';
-import 'package:rxdart/rxdart.dart';
 
 class CrearEditarAsistentesBloc with Validators {
   final _usuarioProvider = new UsuarioProvider();

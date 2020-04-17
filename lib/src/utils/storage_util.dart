@@ -1,5 +1,5 @@
-import 'package:appsam/src/blocs/asistentes_bloc/create_edit_asistentes.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:appsam/src/blocs/asistentes_bloc/create_edit_asistentes.dart';
 
 class StorageUtil {
   static StorageUtil _storageUtil;

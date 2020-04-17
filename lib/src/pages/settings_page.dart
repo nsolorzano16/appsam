@@ -1,10 +1,11 @@
+import 'package:flutter/material.dart';
+
 import 'package:appsam/src/blocs/asistentes_bloc/create_edit_asistentes.dart';
 import 'package:appsam/src/blocs/provider.dart';
 import 'package:appsam/src/blocs/theme_bloc.dart';
 import 'package:appsam/src/models/usuario_model.dart';
 import 'package:appsam/src/utils/storage_util.dart';
 import 'package:appsam/src/widgets/drawer.dart';
-import 'package:flutter/material.dart';
 
 class SettingsPage extends StatefulWidget {
   static final String routeName = 'settings';

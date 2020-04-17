@@ -1,7 +1,7 @@
+import 'package:flutter/material.dart';
 import 'dart:math';
 
 import 'package:flushbar/flushbar.dart';
-import 'package:flutter/material.dart';
 
 bool isNumeric(String s) {
   if (s.isEmpty) return false;
