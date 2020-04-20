@@ -136,6 +136,19 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Consulta'),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(
+              Icons.arrow_forward_ios,
+              color: Colors.white,
+            ),
+            tooltip: 'Siguiente pagina',
+            onPressed: () {
+              showConfirmDialog(
+                  context, 'crear_examen_ginecologico', _preclinica);
+            },
+          )
+        ],
       ),
       drawer: MenuWidget(),
       body: Form(
