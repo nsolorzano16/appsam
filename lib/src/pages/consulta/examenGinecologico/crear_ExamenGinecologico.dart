@@ -78,7 +78,7 @@ class _CrearExamenGinecologicoPageState
             ),
             tooltip: 'Siguiente pagina',
             onPressed: () {
-              // TODO: poner la siguiente pagina
+              showConfirmDialog(context, 'crear_diagnosticos', _preclinica);
             },
           )
         ],

@@ -5,6 +5,8 @@ Diagnosticos diagnosticosFromJson(String str) =>
 
 String diagnosticosToJson(Diagnosticos data) => json.encode(data.toJson());
 
+String diagnosticosToJsonList(List<Diagnosticos> data) => json.encode(data);
+
 class Diagnosticos {
   int diagnosticoId;
   int pacienteId;

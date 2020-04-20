@@ -38,10 +38,9 @@ class _CrearFarmacosUsoActualPageState
   final _editartiempoController = new TextEditingController();
   final _editarnotasController = new TextEditingController();
 
-  int i = 0;
-
   final GlobalKey<ScaffoldState> mScaffoldState =
       new GlobalKey<ScaffoldState>();
+
   @override
   void initState() {
     super.initState();
@@ -101,7 +100,6 @@ class _CrearFarmacosUsoActualPageState
 
   List<Widget> items(List<FarmacosUsoActual> lista) {
     return lista.map((f) {
-      i++;
       return Column(
         children: <Widget>[
           ExpansionTile(
@@ -116,7 +114,7 @@ class _CrearFarmacosUsoActualPageState
                       color: Theme.of(context).primaryColor,
                     ),
                     onPressed: () {
-                      _dialogEdit(context, f, i);
+                      _dialogEdit(context, f);
                     }),
                 IconButton(
                   icon: Icon(
@@ -199,7 +197,7 @@ class _CrearFarmacosUsoActualPageState
         barrierDismissible: false);
   }
 
-  void _dialogEdit(BuildContext context, FarmacosUsoActual farmaco, int index) {
+  void _dialogEdit(BuildContext context, FarmacosUsoActual farmaco) {
     _editarnombreController.text = farmaco.nombre;
     _editarconcentracionController.text = farmaco.concentracion;
     _editardosisController.text = farmaco.dosis;
@@ -213,7 +211,7 @@ class _CrearFarmacosUsoActualPageState
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  _formularioEditar(farmaco, context, index),
+                  _formularioEditar(farmaco, context),
                 ],
               ),
             ),
@@ -384,8 +382,7 @@ class _CrearFarmacosUsoActualPageState
     );
   }
 
-  Widget _formularioEditar(
-      FarmacosUsoActual farmaco, BuildContext context, int index) {
+  Widget _formularioEditar(FarmacosUsoActual farmaco, BuildContext context) {
     return Container(
       padding: EdgeInsets.all(5.0),
       child: Form(
@@ -411,7 +408,7 @@ class _CrearFarmacosUsoActualPageState
                       onPressed: () => Navigator.pop(context),
                       child: Text('Cancelar')),
                   FlatButton(
-                      onPressed: () => _editar(farmaco, context, index),
+                      onPressed: () => _editar(farmaco, context),
                       child: Text('Editar'))
                 ],
               )
@@ -420,8 +417,7 @@ class _CrearFarmacosUsoActualPageState
     );
   }
 
-  void _editar(
-      FarmacosUsoActual farmaco, BuildContext context, int index) async {
+  void _editar(FarmacosUsoActual farmaco, BuildContext context) async {
     if (_editarnombreController.text.isEmpty &&
         _editarconcentracionController.text.isEmpty &&
         _editardosisController.text.isEmpty &&
