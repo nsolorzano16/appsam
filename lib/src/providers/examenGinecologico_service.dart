@@ -16,7 +16,7 @@ class ExamenGinecologicoService {
       "accept": "application/json",
       'authorization': 'Bearer $token',
     };
-    final url = '$_apiURL/api/ExamenFisicoGineologico';
+    final url = '$_apiURL/api/ExamenFisicoGinecologico';
 
     final resp = await http.post(url,
         headers: headers,
@@ -39,7 +39,7 @@ class ExamenGinecologicoService {
       "accept": "application/json",
       'authorization': 'Bearer $token',
     };
-    final url = '$_apiURL/api/ExamenFisicoGineologico';
+    final url = '$_apiURL/api/ExamenFisicoGinecologico';
 
     //print(usuarioModelToJson(usuario));
     final resp = await http.put(url,

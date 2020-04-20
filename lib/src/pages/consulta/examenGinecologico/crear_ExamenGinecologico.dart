@@ -124,7 +124,15 @@ class _CrearExamenGinecologicoPageState
               content: Form(
                   key: _formkey,
                   child: Column(
-                    children: <Widget>[_campoAfu(), _crearBotones(context)],
+                    children: <Widget>[
+                      _campoAfu(),
+                      _campoPelvis(),
+                      _campoDorso(),
+                      _campoFcf(),
+                      _campoAp(),
+                      _campoNotas(),
+                      _crearBotones(context)
+                    ],
                   )),
             )
           ],
@@ -188,10 +196,74 @@ class _CrearExamenGinecologicoPageState
       child: TextFormField(
         controller: _afuController,
         onSaved: (value) => _examenGinecologico.afu = value,
-        maxLines: 3,
         keyboardType: TextInputType.text,
-        decoration: inputsDecorations(
-            'Antecedentes Patologicos Familiares', Icons.note),
+        decoration: inputsDecorations('Afu', Icons.note),
+        enabled: quieroEditar,
+      ),
+    );
+  }
+
+  Widget _campoPelvis() {
+    return Padding(
+      padding: EdgeInsets.only(left: 8.0, right: 8.0),
+      child: TextFormField(
+        controller: _pelvisController,
+        onSaved: (value) => _examenGinecologico.pelvis = value,
+        keyboardType: TextInputType.text,
+        decoration: inputsDecorations('Pelvis', Icons.note),
+        enabled: quieroEditar,
+      ),
+    );
+  }
+
+  Widget _campoDorso() {
+    return Padding(
+      padding: EdgeInsets.only(left: 8.0, right: 8.0),
+      child: TextFormField(
+        controller: _dorsoController,
+        onSaved: (value) => _examenGinecologico.dorso = value,
+        keyboardType: TextInputType.text,
+        decoration: inputsDecorations('Dorso', Icons.note),
+        enabled: quieroEditar,
+      ),
+    );
+  }
+
+  Widget _campoFcf() {
+    return Padding(
+      padding: EdgeInsets.only(left: 8.0, right: 8.0),
+      child: TextFormField(
+        controller: _fcfController,
+        onSaved: (value) => _examenGinecologico.fcf = value,
+        keyboardType: TextInputType.text,
+        decoration: inputsDecorations('Fcf', Icons.note),
+        enabled: quieroEditar,
+      ),
+    );
+  }
+
+  Widget _campoAp() {
+    return Padding(
+      padding: EdgeInsets.only(left: 8.0, right: 8.0),
+      child: TextFormField(
+        controller: _apController,
+        onSaved: (value) => _examenGinecologico.ap = value,
+        keyboardType: TextInputType.text,
+        decoration: inputsDecorations('Ap', Icons.note),
+        enabled: quieroEditar,
+      ),
+    );
+  }
+
+  Widget _campoNotas() {
+    return Padding(
+      padding: EdgeInsets.only(left: 8.0, right: 8.0),
+      child: TextFormField(
+        controller: _notasController,
+        maxLines: 2,
+        onSaved: (value) => _examenGinecologico.notas = value,
+        keyboardType: TextInputType.text,
+        decoration: inputsDecorations('Notas Adicionales', Icons.note),
         enabled: quieroEditar,
       ),
     );
@@ -264,8 +336,8 @@ class _CrearExamenGinecologicoPageState
             .updateExamenGinecologico(_examenGinecologico);
       }
 
+      _pr.hide();
       if (_examenGinecologicoGuardado != null) {
-        _pr.hide();
         mostrarFlushBar(context, Colors.green, 'Info', 'Datos Guardados', 2,
             FlushbarPosition.TOP, Icons.info, Colors.black);
         _examenGinecologico.examenId = _examenGinecologicoGuardado.examenId;
