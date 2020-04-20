@@ -1,5 +1,6 @@
 import 'package:appsam/src/pages/consulta/diagnosticos/crear_diagnosticos_page.dart';
 import 'package:appsam/src/pages/consulta/examenGinecologico/crear_ExamenGinecologico.dart';
+import 'package:appsam/src/pages/consulta/notas/crear_notas_page.dart';
 import 'package:flutter/material.dart';
 import 'package:appsam/src/pages/home_page.dart';
 
@@ -70,6 +71,7 @@ Map<String, WidgetBuilder> getApplicationRoutes(ThemeBloc bloc) {
     CrearExamenGinecologicoPage.routeName: (BuildContext context) =>
         CrearExamenGinecologicoPage(),
     CrearDiagnosticosPage.routeName: (BuildContext context) =>
-        CrearDiagnosticosPage()
+        CrearDiagnosticosPage(),
+    CrearNotasPage.routeName: (BuildContext context) => CrearNotasPage()
   };
 }

@@ -1,33 +1,33 @@
-import 'package:appsam/src/blocs/diagnosticos_bloc.dart';
-import 'package:appsam/src/models/diagnosticos_model.dart';
+import 'package:flushbar/flushbar.dart';
+import 'package:flutter/material.dart';
+
+import 'package:appsam/src/blocs/notas_bloc.dart';
+import 'package:appsam/src/models/notas_model.dart';
 import 'package:appsam/src/models/paginados/preclinica_paginadoVM.dart';
 import 'package:appsam/src/models/usuario_model.dart';
 import 'package:appsam/src/utils/storage_util.dart';
 import 'package:appsam/src/utils/utils.dart';
 import 'package:appsam/src/widgets/drawer.dart';
-import 'package:flushbar/flushbar.dart';
-import 'package:flutter/material.dart';
 import 'package:getflutter/getflutter.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 
-class CrearDiagnosticosPage extends StatefulWidget {
-  static final String routeName = 'crear_diagnosticos';
-
+class CrearNotasPage extends StatefulWidget {
+  static final String routeName = 'crear_notas';
   @override
-  _CrearDiagnosticosPageState createState() => _CrearDiagnosticosPageState();
+  _CrearNotasPageState createState() => _CrearNotasPageState();
 }
 
-class _CrearDiagnosticosPageState extends State<CrearDiagnosticosPage> {
+class _CrearNotasPageState extends State<CrearNotasPage> {
   final UsuarioModel _usuario =
       usuarioModelFromJson(StorageUtil.getString('usuarioGlobal'));
-  final List<Diagnosticos> _listaDiagnosticos = new List<Diagnosticos>();
-  final DiagnosticosBloc _diagnosticosBloc = new DiagnosticosBloc();
+  final List<Notas> _listaNotas = new List<Notas>();
+  final NotasBloc _notasBloc = new NotasBloc();
 
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
   final GlobalKey<FormState> _formkeyEditar = GlobalKey<FormState>();
 
-  final _problemasClinicosController = new TextEditingController();
-  final _editarproblemasClinicosController = new TextEditingController();
+  final _notasController = new TextEditingController();
+  final _editarNotasController = new TextEditingController();
 
   final GlobalKey<ScaffoldState> mScaffoldState =
       new GlobalKey<ScaffoldState>();
@@ -35,7 +35,7 @@ class _CrearDiagnosticosPageState extends State<CrearDiagnosticosPage> {
   @override
   void initState() {
     super.initState();
-    StorageUtil.putString('ultimaPagina', CrearDiagnosticosPage.routeName);
+    StorageUtil.putString('ultimaPagina', CrearNotasPage.routeName);
   }
 
   @override
@@ -48,10 +48,7 @@ class _CrearDiagnosticosPageState extends State<CrearDiagnosticosPage> {
         appBar: AppBar(
           title: Text('Consulta'),
           actions: <Widget>[
-            IconButton(
-                icon: Icon(Icons.arrow_forward_ios),
-                onPressed: () =>
-                    showConfirmDialog(context, 'crear_notas', _preclinica))
+            IconButton(icon: Icon(Icons.arrow_forward_ios), onPressed: () {})
           ],
         ),
         drawer: MenuWidget(),
@@ -65,7 +62,7 @@ class _CrearDiagnosticosPageState extends State<CrearDiagnosticosPage> {
                   right: 10.0,
                 ),
                 child: ListTile(
-                  title: Text('Diagnosticos'),
+                  title: Text('Notas'),
                   subtitle: Text('Click en el boton \"+\" para agregar'),
                 )),
             Divider(
@@ -75,7 +72,7 @@ class _CrearDiagnosticosPageState extends State<CrearDiagnosticosPage> {
             ),
             Flexible(
                 child: ListView(
-              children: items(_listaDiagnosticos),
+              children: items(_listaNotas),
             ))
           ],
         ),
@@ -86,13 +83,13 @@ class _CrearDiagnosticosPageState extends State<CrearDiagnosticosPage> {
         ));
   } //fin build
 
-  List<Widget> items(List<Diagnosticos> lista) {
+  List<Widget> items(List<Notas> lista) {
     return lista.map((f) {
       return Column(
         children: <Widget>[
           ExpansionTile(
             title: Text(
-              'Problema Clinico: ${f.problemasClinicos}',
+              'Nota: ${f.notas}',
               overflow: TextOverflow.ellipsis,
             ),
             leading: Row(
@@ -124,7 +121,7 @@ class _CrearDiagnosticosPageState extends State<CrearDiagnosticosPage> {
                   child: GFCard(
                     elevation: 3.0,
                     content: Text(
-                      f.problemasClinicos,
+                      f.notas,
                       textAlign: TextAlign.justify,
                     ),
                   ))
@@ -135,43 +132,43 @@ class _CrearDiagnosticosPageState extends State<CrearDiagnosticosPage> {
     }).toList();
   }
 
-  _campoProblemasClinicos(Diagnosticos diagnostico) {
+  _campoNotas(Notas nota) {
     return Padding(
       padding: EdgeInsets.only(left: 8.0, right: 8.0, top: 10.0),
       child: TextFormField(
-        initialValue: diagnostico.problemasClinicos,
-        onSaved: (value) => diagnostico.problemasClinicos = value,
-        controller: _problemasClinicosController,
+        initialValue: nota.notas,
+        onSaved: (value) => nota.notas = value,
+        controller: _notasController,
         keyboardType: TextInputType.text,
         maxLines: 3,
-        decoration: inputsDecorations('Problemas Clinicos', Icons.note),
+        decoration: inputsDecorations('Nota', Icons.note),
       ),
     );
   }
 
-  _campoProblemasClinicosEditar(Diagnosticos diagnostico) {
+  _campoNotasEditar(Notas nota) {
     return Padding(
       padding: EdgeInsets.only(left: 8.0, right: 8.0, top: 10.0),
       child: TextFormField(
-        controller: _editarproblemasClinicosController,
-        onSaved: (value) => diagnostico.problemasClinicos = value,
+        controller: _editarNotasController,
+        onSaved: (value) => nota.notas = value,
         maxLines: 3,
         keyboardType: TextInputType.text,
-        decoration: InputDecoration(hintText: 'Problemas Clinicos'),
+        decoration: InputDecoration(hintText: 'Nota'),
       ),
     );
   }
 
   void _dialogAdd(BuildContext context, PreclinicaViewModel preclinica) {
-    final _diagnostico = new Diagnosticos();
-    _diagnostico.diagnosticoId = 0;
-    _diagnostico.doctorId = preclinica.doctorId;
-    _diagnostico.pacienteId = preclinica.pacienteId;
-    _diagnostico.activo = true;
-    _diagnostico.creadoPor = _usuario.userName;
-    _diagnostico.creadoFecha = DateTime.now();
-    _diagnostico.modificadoPor = _usuario.userName;
-    _diagnostico.modificadoFecha = _usuario.modificadoFecha;
+    final _nota = new Notas();
+    _nota.notaId = 0;
+    _nota.doctorId = preclinica.doctorId;
+    _nota.pacienteId = preclinica.pacienteId;
+    _nota.activo = true;
+    _nota.creadoPor = _usuario.userName;
+    _nota.creadoFecha = DateTime.now();
+    _nota.modificadoPor = _usuario.userName;
+    _nota.modificadoFecha = _usuario.modificadoFecha;
     showDialog(
         context: context,
         builder: (context) {
@@ -180,7 +177,7 @@ class _CrearDiagnosticosPageState extends State<CrearDiagnosticosPage> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  _formularioAgregar(_diagnostico, context),
+                  _formularioAgregar(_nota, context),
                 ],
               ),
             ),
@@ -189,8 +186,8 @@ class _CrearDiagnosticosPageState extends State<CrearDiagnosticosPage> {
         barrierDismissible: false);
   }
 
-  void _dialogEdit(BuildContext context, Diagnosticos diagnostico) {
-    _editarproblemasClinicosController.text = diagnostico.problemasClinicos;
+  void _dialogEdit(BuildContext context, Notas nota) {
+    _editarNotasController.text = nota.notas;
     showDialog(
         context: context,
         builder: (context) {
@@ -199,7 +196,7 @@ class _CrearDiagnosticosPageState extends State<CrearDiagnosticosPage> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  _formularioEditar(diagnostico, context),
+                  _formularioEditar(nota, context),
                 ],
               ),
             ),
@@ -208,7 +205,7 @@ class _CrearDiagnosticosPageState extends State<CrearDiagnosticosPage> {
         barrierDismissible: false);
   }
 
-  Widget _formularioAgregar(Diagnosticos diagnostico, BuildContext context) {
+  Widget _formularioAgregar(Notas nota, BuildContext context) {
     return Container(
       padding: EdgeInsets.all(5.0),
       child: Form(
@@ -222,7 +219,7 @@ class _CrearDiagnosticosPageState extends State<CrearDiagnosticosPage> {
                   style: TextStyle(color: Colors.red),
                 ),
               ),
-              _campoProblemasClinicos(diagnostico),
+              _campoNotas(nota),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
@@ -233,7 +230,7 @@ class _CrearDiagnosticosPageState extends State<CrearDiagnosticosPage> {
                         style: TextStyle(color: Colors.blue),
                       )),
                   FlatButton(
-                      onPressed: () => _guardar(diagnostico, context),
+                      onPressed: () => _guardar(nota, context),
                       child: Text(
                         'Guardar',
                         style: TextStyle(color: Colors.blue),
@@ -245,7 +242,7 @@ class _CrearDiagnosticosPageState extends State<CrearDiagnosticosPage> {
     );
   }
 
-  Widget _formularioEditar(Diagnosticos diagnostico, BuildContext context) {
+  Widget _formularioEditar(Notas nota, BuildContext context) {
     return Container(
       padding: EdgeInsets.all(5.0),
       child: Form(
@@ -259,7 +256,7 @@ class _CrearDiagnosticosPageState extends State<CrearDiagnosticosPage> {
                   style: TextStyle(color: Colors.red),
                 ),
               ),
-              _campoProblemasClinicosEditar(diagnostico),
+              _campoNotasEditar(nota),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
@@ -270,7 +267,7 @@ class _CrearDiagnosticosPageState extends State<CrearDiagnosticosPage> {
                         style: TextStyle(color: Colors.blue),
                       )),
                   FlatButton(
-                      onPressed: () => _editar(diagnostico, context),
+                      onPressed: () => _editar(nota, context),
                       child: Text(
                         'Editar',
                         style: TextStyle(color: Colors.blue),
@@ -282,18 +279,17 @@ class _CrearDiagnosticosPageState extends State<CrearDiagnosticosPage> {
     );
   }
 
-  void _editar(Diagnosticos diagnostico, BuildContext context) async {
-    if (_editarproblemasClinicosController.text.isEmpty) {
+  void _editar(Notas nota, BuildContext context) async {
+    if (_editarNotasController.text.isEmpty) {
     } else {
       _formkeyEditar.currentState.save();
 
-      _editarproblemasClinicosController.text = '';
+      _editarNotasController.text = '';
 
-      final item = _listaDiagnosticos.firstWhere(
-          (item) => item.diagnosticoId == diagnostico.diagnosticoId,
+      final item = _listaNotas.firstWhere((item) => item.notaId == nota.notaId,
           orElse: null);
       if (item != null) {
-        item.problemasClinicos = diagnostico.problemasClinicos;
+        item.notas = nota.notas;
       }
       Navigator.pop(context);
       await editarBaseDatos(context);
@@ -315,12 +311,12 @@ class _CrearDiagnosticosPageState extends State<CrearDiagnosticosPage> {
     }
   }
 
-  void _guardar(Diagnosticos diagnostico, BuildContext context) async {
-    if (_problemasClinicosController.text.isEmpty) {
+  void _guardar(Notas nota, BuildContext context) async {
+    if (_notasController.text.isEmpty) {
     } else {
       _formkey.currentState.save();
-      _listaDiagnosticos.add(diagnostico);
-      _problemasClinicosController.text = '';
+      _listaNotas.add(nota);
+      _notasController.text = '';
 
       Navigator.pop(context);
       await salvarBaseDatos(context);
@@ -361,12 +357,11 @@ class _CrearDiagnosticosPageState extends State<CrearDiagnosticosPage> {
           color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600),
     );
     await _pr.show();
-    final List<Diagnosticos> lista =
-        await _diagnosticosBloc.addListaDiagnosticos(_listaDiagnosticos);
+    final List<Notas> lista = await _notasBloc.addListaNotas(_listaNotas);
 
     _pr.hide();
     if (lista != null) {
-      _listaDiagnosticos.replaceRange(0, _listaDiagnosticos.length, lista);
+      _listaNotas.replaceRange(0, _listaNotas.length, lista);
     } else {
       mostrarFlushBar(context, Colors.red, 'Info', 'Ha ocurrido un error', 3,
           FlushbarPosition.BOTTOM, Icons.info, Colors.black);
@@ -392,19 +387,18 @@ class _CrearDiagnosticosPageState extends State<CrearDiagnosticosPage> {
           color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600),
     );
     await _pr.show();
-    final List<Diagnosticos> lista =
-        await _diagnosticosBloc.updateListaDiagnosticos(_listaDiagnosticos);
+    final List<Notas> lista = await _notasBloc.updateListaNotas(_listaNotas);
     _pr.hide();
 
     if (lista != null) {
-      _listaDiagnosticos.replaceRange(0, _listaDiagnosticos.length, lista);
+      _listaNotas.replaceRange(0, _listaNotas.length, lista);
     } else {
       mostrarFlushBar(context, Colors.red, 'Info', 'Ha ocurrido un error', 3,
           FlushbarPosition.BOTTOM, Icons.info, Colors.black);
     }
   }
 
-  void _desactivar(Diagnosticos f) async {
+  void _desactivar(Notas f) async {
     final ProgressDialog _pr = new ProgressDialog(
       context,
       type: ProgressDialogType.Normal,
@@ -424,8 +418,8 @@ class _CrearDiagnosticosPageState extends State<CrearDiagnosticosPage> {
     );
     await _pr.show();
     f.activo = false;
-    bool resp = await _diagnosticosBloc.desactivar(f);
-    _listaDiagnosticos.remove(f);
+    bool resp = await _notasBloc.desactivar(f);
+    _listaNotas.remove(f);
     _pr.hide();
     if (resp) {
       mostrarFlushBar(context, Colors.green, 'Info', 'Datos Guardados', 2,
@@ -437,7 +431,7 @@ class _CrearDiagnosticosPageState extends State<CrearDiagnosticosPage> {
     setState(() {});
   }
 
-  void confirmAction(BuildContext context, String texto, Diagnosticos f) {
+  void confirmAction(BuildContext context, String texto, Notas f) {
     // set up the buttons
     Widget cancelButton = FlatButton(
       child: Text('Cancelar'),

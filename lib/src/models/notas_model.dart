@@ -4,8 +4,10 @@ Notas notasFromJson(String str) => Notas.fromJson(json.decode(str));
 
 String notasToJson(Notas data) => json.encode(data.toJson());
 
+String notasToJsonList(List<Notas> data) => json.encode(data);
+
 class Notas {
-  int diagnosticoId;
+  int notaId;
   int pacienteId;
   int doctorId;
 
@@ -17,7 +19,7 @@ class Notas {
   String notas;
 
   Notas({
-    this.diagnosticoId,
+    this.notaId,
     this.pacienteId,
     this.doctorId,
     this.activo,
@@ -29,8 +31,7 @@ class Notas {
   });
 
   factory Notas.fromJson(Map<String, dynamic> json) => Notas(
-        diagnosticoId:
-            json["diagnosticoId"] == null ? null : json["diagnosticoId"],
+        notaId: json["notaId"] == null ? null : json["notaId"],
         pacienteId: json["pacienteId"],
         doctorId: json["doctorId"],
         activo: json["activo"],
@@ -42,7 +43,7 @@ class Notas {
       );
 
   Map<String, dynamic> toJson() => {
-        "diagnosticoId": diagnosticoId == null ? null : diagnosticoId,
+        "notaId": notaId == null ? null : notaId,
         "pacienteId": pacienteId,
         "doctorId": doctorId,
         "activo": activo,
