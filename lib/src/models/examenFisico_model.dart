@@ -9,6 +9,7 @@ class ExamenFisico {
   int examenFisicoId;
   int pacienteId;
   int doctorId;
+  int preclinicaId;
   String aspectoGeneral;
   int edadAparente;
   String marcha;
@@ -56,6 +57,7 @@ class ExamenFisico {
     this.examenFisicoId,
     this.pacienteId,
     this.doctorId,
+    this.preclinicaId,
     this.aspectoGeneral,
     this.edadAparente,
     this.marcha,
@@ -104,6 +106,7 @@ class ExamenFisico {
         examenFisicoId: json["examenFisicoId"],
         pacienteId: json["pacienteId"],
         doctorId: json["doctorId"],
+        preclinicaId: json["preclinicaId"],
         aspectoGeneral: json["aspectoGeneral"],
         edadAparente:
             json["edadAparente"] == null ? null : json["edadAparente"],
@@ -153,6 +156,7 @@ class ExamenFisico {
         "examenFisicoId": examenFisicoId,
         "pacienteId": pacienteId,
         "doctorId": doctorId,
+        "preclinicaId": preclinicaId,
         "aspectoGeneral": aspectoGeneral,
         "edadAparente": edadAparente,
         "marcha": marcha,

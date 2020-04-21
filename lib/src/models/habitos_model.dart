@@ -8,6 +8,7 @@ class Habitos {
   int habitoId;
   int pacienteId;
   int doctorId;
+  int preclinicaId;
   bool cafe;
   bool cigarrillo;
   int tazasCafe;
@@ -23,6 +24,7 @@ class Habitos {
     this.habitoId,
     this.pacienteId,
     this.doctorId,
+    this.preclinicaId,
     this.cafe,
     this.cigarrillo,
     this.tazasCafe,
@@ -39,6 +41,7 @@ class Habitos {
         habitoId: json["habitoId"],
         pacienteId: json["pacienteId"],
         doctorId: json["doctorId"],
+        preclinicaId: json["preclinicaId"],
         cafe: json["cafe"],
         cigarrillo: json["cigarrillo"],
         tazasCafe: json["tazasCafe"],
@@ -55,6 +58,7 @@ class Habitos {
         "habitoId": habitoId,
         "pacienteId": pacienteId,
         "doctorId": doctorId,
+        "preclinicaId": preclinicaId,
         "cafe": cafe,
         "cigarrillo": cigarrillo,
         "tazasCafe": tazasCafe,

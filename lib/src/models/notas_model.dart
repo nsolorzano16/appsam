@@ -10,7 +10,7 @@ class Notas {
   int notaId;
   int pacienteId;
   int doctorId;
-
+  int preclinicaId;
   bool activo;
   String creadoPor;
   DateTime creadoFecha;
@@ -22,6 +22,7 @@ class Notas {
     this.notaId,
     this.pacienteId,
     this.doctorId,
+    this.preclinicaId,
     this.activo,
     this.creadoPor,
     this.creadoFecha,
@@ -34,6 +35,7 @@ class Notas {
         notaId: json["notaId"] == null ? null : json["notaId"],
         pacienteId: json["pacienteId"],
         doctorId: json["doctorId"],
+        preclinicaId: json["preclinicaId"],
         activo: json["activo"],
         creadoPor: json["creadoPor"],
         creadoFecha: DateTime.parse(json["creadoFecha"]),
@@ -46,6 +48,7 @@ class Notas {
         "notaId": notaId == null ? null : notaId,
         "pacienteId": pacienteId,
         "doctorId": doctorId,
+        "preclinicaId": preclinicaId,
         "activo": activo,
         "creadoPor": creadoPor,
         "creadoFecha": creadoFecha.toIso8601String(),

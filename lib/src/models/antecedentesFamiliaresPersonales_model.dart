@@ -12,6 +12,7 @@ class AntecedentesFamiliaresPersonales {
   int antecedentesFamiliaresPersonalesId;
   int pacienteId;
   int doctorId;
+  int preclinicaId;
   String antecedentesPatologicosFamiliares;
   String antecedentesPatologicosPersonales;
   String antecedentesNoPatologicosFamiliares;
@@ -28,6 +29,7 @@ class AntecedentesFamiliaresPersonales {
     this.antecedentesFamiliaresPersonalesId,
     this.pacienteId,
     this.doctorId,
+    this.preclinicaId,
     this.antecedentesPatologicosFamiliares,
     this.antecedentesPatologicosPersonales,
     this.antecedentesNoPatologicosFamiliares,
@@ -48,6 +50,7 @@ class AntecedentesFamiliaresPersonales {
             json["antecedentesFamiliaresPersonalesId"],
         pacienteId: json["pacienteId"],
         doctorId: json["doctorId"],
+        preclinicaId: json["preclinicaId"],
         antecedentesPatologicosFamiliares:
             json["antecedentesPatologicosFamiliares"],
         antecedentesPatologicosPersonales:
@@ -71,6 +74,7 @@ class AntecedentesFamiliaresPersonales {
             antecedentesFamiliaresPersonalesId,
         "pacienteId": pacienteId,
         "doctorId": doctorId,
+        "preclinicaId": preclinicaId,
         "antecedentesPatologicosFamiliares": antecedentesPatologicosFamiliares,
         "antecedentesPatologicosPersonales": antecedentesPatologicosPersonales,
         "antecedentesNoPatologicosFamiliares":

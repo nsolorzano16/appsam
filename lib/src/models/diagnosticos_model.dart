@@ -11,6 +11,7 @@ class Diagnosticos {
   int diagnosticoId;
   int pacienteId;
   int doctorId;
+  int preclinicaId;
   String problemasClinicos;
   bool activo;
   String creadoPor;
@@ -23,6 +24,7 @@ class Diagnosticos {
     this.diagnosticoId,
     this.pacienteId,
     this.doctorId,
+    this.preclinicaId,
     this.problemasClinicos,
     this.activo,
     this.creadoPor,
@@ -37,6 +39,7 @@ class Diagnosticos {
             json["diagnosticoId"] == null ? null : json["diagnosticoId"],
         pacienteId: json["pacienteId"],
         doctorId: json["doctorId"],
+        preclinicaId: json["preclinicaId"],
         problemasClinicos: json["problemasClinicos"] == null
             ? null
             : json["problemasClinicos"],
@@ -52,6 +55,7 @@ class Diagnosticos {
         "diagnosticoId": diagnosticoId == null ? null : diagnosticoId,
         "pacienteId": pacienteId,
         "doctorId": doctorId,
+        "preclinicaId": preclinicaId,
         "problemasClinicos":
             problemasClinicos == null ? null : problemasClinicos,
         "activo": activo,

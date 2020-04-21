@@ -13,6 +13,7 @@ class FarmacosUsoActual {
   int farmacoId;
   int pacienteId;
   int doctorId;
+  int preclinicaId;
   String nombre;
   String concentracion;
   String dosis;
@@ -28,6 +29,7 @@ class FarmacosUsoActual {
     this.farmacoId,
     this.pacienteId,
     this.doctorId,
+    this.preclinicaId,
     this.nombre,
     this.concentracion,
     this.dosis,
@@ -45,6 +47,7 @@ class FarmacosUsoActual {
         farmacoId: json["farmacoId"],
         pacienteId: json["pacienteId"],
         doctorId: json["doctorId"],
+        preclinicaId: json["preclinicaId"],
         nombre: json["nombre"],
         concentracion: json["concentracion"],
         dosis: json["dosis"],
@@ -61,6 +64,7 @@ class FarmacosUsoActual {
         "farmacoId": farmacoId,
         "pacienteId": pacienteId,
         "doctorId": doctorId,
+        "preclinicaId": preclinicaId,
         "nombre": nombre,
         "concentracion": concentracion,
         "dosis": dosis,

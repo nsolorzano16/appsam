@@ -10,6 +10,7 @@ class HistorialGinecoObstetra {
   int historialId;
   int pacienteId;
   int doctorId;
+  int preclinicaId;
   DateTime menarquia;
   DateTime fur;
   String sg;
@@ -33,6 +34,7 @@ class HistorialGinecoObstetra {
     this.historialId,
     this.pacienteId,
     this.doctorId,
+    this.preclinicaId,
     this.menarquia,
     this.fur,
     this.sg,
@@ -58,6 +60,7 @@ class HistorialGinecoObstetra {
         historialId: json["historialId"],
         pacienteId: json["pacienteId"],
         doctorId: json["doctorId"],
+        preclinicaId: json["preclinicaId"],
         menarquia: json["menarquia"] == null
             ? null
             : DateTime.parse(json["menarquia"]),
@@ -86,6 +89,7 @@ class HistorialGinecoObstetra {
         "historialId": historialId,
         "pacienteId": pacienteId,
         "doctorId": doctorId,
+        "preclinicaId": preclinicaId,
         "menarquia": menarquia == null ? null : menarquia.toIso8601String(),
         "fur": fur == null ? null : fur.toIso8601String(),
         "sg": sg,

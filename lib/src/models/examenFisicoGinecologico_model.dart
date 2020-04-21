@@ -10,6 +10,7 @@ class ExamenFisicoGinecologico {
   int examenId;
   int pacienteId;
   int doctorId;
+  int preclinicaId;
   String afu;
   String pelvis;
   String dorso;
@@ -26,6 +27,7 @@ class ExamenFisicoGinecologico {
     this.examenId,
     this.pacienteId,
     this.doctorId,
+    this.preclinicaId,
     this.afu,
     this.pelvis,
     this.dorso,
@@ -44,6 +46,7 @@ class ExamenFisicoGinecologico {
         examenId: json["examenId"],
         pacienteId: json["pacienteId"],
         doctorId: json["doctorId"],
+        preclinicaId: json["preclinicaId"],
         afu: json["afu"],
         pelvis: json["pelvis"],
         dorso: json["dorso"],
@@ -61,6 +64,7 @@ class ExamenFisicoGinecologico {
         "examenId": examenId,
         "pacienteId": pacienteId,
         "doctorId": doctorId,
+        "preclinicaId": preclinicaId,
         "afu": afu,
         "pelvis": pelvis,
         "dorso": dorso,
