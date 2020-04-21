@@ -131,6 +131,7 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
         ModalRoute.of(context).settings.arguments;
     _examenFisico.pacienteId = _preclinica.pacienteId;
     _examenFisico.doctorId = _preclinica.doctorId;
+    _examenFisico.preclinicaId = _preclinica.preclinicaId;
     final size = MediaQuery.of(context).size;
 
     return Scaffold(

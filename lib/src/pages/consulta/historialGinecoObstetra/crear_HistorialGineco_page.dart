@@ -64,6 +64,7 @@ class _CrearHistorialGinecoObstetraPageState
         ModalRoute.of(context).settings.arguments;
     _historial.pacienteId = _preclinica.pacienteId;
     _historial.doctorId = _preclinica.doctorId;
+    _historial.preclinicaId = _preclinica.preclinicaId;
 
     return Scaffold(
       appBar: AppBar(

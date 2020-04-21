@@ -164,6 +164,7 @@ class _CrearNotasPageState extends State<CrearNotasPage> {
     _nota.notaId = 0;
     _nota.doctorId = preclinica.doctorId;
     _nota.pacienteId = preclinica.pacienteId;
+    _nota.preclinicaId = preclinica.preclinicaId;
     _nota.activo = true;
     _nota.creadoPor = _usuario.userName;
     _nota.creadoFecha = DateTime.now();

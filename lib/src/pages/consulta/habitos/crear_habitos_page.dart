@@ -57,6 +57,7 @@ class _CrearHabitosPageState extends State<CrearHabitosPage> {
         ModalRoute.of(context).settings.arguments;
     _habitos.pacienteId = _preclinica.pacienteId;
     _habitos.doctorId = _preclinica.doctorId;
+    _habitos.preclinicaId = _preclinica.preclinicaId;
 
     return Scaffold(
       appBar: AppBar(

@@ -61,6 +61,7 @@ class _CrearAntecedentesPageState extends State<CrearAntecedentesPage> {
         ModalRoute.of(context).settings.arguments;
     _antecedentes.pacienteId = _preclinica.pacienteId;
     _antecedentes.doctorId = _preclinica.doctorId;
+    _antecedentes.preclinicaId = _preclinica.preclinicaId;
     return Scaffold(
       appBar: AppBar(
         title: Text('Consulta'),

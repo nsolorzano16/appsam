@@ -175,11 +175,13 @@ class _CrearFarmacosUsoActualPageState
     _farmaco.farmacoId = 0;
     _farmaco.doctorId = preclinica.doctorId;
     _farmaco.pacienteId = preclinica.pacienteId;
+    _farmaco.preclinicaId = preclinica.preclinicaId;
     _farmaco.activo = true;
     _farmaco.creadoPor = _usuario.userName;
     _farmaco.creadoFecha = DateTime.now();
     _farmaco.modificadoPor = _usuario.userName;
     _farmaco.modificadoFecha = _usuario.modificadoFecha;
+
     showDialog(
         context: context,
         builder: (context) {

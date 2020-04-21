@@ -167,6 +167,7 @@ class _CrearDiagnosticosPageState extends State<CrearDiagnosticosPage> {
     _diagnostico.diagnosticoId = 0;
     _diagnostico.doctorId = preclinica.doctorId;
     _diagnostico.pacienteId = preclinica.pacienteId;
+    _diagnostico.preclinicaId = preclinica.preclinicaId;
     _diagnostico.activo = true;
     _diagnostico.creadoPor = _usuario.userName;
     _diagnostico.creadoFecha = DateTime.now();

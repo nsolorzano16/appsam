@@ -66,6 +66,7 @@ class _CrearExamenGinecologicoPageState
         ModalRoute.of(context).settings.arguments;
     _examenGinecologico.pacienteId = _preclinica.pacienteId;
     _examenGinecologico.doctorId = _preclinica.doctorId;
+    _examenGinecologico.preclinicaId = _preclinica.preclinicaId;
 
     return Scaffold(
       appBar: AppBar(
