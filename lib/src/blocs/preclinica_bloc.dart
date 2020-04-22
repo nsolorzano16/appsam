@@ -16,9 +16,9 @@ class PreclinicaBloc with Validators {
   Function(List<PreclinicaViewModel>) get preclinicasSink =>
       _preclinicaController.sink.add;
 
-  cargarPreclinicasPaginado(int page, int doctorId) async {
-    final preclinicas =
-        await _preclinicaService.getpreclinicasPaginado(page, doctorId);
+  cargarPreclinicasPaginado(int page, int doctorId, int atendida) async {
+    final preclinicas = await _preclinicaService.getpreclinicasPaginado(
+        page, doctorId, atendida);
     _ultimaPaginaController.sink.add(preclinicas.totalPages);
     listPreclinicas.addAll(preclinicas.items);
     preclinicasSink(listPreclinicas);

@@ -10,7 +10,7 @@ class PreclinicaService {
   final _apiURL = EnviromentVariables().getApiURL();
 
   Future<PreclinicaPaginadoViewModel> getpreclinicasPaginado(
-      int page, int doctorId) async {
+      int page, int doctorId, int atendida) async {
     final String token = StorageUtil.getString('token');
     final headers = {
       "content-type": "application/json",
@@ -18,7 +18,7 @@ class PreclinicaService {
       'authorization': 'Bearer $token',
     };
     final url =
-        '$_apiURL/api/Preclinica/page/$page/limit/50/doctorId/$doctorId';
+        '$_apiURL/api/Preclinica/page/$page/limit/50/doctorId/$doctorId/atendida/$atendida';
     final resp = await http.get(url, headers: headers);
     Map<String, dynamic> decodeResp = json.decode(resp.body);
     var preclinicas = new PreclinicaPaginadoViewModel();

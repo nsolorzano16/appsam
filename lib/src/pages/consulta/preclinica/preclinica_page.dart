@@ -28,7 +28,7 @@ class _PreclinicaPageState extends State<PreclinicaPage> {
   @override
   void initState() {
     StorageUtil.putString('ultimaPagina', PreclinicaPage.routeName);
-    _preclinicaBloc.cargarPreclinicasPaginado(1, _usuario.usuarioId);
+    _preclinicaBloc.cargarPreclinicasPaginado(1, _usuario.usuarioId, 0);
     super.initState();
   }
 
@@ -70,7 +70,7 @@ class _PreclinicaPageState extends State<PreclinicaPage> {
   }
 
   Future<Null> fetchData(int page) async {
-    _preclinicaBloc.cargarPreclinicasPaginado(page, _usuario.usuarioId);
+    _preclinicaBloc.cargarPreclinicasPaginado(page, _usuario.usuarioId, 0);
     final ProgressDialog pd = new ProgressDialog(
       context,
       type: ProgressDialogType.Normal,
