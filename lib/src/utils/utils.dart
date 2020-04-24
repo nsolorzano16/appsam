@@ -29,6 +29,14 @@ void mostrarAlerta(BuildContext context, String mensaje) {
       });
 }
 
+String validaNulo(String valor) {
+  if (valor != null) {
+    return valor;
+  } else {
+    return '';
+  }
+}
+
 void mostrarFlushBar(
     BuildContext context,
     Color color,

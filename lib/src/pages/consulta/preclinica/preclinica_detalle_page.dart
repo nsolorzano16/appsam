@@ -99,42 +99,6 @@ class PreclinicaDetallePage extends StatelessWidget {
     final format = DateFormat.yMMMEd('es_Es');
     final _fechaNac = format.format(preclinica.fechaNacimiento);
     final lista = [
-      TableRow(
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(
-                '${preclinica.nombres} ${preclinica.primerApellido} ${preclinica.segundoApellido}',
-                textAlign: TextAlign.justify,
-                style: estiloDatos,
-              ),
-              Text(
-                'Nombre Completo',
-                textAlign: TextAlign.left,
-                style: _estiloSubt,
-              ),
-              Divider()
-            ],
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(
-                '${preclinica.identificacion}',
-                textAlign: TextAlign.justify,
-                style: estiloDatos,
-              ),
-              Text(
-                'Identificación',
-                textAlign: TextAlign.left,
-                style: _estiloSubt,
-              ),
-              Divider()
-            ],
-          ),
-        ],
-      ),
       TableRow(children: [
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,

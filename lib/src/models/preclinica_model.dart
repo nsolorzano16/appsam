@@ -50,7 +50,7 @@ class Preclinica {
         preclinicaId: json["preclinicaId"],
         pacienteId: json["pacienteId"],
         doctorId: json["doctorId"],
-        peso: json["peso"],
+        peso: json["peso"].toDouble(),
         altura: json["altura"].toDouble(),
         frecuenciaRespiratoria: json["frecuenciaRespiratoria"],
         ritmoCardiaco: json["ritmoCardiaco"],

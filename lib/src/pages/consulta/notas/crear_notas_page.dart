@@ -1,3 +1,6 @@
+import 'package:appsam/src/blocs/consulta_bloc.dart';
+import 'package:appsam/src/blocs/preclinica_bloc.dart';
+import 'package:appsam/src/pages/consulta/consulta_detalle_page.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 
@@ -22,6 +25,8 @@ class _CrearNotasPageState extends State<CrearNotasPage> {
       usuarioModelFromJson(StorageUtil.getString('usuarioGlobal'));
   final List<Notas> _listaNotas = new List<Notas>();
   final NotasBloc _notasBloc = new NotasBloc();
+  final PreclinicaBloc _preclinicaBloc = new PreclinicaBloc();
+  final ConsultaBloc _consultaBloc = new ConsultaBloc();
 
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
   final GlobalKey<FormState> _formkeyEditar = GlobalKey<FormState>();
@@ -48,7 +53,10 @@ class _CrearNotasPageState extends State<CrearNotasPage> {
         appBar: AppBar(
           title: Text('Consulta'),
           actions: <Widget>[
-            IconButton(icon: Icon(Icons.arrow_forward_ios), onPressed: () {})
+            IconButton(
+                icon: Icon(Icons.arrow_forward_ios),
+                onPressed: () =>
+                    updatePreclinicaAndGoToDetalleConsulta(_preclinica))
           ],
         ),
         drawer: MenuWidget(),
@@ -472,5 +480,51 @@ class _CrearNotasPageState extends State<CrearNotasPage> {
           return alert;
         },
         barrierDismissible: false);
+  }
+
+  void updatePreclinicaAndGoToDetalleConsulta(
+      PreclinicaViewModel preclinica) async {
+    final ProgressDialog _pr = new ProgressDialog(
+      context,
+      type: ProgressDialogType.Normal,
+      isDismissible: false,
+      showLogs: false,
+    );
+    _pr.update(
+      progress: 50.0,
+      message: "Espere...",
+      progressWidget: Container(
+          padding: EdgeInsets.all(8.0), child: CircularProgressIndicator()),
+      maxProgress: 100.0,
+      progressTextStyle: TextStyle(
+          color: Colors.black, fontSize: 13.0, fontWeight: FontWeight.w400),
+      messageTextStyle: TextStyle(
+          color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600),
+    );
+    await _pr.show();
+
+    preclinica.atendida = true;
+    final preclinicaEdit = await _preclinicaBloc.updatePreclinica(preclinica);
+
+    if (preclinicaEdit != null) {
+      _pr.hide();
+
+      final detalleConsulta = await _consultaBloc.getDetalleConsulta(
+          preclinicaEdit.pacienteId,
+          preclinicaEdit.doctorId,
+          preclinicaEdit.preclinicaId);
+      if (detalleConsulta != null) {
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (BuildContext context) => ConsultaDetallePage(
+                      preclinica: preclinicaEdit,
+                      consulta: detalleConsulta,
+                    )));
+      }
+    } else {
+      mostrarFlushBar(context, Colors.red, 'Info', 'Ha ocurrido un error', 2,
+          FlushbarPosition.TOP, Icons.info, Colors.white);
+    }
   }
 }

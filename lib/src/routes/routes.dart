@@ -72,6 +72,8 @@ Map<String, WidgetBuilder> getApplicationRoutes(ThemeBloc bloc) {
         CrearExamenGinecologicoPage(),
     CrearDiagnosticosPage.routeName: (BuildContext context) =>
         CrearDiagnosticosPage(),
-    CrearNotasPage.routeName: (BuildContext context) => CrearNotasPage()
+    CrearNotasPage.routeName: (BuildContext context) => CrearNotasPage(),
+    // ConsultaDetallePage.routeName: (BuildContext context) =>
+    //     ConsultaDetallePage()
   };
 }

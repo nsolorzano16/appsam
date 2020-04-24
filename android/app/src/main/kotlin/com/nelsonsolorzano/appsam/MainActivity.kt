@@ -1,4 +1,4 @@
-package com.example.appsam
+package com.nelsonsolorzano.appsam
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity
