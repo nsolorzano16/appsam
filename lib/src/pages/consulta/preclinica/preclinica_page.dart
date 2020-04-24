@@ -63,7 +63,7 @@ class _PreclinicaPageState extends State<PreclinicaPage> {
       ),
       body: Stack(
         children: <Widget>[
-          _crearListaPreclinicas(),
+          _crearListaPreclinicas(context),
         ],
       ),
     );
@@ -93,11 +93,10 @@ class _PreclinicaPageState extends State<PreclinicaPage> {
     });
   }
 
-  Widget _crearListaPreclinicas() {
+  Widget _crearListaPreclinicas(BuildContext context) {
     return StreamBuilder(
       stream: _preclinicaBloc.preclinicasListStream,
-      builder: (BuildContext context,
-          AsyncSnapshot<List<PreclinicaViewModel>> snapshot) {
+      builder: (context, AsyncSnapshot<List<PreclinicaViewModel>> snapshot) {
         if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}');
         }
@@ -115,7 +114,7 @@ class _PreclinicaPageState extends State<PreclinicaPage> {
             return ListView.builder(
                 controller: _scrollController,
                 itemCount: preclinicas.length,
-                itemBuilder: (BuildContext context, int index) {
+                itemBuilder: (context, int index) {
                   return _crearItem(context, preclinicas[index]);
                 });
         }

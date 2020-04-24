@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -289,7 +290,6 @@ class _CrearPreclinicaPageState extends State<CrearPreclinicaPage> {
     );
     await _pr.show();
     _preclinica.preclinicaId = 0;
-    _preclinica.iMc = 0;
     _preclinica.pacienteId = paciente.pacienteId;
     _preclinica.doctorId = paciente.doctorId;
     _preclinica.atendida = false;
@@ -298,6 +298,11 @@ class _CrearPreclinicaPageState extends State<CrearPreclinicaPage> {
     _preclinica.creadoFecha = DateTime.now();
     _preclinica.modificadoPor = _usuario.userName;
     _preclinica.modificadoFecha = DateTime.now();
+    double pesoKg = _preclinica.peso / 2.2;
+    double alturaMts = _preclinica.altura / 100;
+
+    _preclinica.altura = _preclinica.altura / 100;
+    _preclinica.iMc = pesoKg / pow(alturaMts, 2);
 
     final bool resp = await bloc.addPreclinica(_preclinica);
 
