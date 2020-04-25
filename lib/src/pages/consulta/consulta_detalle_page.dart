@@ -8,6 +8,7 @@ import 'package:appsam/src/models/habitos_model.dart';
 import 'package:appsam/src/models/historialGinecoObstetra_model.dart';
 import 'package:appsam/src/models/notas_model.dart';
 import 'package:appsam/src/models/paginados/preclinica_paginadoVM.dart';
+import 'package:appsam/src/pages/consulta/menuConsulta_page.dart';
 import 'package:appsam/src/utils/utils.dart';
 import 'package:appsam/src/widgets/drawer.dart';
 import 'package:flutter/material.dart';
@@ -43,109 +44,114 @@ class _ConsultaDetallePageState extends State<ConsultaDetallePage> {
   Widget build(BuildContext context) {
     final _consultaDetalle = widget.consulta;
     final _preclinicaDetalle = widget.preclinica;
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Detalle de Consulta'),
-      ),
-      drawer: MenuWidget(),
-      body: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            GFCard(
-              elevation: 5.0,
-              title: GFListTile(
-                avatar: ClipRRect(
-                  borderRadius: BorderRadius.circular(100.0),
-                  child: FadeInImage(
-                      width: 100,
-                      height: 100,
-                      placeholder: AssetImage('assets/jar-loading.gif'),
-                      image: NetworkImage(_preclinicaDetalle.fotoUrl)),
+
+    return WillPopScope(
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text('Detalle de Consulta'),
+            actions: <Widget>[
+              IconButton(
+                icon: Icon(
+                  Icons.arrow_back_ios,
+                  color: Colors.white,
                 ),
-                title: Text(
-                    '${_preclinicaDetalle.nombres} ${_preclinicaDetalle.primerApellido} ${_preclinicaDetalle.segundoApellido}'),
-                subTitle: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                        'Identificación: ${_preclinicaDetalle.identificacion}'),
-                  ],
-                ),
-              ),
-              content: Table(children: _camposPaciente(_preclinicaDetalle)),
-            ),
-            _AccordionPreclinica(
-                preclinica: _preclinicaDetalle,
-                estiloDatos: estiloDatos,
-                estiloSubt: _estiloSubt),
-            (_consultaDetalle.antecedentesFamiliaresPersonales != null)
-                ? _AccordionAntecedentes(
-                    antecedentes:
-                        _consultaDetalle.antecedentesFamiliaresPersonales,
-                    estiloDatos: estiloDatos,
-                    estiloSubt: _estiloSubt)
-                : Container(),
-            (_consultaDetalle.habitos != null)
-                ? _AccordionHabitos(
-                    habitos: _consultaDetalle.habitos,
-                    estiloDatos: estiloDatos,
-                    estiloSubt: _estiloSubt)
-                : Container(),
-            (_consultaDetalle.historialGinecoObstetra != null)
-                ? _AccordionHistorialGinecoObstetra(
-                    historial: _consultaDetalle.historialGinecoObstetra,
-                    estiloDatos: estiloDatos,
-                    estiloSubt: _estiloSubt)
-                : Container(),
-            (_consultaDetalle.farmacosUsoActual != null)
-                ? _AccordionFarmacos(
-                    farmacos: _consultaDetalle.farmacosUsoActual,
-                    estiloDatos: estiloDatos,
-                    estiloSubt: _estiloSubt)
-                : Container(),
-            (_consultaDetalle.examenFisico != null)
-                ? _AccordionExamenFisico(
-                    examenFisico: _consultaDetalle.examenFisico,
-                    estiloDatos: estiloDatos,
-                    estiloSubt: _estiloSubt)
-                : Container(),
-            (_consultaDetalle.examenFisicoGinecologico != null)
-                ? _AccordionExamenGinecologico(
-                    examenGinecologico:
-                        _consultaDetalle.examenFisicoGinecologico,
-                    estiloDatos: estiloDatos,
-                    estiloSubt: _estiloSubt)
-                : Container(),
-            (_consultaDetalle.diagnosticos != null)
-                ? _AccordionDiagnosticos(
-                    diagnosticos: _consultaDetalle.diagnosticos,
-                    estiloDatos: estiloDatos,
-                    estiloSubt: _estiloSubt)
-                : Container(),
-            (_consultaDetalle.notas != null)
-                ? _AccordionNotas(
-                    notas: _consultaDetalle.notas,
-                    estiloDatos: estiloDatos,
-                    estiloSubt: _estiloSubt)
-                : Container(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.max,
+                onPressed: () {
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (BuildContext context) => MenuConsultaPage(
+                                preclinica: _preclinicaDetalle,
+                              )));
+                },
+              )
+            ],
+          ),
+          drawer: MenuWidget(),
+          body: SingleChildScrollView(
+            child: Column(
               children: <Widget>[
-                RaisedButton.icon(
-                    color: Colors.red,
-                    onPressed: () {},
-                    icon: Icon(Icons.add_circle_outline, color: Colors.white),
-                    label: Text(
-                      'Generar Reseta',
-                      style: TextStyle(color: Colors.white),
-                    ))
+                GFCard(
+                  elevation: 5.0,
+                  title: GFListTile(
+                    avatar: ClipRRect(
+                      borderRadius: BorderRadius.circular(100.0),
+                      child: FadeInImage(
+                          width: 100,
+                          height: 100,
+                          placeholder: AssetImage('assets/jar-loading.gif'),
+                          image: NetworkImage(_preclinicaDetalle.fotoUrl)),
+                    ),
+                    title: Text(
+                        '${_preclinicaDetalle.nombres} ${_preclinicaDetalle.primerApellido} ${_preclinicaDetalle.segundoApellido}'),
+                    subTitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                            'Identificación: ${_preclinicaDetalle.identificacion}'),
+                      ],
+                    ),
+                  ),
+                  content: Table(children: _camposPaciente(_preclinicaDetalle)),
+                ),
+                _AccordionPreclinica(
+                    preclinica: _preclinicaDetalle,
+                    estiloDatos: estiloDatos,
+                    estiloSubt: _estiloSubt),
+                (_consultaDetalle.antecedentesFamiliaresPersonales != null)
+                    ? _AccordionAntecedentes(
+                        antecedentes:
+                            _consultaDetalle.antecedentesFamiliaresPersonales,
+                        estiloDatos: estiloDatos,
+                        estiloSubt: _estiloSubt)
+                    : Container(),
+                (_consultaDetalle.habitos != null)
+                    ? _AccordionHabitos(
+                        habitos: _consultaDetalle.habitos,
+                        estiloDatos: estiloDatos,
+                        estiloSubt: _estiloSubt)
+                    : Container(),
+                (_consultaDetalle.historialGinecoObstetra != null)
+                    ? _AccordionHistorialGinecoObstetra(
+                        historial: _consultaDetalle.historialGinecoObstetra,
+                        estiloDatos: estiloDatos,
+                        estiloSubt: _estiloSubt)
+                    : Container(),
+                (_consultaDetalle.farmacosUsoActual.length > 0)
+                    ? _AccordionFarmacos(
+                        farmacos: _consultaDetalle.farmacosUsoActual,
+                        estiloDatos: estiloDatos,
+                        estiloSubt: _estiloSubt)
+                    : Container(),
+                (_consultaDetalle.examenFisico != null)
+                    ? _AccordionExamenFisico(
+                        examenFisico: _consultaDetalle.examenFisico,
+                        estiloDatos: estiloDatos,
+                        estiloSubt: _estiloSubt)
+                    : Container(),
+                (_consultaDetalle.examenFisicoGinecologico != null)
+                    ? _AccordionExamenGinecologico(
+                        examenGinecologico:
+                            _consultaDetalle.examenFisicoGinecologico,
+                        estiloDatos: estiloDatos,
+                        estiloSubt: _estiloSubt)
+                    : Container(),
+                (_consultaDetalle.diagnosticos.length > 0)
+                    ? _AccordionDiagnosticos(
+                        diagnosticos: _consultaDetalle.diagnosticos,
+                        estiloDatos: estiloDatos,
+                        estiloSubt: _estiloSubt)
+                    : Container(),
+                (_consultaDetalle.notas.length > 0)
+                    ? _AccordionNotas(
+                        notas: _consultaDetalle.notas,
+                        estiloDatos: estiloDatos,
+                        estiloSubt: _estiloSubt)
+                    : Container(),
               ],
-            )
-          ],
+            ),
+          ),
         ),
-      ),
-    );
+        onWillPop: () async => false);
   }
 
   List<TableRow> _camposPaciente(PreclinicaViewModel preclinica) {

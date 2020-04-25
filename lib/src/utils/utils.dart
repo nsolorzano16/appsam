@@ -62,46 +62,46 @@ void mostrarFlushBar(
   )..show(context);
 }
 
-showConfirmDialog(BuildContext context, String ruta, PreclinicaViewModel args) {
-  // set up the buttons
-  Widget cancelButton = FlatButton(
-    child: Text('Cancelar'),
-    onPressed: () {
-      Navigator.pop(context);
-    },
-  );
-  Widget continueButton = FlatButton(
-    child: Text('Ok'),
-    onPressed: () {
-      Navigator.pushReplacementNamed(context, ruta, arguments: args);
-    },
-  );
+// showConfirmDialog(BuildContext context, String ruta, PreclinicaViewModel args) {
+//   // set up the buttons
+//   Widget cancelButton = FlatButton(
+//     child: Text('Cancelar'),
+//     onPressed: () {
+//       Navigator.pop(context);
+//     },
+//   );
+//   Widget continueButton = FlatButton(
+//     child: Text('Ok'),
+//     onPressed: () {
+//       Navigator.pushReplacementNamed(context, ruta, arguments: args);
+//     },
+//   );
 
-  // set up the AlertDialog
-  AlertDialog alert = AlertDialog(
-    title: Text("Información"),
-    content: Column(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        Text('Desea continuar a la siguiente pagina?'),
-        Text('Esta acción no se podra deshacer.')
-      ],
-    ),
-    elevation: 24.0,
-    actions: [
-      cancelButton,
-      continueButton,
-    ],
-  );
+//   // set up the AlertDialog
+//   AlertDialog alert = AlertDialog(
+//     title: Text("Información"),
+//     content: Column(
+//       mainAxisSize: MainAxisSize.min,
+//       children: <Widget>[
+//         Text('Desea continuar a la siguiente pagina?'),
+//         Text('Esta acción no se podra deshacer.')
+//       ],
+//     ),
+//     elevation: 24.0,
+//     actions: [
+//       cancelButton,
+//       continueButton,
+//     ],
+//   );
 
-  // show the dialog
-  showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-      barrierDismissible: false);
-}
+//   // show the dialog
+//   showDialog(
+//       context: context,
+//       builder: (context) {
+//         return alert;
+//       },
+//       barrierDismissible: false);
+// }
 
 InputDecoration inputsDecorations(String label, IconData icon,
     {String helperTexto = '', String hintTexto = ''}) {

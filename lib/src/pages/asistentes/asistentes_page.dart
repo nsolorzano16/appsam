@@ -69,7 +69,7 @@ class _AsistentesPageState extends State<AsistentesPage> {
       ),
       body: Stack(
         children: <Widget>[
-          _crearListaAsistentes(),
+          _crearListaAsistentes(context),
         ],
       ),
       floatingActionButton: FloatingActionButton(
@@ -104,11 +104,10 @@ class _AsistentesPageState extends State<AsistentesPage> {
     });
   }
 
-  Widget _crearListaAsistentes() {
+  Widget _crearListaAsistentes(BuildContext context) {
     return StreamBuilder(
       stream: asistentesBloc.asistentesStream,
-      builder:
-          (BuildContext context, AsyncSnapshot<List<UsuarioModel>> snapshot) {
+      builder: (context, AsyncSnapshot<List<UsuarioModel>> snapshot) {
         if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}');
         }
@@ -126,7 +125,7 @@ class _AsistentesPageState extends State<AsistentesPage> {
             return ListView.builder(
                 controller: _scrollController,
                 itemCount: asistentes.length,
-                itemBuilder: (BuildContext context, int index) {
+                itemBuilder: (context, int index) {
                   return _crearItem(context, asistentes[index]);
                 });
         }

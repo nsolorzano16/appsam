@@ -1,3 +1,4 @@
+import 'package:appsam/src/pages/consulta/menuConsulta_page.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:getflutter/getflutter.dart';
@@ -66,142 +67,164 @@ class _CrearHistorialGinecoObstetraPageState
     _historial.doctorId = _preclinica.doctorId;
     _historial.preclinicaId = _preclinica.preclinicaId;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Consulta'),
-        actions: <Widget>[
-          IconButton(
-              icon: Icon(Icons.arrow_forward_ios),
-              onPressed: () {
-                showConfirmDialog(
-                    context, 'crear_farmacos_uso_actual', _preclinica);
-              })
-        ],
-      ),
-      drawer: MenuWidget(),
-      body: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            GFCard(
-              elevation: 6.0,
-              title: GFListTile(
-                title: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: <Widget>[
-                    Text(
-                      'Historial Gineco Obstetra',
-                      style: TextStyle(fontSize: 16.0),
-                    ),
-                    IconButton(
-                        icon: Icon(
-                          Icons.edit,
-                          color: Theme.of(context).primaryColor,
-                        ),
-                        onPressed: () {
-                          if (!quieroEditar) {
-                            setState(() {
-                              quieroEditar = true;
-                              labelBoton = 'Editar';
-                            });
-                          }
-                        }),
-                    IconButton(
-                      icon: Icon(
-                        Icons.delete,
-                        color: Theme.of(context).primaryColor,
-                      ),
-                      onPressed: (!quieroEditar)
-                          ? () => confirmAction(
-                              context, 'Desea eliminar el registro')
-                          : () {},
-                    )
-                  ],
+    return WillPopScope(
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text('Consulta'),
+            actions: <Widget>[
+              IconButton(
+                icon: Icon(
+                  Icons.arrow_back_ios,
+                  color: Colors.white,
                 ),
-              ),
-              content: Form(
-                  key: _formkey,
-                  child: Column(
-                    children: <Widget>[
-                      Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                onPressed: () {
+                  if (_historial.historialId == 0) {
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (BuildContext context) => MenuConsultaPage(
+                                  preclinica: _preclinica,
+                                )));
+                  } else {
+                    StorageUtil.putString('historialObstetra',
+                        historialGinecoObstetraToJson(_historial));
+
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (BuildContext context) => MenuConsultaPage(
+                                  preclinica: _preclinica,
+                                )));
+                  }
+                },
+              )
+            ],
+          ),
+          drawer: MenuWidget(),
+          body: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                GFCard(
+                  elevation: 6.0,
+                  title: GFListTile(
+                    title: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: <Widget>[
+                        Text(
+                          'Historial Gineco Obstetra',
+                          style: TextStyle(fontSize: 16.0),
+                        ),
+                        IconButton(
+                            icon: Icon(
+                              Icons.edit,
+                              color: Theme.of(context).primaryColor,
+                            ),
+                            onPressed: () {
+                              if (!quieroEditar) {
+                                setState(() {
+                                  quieroEditar = true;
+                                  labelBoton = 'Editar';
+                                });
+                              }
+                            }),
+                        IconButton(
+                          icon: Icon(
+                            Icons.delete,
+                            color: Theme.of(context).primaryColor,
+                          ),
+                          onPressed: (!quieroEditar)
+                              ? () => confirmAction(
+                                  context, 'Desea eliminar el registro')
+                              : () {},
+                        )
+                      ],
+                    ),
+                  ),
+                  content: Form(
+                      key: _formkey,
+                      child: Column(
                         children: <Widget>[
-                          Expanded(child: _campoMenarquia(context)),
-                          Container(
-                              margin: EdgeInsets.only(bottom: 25.0),
-                              child: IconButton(
-                                  icon: Icon(
-                                    Icons.delete,
-                                    color: Theme.of(context).primaryColor,
-                                  ),
-                                  onPressed: (quieroEditar)
-                                      ? () {
-                                          _menarquiaController.text = '';
-                                          pickedMenarquia = null;
-                                          _historial.menarquia = null;
-                                          setState(() {});
-                                        }
-                                      : null))
+                          Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Expanded(child: _campoMenarquia(context)),
+                              Container(
+                                  margin: EdgeInsets.only(bottom: 25.0),
+                                  child: IconButton(
+                                      icon: Icon(
+                                        Icons.delete,
+                                        color: Theme.of(context).primaryColor,
+                                      ),
+                                      onPressed: (quieroEditar)
+                                          ? () {
+                                              _menarquiaController.text = '';
+                                              pickedMenarquia = null;
+                                              _historial.menarquia = null;
+                                              setState(() {});
+                                            }
+                                          : null))
+                            ],
+                          ),
+                          Row(
+                            children: <Widget>[
+                              Expanded(child: _campoFur(context)),
+                              Container(
+                                  margin: EdgeInsets.only(bottom: 25.0),
+                                  child: IconButton(
+                                      icon: Icon(
+                                        Icons.delete,
+                                        color: Theme.of(context).primaryColor,
+                                      ),
+                                      onPressed: (quieroEditar)
+                                          ? () {
+                                              _furController.text = '';
+                                              pickedFur = null;
+                                              _historial.fur = null;
+                                              setState(() {});
+                                            }
+                                          : null))
+                            ],
+                          ),
+                          _campoSG(),
+                          _campoG(),
+                          _campoP(),
+                          _campoC(),
+                          _campoHV(),
+                          _campoFPP(),
+                          _campoUC(),
+                          Row(
+                            children: <Widget>[
+                              Expanded(child: _campoFechaMenopausia()),
+                              Container(
+                                  margin: EdgeInsets.only(bottom: 25.0),
+                                  child: IconButton(
+                                      icon: Icon(
+                                        Icons.delete,
+                                        color: Theme.of(context).primaryColor,
+                                      ),
+                                      onPressed: (quieroEditar)
+                                          ? () {
+                                              _menopausiaController.text = '';
+                                              pickedMenopausia = null;
+                                              _historial.fechaMenopausia = null;
+                                              setState(() {});
+                                            }
+                                          : null))
+                            ],
+                          ),
+                          _campoAnticonceptivo(),
+                          _campoVacunacion(),
+                          _campoNotas(),
+                          _crearBotones(context)
                         ],
-                      ),
-                      Row(
-                        children: <Widget>[
-                          Expanded(child: _campoFur(context)),
-                          Container(
-                              margin: EdgeInsets.only(bottom: 25.0),
-                              child: IconButton(
-                                  icon: Icon(
-                                    Icons.delete,
-                                    color: Theme.of(context).primaryColor,
-                                  ),
-                                  onPressed: (quieroEditar)
-                                      ? () {
-                                          _furController.text = '';
-                                          pickedFur = null;
-                                          _historial.fur = null;
-                                          setState(() {});
-                                        }
-                                      : null))
-                        ],
-                      ),
-                      _campoSG(),
-                      _campoG(),
-                      _campoP(),
-                      _campoC(),
-                      _campoHV(),
-                      _campoFPP(),
-                      _campoUC(),
-                      Row(
-                        children: <Widget>[
-                          Expanded(child: _campoFechaMenopausia()),
-                          Container(
-                              margin: EdgeInsets.only(bottom: 25.0),
-                              child: IconButton(
-                                  icon: Icon(
-                                    Icons.delete,
-                                    color: Theme.of(context).primaryColor,
-                                  ),
-                                  onPressed: (quieroEditar)
-                                      ? () {
-                                          _menopausiaController.text = '';
-                                          pickedMenopausia = null;
-                                          _historial.fechaMenopausia = null;
-                                          setState(() {});
-                                        }
-                                      : null))
-                        ],
-                      ),
-                      _campoAnticonceptivo(),
-                      _campoVacunacion(),
-                      _campoNotas(),
-                      _crearBotones(context)
-                    ],
-                  )),
+                      )),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
-      ),
-    );
+        onWillPop: () async => false);
   }
 
   void _desactivar() async {
@@ -629,6 +652,48 @@ class _CrearHistorialGinecoObstetraPageState
     showDialog(
         context: context,
         builder: (BuildContext context) {
+          return alert;
+        },
+        barrierDismissible: false);
+  }
+
+  showConfirmDialog(
+      BuildContext context, String ruta, PreclinicaViewModel args) {
+    // set up the buttons
+    Widget cancelButton = FlatButton(
+      child: Text('Cancelar'),
+      onPressed: () {
+        Navigator.pop(context);
+      },
+    );
+    Widget continueButton = FlatButton(
+      child: Text('Ok'),
+      onPressed: () {
+        Navigator.pushReplacementNamed(context, ruta, arguments: args);
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Información"),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Text('Desea continuar a la siguiente pagina?'),
+          Text('Esta acción no se podra deshacer.')
+        ],
+      ),
+      elevation: 24.0,
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+        context: context,
+        builder: (context) {
           return alert;
         },
         barrierDismissible: false);

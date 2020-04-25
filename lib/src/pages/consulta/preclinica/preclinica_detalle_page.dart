@@ -1,3 +1,8 @@
+import 'package:appsam/src/blocs/preclinica_bloc.dart';
+import 'package:appsam/src/models/consulta_model.dart';
+import 'package:appsam/src/pages/consulta/menuConsulta_page.dart';
+import 'package:appsam/src/utils/utils.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:getflutter/getflutter.dart';
@@ -6,9 +11,13 @@ import 'package:intl/intl.dart';
 import 'package:appsam/src/models/paginados/preclinica_paginadoVM.dart';
 import 'package:appsam/src/utils/storage_util.dart';
 import 'package:appsam/src/widgets/drawer.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 
 class PreclinicaDetallePage extends StatelessWidget {
   static final String routeName = 'preclinica_detalle';
+
+  final PreclinicaBloc _preclinicaBloc = new PreclinicaBloc();
+
   @override
   Widget build(BuildContext context) {
     StorageUtil.putString('ultimaPagina', PreclinicaDetallePage.routeName);
@@ -42,9 +51,9 @@ class PreclinicaDetallePage extends StatelessWidget {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.pushReplacementNamed(
-            context, 'crear_antecedentes',
-            arguments: _preclinica),
+        onPressed: () {
+          updatePreclinicaAndGoToDetalleConsulta(_preclinica, context);
+        },
         child: FaIcon(FontAwesomeIcons.notesMedical),
         backgroundColor: Theme.of(context).primaryColor,
       ),
@@ -452,5 +461,44 @@ class PreclinicaDetallePage extends StatelessWidget {
             style: _estiloSubt,
           ),
         ));
+  }
+
+  void updatePreclinicaAndGoToDetalleConsulta(
+      PreclinicaViewModel preclinica, BuildContext context) async {
+    final ProgressDialog _pr = new ProgressDialog(
+      context,
+      type: ProgressDialogType.Normal,
+      isDismissible: false,
+      showLogs: false,
+    );
+    _pr.update(
+      progress: 50.0,
+      message: "Espere...",
+      progressWidget: Container(
+          padding: EdgeInsets.all(8.0), child: CircularProgressIndicator()),
+      maxProgress: 100.0,
+      progressTextStyle: TextStyle(
+          color: Colors.black, fontSize: 13.0, fontWeight: FontWeight.w400),
+      messageTextStyle: TextStyle(
+          color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600),
+    );
+    await _pr.show();
+
+    preclinica.atendida = true;
+    final preclinicaEdit = await _preclinicaBloc.updatePreclinica(preclinica);
+
+    if (preclinicaEdit != null) {
+      _pr.hide();
+
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) => MenuConsultaPage(
+                    preclinica: preclinicaEdit,
+                  )));
+    } else {
+      mostrarFlushBar(context, Colors.red, 'Info', 'Ha ocurrido un error', 2,
+          FlushbarPosition.TOP, Icons.info, Colors.white);
+    }
   }
 }

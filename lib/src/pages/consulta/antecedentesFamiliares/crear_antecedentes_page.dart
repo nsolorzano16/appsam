@@ -1,3 +1,5 @@
+import 'package:appsam/src/models/consulta_model.dart';
+import 'package:appsam/src/pages/consulta/menuConsulta_page.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:getflutter/getflutter.dart';
@@ -33,6 +35,7 @@ class _CrearAntecedentesPageState extends State<CrearAntecedentesPage> {
   final _antNoPatologicosFamiCtrl = new TextEditingController();
   final _antNoPatologicosPersCtrl = new TextEditingController();
   final _antInmunoAlergicosCtrl = new TextEditingController();
+
   @override
   void initState() {
     super.initState();
@@ -62,77 +65,96 @@ class _CrearAntecedentesPageState extends State<CrearAntecedentesPage> {
     _antecedentes.pacienteId = _preclinica.pacienteId;
     _antecedentes.doctorId = _preclinica.doctorId;
     _antecedentes.preclinicaId = _preclinica.preclinicaId;
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Consulta'),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(
-              Icons.arrow_forward_ios,
-              color: Colors.white,
-            ),
-            tooltip: 'Siguiente pagina',
-            onPressed: () {
-              showConfirmDialog(context, 'crear_habitos', _preclinica);
-            },
-          )
-        ],
-      ),
-      drawer: MenuWidget(),
-      body: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            GFCard(
-              elevation: 6.0,
-              title: GFListTile(
-                title: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: <Widget>[
-                    Text(
-                      'Antecedentes Personales',
-                      style: TextStyle(fontSize: 16.0),
-                    ),
-                    IconButton(
-                        icon: Icon(Icons.edit,
-                            color: Theme.of(context).primaryColor),
-                        onPressed: () {
-                          if (!quieroEditar) {
-                            setState(() {
-                              quieroEditar = true;
-                              labelBoton = 'Editar';
-                            });
-                          }
-                        }),
-                    IconButton(
-                      icon: Icon(
-                        Icons.delete,
-                        color: Theme.of(context).primaryColor,
-                      ),
-                      onPressed: (!quieroEditar)
-                          ? () => confirmAction(
-                              context, 'Desea eliminar el registro')
-                          : () {},
-                    )
-                  ],
+
+    return WillPopScope(
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text('Consulta'),
+            actions: <Widget>[
+              IconButton(
+                icon: Icon(
+                  Icons.arrow_back_ios,
+                  color: Colors.white,
                 ),
-              ),
-              content: Form(
-                  key: _formkey,
-                  child: Column(
-                    children: <Widget>[
-                      _campoAntecedentesPatologicosFamiliares(),
-                      _campoAntecedentesPatologicosPersonales(),
-                      _campoAntecedentesNoPatologicosFamiliares(),
-                      _campoAntecedentesNoPatologicosPersonales(),
-                      _campoAntecedentesInmunoAlergicosPersonales(),
-                      _crearBotones(context),
-                    ],
-                  )),
-            )
-          ],
+                onPressed: () {
+                  if (_antecedentes.antecedentesFamiliaresPersonalesId == 0) {
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (BuildContext context) => MenuConsultaPage(
+                                  preclinica: _preclinica,
+                                )));
+                  } else {
+                    StorageUtil.putString('antecedentes',
+                        antecedentesFamiliaresPersonalesToJson(_antecedentes));
+
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (BuildContext context) => MenuConsultaPage(
+                                  preclinica: _preclinica,
+                                )));
+                  }
+                },
+              )
+            ],
+          ),
+          drawer: MenuWidget(),
+          body: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                GFCard(
+                  elevation: 6.0,
+                  title: GFListTile(
+                    title: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: <Widget>[
+                        Text(
+                          'Antecedentes Personales',
+                          style: TextStyle(fontSize: 16.0),
+                        ),
+                        IconButton(
+                            icon: Icon(Icons.edit,
+                                color: Theme.of(context).primaryColor),
+                            onPressed: () {
+                              if (!quieroEditar) {
+                                setState(() {
+                                  quieroEditar = true;
+                                  labelBoton = 'Editar';
+                                });
+                              }
+                            }),
+                        IconButton(
+                          icon: Icon(
+                            Icons.delete,
+                            color: Theme.of(context).primaryColor,
+                          ),
+                          onPressed: (!quieroEditar)
+                              ? () => confirmAction(
+                                  context, 'Desea eliminar el registro')
+                              : () {},
+                        )
+                      ],
+                    ),
+                  ),
+                  content: Form(
+                      key: _formkey,
+                      child: Column(
+                        children: <Widget>[
+                          _campoAntecedentesPatologicosFamiliares(),
+                          _campoAntecedentesPatologicosPersonales(),
+                          _campoAntecedentesNoPatologicosFamiliares(),
+                          _campoAntecedentesNoPatologicosPersonales(),
+                          _campoAntecedentesInmunoAlergicosPersonales(),
+                          _crearBotones(context),
+                        ],
+                      )),
+                )
+              ],
+            ),
+          ),
         ),
-      ),
-    );
+        onWillPop: () async => false);
   }
 
   void _desactivar() async {
@@ -378,6 +400,47 @@ class _CrearAntecedentesPageState extends State<CrearAntecedentesPage> {
         children: <Widget>[
           Text(texto),
           Text('Esta acción no se podra deshacer.')
+        ],
+      ),
+      elevation: 24.0,
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return alert;
+        },
+        barrierDismissible: false);
+  }
+
+  showConfirmDialog(
+      BuildContext context, String ruta, PreclinicaViewModel args) {
+    // set up the buttons
+    Widget cancelButton = FlatButton(
+      child: Text('Cancelar'),
+      onPressed: () {
+        Navigator.pop(context);
+      },
+    );
+    Widget continueButton = FlatButton(
+      child: Text('Ok'),
+      onPressed: () {
+        Navigator.pushReplacementNamed(context, ruta, arguments: args);
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Información"),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Text('Desea volver?'),
         ],
       ),
       elevation: 24.0,

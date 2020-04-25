@@ -35,7 +35,7 @@ class ResetPasswordPage extends StatelessWidget {
               SizedBox(
                 height: 8.0,
               ),
-              _crearBoton(_resetPasswordBloc, blocService, _asistente)
+              _crearBoton(_resetPasswordBloc, blocService, _asistente, context)
             ],
           ),
         ));
@@ -44,7 +44,7 @@ class ResetPasswordPage extends StatelessWidget {
   Widget _crearCampoPassword1(BuildContext context, ResetPasswordBloc bloc) {
     return StreamBuilder(
       stream: bloc.password,
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
+      builder: (context, AsyncSnapshot snapshot) {
         return Container(
           padding: EdgeInsets.symmetric(horizontal: 20.0),
           child: TextField(
@@ -60,7 +60,7 @@ class ResetPasswordPage extends StatelessWidget {
   Widget _crearRepetirPassword(BuildContext context, ResetPasswordBloc bloc) {
     return StreamBuilder(
       stream: bloc.confirmPassword,
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
+      builder: (context, AsyncSnapshot snapshot) {
         return Container(
           padding: EdgeInsets.symmetric(horizontal: 20.0),
           child: TextField(
@@ -73,11 +73,14 @@ class ResetPasswordPage extends StatelessWidget {
     );
   }
 
-  Widget _crearBoton(ResetPasswordBloc bloc,
-      CrearEditarAsistentesBloc blocService, UsuarioModel asistente) {
+  Widget _crearBoton(
+      ResetPasswordBloc bloc,
+      CrearEditarAsistentesBloc blocService,
+      UsuarioModel asistente,
+      BuildContext context) {
     return StreamBuilder(
       stream: bloc.registerValue,
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
+      builder: (context, AsyncSnapshot snapshot) {
         return RaisedButton(
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 80.0, vertical: 15.0),

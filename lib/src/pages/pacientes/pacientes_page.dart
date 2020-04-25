@@ -75,7 +75,7 @@ class _PacientesPageState extends State<PacientesPage> {
       body: Stack(
         children: <Widget>[
           RefreshIndicator(
-              child: _crearListaPacientes(),
+              child: _crearListaPacientes(context),
               onRefresh: () => fetchDataRefresh(1))
         ],
       ),
@@ -147,11 +147,10 @@ class _PacientesPageState extends State<PacientesPage> {
     });
   }
 
-  Widget _crearListaPacientes() {
+  Widget _crearListaPacientes(BuildContext context) {
     return StreamBuilder(
       stream: _pacientesBloc.pacientesListStream,
-      builder: (BuildContext context,
-          AsyncSnapshot<List<PacientesViewModel>> snapshot) {
+      builder: (context, AsyncSnapshot<List<PacientesViewModel>> snapshot) {
         if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}');
         }
@@ -169,7 +168,7 @@ class _PacientesPageState extends State<PacientesPage> {
             return ListView.builder(
                 controller: _scrollController,
                 itemCount: asistentes.length,
-                itemBuilder: (BuildContext context, int index) {
+                itemBuilder: (context, int index) {
                   return _crearItem(context, asistentes[index]);
                 });
         }
