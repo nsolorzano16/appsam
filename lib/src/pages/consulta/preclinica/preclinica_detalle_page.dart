@@ -1,5 +1,4 @@
 import 'package:appsam/src/blocs/preclinica_bloc.dart';
-import 'package:appsam/src/models/consulta_model.dart';
 import 'package:appsam/src/pages/consulta/menuConsulta_page.dart';
 import 'package:appsam/src/utils/utils.dart';
 import 'package:flushbar/flushbar.dart';
@@ -490,12 +489,8 @@ class PreclinicaDetallePage extends StatelessWidget {
     if (preclinicaEdit != null) {
       _pr.hide();
 
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (context) => MenuConsultaPage(
-                    preclinica: preclinicaEdit,
-                  )));
+      Navigator.pushReplacementNamed(context, 'menu_consulta',
+          arguments: preclinicaEdit);
     } else {
       mostrarFlushBar(context, Colors.red, 'Info', 'Ha ocurrido un error', 2,
           FlushbarPosition.TOP, Icons.info, Colors.white);

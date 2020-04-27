@@ -1,4 +1,3 @@
-import 'package:appsam/src/models/consulta_model.dart';
 import 'package:appsam/src/pages/consulta/menuConsulta_page.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
@@ -61,92 +60,77 @@ class _CrearHabitosPageState extends State<CrearHabitosPage> {
     _habitos.doctorId = _preclinica.doctorId;
     _habitos.preclinicaId = _preclinica.preclinicaId;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Consulta'),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(
-              Icons.arrow_back_ios,
-              color: Colors.white,
-            ),
-            onPressed: () {
-              if (_habitos.habitoId == 0) {
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (BuildContext context) => MenuConsultaPage(
-                              preclinica: _preclinica,
-                            )));
-              } else {
-                StorageUtil.putString('habitos', habitosToJson(_habitos));
-
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (BuildContext context) => MenuConsultaPage(
-                              preclinica: _preclinica,
-                            )));
-              }
-            },
-          )
-        ],
-      ),
-      drawer: MenuWidget(),
-      body: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            GFCard(
-              elevation: 6.0,
-              title: GFListTile(
-                title: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: <Widget>[
-                    Text(
-                      'Habitos',
-                      style: TextStyle(fontSize: 16.0),
+    return WillPopScope(
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text('Consulta'),
+            actions: <Widget>[
+              IconButton(
+                  icon: Icon(
+                    Icons.arrow_back_ios,
+                    color: Colors.white,
+                  ),
+                  onPressed: () => Navigator.pushReplacementNamed(
+                      context, 'menu_consulta',
+                      arguments: _preclinica))
+            ],
+          ),
+          drawer: MenuWidget(),
+          body: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                GFCard(
+                  elevation: 6.0,
+                  title: GFListTile(
+                    title: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: <Widget>[
+                        Text(
+                          'Habitos',
+                          style: TextStyle(fontSize: 16.0),
+                        ),
+                        IconButton(
+                            icon: Icon(Icons.edit,
+                                color: Theme.of(context).primaryColor),
+                            onPressed: () {
+                              if (!quieroEditar) {
+                                setState(() {
+                                  quieroEditar = true;
+                                  labelBoton = 'Editar';
+                                });
+                              }
+                            }),
+                        IconButton(
+                          icon: Icon(Icons.delete,
+                              color: Theme.of(context).primaryColor),
+                          onPressed: (!quieroEditar)
+                              ? () => confirmAction(
+                                  context, 'Desea eliminar el registro')
+                              : () {},
+                        )
+                      ],
                     ),
-                    IconButton(
-                        icon: Icon(Icons.edit,
-                            color: Theme.of(context).primaryColor),
-                        onPressed: () {
-                          if (!quieroEditar) {
-                            setState(() {
-                              quieroEditar = true;
-                              labelBoton = 'Editar';
-                            });
-                          }
-                        }),
-                    IconButton(
-                      icon: Icon(Icons.delete,
-                          color: Theme.of(context).primaryColor),
-                      onPressed: (!quieroEditar)
-                          ? () => confirmAction(
-                              context, 'Desea eliminar el registro')
-                          : () {},
-                    )
-                  ],
-                ),
-              ),
-              content: Form(
-                  key: _formkey,
-                  child: Column(
-                    children: <Widget>[
-                      _campoConsumeCafe(),
-                      (_consumeCafe) ? _campoTazasCafe() : Container(),
-                      _campoConsumeCigarrillos(),
-                      (_consumeCigarros)
-                          ? _campoCantidadCigarros()
-                          : Container(),
-                      _campoNotas(),
-                      _crearBotones(context)
-                    ],
-                  )),
-            )
-          ],
+                  ),
+                  content: Form(
+                      key: _formkey,
+                      child: Column(
+                        children: <Widget>[
+                          _campoConsumeCafe(),
+                          (_consumeCafe) ? _campoTazasCafe() : Container(),
+                          _campoConsumeCigarrillos(),
+                          (_consumeCigarros)
+                              ? _campoCantidadCigarros()
+                              : Container(),
+                          _campoNotas(),
+                          _crearBotones(context)
+                        ],
+                      )),
+                )
+              ],
+            ),
+          ),
         ),
-      ),
-    );
+        onWillPop: () async => false);
   }
 
   void _desactivar() async {

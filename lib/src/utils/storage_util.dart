@@ -78,6 +78,17 @@ class StorageUtil {
     //_preferences.remove('temaDark');
   }
 
+  static void removeDetalleConsulta() {
+    _preferences.remove('antecedentes');
+    _preferences.remove('habitos');
+    _preferences.remove('historialObstetra');
+    _preferences.remove('farmacos');
+    _preferences.remove('examenFisico');
+    _preferences.remove('examenGinecologico');
+    _preferences.remove('diagnosticos');
+    _preferences.remove('notas');
+  }
+
   static void removeUsuario() {
     _preferences.remove('usuarioGlobal');
   }

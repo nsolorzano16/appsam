@@ -73,31 +73,13 @@ class _CrearHistorialGinecoObstetraPageState
             title: Text('Consulta'),
             actions: <Widget>[
               IconButton(
-                icon: Icon(
-                  Icons.arrow_back_ios,
-                  color: Colors.white,
-                ),
-                onPressed: () {
-                  if (_historial.historialId == 0) {
-                    Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (BuildContext context) => MenuConsultaPage(
-                                  preclinica: _preclinica,
-                                )));
-                  } else {
-                    StorageUtil.putString('historialObstetra',
-                        historialGinecoObstetraToJson(_historial));
-
-                    Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (BuildContext context) => MenuConsultaPage(
-                                  preclinica: _preclinica,
-                                )));
-                  }
-                },
-              )
+                  icon: Icon(
+                    Icons.arrow_back_ios,
+                    color: Colors.white,
+                  ),
+                  onPressed: () => Navigator.pushReplacementNamed(
+                      context, 'menu_consulta',
+                      arguments: _preclinica))
             ],
           ),
           drawer: MenuWidget(),

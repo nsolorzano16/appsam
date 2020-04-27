@@ -68,78 +68,78 @@ class _CrearExamenGinecologicoPageState
     _examenGinecologico.doctorId = _preclinica.doctorId;
     _examenGinecologico.preclinicaId = _preclinica.preclinicaId;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Consulta'),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(
-              Icons.arrow_forward_ios,
-              color: Colors.white,
-            ),
-            tooltip: 'Siguiente pagina',
-            onPressed: () {
-              showConfirmDialog(context, 'crear_diagnosticos', _preclinica);
-            },
-          )
-        ],
-      ),
-      drawer: MenuWidget(),
-      body: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            GFCard(
-              elevation: 6.0,
-              title: GFListTile(
-                title: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: <Widget>[
-                    Text(
-                      'Examen Ginecológico',
-                      style: TextStyle(fontSize: 16.0),
+    return WillPopScope(
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text('Consulta'),
+            actions: <Widget>[
+              IconButton(
+                  icon: Icon(
+                    Icons.arrow_back_ios,
+                    color: Colors.white,
+                  ),
+                  onPressed: () => Navigator.pushReplacementNamed(
+                      context, 'menu_consulta',
+                      arguments: _preclinica))
+            ],
+          ),
+          drawer: MenuWidget(),
+          body: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                GFCard(
+                  elevation: 6.0,
+                  title: GFListTile(
+                    title: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: <Widget>[
+                        Text(
+                          'Examen Ginecológico',
+                          style: TextStyle(fontSize: 16.0),
+                        ),
+                        IconButton(
+                            icon: Icon(Icons.edit,
+                                color: Theme.of(context).primaryColor),
+                            onPressed: () {
+                              if (!quieroEditar) {
+                                setState(() {
+                                  quieroEditar = true;
+                                  labelBoton = 'Editar';
+                                });
+                              }
+                            }),
+                        IconButton(
+                          icon: Icon(
+                            Icons.delete,
+                            color: Theme.of(context).primaryColor,
+                          ),
+                          onPressed: (!quieroEditar)
+                              ? () => confirmAction(
+                                  context, 'Desea eliminar el registro')
+                              : () {},
+                        )
+                      ],
                     ),
-                    IconButton(
-                        icon: Icon(Icons.edit,
-                            color: Theme.of(context).primaryColor),
-                        onPressed: () {
-                          if (!quieroEditar) {
-                            setState(() {
-                              quieroEditar = true;
-                              labelBoton = 'Editar';
-                            });
-                          }
-                        }),
-                    IconButton(
-                      icon: Icon(
-                        Icons.delete,
-                        color: Theme.of(context).primaryColor,
-                      ),
-                      onPressed: (!quieroEditar)
-                          ? () => confirmAction(
-                              context, 'Desea eliminar el registro')
-                          : () {},
-                    )
-                  ],
-                ),
-              ),
-              content: Form(
-                  key: _formkey,
-                  child: Column(
-                    children: <Widget>[
-                      _campoAfu(),
-                      _campoPelvis(),
-                      _campoDorso(),
-                      _campoFcf(),
-                      _campoAp(),
-                      _campoNotas(),
-                      _crearBotones(context)
-                    ],
-                  )),
-            )
-          ],
+                  ),
+                  content: Form(
+                      key: _formkey,
+                      child: Column(
+                        children: <Widget>[
+                          _campoAfu(),
+                          _campoPelvis(),
+                          _campoDorso(),
+                          _campoFcf(),
+                          _campoAp(),
+                          _campoNotas(),
+                          _crearBotones(context)
+                        ],
+                      )),
+                )
+              ],
+            ),
+          ),
         ),
-      ),
-    );
+        onWillPop: () async => false);
   }
 
   void _desactivar() async {

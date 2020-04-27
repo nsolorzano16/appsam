@@ -55,7 +55,7 @@ class ConsultaModel {
             ? null
             : HistorialGinecoObstetra.fromJson(json["historialGinecoObstetra"]),
         farmacosUsoActual: json["farmacosUsoActual"] == null
-            ? null
+            ? []
             : List<FarmacosUsoActual>.from(json["farmacosUsoActual"]
                 .map((x) => FarmacosUsoActual.fromJson(x))),
         examenFisico: json["examenFisico"] == null
@@ -66,10 +66,12 @@ class ConsultaModel {
             : ExamenFisicoGinecologico.fromJson(
                 json["examenFisicoGinecologico"]),
         diagnosticos: json["diagnosticos"] == null
-            ? null
+            ? []
             : List<Diagnosticos>.from(
                 json["diagnosticos"].map((x) => Diagnosticos.fromJson(x))),
-        notas: List<Notas>.from(json["notas"].map((x) => Notas.fromJson(x))),
+        notas: json["notas"] == null
+            ? []
+            : List<Notas>.from(json["notas"].map((x) => Notas.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {

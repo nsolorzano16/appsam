@@ -1,4 +1,4 @@
-import 'dart:convert';
+import 'package:appsam/src/blocs/consulta_bloc.dart';
 import 'package:appsam/src/models/antecedentesFamiliaresPersonales_model.dart';
 import 'package:appsam/src/models/consulta_model.dart';
 import 'package:appsam/src/models/diagnosticos_model.dart';
@@ -10,13 +10,12 @@ import 'package:appsam/src/models/historialGinecoObstetra_model.dart';
 import 'package:appsam/src/models/notas_model.dart';
 import 'package:appsam/src/models/paginados/preclinica_paginadoVM.dart';
 import 'package:appsam/src/pages/consulta/consulta_detalle_page.dart';
-import 'package:appsam/src/utils/storage_util.dart';
 import 'package:appsam/src/widgets/drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:getflutter/getflutter.dart';
 
-class MenuConsultaPage extends StatelessWidget {
+class MenuConsultaPage extends StatefulWidget {
   static final String routeName = 'menu_consulta';
 
   final PreclinicaViewModel preclinica;
@@ -24,157 +23,149 @@ class MenuConsultaPage extends StatelessWidget {
   const MenuConsultaPage({Key key, this.preclinica}) : super(key: key);
 
   @override
+  _MenuConsultaPageState createState() => _MenuConsultaPageState();
+}
+
+class _MenuConsultaPageState extends State<MenuConsultaPage> {
+  final _consultaBloc = new ConsultaBloc();
+
+  Future<ConsultaModel> _consultaFuture;
+
+  @override
+  void dispose() {
+    super.dispose();
+    _consultaBloc.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final List<FarmacosUsoActual> _listaFarmacos = new List();
-    final List<Diagnosticos> _listaDiagnosticos = new List();
-    final List<Notas> _listaNotas = new List();
-
-    final AntecedentesFamiliaresPersonales _antecedentes =
-        (StorageUtil.getString('antecedentes').isEmpty)
-            ? null
-            : antecedentesFamiliaresPersonalesFromJson(
-                StorageUtil.getString('antecedentes'));
-
-    final Habitos _habitos = (StorageUtil.getString('habitos').isEmpty)
-        ? null
-        : habitosFromJson(StorageUtil.getString('habitos'));
-
-    final HistorialGinecoObstetra _historialObstetra =
-        (StorageUtil.getString('historialObstetra').isEmpty)
-            ? null
-            : historialGinecoObstetraFromJson(
-                StorageUtil.getString('historialObstetra'));
-
-    if ((StorageUtil.getString('farmacos').isNotEmpty)) {
-      final decodeResp = jsonDecode(StorageUtil.getString('farmacos'));
-      decodeResp.forEach((f) {
-        final farmacoTemp = FarmacosUsoActual.fromJson(f);
-        _listaFarmacos.add(farmacoTemp);
-      });
-    }
-
-    final ExamenFisico _examenFisico =
-        (StorageUtil.getString('examenFisico').isEmpty)
-            ? null
-            : examenFisicoFromJson(StorageUtil.getString('examenFisico'));
-
-    final ExamenFisicoGinecologico _examenGinecologico =
-        (StorageUtil.getString('examenGinecologico').isEmpty)
-            ? null
-            : examenFisicoGinecologicoFromJson(
-                StorageUtil.getString('examenGinecologico'));
-
-    if (StorageUtil.getString('diagnosticos').isNotEmpty) {
-      final decodeDiagnosticos =
-          jsonDecode(StorageUtil.getString('diagnosticos'));
-      decodeDiagnosticos.forEach((d) {
-        final diagnosticoTemp = Diagnosticos.fromJson(d);
-        _listaDiagnosticos.add(diagnosticoTemp);
-      });
-    }
-
-    if (StorageUtil.getString('notas').isNotEmpty) {
-      final decodeNotas = jsonDecode(StorageUtil.getString('notas'));
-      decodeNotas.forEach((n) {
-        final notaTemp = Notas.fromJson(n);
-        _listaNotas.add(notaTemp);
-      });
-    }
+    final PreclinicaViewModel _preclinica =
+        ModalRoute.of(context).settings.arguments;
+    _consultaFuture = _consultaBloc.getDetalleConsulta(
+        _preclinica.pacienteId, _preclinica.doctorId, _preclinica.preclinicaId);
 
     return Scaffold(
       appBar: AppBar(
         title: Text('Menu Consulta'),
       ),
       drawer: MenuWidget(),
-      body: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            SizedBox(
-              height: 15.0,
-            ),
-            Table(
-              children: [
-                TableRow(children: [
-                  (_antecedentes == null)
-                      ? _cardItem(
-                          this.preclinica,
-                          FontAwesomeIcons.heartbeat,
-                          'Antecedentes Personales',
-                          'crear_antecedentes',
-                          Colors.blue,
-                          context)
-                      : _cardItemFake(FontAwesomeIcons.heartbeat,
-                          'Antecedentes Personales', Colors.grey),
-                  (_habitos == null)
-                      ? _cardItem(this.preclinica, FontAwesomeIcons.coffee,
-                          'Habitos', 'crear_habitos', Colors.green, context)
-                      : _cardItemFake(
-                          FontAwesomeIcons.coffee, 'Habitos', Colors.grey)
-                ]),
-                TableRow(children: [
-                  (_historialObstetra == null)
-                      ? _cardItem(
-                          this.preclinica,
-                          FontAwesomeIcons.baby,
-                          'Historial Gineco Obstetra',
-                          'crear_historial_gineco',
-                          Colors.blueGrey,
-                          context)
-                      : _cardItemFake(FontAwesomeIcons.baby,
-                          'Historial Gineco Obstetra', Colors.grey),
-                  _cardItem(
-                      this.preclinica,
-                      Icons.people,
-                      'Farmacos de uso Actual',
-                      'crear_historial',
-                      Colors.orange,
-                      context)
-                ]),
-                TableRow(children: [
-                  _cardItem(
-                      this.preclinica,
-                      FontAwesomeIcons.child,
-                      'Examen Físico',
-                      'crear_historial',
-                      Colors.brown,
-                      context),
-                  _cardItem(
-                      this.preclinica,
-                      FontAwesomeIcons.female,
-                      'Examen Físico Ginecológico',
-                      'crear_historial',
-                      Colors.purple,
-                      context)
-                ]),
-                TableRow(children: [
-                  _cardItem(this.preclinica, Icons.note, 'Diagnosticos',
-                      'crear_historial', Colors.pink, context),
-                  _cardItem(this.preclinica, Icons.note_add, 'Notas',
-                      'crear_historial', Colors.grey, context)
-                ]),
-                TableRow(children: [
-                  _cardItemConsultaDetalle(
-                      this.preclinica,
-                      _antecedentes,
-                      _habitos,
-                      _historialObstetra,
-                      _listaFarmacos,
-                      _examenFisico,
-                      _examenGinecologico,
-                      _listaDiagnosticos,
-                      _listaNotas,
-                      FontAwesomeIcons.userMd,
-                      'Resumen Consulta',
-                      'crear_historial',
-                      Colors.pink,
-                      context),
-                  _cardItem(this.preclinica, FontAwesomeIcons.book, 'Receta',
-                      'crear_historial', Colors.lime, context)
-                ]),
-              ],
-            )
-          ],
-        ),
+      body: FutureBuilder(
+        future: _consultaFuture,
+        builder: (BuildContext context, AsyncSnapshot<ConsultaModel> snapshot) {
+          final _consultaDetalle = snapshot.data;
+          if (snapshot.hasData) {
+            return SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  SizedBox(
+                    height: 15.0,
+                  ),
+                  Table(
+                    children: [
+                      TableRow(children: [
+                        (_consultaDetalle.antecedentesFamiliaresPersonales ==
+                                null)
+                            ? _cardItem(
+                                _preclinica,
+                                FontAwesomeIcons.heartbeat,
+                                'Antecedentes Personales',
+                                'crear_antecedentes',
+                                Colors.blue,
+                                context)
+                            : _cardItemFake(FontAwesomeIcons.heartbeat,
+                                'Antecedentes Personales', Colors.grey),
+                        (_consultaDetalle.habitos == null)
+                            ? _cardItem(
+                                _preclinica,
+                                FontAwesomeIcons.coffee,
+                                'Habitos',
+                                'crear_habitos',
+                                Colors.green,
+                                context)
+                            : _cardItemFake(
+                                FontAwesomeIcons.coffee, 'Habitos', Colors.grey)
+                      ]),
+                      TableRow(children: [
+                        (_consultaDetalle.historialGinecoObstetra == null)
+                            ? _cardItem(
+                                _preclinica,
+                                FontAwesomeIcons.baby,
+                                'Historial Gineco Obstetra',
+                                'crear_historial_gineco',
+                                Colors.blueGrey,
+                                context)
+                            : _cardItemFake(FontAwesomeIcons.baby,
+                                'Historial Gineco Obstetra', Colors.grey),
+                        (_consultaDetalle.farmacosUsoActual.length == 0)
+                            ? _cardItem(
+                                _preclinica,
+                                Icons.people,
+                                'Farmacos de Uso Actual',
+                                'crear_farmacos_uso_actual',
+                                Colors.orange,
+                                context)
+                            : _cardItemFake(Icons.people,
+                                'Farmacos de Uso Actual', Colors.grey),
+                      ]),
+                      TableRow(children: [
+                        (_consultaDetalle.examenFisico == null)
+                            ? _cardItem(
+                                _preclinica,
+                                FontAwesomeIcons.child,
+                                'Examen Físico',
+                                'crear_examen_fisico',
+                                Colors.brown,
+                                context)
+                            : _cardItemFake(FontAwesomeIcons.child,
+                                'Examen Físico', Colors.grey),
+                        (_consultaDetalle.examenFisicoGinecologico == null)
+                            ? _cardItem(
+                                _preclinica,
+                                FontAwesomeIcons.female,
+                                'Examen Físico Ginecológico',
+                                'crear_examen_ginecologico',
+                                Colors.purple,
+                                context)
+                            : _cardItemFake(FontAwesomeIcons.female,
+                                'Examen Físico Ginecológico', Colors.grey),
+                      ]),
+                      TableRow(children: [
+                        (_consultaDetalle.diagnosticos.length == 0)
+                            ? _cardItem(_preclinica, Icons.note, 'Diagnosticos',
+                                'crear_diagnosticos', Colors.pink, context)
+                            : _cardItemFake(
+                                Icons.note, 'Diagnosticos', Colors.grey),
+                        (_consultaDetalle.notas.length == 0)
+                            ? _cardItem(_preclinica, Icons.note_add, 'Notas',
+                                'crear_notas', Colors.deepPurple, context)
+                            : _cardItemFake(
+                                Icons.note_add, 'Notas', Colors.grey)
+                      ]),
+                      TableRow(children: [
+                        _cardItem(
+                            _preclinica,
+                            FontAwesomeIcons.userMd,
+                            'Resumen de Consulta',
+                            'consulta_detalle',
+                            Colors.teal,
+                            context),
+                        _cardItem(_preclinica, FontAwesomeIcons.book, 'Receta',
+                            'crear_historial', Colors.lime, context)
+                      ]),
+                    ],
+                  )
+                ],
+              ),
+            );
+          } else {
+            return Center(child: CircularProgressIndicator());
+          }
+        },
       ),
     );
   }
@@ -183,7 +174,7 @@ class MenuConsultaPage extends StatelessWidget {
       String ruta, Color color, BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, ruta, arguments: preclinica);
+        Navigator.pushReplacementNamed(context, ruta, arguments: preclinica);
       },
       child: GFCard(
         elevation: 3.0,
@@ -245,37 +236,16 @@ class MenuConsultaPage extends StatelessWidget {
 
   Widget _cardItemConsultaDetalle(
     PreclinicaViewModel preclinica,
-    AntecedentesFamiliaresPersonales antecedentes,
-    Habitos habitos,
-    HistorialGinecoObstetra historial,
-    List<FarmacosUsoActual> listaFarmacos,
-    ExamenFisico examenFisico,
-    ExamenFisicoGinecologico examenGinecologico,
-    List<Diagnosticos> listaDiagnosticos,
-    List<Notas> listaNotas,
     IconData icon,
     String texto,
     String ruta,
     Color color,
     BuildContext context,
   ) {
-    final detalleConsulta = new ConsultaModel();
-    detalleConsulta.antecedentesFamiliaresPersonales = antecedentes;
-    detalleConsulta.habitos = habitos;
-    detalleConsulta.historialGinecoObstetra = historial;
-    detalleConsulta.farmacosUsoActual = listaFarmacos;
-    detalleConsulta.examenFisico = examenFisico;
-    detalleConsulta.examenFisicoGinecologico = examenGinecologico;
-    detalleConsulta.diagnosticos = listaDiagnosticos;
-    detalleConsulta.notas = listaNotas;
-
     return GestureDetector(
       onTap: () {
-        Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (BuildContext context) => ConsultaDetallePage(
-                    preclinica: preclinica, consulta: detalleConsulta)));
+        Navigator.pushReplacementNamed(context, 'consulta_detalle',
+            arguments: preclinica);
       },
       child: GFCard(
         elevation: 3.0,

@@ -1,4 +1,3 @@
-import 'package:appsam/src/models/consulta_model.dart';
 import 'package:appsam/src/pages/consulta/menuConsulta_page.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
@@ -72,31 +71,13 @@ class _CrearAntecedentesPageState extends State<CrearAntecedentesPage> {
             title: Text('Consulta'),
             actions: <Widget>[
               IconButton(
-                icon: Icon(
-                  Icons.arrow_back_ios,
-                  color: Colors.white,
-                ),
-                onPressed: () {
-                  if (_antecedentes.antecedentesFamiliaresPersonalesId == 0) {
-                    Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (BuildContext context) => MenuConsultaPage(
-                                  preclinica: _preclinica,
-                                )));
-                  } else {
-                    StorageUtil.putString('antecedentes',
-                        antecedentesFamiliaresPersonalesToJson(_antecedentes));
-
-                    Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (BuildContext context) => MenuConsultaPage(
-                                  preclinica: _preclinica,
-                                )));
-                  }
-                },
-              )
+                  icon: Icon(
+                    Icons.arrow_back_ios,
+                    color: Colors.white,
+                  ),
+                  onPressed: () => Navigator.pushReplacementNamed(
+                      context, 'menu_consulta',
+                      arguments: _preclinica))
             ],
           ),
           drawer: MenuWidget(),

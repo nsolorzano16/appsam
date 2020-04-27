@@ -52,50 +52,54 @@ class _CrearFarmacosUsoActualPageState
     final PreclinicaViewModel _preclinica =
         ModalRoute.of(context).settings.arguments;
 
-    return Scaffold(
-        key: mScaffoldState,
-        appBar: AppBar(
-          title: Text('Consulta'),
-          actions: <Widget>[
-            IconButton(
-                icon: Icon(Icons.arrow_forward_ios),
-                onPressed: () {
-                  showConfirmDialog(
-                      context, 'crear_examen_fisico', _preclinica);
-                })
-          ],
-        ),
-        drawer: MenuWidget(),
-        body: Column(
-          children: <Widget>[
-            Container(
-                alignment: Alignment.centerLeft,
-                padding: EdgeInsets.only(
-                  left: 20.0,
-                  top: 10.0,
-                  right: 10.0,
+    return WillPopScope(
+        child: Scaffold(
+            key: mScaffoldState,
+            appBar: AppBar(
+              title: Text('Consulta'),
+              actions: <Widget>[
+                IconButton(
+                    icon: Icon(
+                      Icons.arrow_back_ios,
+                      color: Colors.white,
+                    ),
+                    onPressed: () => Navigator.pushReplacementNamed(
+                        context, 'menu_consulta',
+                        arguments: _preclinica))
+              ],
+            ),
+            drawer: MenuWidget(),
+            body: Column(
+              children: <Widget>[
+                Container(
+                    alignment: Alignment.centerLeft,
+                    padding: EdgeInsets.only(
+                      left: 20.0,
+                      top: 10.0,
+                      right: 10.0,
+                    ),
+                    child: ListTile(
+                      title: Text('Farmacos de Uso Actual'),
+                      subtitle: Text('Click en el boton \"+\" para agregar'),
+                    )),
+                Divider(
+                  thickness: 2.0,
+                  indent: 20.0,
+                  endIndent: 20.0,
                 ),
-                child: ListTile(
-                  title: Text('Farmacos de Uso Actual'),
-                  subtitle: Text('Click en el boton \"+\" para agregar'),
-                )),
-            Divider(
-              thickness: 2.0,
-              indent: 20.0,
-              endIndent: 20.0,
+                Flexible(
+                  child: ListView(
+                    children: items(_listaFarmacos),
+                  ),
+                ),
+              ],
             ),
-            Flexible(
-              child: ListView(
-                children: items(_listaFarmacos),
-              ),
-            ),
-          ],
-        ),
-        floatingActionButton: FloatingActionButton(
-          backgroundColor: Theme.of(context).primaryColor,
-          onPressed: () => _dialogAdd(context, _preclinica),
-          child: Icon(Icons.add),
-        ));
+            floatingActionButton: FloatingActionButton(
+              backgroundColor: Theme.of(context).primaryColor,
+              onPressed: () => _dialogAdd(context, _preclinica),
+              child: Icon(Icons.add),
+            )),
+        onWillPop: () async => false);
   }
 
   List<Widget> items(List<FarmacosUsoActual> lista) {

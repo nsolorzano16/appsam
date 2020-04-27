@@ -134,54 +134,53 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
     _examenFisico.preclinicaId = _preclinica.preclinicaId;
     final size = MediaQuery.of(context).size;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Consulta'),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(
-              Icons.arrow_forward_ios,
-              color: Colors.white,
-            ),
-            tooltip: 'Siguiente pagina',
-            onPressed: () {
-              showConfirmDialog(
-                  context, 'crear_examen_ginecologico', _preclinica);
-            },
-          )
-        ],
-      ),
-      drawer: MenuWidget(),
-      body: Form(
-          key: _formkey,
-          child: GFCarousel(
-              pagerSize: 11.0,
-              enableInfiniteScroll: false,
-              activeIndicator: Colors.red,
-              viewportFraction: 1.0,
-              pagination: true,
-              height: size.height,
-              onPageChanged: (index) {
-                setState(() {
-                  index;
-                });
-              },
-              items: [
-                _formParte1(context),
-                _formParte2(context),
-                _formParte3(context),
-                _formParte4(context),
-                _formParte5(context),
-                _formParte6(context),
-              ])),
-      floatingActionButton: UnicornDialer(
-          backgroundColor: Color.fromRGBO(255, 255, 255, 0.6),
-          hasBackground: false,
-          parentButtonBackground: Theme.of(context).primaryColor,
-          orientation: UnicornOrientation.VERTICAL,
-          parentButton: Icon(Icons.add),
-          childButtons: botones()),
-    );
+    return WillPopScope(
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text('Consulta'),
+            actions: <Widget>[
+              IconButton(
+                  icon: Icon(
+                    Icons.arrow_back_ios,
+                    color: Colors.white,
+                  ),
+                  onPressed: () => Navigator.pushReplacementNamed(
+                      context, 'menu_consulta',
+                      arguments: _preclinica))
+            ],
+          ),
+          drawer: MenuWidget(),
+          body: Form(
+              key: _formkey,
+              child: GFCarousel(
+                  pagerSize: 11.0,
+                  enableInfiniteScroll: false,
+                  activeIndicator: Colors.red,
+                  viewportFraction: 1.0,
+                  pagination: true,
+                  height: size.height,
+                  onPageChanged: (index) {
+                    setState(() {
+                      index;
+                    });
+                  },
+                  items: [
+                    _formParte1(context),
+                    _formParte2(context),
+                    _formParte3(context),
+                    _formParte4(context),
+                    _formParte5(context),
+                    _formParte6(context),
+                  ])),
+          floatingActionButton: UnicornDialer(
+              backgroundColor: Color.fromRGBO(255, 255, 255, 0.6),
+              hasBackground: false,
+              parentButtonBackground: Theme.of(context).primaryColor,
+              orientation: UnicornOrientation.VERTICAL,
+              parentButton: Icon(Icons.add),
+              childButtons: botones()),
+        ),
+        onWillPop: () async => false);
   }
 
   List<UnicornButton> botones() {
@@ -1026,6 +1025,7 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
   }
 
   void obtenerValores() {
+    // TODO: revisar que esten todos los campos
     _examenFisico.aspectoGeneral = _aspectoGeneralController.text;
     _examenFisico.edadAparente = (_edadAparenteController.text.isEmpty)
         ? null
@@ -1063,6 +1063,12 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
     _examenFisico.rectoProstatico = _rectoProstaticoController.text;
     _examenFisico.miembros = _miembrosController.text;
     _examenFisico.neurologico = _neuroligicoController.text;
+    _examenFisico.dolorAusente = _dolorAusente;
+    _examenFisico.dolorPresente = _dolorPresente;
+    _examenFisico.dolorPresenteLeve = _dolorPresenteLeve;
+    _examenFisico.dolorPresenteModerado = _dolorPresenteModerado;
+    _examenFisico.dolorPresenteSevero = _dolorPresenteSevero;
+    _examenFisico.excesoDePeso = _excesoDePeso;
   }
 
   void limpiar() {
