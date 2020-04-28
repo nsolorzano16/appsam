@@ -29,14 +29,15 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     final bloc = Provider.themeBloc(context);
     final blocAsistentes = Provider.crearEditarAsistentesBloc(context);
-
-    return Scaffold(
-      drawer: MenuWidget(),
-      appBar: AppBar(
-        title: Text('Configuración'),
-      ),
-      body: _crearLista(context, bloc, blocAsistentes),
-    );
+    return WillPopScope(
+        child: Scaffold(
+          drawer: MenuWidget(),
+          appBar: AppBar(
+            title: Text('Configuración'),
+          ),
+          body: _crearLista(context, bloc, blocAsistentes),
+        ),
+        onWillPop: () async => false);
   }
 
   Widget _crearLista(BuildContext context, ThemeBloc bloc,

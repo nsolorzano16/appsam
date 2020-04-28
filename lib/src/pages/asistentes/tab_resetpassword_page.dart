@@ -16,29 +16,33 @@ class ResetPasswordPage extends StatelessWidget {
     final UsuarioModel _asistente = ModalRoute.of(context).settings.arguments;
     final _resetPasswordBloc = new ResetPasswordBloc();
     final blocService = new CrearEditarAsistentesBloc();
-    return Scaffold(
-        drawer: MenuWidget(),
-        appBar: AppBar(
-          title: Text('Resetear Contraseña'),
-        ),
-        body: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              SizedBox(
-                height: 15.0,
+
+    return WillPopScope(
+        child: Scaffold(
+            drawer: MenuWidget(),
+            appBar: AppBar(
+              title: Text('Resetear Contraseña'),
+            ),
+            body: SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  SizedBox(
+                    height: 15.0,
+                  ),
+                  _crearCampoPassword1(context, _resetPasswordBloc),
+                  SizedBox(
+                    height: 8.0,
+                  ),
+                  _crearRepetirPassword(context, _resetPasswordBloc),
+                  SizedBox(
+                    height: 8.0,
+                  ),
+                  _crearBoton(
+                      _resetPasswordBloc, blocService, _asistente, context)
+                ],
               ),
-              _crearCampoPassword1(context, _resetPasswordBloc),
-              SizedBox(
-                height: 8.0,
-              ),
-              _crearRepetirPassword(context, _resetPasswordBloc),
-              SizedBox(
-                height: 8.0,
-              ),
-              _crearBoton(_resetPasswordBloc, blocService, _asistente, context)
-            ],
-          ),
-        ));
+            )),
+        onWillPop: () async => false);
   }
 
   Widget _crearCampoPassword1(BuildContext context, ResetPasswordBloc bloc) {

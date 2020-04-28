@@ -54,30 +54,33 @@ class _AsistentesPageState extends State<AsistentesPage> {
         }
       }
     });
-    return Scaffold(
-      key: _scaffoldKey,
-      drawer: MenuWidget(),
-      appBar: AppBar(
-        actions: <Widget>[
-          IconButton(
-              icon: Icon(Icons.search),
-              onPressed: () {
-                showSearch(context: context, delegate: DataSearch());
-              }),
-        ],
-        title: Text('Asistentes'),
-      ),
-      body: Stack(
-        children: <Widget>[
-          _crearListaAsistentes(context),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Theme.of(context).primaryColor,
-        child: Icon(Icons.add),
-        onPressed: () => _goToCrearAsistente(_usuario),
-      ),
-    );
+
+    return WillPopScope(
+        child: Scaffold(
+          key: _scaffoldKey,
+          drawer: MenuWidget(),
+          appBar: AppBar(
+            actions: <Widget>[
+              IconButton(
+                  icon: Icon(Icons.search),
+                  onPressed: () {
+                    showSearch(context: context, delegate: DataSearch());
+                  }),
+            ],
+            title: Text('Asistentes'),
+          ),
+          body: Stack(
+            children: <Widget>[
+              _crearListaAsistentes(context),
+            ],
+          ),
+          floatingActionButton: FloatingActionButton(
+            backgroundColor: Theme.of(context).primaryColor,
+            child: Icon(Icons.add),
+            onPressed: () => _goToCrearAsistente(_usuario),
+          ),
+        ),
+        onWillPop: () async => false);
   }
 
   Future<Null> fetchData(int page, int doctorId) async {

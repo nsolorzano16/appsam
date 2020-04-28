@@ -38,13 +38,15 @@ class _CrearPreclinicaPageState extends State<CrearPreclinicaPage> {
   Widget build(BuildContext context) {
     final PacientesViewModel _paciente =
         ModalRoute.of(context).settings.arguments;
-    return Scaffold(
-        appBar: AppBar(
-          title: Text('Nueva Preclinica'),
-        ),
-        body: Stack(
-          children: <Widget>[_crearFormulario(_usuario, _paciente)],
-        ));
+    return WillPopScope(
+        child: Scaffold(
+            appBar: AppBar(
+              title: Text('Nueva Preclinica'),
+            ),
+            body: Stack(
+              children: <Widget>[_crearFormulario(_usuario, _paciente)],
+            )),
+        onWillPop: () async => false);
   }
 
   Widget _crearFormulario(UsuarioModel usuario, PacientesViewModel paciente) {

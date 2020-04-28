@@ -56,17 +56,19 @@ class _PreclinicaPageState extends State<PreclinicaPage> {
       }
     });
 
-    return Scaffold(
-      drawer: MenuWidget(),
-      appBar: AppBar(
-        title: Text('Preclinica'),
-      ),
-      body: Stack(
-        children: <Widget>[
-          _crearListaPreclinicas(context),
-        ],
-      ),
-    );
+    return WillPopScope(
+        child: Scaffold(
+          drawer: MenuWidget(),
+          appBar: AppBar(
+            title: Text('Preclinica'),
+          ),
+          body: Stack(
+            children: <Widget>[
+              _crearListaPreclinicas(context),
+            ],
+          ),
+        ),
+        onWillPop: () async => false);
   }
 
   Future<Null> fetchData(int page) async {

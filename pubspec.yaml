@@ -41,6 +41,7 @@ dependencies:
   flutter_svg: ^0.17.3+1
   getflutter: ^1.0.11
   unicorndial: ^1.1.5
+  animate_do: ^1.7.2
 
 dev_dependencies:
   flutter_test:

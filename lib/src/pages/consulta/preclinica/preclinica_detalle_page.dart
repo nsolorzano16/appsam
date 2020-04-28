@@ -24,39 +24,42 @@ class PreclinicaDetallePage extends StatelessWidget {
     final PreclinicaViewModel _preclinica =
         ModalRoute.of(context).settings.arguments;
     //final _screenSize = MediaQuery.of(context).size;
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Preclinica Detalle'),
-        actions: <Widget>[
-          IconButton(
-              icon: Icon(Icons.edit),
-              onPressed: () => Navigator.pushNamed(context, 'editar_preclinica',
-                  arguments: _preclinica))
-        ],
-      ),
-      drawer: MenuWidget(),
-      body: Stack(
-        children: <Widget>[
-          SingleChildScrollView(
-            child: Column(
-              children: <Widget>[
-                _crearDatosPaciente(_preclinica),
-                _crearDatosPreclinica(_preclinica),
-                _crearNotasPreclinica(_preclinica),
-                _crearNotasPaciente(_preclinica),
-              ],
-            ),
-          )
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          updatePreclinicaAndGoToDetalleConsulta(_preclinica, context);
-        },
-        child: FaIcon(FontAwesomeIcons.notesMedical),
-        backgroundColor: Theme.of(context).primaryColor,
-      ),
-    );
+    return WillPopScope(
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text('Preclinica Detalle'),
+            actions: <Widget>[
+              IconButton(
+                  icon: Icon(Icons.edit),
+                  onPressed: () => Navigator.pushNamed(
+                      context, 'editar_preclinica',
+                      arguments: _preclinica))
+            ],
+          ),
+          drawer: MenuWidget(),
+          body: Stack(
+            children: <Widget>[
+              SingleChildScrollView(
+                child: Column(
+                  children: <Widget>[
+                    _crearDatosPaciente(_preclinica),
+                    _crearDatosPreclinica(_preclinica),
+                    _crearNotasPreclinica(_preclinica),
+                    _crearNotasPaciente(_preclinica),
+                  ],
+                ),
+              )
+            ],
+          ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              updatePreclinicaAndGoToDetalleConsulta(_preclinica, context);
+            },
+            child: FaIcon(FontAwesomeIcons.notesMedical),
+            backgroundColor: Theme.of(context).primaryColor,
+          ),
+        ),
+        onWillPop: () async => false);
   }
 
   Widget _crearDatosPaciente(PreclinicaViewModel preclinica) {

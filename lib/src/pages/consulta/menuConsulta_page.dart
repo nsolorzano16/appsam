@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:appsam/src/blocs/consulta_bloc.dart';
 
 import 'package:appsam/src/models/consulta_model.dart';
@@ -98,31 +99,39 @@ class _MenuConsultaPageState extends State<MenuConsultaPage> {
                 Table(
                   children: [
                     TableRow(children: [
-                      _cardItem(
-                          _preclinica,
-                          FontAwesomeIcons.heartbeat,
-                          'Antecedentes Personales',
-                          'crear_antecedentes',
-                          Colors.blue,
-                          context),
-                      _cardItem(_preclinica, FontAwesomeIcons.coffee, 'Habitos',
-                          'crear_habitos', Colors.green, context)
+                      FadeInLeft(
+                        child: _cardItem(
+                            _preclinica,
+                            FontAwesomeIcons.heartbeat,
+                            'Antecedentes Personales',
+                            'crear_antecedentes',
+                            Colors.blue,
+                            context),
+                      ),
+                      FadeInRight(
+                        child: _cardItem(_preclinica, FontAwesomeIcons.coffee,
+                            'Habitos', 'crear_habitos', Colors.green, context),
+                      )
                     ]),
                     TableRow(children: [
-                      _cardItem(
-                          _preclinica,
-                          FontAwesomeIcons.baby,
-                          'Historial Gineco Obstetra',
-                          'crear_historial_gineco',
-                          Colors.blueGrey,
-                          context),
-                      _cardItem(
-                          _preclinica,
-                          Icons.people,
-                          'Farmacos de Uso Actual',
-                          'crear_farmacos_uso_actual',
-                          Colors.orange,
-                          context)
+                      FadeInLeft(
+                        child: _cardItem(
+                            _preclinica,
+                            FontAwesomeIcons.baby,
+                            'Historial Gineco Obstetra',
+                            'crear_historial_gineco',
+                            Colors.blueGrey,
+                            context),
+                      ),
+                      FadeInRight(
+                        child: _cardItem(
+                            _preclinica,
+                            Icons.people,
+                            'Farmacos de Uso Actual',
+                            'crear_farmacos_uso_actual',
+                            Colors.orange,
+                            context),
+                      )
                     ]),
                   ],
                 )
@@ -152,47 +161,77 @@ class _MenuConsultaPageState extends State<MenuConsultaPage> {
                   children: [
                     TableRow(children: [
                       (_consultaDetalle.examenFisico == null)
-                          ? _cardItem(
-                              _preclinica,
-                              FontAwesomeIcons.child,
-                              'Examen Físico',
-                              'crear_examen_fisico',
-                              Colors.brown,
-                              context)
-                          : _cardItemFake(FontAwesomeIcons.child,
-                              'Examen Físico', Colors.grey),
+                          ? FadeInLeft(
+                              child: _cardItem(
+                                  _preclinica,
+                                  FontAwesomeIcons.child,
+                                  'Examen Físico',
+                                  'crear_examen_fisico',
+                                  Colors.brown,
+                                  context),
+                            )
+                          : FadeInLeft(
+                              child: _cardItemFake(FontAwesomeIcons.child,
+                                  'Examen Físico', Colors.grey),
+                            ),
                       (_consultaDetalle.examenFisicoGinecologico == null)
-                          ? _cardItem(
-                              _preclinica,
-                              FontAwesomeIcons.female,
-                              'Examen Físico Ginecológico',
-                              'crear_examen_ginecologico',
-                              Colors.purple,
-                              context)
-                          : _cardItemFake(FontAwesomeIcons.female,
-                              'Examen Físico Ginecológico', Colors.grey),
+                          ? FadeInRight(
+                              child: _cardItem(
+                                  _preclinica,
+                                  FontAwesomeIcons.female,
+                                  'Examen Físico Ginecológico',
+                                  'crear_examen_ginecologico',
+                                  Colors.purple,
+                                  context),
+                            )
+                          : FadeInRight(
+                              child: _cardItemFake(FontAwesomeIcons.female,
+                                  'Examen Físico Ginecológico', Colors.grey),
+                            ),
                     ]),
                     TableRow(children: [
                       (_consultaDetalle.diagnosticos.length == 0)
-                          ? _cardItem(_preclinica, Icons.note, 'Diagnosticos',
-                              'crear_diagnosticos', Colors.pink, context)
-                          : _cardItemFake(
-                              Icons.note, 'Diagnosticos', Colors.grey),
+                          ? FadeInLeft(
+                              child: _cardItem(
+                                  _preclinica,
+                                  Icons.note,
+                                  'Diagnosticos',
+                                  'crear_diagnosticos',
+                                  Colors.pink,
+                                  context),
+                            )
+                          : FadeInLeft(
+                              child: _cardItemFake(
+                                  Icons.note, 'Diagnosticos', Colors.grey),
+                            ),
                       (_consultaDetalle.notas.length == 0)
-                          ? _cardItem(_preclinica, Icons.note_add, 'Notas',
-                              'crear_notas', Colors.deepPurple, context)
-                          : _cardItemFake(Icons.note_add, 'Notas', Colors.grey)
+                          ? FadeInRight(
+                              child: _cardItem(
+                                  _preclinica,
+                                  Icons.note_add,
+                                  'Notas',
+                                  'crear_notas',
+                                  Colors.deepPurple,
+                                  context),
+                            )
+                          : FadeInRight(
+                              child: _cardItemFake(
+                                  Icons.note_add, 'Notas', Colors.grey))
                     ]),
                     TableRow(children: [
-                      _cardItem(
-                          _preclinica,
-                          FontAwesomeIcons.userMd,
-                          'Resumen de Consulta',
-                          'consulta_detalle',
-                          Colors.teal,
-                          context),
-                      _cardItem(_preclinica, FontAwesomeIcons.book, 'Receta',
-                          'crear_historial', Colors.lime, context)
+                      FadeInLeft(
+                        child: _cardItem(
+                            _preclinica,
+                            FontAwesomeIcons.userMd,
+                            'Resumen de Consulta',
+                            'consulta_detalle',
+                            Colors.teal,
+                            context),
+                      ),
+                      FadeInRight(
+                        child: _cardItem(_preclinica, FontAwesomeIcons.book,
+                            'Receta', 'crear_historial', Colors.lime, context),
+                      )
                     ]),
                   ],
                 )
@@ -213,6 +252,8 @@ class _MenuConsultaPageState extends State<MenuConsultaPage> {
         Navigator.pushReplacementNamed(context, ruta, arguments: preclinica);
       },
       child: GFCard(
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
         elevation: 6.0,
         height: 110.0,
         color: color,
@@ -246,6 +287,7 @@ class _MenuConsultaPageState extends State<MenuConsultaPage> {
     return GFCard(
       elevation: 3.0,
       height: 110.0,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
       content: Column(
         children: <Widget>[
           Container(

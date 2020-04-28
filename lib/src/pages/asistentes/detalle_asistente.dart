@@ -28,79 +28,82 @@ class _AsistenteDetalleState extends State<AsistenteDetalle> {
     final _screenSize = MediaQuery.of(context).size;
     final bloc = new CrearEditarAsistentesBloc();
 
-    return Scaffold(
-        appBar: AppBar(
-          title: Text('${_usuario.nombres}'),
-          actions: <Widget>[
-            PopupMenuButton(
-              elevation: 10.0,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20.0)),
-              itemBuilder: (context) => [
-                PopupMenuItem(
-                  child: Text('Editar'),
-                  value: 1,
+    return WillPopScope(
+        child: Scaffold(
+            appBar: AppBar(
+              title: Text('${_usuario.nombres}'),
+              actions: <Widget>[
+                PopupMenuButton(
+                  elevation: 10.0,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20.0)),
+                  itemBuilder: (context) => [
+                    PopupMenuItem(
+                      child: Text('Editar'),
+                      value: 1,
+                    ),
+                    PopupMenuItem(
+                        value: 2,
+                        child: (_usuario.activo)
+                            ? Text('Desactivar')
+                            : Text('Activar')),
+                    PopupMenuItem(value: 3, child: Text('Resetear Contraseña')),
+                  ],
+                  onSelected: (value) {
+                    if (value == 1) {
+                      Navigator.pushNamed(context, 'editar-asistente',
+                          arguments: _usuario);
+                    } else if (value == 2) {
+                      _desactivar(context, bloc, _usuario);
+                    } else if (value == 3) {
+                      Navigator.pushReplacementNamed(context, 'reset-password',
+                          arguments: _usuario);
+                    }
+                  },
                 ),
-                PopupMenuItem(
-                    value: 2,
-                    child: (_usuario.activo)
-                        ? Text('Desactivar')
-                        : Text('Activar')),
-                PopupMenuItem(value: 3, child: Text('Resetear Contraseña')),
               ],
-              onSelected: (value) {
-                if (value == 1) {
-                  Navigator.pushNamed(context, 'editar-asistente',
-                      arguments: _usuario);
-                } else if (value == 2) {
-                  _desactivar(context, bloc, _usuario);
-                } else if (value == 3) {
-                  Navigator.pushReplacementNamed(context, 'reset-password',
-                      arguments: _usuario);
-                }
-              },
             ),
-          ],
-        ),
-        drawer: MenuWidget(),
-        body: SingleChildScrollView(
-          // physics: BouncingScrollPhysics(),
-          child: Container(
-            margin: EdgeInsets.only(top: 5.0),
-            width: _screenSize.width,
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Container(
-                  padding: EdgeInsets.only(
-                      left: _screenSize.width * 0.2,
-                      right: _screenSize.width * 0.2,
-                      top: 1.0,
-                      bottom: 3.0),
-                  child: Card(
-                    elevation: 10,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30.0)),
-                    child: Container(
+            drawer: MenuWidget(),
+            body: SingleChildScrollView(
+              // physics: BouncingScrollPhysics(),
+              child: Container(
+                margin: EdgeInsets.only(top: 5.0),
+                width: _screenSize.width,
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Container(
                       padding: EdgeInsets.only(
-                          left: 40.0, right: 40.0, top: 20.0, bottom: 20.0),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(100.0),
-                        child: FadeInImage(
-                            width: 150,
-                            height: 150,
-                            placeholder: AssetImage('assets/jar-loading.gif'),
-                            image: NetworkImage(_usuario.fotoUrl)),
+                          left: _screenSize.width * 0.2,
+                          right: _screenSize.width * 0.2,
+                          top: 1.0,
+                          bottom: 3.0),
+                      child: Card(
+                        elevation: 10,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30.0)),
+                        child: Container(
+                          padding: EdgeInsets.only(
+                              left: 40.0, right: 40.0, top: 20.0, bottom: 20.0),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(100.0),
+                            child: FadeInImage(
+                                width: 150,
+                                height: 150,
+                                placeholder:
+                                    AssetImage('assets/jar-loading.gif'),
+                                image: NetworkImage(_usuario.fotoUrl)),
+                          ),
+                        ),
                       ),
                     ),
-                  ),
+                    _campoTexto(_usuario, Icons.email, context)
+                  ],
                 ),
-                _campoTexto(_usuario, Icons.email, context)
-              ],
-            ),
-          ),
-        ));
+              ),
+            )),
+        onWillPop: () async => false);
   }
 
   _desactivar(BuildContext context, CrearEditarAsistentesBloc bloc,

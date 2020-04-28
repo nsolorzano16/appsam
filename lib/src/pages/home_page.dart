@@ -18,14 +18,16 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      drawer: MenuWidget(),
-      appBar: AppBar(
-        title: Text('Inicio'),
-      ),
-      body: Center(
-        child: Text(StorageUtil.getString('usuarioGlobal')),
-      ),
-    );
+    return WillPopScope(
+        child: Scaffold(
+          drawer: MenuWidget(),
+          appBar: AppBar(
+            title: Text('Inicio'),
+          ),
+          body: Center(
+            child: Text(StorageUtil.getString('usuarioGlobal')),
+          ),
+        ),
+        onWillPop: () async => false);
   }
 }

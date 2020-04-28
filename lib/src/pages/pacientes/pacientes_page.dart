@@ -60,31 +60,34 @@ class _PacientesPageState extends State<PacientesPage> {
       }
     });
 
-    return Scaffold(
-      drawer: MenuWidget(),
-      appBar: AppBar(
-        actions: <Widget>[
-          IconButton(
-              icon: Icon(Icons.search),
-              onPressed: () {
-                showSearch(context: context, delegate: DataSearchPacientes());
-              }),
-        ],
-        title: Text('Pacientes'),
-      ),
-      body: Stack(
-        children: <Widget>[
-          RefreshIndicator(
-              child: _crearListaPacientes(context),
-              onRefresh: () => fetchDataRefresh(1))
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Theme.of(context).primaryColor,
-        child: Icon(Icons.add),
-        onPressed: () => _goToCrearPaciente(_usuario),
-      ),
-    );
+    return WillPopScope(
+        child: Scaffold(
+          drawer: MenuWidget(),
+          appBar: AppBar(
+            actions: <Widget>[
+              IconButton(
+                  icon: Icon(Icons.search),
+                  onPressed: () {
+                    showSearch(
+                        context: context, delegate: DataSearchPacientes());
+                  }),
+            ],
+            title: Text('Pacientes'),
+          ),
+          body: Stack(
+            children: <Widget>[
+              RefreshIndicator(
+                  child: _crearListaPacientes(context),
+                  onRefresh: () => fetchDataRefresh(1))
+            ],
+          ),
+          floatingActionButton: FloatingActionButton(
+            backgroundColor: Theme.of(context).primaryColor,
+            child: Icon(Icons.add),
+            onPressed: () => _goToCrearPaciente(_usuario),
+          ),
+        ),
+        onWillPop: () async => false);
   }
 
   Future<Null> fetchData(int page) async {

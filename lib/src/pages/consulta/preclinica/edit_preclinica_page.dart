@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:appsam/src/widgets/drawer.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -36,13 +37,16 @@ class _EditarPreclinicaPageState extends State<EditarPreclinicaPage> {
   Widget build(BuildContext context) {
     final PreclinicaViewModel _preclinica =
         ModalRoute.of(context).settings.arguments;
-    return Scaffold(
-        appBar: AppBar(
-          title: Text('Editar Preclinica'),
-        ),
-        body: Stack(
-          children: <Widget>[_crearFormulario(_usuario, _preclinica)],
-        ));
+    return WillPopScope(
+        child: Scaffold(
+            appBar: AppBar(
+              title: Text('Editar Preclinica'),
+            ),
+            drawer: MenuWidget(),
+            body: Stack(
+              children: <Widget>[_crearFormulario(_usuario, _preclinica)],
+            )),
+        onWillPop: () async => false);
   }
 
   Widget _crearFormulario(

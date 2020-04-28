@@ -52,63 +52,64 @@ class _CrearAsistentesPageState extends State<CrearAsistentesPage> {
         mask: '####-####', filter: {"#": RegExp(r'[0-9]')});
 
     final bloc = Provider.crearEditarAsistentesBloc(context);
-
-    return Scaffold(
-        appBar: AppBar(
-          key: _scaffoldKey,
-          title: Text('Nuevo Asistente'),
-        ),
-        drawer: MenuWidget(),
-        body: SingleChildScrollView(
-          child: Form(
-              key: _formKey,
-              child: GFCard(
-                content: Column(
-                  children: <Widget>[
-                    _espacio(),
-                    _crearCampoNombre(_asistente),
-                    _espacio(),
-                    _crearCampoPrimerAppellido(_asistente),
-                    _espacio(),
-                    _crearCampoSegundoAppellido(_asistente),
-                    _espacio(),
-                    _crearCampoIdentificacion(_asistente),
-                    _espacio(),
-                    _crearFecha(context, bloc.fechaNacimientoStream,
-                        bloc.changeFechaNacimiento),
-                    _espacio(),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+    return WillPopScope(
+        child: Scaffold(
+            appBar: AppBar(
+              key: _scaffoldKey,
+              title: Text('Nuevo Asistente'),
+            ),
+            drawer: MenuWidget(),
+            body: SingleChildScrollView(
+              child: Form(
+                  key: _formKey,
+                  child: GFCard(
+                    content: Column(
                       children: <Widget>[
-                        Container(
-                            padding: EdgeInsets.only(left: 25),
-                            child: Text(
-                              'Genero',
-                              style: TextStyle(fontSize: 16.0),
-                            ))
+                        _espacio(),
+                        _crearCampoNombre(_asistente),
+                        _espacio(),
+                        _crearCampoPrimerAppellido(_asistente),
+                        _espacio(),
+                        _crearCampoSegundoAppellido(_asistente),
+                        _espacio(),
+                        _crearCampoIdentificacion(_asistente),
+                        _espacio(),
+                        _crearFecha(context, bloc.fechaNacimientoStream,
+                            bloc.changeFechaNacimiento),
+                        _espacio(),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Container(
+                                padding: EdgeInsets.only(left: 25),
+                                child: Text(
+                                  'Genero',
+                                  style: TextStyle(fontSize: 16.0),
+                                ))
+                          ],
+                        ),
+                        _crearSexo('M', 'Masculino'),
+                        _crearSexo('F', 'Femenino'),
+                        _crearCampoTelefono1(maskTelefono1, _asistente),
+                        _espacio(),
+                        _crearCampoTelefono2(maskTelefono2, _asistente),
+                        _espacio(),
+                        _crearCampoColegioNumero(_asistente),
+                        _espacio(),
+                        _crearCampoEmail(_asistente),
+                        _espacio(),
+                        _crearCampoUsuario(_asistente),
+                        _espacio(),
+                        _crearCampoPassword(_asistente),
+                        _espacio(),
+                        _crearCampoNotas(_asistente),
+                        _espacio(),
+                        _crearBotones(_asistente, bloc),
                       ],
                     ),
-                    _crearSexo('M', 'Masculino'),
-                    _crearSexo('F', 'Femenino'),
-                    _crearCampoTelefono1(maskTelefono1, _asistente),
-                    _espacio(),
-                    _crearCampoTelefono2(maskTelefono2, _asistente),
-                    _espacio(),
-                    _crearCampoColegioNumero(_asistente),
-                    _espacio(),
-                    _crearCampoEmail(_asistente),
-                    _espacio(),
-                    _crearCampoUsuario(_asistente),
-                    _espacio(),
-                    _crearCampoPassword(_asistente),
-                    _espacio(),
-                    _crearCampoNotas(_asistente),
-                    _espacio(),
-                    _crearBotones(_asistente, bloc),
-                  ],
-                ),
-              )),
-        ));
+                  )),
+            )),
+        onWillPop: () async => false);
   } // fin build
 
   String validateEmail(String value) {

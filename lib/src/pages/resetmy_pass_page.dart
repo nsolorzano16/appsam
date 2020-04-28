@@ -15,37 +15,41 @@ class ResetMyPasswordPage extends StatelessWidget {
     print('USUARIO ID EN RESTE PASS $_usuarioId');
     final _resetPasswordBloc = new ResetPasswordBloc();
     final blocService = new CrearEditarAsistentesBloc();
-    return Scaffold(
-      drawer: MenuWidget(),
-      appBar: AppBar(
-        title: Text('Resetear Mi Contraseña'),
-      ),
-      body: Container(
-        margin:
-            EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0, bottom: 10.0),
-        child: Card(
-          elevation: 6.0,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
-          child: Column(
-            children: <Widget>[
-              SizedBox(
-                height: 15.0,
+
+    return WillPopScope(
+        child: Scaffold(
+          drawer: MenuWidget(),
+          appBar: AppBar(
+            title: Text('Resetear Mi Contraseña'),
+          ),
+          body: Container(
+            height: 250.0,
+            margin: EdgeInsets.only(
+                top: 10.0, left: 10.0, right: 10.0, bottom: 10.0),
+            child: Card(
+              elevation: 6.0,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30.0)),
+              child: Column(
+                children: <Widget>[
+                  SizedBox(
+                    height: 15.0,
+                  ),
+                  _crearCampoPassword1(context, _resetPasswordBloc),
+                  SizedBox(
+                    height: 8.0,
+                  ),
+                  _crearRepetirPassword(context, _resetPasswordBloc),
+                  SizedBox(
+                    height: 8.0,
+                  ),
+                  _crearBoton(_resetPasswordBloc, blocService, _usuarioId)
+                ],
               ),
-              _crearCampoPassword1(context, _resetPasswordBloc),
-              SizedBox(
-                height: 8.0,
-              ),
-              _crearRepetirPassword(context, _resetPasswordBloc),
-              SizedBox(
-                height: 8.0,
-              ),
-              _crearBoton(_resetPasswordBloc, blocService, _usuarioId)
-            ],
+            ),
           ),
         ),
-      ),
-    );
+        onWillPop: () async => false);
   }
 
   Widget _crearCampoPassword1(BuildContext context, ResetPasswordBloc bloc) {

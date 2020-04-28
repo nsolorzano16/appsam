@@ -104,74 +104,80 @@ class _EditarPacientePageState extends State<EditarPacientePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Editar Paciente'),
-      ),
-      drawer: MenuWidget(),
-      body: Form(
-        key: _formKey,
-        child: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              GFCard(
-                elevation: 6.0,
-                boxFit: BoxFit.cover,
-                title: GFListTile(
-                    color: Colors.red,
-                    title: Text('Información Personal',
-                        style: TextStyle(
-                            fontSize: 18.0,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white)),
-                    icon: FaIcon(FontAwesomeIcons.user, color: Colors.white)),
-                content: _formParteUno(widget.paciente),
+    return WillPopScope(
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text('Editar Paciente'),
+          ),
+          drawer: MenuWidget(),
+          body: Form(
+            key: _formKey,
+            child: SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  GFCard(
+                    elevation: 6.0,
+                    boxFit: BoxFit.cover,
+                    title: GFListTile(
+                        color: Colors.red,
+                        title: Text('Información Personal',
+                            style: TextStyle(
+                                fontSize: 18.0,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white)),
+                        icon:
+                            FaIcon(FontAwesomeIcons.user, color: Colors.white)),
+                    content: _formParteUno(widget.paciente),
+                  ),
+                  GFCard(
+                    elevation: 6.0,
+                    boxFit: BoxFit.cover,
+                    title: GFListTile(
+                        color: Colors.red,
+                        title: Text('Datos Generales',
+                            style: TextStyle(
+                                fontSize: 18.0,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white)),
+                        icon:
+                            FaIcon(FontAwesomeIcons.user, color: Colors.white)),
+                    content: _formParteDos(),
+                  ),
+                  GFCard(
+                    elevation: 6.0,
+                    boxFit: BoxFit.cover,
+                    title: GFListTile(
+                        color: Colors.red,
+                        title: Text('Datos Referenciales',
+                            style: TextStyle(
+                                fontSize: 18.0,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white)),
+                        icon:
+                            FaIcon(FontAwesomeIcons.user, color: Colors.white)),
+                    content: _formParteTres(),
+                  ),
+                  GFCard(
+                    elevation: 6.0,
+                    boxFit: BoxFit.cover,
+                    title: GFListTile(
+                        color: Colors.red,
+                        title: Text(
+                            'En caso de ser menor de edad complete los campos ',
+                            style: TextStyle(
+                                fontSize: 18.0,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white)),
+                        icon:
+                            FaIcon(FontAwesomeIcons.user, color: Colors.white)),
+                    content: _formParteCuatro(widget.paciente),
+                  ),
+                ],
               ),
-              GFCard(
-                elevation: 6.0,
-                boxFit: BoxFit.cover,
-                title: GFListTile(
-                    color: Colors.red,
-                    title: Text('Datos Generales',
-                        style: TextStyle(
-                            fontSize: 18.0,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white)),
-                    icon: FaIcon(FontAwesomeIcons.user, color: Colors.white)),
-                content: _formParteDos(),
-              ),
-              GFCard(
-                elevation: 6.0,
-                boxFit: BoxFit.cover,
-                title: GFListTile(
-                    color: Colors.red,
-                    title: Text('Datos Referenciales',
-                        style: TextStyle(
-                            fontSize: 18.0,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white)),
-                    icon: FaIcon(FontAwesomeIcons.user, color: Colors.white)),
-                content: _formParteTres(),
-              ),
-              GFCard(
-                elevation: 6.0,
-                boxFit: BoxFit.cover,
-                title: GFListTile(
-                    color: Colors.red,
-                    title: Text(
-                        'En caso de ser menor de edad complete los campos ',
-                        style: TextStyle(
-                            fontSize: 18.0,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white)),
-                    icon: FaIcon(FontAwesomeIcons.user, color: Colors.white)),
-                content: _formParteCuatro(widget.paciente),
-              ),
-            ],
+            ),
           ),
         ),
-      ),
-    );
+        onWillPop: () async => false);
   } // fin build
 
   String validaTexto(String value) {

@@ -1,3 +1,4 @@
+import 'package:appsam/src/widgets/drawer.dart';
 import 'package:flutter/material.dart';
 
 import 'package:appsam/src/pages/asistentes/tab_formeditar.dart';
@@ -20,13 +21,16 @@ class _EditarAsistentesPageState extends State<EditarAsistentesPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Editar Asistente'),
-      ),
-      body: SingleChildScrollView(
-          child: (_currentIndex == 0) ? FormEditarPage() : Container()),
-    );
+    return WillPopScope(
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text('Editar Asistente'),
+          ),
+          drawer: MenuWidget(),
+          body: SingleChildScrollView(
+              child: (_currentIndex == 0) ? FormEditarPage() : Container()),
+        ),
+        onWillPop: () async => false);
   }
 
   void onTabTapped(int index) {
