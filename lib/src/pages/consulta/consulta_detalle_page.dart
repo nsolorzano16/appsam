@@ -9,12 +9,14 @@ import 'package:appsam/src/models/habitos_model.dart';
 import 'package:appsam/src/models/historialGinecoObstetra_model.dart';
 import 'package:appsam/src/models/notas_model.dart';
 import 'package:appsam/src/models/paginados/preclinica_paginadoVM.dart';
-import 'package:appsam/src/pages/consulta/menuConsulta_page.dart';
+
 import 'package:appsam/src/utils/utils.dart';
 import 'package:appsam/src/widgets/drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:getflutter/getflutter.dart';
 import 'package:intl/intl.dart';
+
+// TODO: avisar que la preclinica se va a poner en atendida
 
 class ConsultaDetallePage extends StatefulWidget {
   static final String routeName = 'consulta_detalle';
@@ -114,7 +116,8 @@ class _ConsultaDetallePageState extends State<ConsultaDetallePage> {
                           ? _AccordionHabitos(
                               habitos: _consultaDetalle.habitos,
                               estiloDatos: estiloDatos,
-                              estiloSubt: _estiloSubt)
+                              estiloSubt: _estiloSubt,
+                            )
                           : Container(),
                       (_consultaDetalle.historialGinecoObstetra != null)
                           ? _AccordionHistorialGinecoObstetra(
@@ -151,8 +154,7 @@ class _ConsultaDetallePageState extends State<ConsultaDetallePage> {
                       (_consultaDetalle.notas.length != 0)
                           ? _AccordionNotas(
                               notas: _consultaDetalle.notas,
-                              estiloDatos: estiloDatos,
-                              estiloSubt: _estiloSubt)
+                              estiloDatos: estiloDatos)
                           : Container(),
                     ],
                   ),
@@ -409,7 +411,7 @@ class _AccordionPreclinica extends StatelessWidget {
                 Column(
                   children: <Widget>[
                     Text(
-                      _preclinica.peso.toString(),
+                      '${_preclinica.peso}',
                       style: estiloDatos,
                     ),
                     Text(
@@ -422,7 +424,7 @@ class _AccordionPreclinica extends StatelessWidget {
                 Column(
                   children: <Widget>[
                     Text(
-                      _preclinica.altura.toString(),
+                      '${_preclinica.altura}',
                       style: estiloDatos,
                     ),
                     Text(
@@ -435,7 +437,7 @@ class _AccordionPreclinica extends StatelessWidget {
                 Column(
                   children: <Widget>[
                     Text(
-                      _preclinica.frecuenciaRespiratoria.toString(),
+                      '${_preclinica.frecuenciaRespiratoria}',
                       style: estiloDatos,
                     ),
                     Text(
@@ -450,7 +452,7 @@ class _AccordionPreclinica extends StatelessWidget {
                 Column(
                   children: <Widget>[
                     Text(
-                      _preclinica.presionSistolica.toString(),
+                      '${_preclinica.presionSistolica}',
                       style: estiloDatos,
                     ),
                     Text(
@@ -463,7 +465,7 @@ class _AccordionPreclinica extends StatelessWidget {
                 Column(
                   children: <Widget>[
                     Text(
-                      _preclinica.presionDiastolica.toString(),
+                      '${_preclinica.presionDiastolica}',
                       style: estiloDatos,
                     ),
                     Text(
@@ -476,7 +478,7 @@ class _AccordionPreclinica extends StatelessWidget {
                 Column(
                   children: <Widget>[
                     Text(
-                      _preclinica.ritmoCardiaco.toString(),
+                      '${_preclinica.ritmoCardiaco}',
                       style: estiloDatos,
                     ),
                     Text(
@@ -496,7 +498,7 @@ class _AccordionPreclinica extends StatelessWidget {
                 Column(
                   children: <Widget>[
                     Text(
-                      _preclinica.imc.toString(),
+                      '${_preclinica.imc}',
                       style: estiloDatos,
                     ),
                     Text(
@@ -508,9 +510,7 @@ class _AccordionPreclinica extends StatelessWidget {
                 Column(
                   children: <Widget>[
                     Text(
-                      (_preclinica.pesoDescripcion != null)
-                          ? _preclinica.pesoDescripcion.toString()
-                          : '****',
+                      validaNulo(_preclinica.pesoDescripcion),
                       style: estiloDatos,
                     ),
                     Text(
@@ -528,7 +528,7 @@ class _AccordionPreclinica extends StatelessWidget {
             style: _estiloSubt,
           ),
           Text(
-            _preclinica.notas,
+            validaNulo(_preclinica.notas),
             textAlign: TextAlign.justify,
           )
         ],
@@ -708,6 +708,7 @@ class _AccordionHabitos extends StatelessWidget {
           SizedBox(
             height: 8.0,
           ),
+          Divider(),
           Row(
             children: <Widget>[
               Text(
@@ -740,7 +741,17 @@ class _AccordionHabitos extends StatelessWidget {
                     )
                   : Text('')
             ],
-          )
+          ),
+          Divider(),
+          Text(
+            'Notas:',
+            style: _estiloSubt,
+          ),
+          Text(
+            validaNulo(_habitos.notas),
+            textAlign: TextAlign.justify,
+            style: estiloDatos,
+          ),
         ],
       )),
     );
@@ -966,12 +977,10 @@ class _AccordionFarmacos extends StatelessWidget {
     @required this.estiloDatos,
     @required TextStyle estiloSubt,
   })  : _farmacos = farmacos,
-        _estiloSubt = estiloSubt,
         super(key: key);
 
   final List<FarmacosUsoActual> _farmacos;
   final TextStyle estiloDatos;
-  final TextStyle _estiloSubt;
 
   @override
   Widget build(BuildContext context) {
@@ -1574,12 +1583,10 @@ class _AccordionDiagnosticos extends StatelessWidget {
     @required this.estiloDatos,
     @required TextStyle estiloSubt,
   })  : _diagnosticos = diagnosticos,
-        _estiloSubt = estiloSubt,
         super(key: key);
 
   final List<Diagnosticos> _diagnosticos;
   final TextStyle estiloDatos;
-  final TextStyle _estiloSubt;
 
   @override
   Widget build(BuildContext context) {
@@ -1639,14 +1646,11 @@ class _AccordionNotas extends StatelessWidget {
     Key key,
     @required List<Notas> notas,
     @required this.estiloDatos,
-    @required TextStyle estiloSubt,
   })  : _notas = notas,
-        _estiloSubt = estiloSubt,
         super(key: key);
 
   final List<Notas> _notas;
   final TextStyle estiloDatos;
-  final TextStyle _estiloSubt;
 
   @override
   Widget build(BuildContext context) {

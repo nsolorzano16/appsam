@@ -1,3 +1,4 @@
+import 'package:appsam/src/blocs/habitos_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:appsam/src/blocs/asistentes_bloc.dart';
 import 'package:appsam/src/blocs/asistentes_bloc/create_edit_asistentes.dart';
@@ -17,6 +18,7 @@ class Provider extends InheritedWidget {
   final _preclinicaBloc = new PreclinicaBloc();
   final blocTheme = new ThemeBloc();
   final _consultaBloc = new ConsultaBloc();
+  final _habitosBloc = new HabitosBloc();
 
   static Provider _instancia;
 
@@ -74,5 +76,9 @@ class Provider extends InheritedWidget {
 
   static ConsultaBloc consultaBloc(BuildContext context) {
     return context.dependOnInheritedWidgetOfExactType<Provider>()._consultaBloc;
+  }
+
+  static HabitosBloc habitosBloc(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<Provider>()._habitosBloc;
   }
 }

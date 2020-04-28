@@ -1,4 +1,3 @@
-import 'package:appsam/src/pages/consulta/menuConsulta_page.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:getflutter/getflutter.dart';
@@ -26,8 +25,6 @@ class _CrearAntecedentesPageState extends State<CrearAntecedentesPage> {
   final _antecedentesBloc = new AntecedentesFamiliaresBloc();
   final UsuarioModel _usuario =
       usuarioModelFromJson(StorageUtil.getString('usuarioGlobal'));
-  bool quieroEditar = true;
-  String labelBoton = 'Guardar';
 
   final _antPatologicosFamiCtrl = new TextEditingController();
   final _antPatologicosPersCtrl = new TextEditingController();
@@ -35,16 +32,13 @@ class _CrearAntecedentesPageState extends State<CrearAntecedentesPage> {
   final _antNoPatologicosPersCtrl = new TextEditingController();
   final _antInmunoAlergicosCtrl = new TextEditingController();
 
+  Future<AntecedentesFamiliaresPersonales> _antecedentesFuture;
+  String labelBoton = 'Guardar';
+
   @override
   void initState() {
     super.initState();
     StorageUtil.putString('ultimaPagina', CrearAntecedentesPage.routeName);
-    _antecedentes.antecedentesFamiliaresPersonalesId = 0;
-    _antecedentes.activo = true;
-    _antecedentes.creadoPor = _usuario.userName;
-    _antecedentes.creadoFecha = DateTime.now();
-    _antecedentes.modificadoPor = _usuario.userName;
-    _antecedentes.modificadoFecha = DateTime.now();
   }
 
   @override
@@ -61,9 +55,9 @@ class _CrearAntecedentesPageState extends State<CrearAntecedentesPage> {
   Widget build(BuildContext context) {
     final PreclinicaViewModel _preclinica =
         ModalRoute.of(context).settings.arguments;
-    _antecedentes.pacienteId = _preclinica.pacienteId;
-    _antecedentes.doctorId = _preclinica.doctorId;
-    _antecedentes.preclinicaId = _preclinica.preclinicaId;
+
+    _antecedentesFuture = _antecedentesBloc.getAntecedente(
+        _preclinica.pacienteId, _preclinica.doctorId);
 
     return WillPopScope(
         child: Scaffold(
@@ -81,109 +75,88 @@ class _CrearAntecedentesPageState extends State<CrearAntecedentesPage> {
             ],
           ),
           drawer: MenuWidget(),
-          body: SingleChildScrollView(
-            child: Column(
-              children: <Widget>[
-                GFCard(
-                  elevation: 6.0,
-                  title: GFListTile(
-                    title: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: <Widget>[
-                        Text(
-                          'Antecedentes Personales',
-                          style: TextStyle(fontSize: 16.0),
-                        ),
-                        IconButton(
-                            icon: Icon(Icons.edit,
-                                color: Theme.of(context).primaryColor),
-                            onPressed: () {
-                              if (!quieroEditar) {
-                                setState(() {
-                                  quieroEditar = true;
-                                  labelBoton = 'Editar';
-                                });
-                              }
-                            }),
-                        IconButton(
-                          icon: Icon(
-                            Icons.delete,
-                            color: Theme.of(context).primaryColor,
-                          ),
-                          onPressed: (!quieroEditar)
-                              ? () => confirmAction(
-                                  context, 'Desea eliminar el registro')
-                              : () {},
-                        )
-                      ],
-                    ),
-                  ),
-                  content: Form(
-                      key: _formkey,
-                      child: Column(
-                        children: <Widget>[
-                          _campoAntecedentesPatologicosFamiliares(),
-                          _campoAntecedentesPatologicosPersonales(),
-                          _campoAntecedentesNoPatologicosFamiliares(),
-                          _campoAntecedentesNoPatologicosPersonales(),
-                          _campoAntecedentesInmunoAlergicosPersonales(),
-                          _crearBotones(context),
-                        ],
-                      )),
-                )
-              ],
-            ),
+          body: FutureBuilder(
+            future: _antecedentesFuture,
+            builder: (BuildContext context,
+                AsyncSnapshot<AntecedentesFamiliaresPersonales> snapshot) {
+              final x = snapshot.data;
+              if (snapshot.connectionState == ConnectionState.done) {
+                if (x != null) {
+                  _antecedentes.pacienteId = x.pacienteId;
+                  _antecedentes.doctorId = x.doctorId;
+                  _antecedentes.preclinicaId = x.preclinicaId;
+                  _antecedentes.antecedentesFamiliaresPersonalesId =
+                      x.antecedentesFamiliaresPersonalesId;
+                  _antecedentes.activo = x.activo;
+                  _antecedentes.creadoPor = x.creadoPor;
+                  _antecedentes.creadoFecha = x.creadoFecha;
+                  _antecedentes.modificadoPor = _usuario.userName;
+                  _antecedentes.modificadoFecha = DateTime.now();
+                  _antPatologicosFamiCtrl.text =
+                      x.antecedentesPatologicosFamiliares;
+                  _antPatologicosPersCtrl.text =
+                      x.antecedentesPatologicosPersonales;
+                  _antNoPatologicosFamiCtrl.text =
+                      x.antecedentesNoPatologicosFamiliares;
+                  _antNoPatologicosPersCtrl.text =
+                      x.antecedentesNoPatologicosPersonales;
+                  _antInmunoAlergicosCtrl.text =
+                      x.antecedentesInmunoAlergicosPersonales;
+                  return _antecedentesForm(context);
+                } else {
+                  _antecedentes.pacienteId = _preclinica.pacienteId;
+                  _antecedentes.doctorId = _preclinica.doctorId;
+                  _antecedentes.preclinicaId = _preclinica.preclinicaId;
+                  _antecedentes.antecedentesFamiliaresPersonalesId = 0;
+                  _antecedentes.activo = true;
+                  _antecedentes.creadoPor = _usuario.userName;
+                  _antecedentes.creadoFecha = DateTime.now();
+                  _antecedentes.modificadoPor = _usuario.userName;
+                  _antecedentes.modificadoFecha = DateTime.now();
+                  return _antecedentesForm(context);
+                }
+              } else {
+                return loadingIndicator(context);
+              }
+            },
           ),
         ),
         onWillPop: () async => false);
   }
 
-  void _desactivar() async {
-    if (_antecedentes.antecedentesFamiliaresPersonalesId != 0) {
-      final ProgressDialog _pr = new ProgressDialog(
-        context,
-        type: ProgressDialogType.Normal,
-        isDismissible: false,
-        showLogs: false,
-      );
-      _pr.update(
-        progress: 50.0,
-        message: "Espere...",
-        progressWidget: Container(
-            padding: EdgeInsets.all(8.0), child: CircularProgressIndicator()),
-        maxProgress: 100.0,
-        progressTextStyle: TextStyle(
-            color: Colors.black, fontSize: 13.0, fontWeight: FontWeight.w400),
-        messageTextStyle: TextStyle(
-            color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600),
-      );
-      await _pr.show();
-      AntecedentesFamiliaresPersonales _antecedentesGuardado;
-      _antecedentes.activo = false;
-      _antecedentesGuardado =
-          await _antecedentesBloc.updateAntecedentes(_antecedentes);
-      if (_antecedentesGuardado != null) {
-        _pr.hide();
-        mostrarFlushBar(context, Colors.green, 'Info', 'Datos Guardados', 2,
-            FlushbarPosition.TOP, Icons.info, Colors.black);
-        _antecedentes.antecedentesFamiliaresPersonalesId = 0;
-        _antecedentes.activo = true;
-        _antPatologicosFamiCtrl.text = '';
-        _antPatologicosPersCtrl.text = '';
-        _antNoPatologicosFamiCtrl.text = '';
-        _antNoPatologicosPersCtrl.text = '';
-        _antInmunoAlergicosCtrl.text = '';
-        setState(() {
-          quieroEditar = true;
-          labelBoton = 'Guardar';
-        });
-      } else {
-        mostrarFlushBar(context, Colors.red, 'Info', 'Ha ocurrido un error', 2,
-            FlushbarPosition.TOP, Icons.info, Colors.white);
-      }
-    } else {
-      print('nada');
-    }
+  SingleChildScrollView _antecedentesForm(BuildContext context) {
+    return SingleChildScrollView(
+      child: Column(
+        children: <Widget>[
+          GFCard(
+            elevation: 6.0,
+            title: GFListTile(
+              title: Row(
+                mainAxisSize: MainAxisSize.max,
+                children: <Widget>[
+                  Text(
+                    'Antecedentes Personales',
+                    style: TextStyle(fontSize: 16.0),
+                  ),
+                ],
+              ),
+            ),
+            content: Form(
+                key: _formkey,
+                child: Column(
+                  children: <Widget>[
+                    _campoAntecedentesPatologicosFamiliares(),
+                    _campoAntecedentesPatologicosPersonales(),
+                    _campoAntecedentesNoPatologicosFamiliares(),
+                    _campoAntecedentesNoPatologicosPersonales(),
+                    _campoAntecedentesInmunoAlergicosPersonales(),
+                    _crearBotones(context),
+                  ],
+                )),
+          )
+        ],
+      ),
+    );
   }
 
   Widget _campoAntecedentesPatologicosFamiliares() {
@@ -197,7 +170,6 @@ class _CrearAntecedentesPageState extends State<CrearAntecedentesPage> {
         keyboardType: TextInputType.text,
         decoration: inputsDecorations(
             'Antecedentes Patologicos Familiares', Icons.note),
-        enabled: quieroEditar,
       ),
     );
   }
@@ -213,7 +185,6 @@ class _CrearAntecedentesPageState extends State<CrearAntecedentesPage> {
         keyboardType: TextInputType.text,
         decoration: inputsDecorations(
             'Antecedentes Patologicos Personales', Icons.note),
-        enabled: quieroEditar,
       ),
     );
   }
@@ -229,7 +200,6 @@ class _CrearAntecedentesPageState extends State<CrearAntecedentesPage> {
         keyboardType: TextInputType.text,
         decoration: inputsDecorations(
             'Antecedentes No Patologicos Familiares', Icons.note),
-        enabled: quieroEditar,
       ),
     );
   }
@@ -245,7 +215,6 @@ class _CrearAntecedentesPageState extends State<CrearAntecedentesPage> {
         keyboardType: TextInputType.text,
         decoration: inputsDecorations(
             'Antecedentes No Patologicos Personales', Icons.note),
-        enabled: quieroEditar,
       ),
     );
   }
@@ -261,7 +230,6 @@ class _CrearAntecedentesPageState extends State<CrearAntecedentesPage> {
         keyboardType: TextInputType.text,
         decoration:
             inputsDecorations('Antecedentes Inmuno Alergicos', Icons.note),
-        enabled: quieroEditar,
       ),
     );
   }
@@ -272,7 +240,7 @@ class _CrearAntecedentesPageState extends State<CrearAntecedentesPage> {
       children: <Widget>[
         RaisedButton.icon(
             color: Theme.of(context).primaryColor,
-            onPressed: (quieroEditar) ? () => _guardar(context) : null,
+            onPressed: () => _guardar(context),
             textColor: Colors.white,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20.0)),
@@ -344,7 +312,6 @@ class _CrearAntecedentesPageState extends State<CrearAntecedentesPage> {
         _antecedentesGuardado.modificadoFecha =
             _antecedentesGuardado.modificadoFecha;
         setState(() {
-          quieroEditar = false;
           labelBoton = 'Editar';
         });
       } else {
@@ -352,91 +319,5 @@ class _CrearAntecedentesPageState extends State<CrearAntecedentesPage> {
             FlushbarPosition.TOP, Icons.info, Colors.white);
       }
     }
-  }
-
-  void confirmAction(
-    BuildContext context,
-    String texto,
-  ) {
-    // set up the buttons
-    Widget cancelButton = FlatButton(
-      child: Text('Cancelar'),
-      onPressed: () {
-        Navigator.pop(context);
-      },
-    );
-    Widget continueButton = FlatButton(
-      child: Text('Ok'),
-      onPressed: () {
-        Navigator.pop(context);
-        _desactivar();
-      },
-    );
-
-    // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-      title: Text("Información"),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Text(texto),
-          Text('Esta acción no se podra deshacer.')
-        ],
-      ),
-      elevation: 24.0,
-      actions: [
-        cancelButton,
-        continueButton,
-      ],
-    );
-
-    // show the dialog
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return alert;
-        },
-        barrierDismissible: false);
-  }
-
-  showConfirmDialog(
-      BuildContext context, String ruta, PreclinicaViewModel args) {
-    // set up the buttons
-    Widget cancelButton = FlatButton(
-      child: Text('Cancelar'),
-      onPressed: () {
-        Navigator.pop(context);
-      },
-    );
-    Widget continueButton = FlatButton(
-      child: Text('Ok'),
-      onPressed: () {
-        Navigator.pushReplacementNamed(context, ruta, arguments: args);
-      },
-    );
-
-    // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-      title: Text("Información"),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Text('Desea volver?'),
-        ],
-      ),
-      elevation: 24.0,
-      actions: [
-        cancelButton,
-        continueButton,
-      ],
-    );
-
-    // show the dialog
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return alert;
-        },
-        barrierDismissible: false);
   }
 }

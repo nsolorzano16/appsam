@@ -51,4 +51,30 @@ class HistorialGinecoObstetraService {
 
     return null;
   }
+
+  Future<HistorialGinecoObstetra> getHistorialGinecoObstetra(
+      int pacienteId, int doctorId) async {
+    final String token = StorageUtil.getString('token');
+    final headers = {
+      "content-type": "application/json",
+      "accept": "application/json",
+      'authorization': 'Bearer $token',
+    };
+    final url =
+        '$_apiURL/api/HistorialGinecoObstetra/pacienteId/$pacienteId/doctorId/$doctorId';
+
+    //print(usuarioModelToJson(usuario));
+    final resp = await http.get(
+      url,
+      headers: headers,
+    );
+    final decodedData = json.decode(resp.body);
+
+    if (resp.statusCode == 200 && decodedData != null) {
+      final historial = new HistorialGinecoObstetra.fromJson(decodedData);
+      return historial;
+    }
+
+    return null;
+  }
 }

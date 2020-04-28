@@ -1,4 +1,3 @@
-import 'package:appsam/src/pages/consulta/menuConsulta_page.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:getflutter/getflutter.dart';

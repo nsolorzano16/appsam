@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:math';
 
 import 'package:flushbar/flushbar.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 bool isNumeric(String s) {
   if (s.isEmpty) return false;
@@ -34,6 +35,14 @@ String validaNulo(String valor) {
   } else {
     return '';
   }
+}
+
+Widget loadingIndicator(BuildContext context) {
+  return Center(
+    child: SpinKitWave(
+      color: Theme.of(context).primaryColor,
+    ),
+  );
 }
 
 void mostrarFlushBar(

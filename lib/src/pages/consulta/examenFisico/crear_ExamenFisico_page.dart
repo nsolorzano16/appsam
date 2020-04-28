@@ -1025,7 +1025,6 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
   }
 
   void obtenerValores() {
-    // TODO: revisar que esten todos los campos
     _examenFisico.aspectoGeneral = _aspectoGeneralController.text;
     _examenFisico.edadAparente = (_edadAparenteController.text.isEmpty)
         ? null

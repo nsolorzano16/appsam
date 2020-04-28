@@ -1,5 +1,5 @@
 import 'package:appsam/src/blocs/preclinica_bloc.dart';
-import 'package:appsam/src/pages/consulta/menuConsulta_page.dart';
+
 import 'package:appsam/src/utils/utils.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
