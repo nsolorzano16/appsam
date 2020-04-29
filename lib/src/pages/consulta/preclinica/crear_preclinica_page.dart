@@ -303,7 +303,6 @@ class _CrearPreclinicaPageState extends State<CrearPreclinicaPage> {
     double pesoKg = _preclinica.peso / 2.2;
     double alturaMts = _preclinica.altura / 100;
 
-    _preclinica.altura = _preclinica.altura / 100;
     _preclinica.iMc = pesoKg / pow(alturaMts, 2);
 
     final bool resp = await bloc.addPreclinica(_preclinica);

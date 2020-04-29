@@ -53,7 +53,41 @@ class PreclinicaDetallePage extends StatelessWidget {
           ),
           floatingActionButton: FloatingActionButton(
             onPressed: () {
-              updatePreclinicaAndGoToDetalleConsulta(_preclinica, context);
+// set up the AlertDialog
+              AlertDialog alert = AlertDialog(
+                title: Text("Información"),
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Text(
+                      'Al confirmar esta acción la preclinica se cambiara a estado \"Atendida\"',
+                      textAlign: TextAlign.center,
+                    ),
+                    Text('Desea completar esta acción?'),
+                  ],
+                ),
+                elevation: 24.0,
+                actions: [
+                  FlatButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: Text('Cancelar')),
+                  FlatButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        updatePreclinicaAndGoToDetalleConsulta(
+                            _preclinica, context);
+                      },
+                      child: Text('Aceptar'))
+                ],
+              );
+
+              // show the dialog
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return alert;
+                  },
+                  barrierDismissible: false);
             },
             child: FaIcon(FontAwesomeIcons.notesMedical),
             backgroundColor: Theme.of(context).primaryColor,

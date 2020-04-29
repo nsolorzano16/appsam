@@ -9,11 +9,15 @@ import 'package:appsam/src/utils/utils.dart';
 import 'package:appsam/src/widgets/drawer.dart';
 import 'package:appsam/src/blocs/historialGineco_bloc.dart';
 import 'package:appsam/src/models/historialGinecoObstetra_model.dart';
-import 'package:appsam/src/models/usuario_model.dart';
 import 'package:appsam/src/utils/storage_util.dart';
 
 class CrearHistorialGinecoObstetraPage extends StatefulWidget {
   static final String routeName = 'crear_historial_gineco';
+  final HistorialGinecoObstetra historial;
+  final PreclinicaViewModel preclinica;
+
+  const CrearHistorialGinecoObstetraPage({this.historial, this.preclinica});
+
   @override
   _CrearHistorialGinecoObstetraPageState createState() =>
       _CrearHistorialGinecoObstetraPageState();
@@ -22,11 +26,9 @@ class CrearHistorialGinecoObstetraPage extends StatefulWidget {
 class _CrearHistorialGinecoObstetraPageState
     extends State<CrearHistorialGinecoObstetraPage> {
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
-  final HistorialGinecoObstetra _historial = new HistorialGinecoObstetra();
-  final UsuarioModel _usuario =
-      usuarioModelFromJson(StorageUtil.getString('usuarioGlobal'));
+
   final _historialBloc = new HistorialGinecoObstetraBloc();
-  bool quieroEditar = true;
+
   String labelBoton = 'Guardar';
   DateTime pickedMenarquia;
   DateTime pickedFur;
@@ -45,224 +47,179 @@ class _CrearHistorialGinecoObstetraPageState
   TextEditingController _anticonceptivoController = new TextEditingController();
   TextEditingController _vacunacionController = new TextEditingController();
   TextEditingController _notasController = new TextEditingController();
+
   @override
   void initState() {
     super.initState();
     StorageUtil.putString(
         'ultimaPagina', CrearHistorialGinecoObstetraPage.routeName);
-    _historial.historialId = 0;
-    _historial.activo = true;
-    _historial.creadoPor = _usuario.userName;
-    _historial.creadoFecha = DateTime.now();
-    _historial.modificadoPor = _usuario.userName;
-    _historial.modificadoFecha = DateTime.now();
+
+    var format = DateFormat('dd/MM/yyyy');
+
+    _menarquiaController.text = (widget.historial.menarquia != null)
+        ? format.format(widget.historial.menarquia)
+        : '';
+    _furController.text = (widget.historial.fur != null)
+        ? format.format(widget.historial.fur)
+        : '';
+    _menopausiaController.text = (widget.historial.fechaMenopausia != null)
+        ? format.format(widget.historial.fechaMenopausia)
+        : '';
+
+    _sgController.text =
+        (widget.historial.sg != null) ? widget.historial.sg : '';
+    _gController.text = (widget.historial.g != null) ? widget.historial.g : '';
+    _pController.text = (widget.historial.p != null) ? widget.historial.p : '';
+    _cController.text = (widget.historial.c != null) ? widget.historial.c : '';
+    _hvController.text =
+        (widget.historial.hv != null) ? widget.historial.hv : '';
+    _fppController.text =
+        (widget.historial.fpp != null) ? widget.historial.fpp : '';
+    _ucController.text =
+        (widget.historial.uc != null) ? widget.historial.uc : '';
+    _anticonceptivoController.text = (widget.historial.anticonceptivo != null)
+        ? widget.historial.anticonceptivo
+        : '';
+    _vacunacionController.text = (widget.historial.vacunacion != null)
+        ? widget.historial.vacunacion
+        : '';
+    _notasController.text =
+        (widget.historial.notas != null) ? widget.historial.notas : '';
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _menarquiaController.dispose();
+    _furController.dispose();
+    _sgController.dispose();
+    _gController.dispose();
+    _pController.dispose();
+    _cController.dispose();
+    _hvController.dispose();
+    _fppController.dispose();
+    _ucController.dispose();
+    _menopausiaController.dispose();
+    _anticonceptivoController.dispose();
+    _vacunacionController.dispose();
+    _notasController.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final PreclinicaViewModel _preclinica =
-        ModalRoute.of(context).settings.arguments;
-    _historial.pacienteId = _preclinica.pacienteId;
-    _historial.doctorId = _preclinica.doctorId;
-    _historial.preclinicaId = _preclinica.preclinicaId;
+    final PreclinicaViewModel _preclinica = widget.preclinica;
 
     return WillPopScope(
         child: Scaffold(
-          appBar: AppBar(
-            title: Text('Consulta'),
-            actions: <Widget>[
-              IconButton(
-                  icon: Icon(
-                    Icons.arrow_back_ios,
-                    color: Colors.white,
-                  ),
-                  onPressed: () => Navigator.pushReplacementNamed(
-                      context, 'menu_consulta',
-                      arguments: _preclinica))
-            ],
-          ),
-          drawer: MenuWidget(),
-          body: SingleChildScrollView(
-            child: Column(
-              children: <Widget>[
-                GFCard(
-                  elevation: 6.0,
-                  title: GFListTile(
-                    title: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: <Widget>[
-                        Text(
-                          'Historial Gineco Obstetra',
-                          style: TextStyle(fontSize: 16.0),
-                        ),
-                        IconButton(
-                            icon: Icon(
-                              Icons.edit,
-                              color: Theme.of(context).primaryColor,
-                            ),
-                            onPressed: () {
-                              if (!quieroEditar) {
-                                setState(() {
-                                  quieroEditar = true;
-                                  labelBoton = 'Editar';
-                                });
-                              }
-                            }),
-                        IconButton(
-                          icon: Icon(
-                            Icons.delete,
-                            color: Theme.of(context).primaryColor,
-                          ),
-                          onPressed: (!quieroEditar)
-                              ? () => confirmAction(
-                                  context, 'Desea eliminar el registro')
-                              : () {},
-                        )
-                      ],
+            appBar: AppBar(
+              title: Text('Consulta'),
+              actions: <Widget>[
+                IconButton(
+                    icon: Icon(
+                      Icons.arrow_back_ios,
+                      color: Colors.white,
                     ),
-                  ),
-                  content: Form(
-                      key: _formkey,
-                      child: Column(
-                        children: <Widget>[
-                          Row(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Expanded(child: _campoMenarquia(context)),
-                              Container(
-                                  margin: EdgeInsets.only(bottom: 25.0),
-                                  child: IconButton(
-                                      icon: Icon(
-                                        Icons.delete,
-                                        color: Theme.of(context).primaryColor,
-                                      ),
-                                      onPressed: (quieroEditar)
-                                          ? () {
-                                              _menarquiaController.text = '';
-                                              pickedMenarquia = null;
-                                              _historial.menarquia = null;
-                                              setState(() {});
-                                            }
-                                          : null))
-                            ],
-                          ),
-                          Row(
-                            children: <Widget>[
-                              Expanded(child: _campoFur(context)),
-                              Container(
-                                  margin: EdgeInsets.only(bottom: 25.0),
-                                  child: IconButton(
-                                      icon: Icon(
-                                        Icons.delete,
-                                        color: Theme.of(context).primaryColor,
-                                      ),
-                                      onPressed: (quieroEditar)
-                                          ? () {
-                                              _furController.text = '';
-                                              pickedFur = null;
-                                              _historial.fur = null;
-                                              setState(() {});
-                                            }
-                                          : null))
-                            ],
-                          ),
-                          _campoSG(),
-                          _campoG(),
-                          _campoP(),
-                          _campoC(),
-                          _campoHV(),
-                          _campoFPP(),
-                          _campoUC(),
-                          Row(
-                            children: <Widget>[
-                              Expanded(child: _campoFechaMenopausia()),
-                              Container(
-                                  margin: EdgeInsets.only(bottom: 25.0),
-                                  child: IconButton(
-                                      icon: Icon(
-                                        Icons.delete,
-                                        color: Theme.of(context).primaryColor,
-                                      ),
-                                      onPressed: (quieroEditar)
-                                          ? () {
-                                              _menopausiaController.text = '';
-                                              pickedMenopausia = null;
-                                              _historial.fechaMenopausia = null;
-                                              setState(() {});
-                                            }
-                                          : null))
-                            ],
-                          ),
-                          _campoAnticonceptivo(),
-                          _campoVacunacion(),
-                          _campoNotas(),
-                          _crearBotones(context)
-                        ],
-                      )),
-                ),
+                    onPressed: () => Navigator.pushReplacementNamed(
+                        context, 'menu_consulta',
+                        arguments: _preclinica))
               ],
             ),
-          ),
-        ),
+            drawer: MenuWidget(),
+            body: _historialForm(context)),
         onWillPop: () async => false);
   }
 
-  void _desactivar() async {
-    if (_historial.historialId != 0) {
-      final ProgressDialog _pr = new ProgressDialog(
-        context,
-        type: ProgressDialogType.Normal,
-        isDismissible: false,
-        showLogs: false,
-      );
-      _pr.update(
-        progress: 50.0,
-        message: "Espere...",
-        progressWidget: Container(
-            padding: EdgeInsets.all(8.0), child: CircularProgressIndicator()),
-        maxProgress: 100.0,
-        progressTextStyle: TextStyle(
-            color: Colors.black, fontSize: 13.0, fontWeight: FontWeight.w400),
-        messageTextStyle: TextStyle(
-            color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600),
-      );
-      await _pr.show();
-      HistorialGinecoObstetra _historialGuardado;
-      _historial.activo = false;
-      _historialGuardado = await _historialBloc.updateHistorial(_historial);
-      if (_historialGuardado != null) {
-        _pr.hide();
-        mostrarFlushBar(context, Colors.green, 'Info', 'Datos Guardados', 2,
-            FlushbarPosition.TOP, Icons.info, Colors.black);
-        _historial.historialId = 0;
-        _historial.activo = true;
-        // limpia controllers
-        _menarquiaController.text = '';
-        _furController.text = '';
-        _sgController.text = '';
-        _gController.text = '';
-        _pController.text = '';
-        _cController.text = '';
-        _hvController.text = '';
-        _fppController.text = '';
-        _ucController.text = '';
-        _menopausiaController.text = '';
-        _anticonceptivoController.text = '';
-        _vacunacionController.text = '';
-        _notasController.text = '';
-
-        setState(() {
-          quieroEditar = true;
-          labelBoton = 'Guardar';
-        });
-      } else {
-        mostrarFlushBar(context, Colors.red, 'Info', 'Ha ocurrido un error', 2,
-            FlushbarPosition.TOP, Icons.info, Colors.white);
-      }
-    } else {
-      print('nada');
-    }
+  SingleChildScrollView _historialForm(BuildContext context) {
+    return SingleChildScrollView(
+      child: Column(
+        children: <Widget>[
+          GFCard(
+            elevation: 6.0,
+            title: GFListTile(
+              title: Row(
+                mainAxisSize: MainAxisSize.max,
+                children: <Widget>[
+                  Text(
+                    'Historial Gineco Obstetra',
+                    style: TextStyle(fontSize: 16.0),
+                  ),
+                ],
+              ),
+            ),
+            content: Form(
+                key: _formkey,
+                child: Column(
+                  children: <Widget>[
+                    Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Expanded(child: _campoMenarquia(context)),
+                        Container(
+                            margin: EdgeInsets.only(bottom: 25.0),
+                            child: IconButton(
+                                icon: Icon(
+                                  Icons.delete,
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                                onPressed: () {
+                                  _menarquiaController.text = '';
+                                  pickedMenarquia = null;
+                                  widget.historial.menarquia = null;
+                                }))
+                      ],
+                    ),
+                    Row(
+                      children: <Widget>[
+                        Expanded(child: _campoFur(context)),
+                        Container(
+                            margin: EdgeInsets.only(bottom: 25.0),
+                            child: IconButton(
+                                icon: Icon(
+                                  Icons.delete,
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                                onPressed: () {
+                                  _furController.text = '';
+                                  pickedFur = null;
+                                  widget.historial.fur = null;
+                                }))
+                      ],
+                    ),
+                    _campoSG(),
+                    _campoG(),
+                    _campoP(),
+                    _campoC(),
+                    _campoHV(),
+                    _campoFPP(),
+                    _campoUC(),
+                    Row(
+                      children: <Widget>[
+                        Expanded(child: _campoFechaMenopausia()),
+                        Container(
+                            margin: EdgeInsets.only(bottom: 25.0),
+                            child: IconButton(
+                                icon: Icon(
+                                  Icons.delete,
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                                onPressed: () {
+                                  _menopausiaController.text = '';
+                                  pickedMenopausia = null;
+                                  widget.historial.fechaMenopausia = null;
+                                }))
+                      ],
+                    ),
+                    _campoAnticonceptivo(),
+                    _campoVacunacion(),
+                    _campoNotas(),
+                    _crearBotones(context)
+                  ],
+                )),
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _campoMenarquia(BuildContext context) {
@@ -284,7 +241,6 @@ class _CrearHistorialGinecoObstetraPageState
             helperText: '',
             hintText: '',
             isDense: true),
-        enabled: quieroEditar,
         onTap: () {
           FocusScope.of(context).requestFocus(new FocusNode());
           selectDateMenarquia(context);
@@ -303,9 +259,8 @@ class _CrearHistorialGinecoObstetraPageState
 
     if (pickedMenarquia != null) {
       var format = DateFormat('dd/MM/yyyy');
-      _historial.menarquia = pickedMenarquia;
+      widget.historial.menarquia = pickedMenarquia;
       _menarquiaController.text = format.format(pickedMenarquia);
-      setState(() {});
     }
   }
 
@@ -316,7 +271,6 @@ class _CrearHistorialGinecoObstetraPageState
         enableInteractiveSelection: false,
         controller: _furController,
         decoration: inputsDecorations('Fur', Icons.calendar_today),
-        enabled: quieroEditar,
         onTap: () {
           FocusScope.of(context).requestFocus(new FocusNode());
           selectDateFur(context);
@@ -335,9 +289,8 @@ class _CrearHistorialGinecoObstetraPageState
 
     if (pickedFur != null) {
       var format = DateFormat('dd/MM/yyyy');
-      _historial.fur = pickedFur;
+      widget.historial.fur = pickedFur;
       _furController.text = format.format(pickedFur);
-      setState(() {});
     }
   }
 
@@ -346,10 +299,9 @@ class _CrearHistorialGinecoObstetraPageState
       padding: EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
         controller: _sgController,
-        onSaved: (value) => _historial.sg = value,
+        onSaved: (value) => widget.historial.sg = value,
         keyboardType: TextInputType.text,
         decoration: inputsDecorations('SG', Icons.insert_drive_file),
-        enabled: quieroEditar,
       ),
     );
   }
@@ -359,10 +311,9 @@ class _CrearHistorialGinecoObstetraPageState
       padding: EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
         controller: _gController,
-        onSaved: (value) => _historial.g = value,
+        onSaved: (value) => widget.historial.g = value,
         keyboardType: TextInputType.text,
         decoration: inputsDecorations('G', Icons.insert_drive_file),
-        enabled: quieroEditar,
       ),
     );
   }
@@ -372,10 +323,9 @@ class _CrearHistorialGinecoObstetraPageState
       padding: EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
         controller: _pController,
-        onSaved: (value) => _historial.p = value,
+        onSaved: (value) => widget.historial.p = value,
         keyboardType: TextInputType.text,
         decoration: inputsDecorations('P', Icons.insert_drive_file),
-        enabled: quieroEditar,
       ),
     );
   }
@@ -385,10 +335,9 @@ class _CrearHistorialGinecoObstetraPageState
       padding: EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
         controller: _cController,
-        onSaved: (value) => _historial.c = value,
+        onSaved: (value) => widget.historial.c = value,
         keyboardType: TextInputType.text,
         decoration: inputsDecorations('C', Icons.insert_drive_file),
-        enabled: quieroEditar,
       ),
     );
   }
@@ -398,10 +347,9 @@ class _CrearHistorialGinecoObstetraPageState
       padding: EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
         controller: _hvController,
-        onSaved: (value) => _historial.hv = value,
+        onSaved: (value) => widget.historial.hv = value,
         keyboardType: TextInputType.text,
         decoration: inputsDecorations('HV', Icons.insert_drive_file),
-        enabled: quieroEditar,
       ),
     );
   }
@@ -411,10 +359,9 @@ class _CrearHistorialGinecoObstetraPageState
       padding: EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
         controller: _fppController,
-        onSaved: (value) => _historial.fpp = value,
+        onSaved: (value) => widget.historial.fpp = value,
         keyboardType: TextInputType.text,
         decoration: inputsDecorations('FPP', Icons.insert_drive_file),
-        enabled: quieroEditar,
       ),
     );
   }
@@ -424,10 +371,9 @@ class _CrearHistorialGinecoObstetraPageState
       padding: EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
         controller: _ucController,
-        onSaved: (value) => _historial.uc = value,
+        onSaved: (value) => widget.historial.uc = value,
         keyboardType: TextInputType.text,
         decoration: inputsDecorations('UC', Icons.insert_drive_file),
-        enabled: quieroEditar,
       ),
     );
   }
@@ -438,7 +384,6 @@ class _CrearHistorialGinecoObstetraPageState
       child: TextFormField(
         enableInteractiveSelection: false,
         controller: _menopausiaController,
-        enabled: quieroEditar,
         decoration: inputsDecorations('Fecha Menopausia', Icons.calendar_today),
         onTap: () {
           FocusScope.of(context).requestFocus(new FocusNode());
@@ -458,9 +403,8 @@ class _CrearHistorialGinecoObstetraPageState
 
     if (pickedMenopausia != null) {
       var format = DateFormat('dd/MM/yyyy');
-      _historial.fechaMenopausia = pickedMenopausia;
+      widget.historial.fechaMenopausia = pickedMenopausia;
       _menopausiaController.text = format.format(pickedMenopausia);
-      setState(() {});
     }
   }
 
@@ -469,11 +413,10 @@ class _CrearHistorialGinecoObstetraPageState
       padding: EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
         controller: _anticonceptivoController,
-        onSaved: (value) => _historial.anticonceptivo = value,
+        onSaved: (value) => widget.historial.anticonceptivo = value,
         keyboardType: TextInputType.text,
         decoration:
             inputsDecorations('Anticonceptivo', Icons.insert_drive_file),
-        enabled: quieroEditar,
       ),
     );
   }
@@ -483,10 +426,9 @@ class _CrearHistorialGinecoObstetraPageState
       padding: EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
         controller: _vacunacionController,
-        onSaved: (value) => _historial.vacunacion = value,
+        onSaved: (value) => widget.historial.vacunacion = value,
         keyboardType: TextInputType.text,
         decoration: inputsDecorations('Vacunacion', Icons.insert_drive_file),
-        enabled: quieroEditar,
       ),
     );
   }
@@ -497,10 +439,9 @@ class _CrearHistorialGinecoObstetraPageState
       child: TextFormField(
         controller: _notasController,
         maxLines: 2,
-        onSaved: (value) => _historial.notas = value,
+        onSaved: (value) => widget.historial.notas = value,
         keyboardType: TextInputType.text,
         decoration: inputsDecorations('Notas Adicionales', Icons.note),
-        enabled: quieroEditar,
       ),
     );
   }
@@ -511,7 +452,7 @@ class _CrearHistorialGinecoObstetraPageState
       children: <Widget>[
         RaisedButton.icon(
             color: Theme.of(context).primaryColor,
-            onPressed: (quieroEditar) ? () => _guardar(context) : null,
+            onPressed: () => _guardar(context),
             textColor: Colors.white,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20.0)),
@@ -569,21 +510,22 @@ class _CrearHistorialGinecoObstetraPageState
       await _pr.show();
 
       HistorialGinecoObstetra _historialGuardado;
-      if (_historial.historialId == 0) {
+      if (widget.historial.historialId == 0) {
         //guarda
-        _historialGuardado = await _historialBloc.addHistorial(_historial);
+        _historialGuardado =
+            await _historialBloc.addHistorial(widget.historial);
       } else {
         // edita
-        _historialGuardado = await _historialBloc.updateHistorial(_historial);
+        _historialGuardado =
+            await _historialBloc.updateHistorial(widget.historial);
       }
 
       if (_historialGuardado != null) {
         _pr.hide();
         mostrarFlushBar(context, Colors.green, 'Info', 'Datos Guardados', 2,
             FlushbarPosition.TOP, Icons.info, Colors.black);
-        _historial.historialId = _historialGuardado.historialId;
+        widget.historial.historialId = _historialGuardado.historialId;
         setState(() {
-          quieroEditar = false;
           labelBoton = 'Editar';
         });
       } else {
@@ -591,92 +533,5 @@ class _CrearHistorialGinecoObstetraPageState
             FlushbarPosition.TOP, Icons.info, Colors.white);
       }
     }
-  }
-
-  void confirmAction(
-    BuildContext context,
-    String texto,
-  ) {
-    // set up the buttons
-    Widget cancelButton = FlatButton(
-      child: Text('Cancelar'),
-      onPressed: () {
-        Navigator.pop(context);
-      },
-    );
-    Widget continueButton = FlatButton(
-      child: Text('Ok'),
-      onPressed: () {
-        Navigator.pop(context);
-        _desactivar();
-      },
-    );
-
-    // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-      title: Text("Información"),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Text(texto),
-          Text('Esta acción no se podra deshacer.')
-        ],
-      ),
-      elevation: 24.0,
-      actions: [
-        cancelButton,
-        continueButton,
-      ],
-    );
-
-    // show the dialog
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return alert;
-        },
-        barrierDismissible: false);
-  }
-
-  showConfirmDialog(
-      BuildContext context, String ruta, PreclinicaViewModel args) {
-    // set up the buttons
-    Widget cancelButton = FlatButton(
-      child: Text('Cancelar'),
-      onPressed: () {
-        Navigator.pop(context);
-      },
-    );
-    Widget continueButton = FlatButton(
-      child: Text('Ok'),
-      onPressed: () {
-        Navigator.pushReplacementNamed(context, ruta, arguments: args);
-      },
-    );
-
-    // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-      title: Text("Información"),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Text('Desea continuar a la siguiente pagina?'),
-          Text('Esta acción no se podra deshacer.')
-        ],
-      ),
-      elevation: 24.0,
-      actions: [
-        cancelButton,
-        continueButton,
-      ],
-    );
-
-    // show the dialog
-    showDialog(
-        context: context,
-        builder: (context) {
-          return alert;
-        },
-        barrierDismissible: false);
   }
 }

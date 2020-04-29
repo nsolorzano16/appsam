@@ -68,9 +68,9 @@ class HistorialGinecoObstetraService {
       url,
       headers: headers,
     );
-    final decodedData = json.decode(resp.body);
 
-    if (resp.statusCode == 200 && decodedData != null) {
+    if (resp.statusCode == 200 && resp.body.isNotEmpty) {
+      final decodedData = json.decode(resp.body);
       final historial = new HistorialGinecoObstetra.fromJson(decodedData);
       return historial;
     }

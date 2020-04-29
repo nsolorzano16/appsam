@@ -16,8 +16,6 @@ import 'package:flutter/material.dart';
 import 'package:getflutter/getflutter.dart';
 import 'package:intl/intl.dart';
 
-// TODO: avisar que la preclinica se va a poner en atendida
-
 class ConsultaDetallePage extends StatefulWidget {
   static final String routeName = 'consulta_detalle';
 
@@ -38,7 +36,6 @@ class _ConsultaDetallePageState extends State<ConsultaDetallePage> {
   void initState() {
     super.initState();
   }
-  // TODO: poner notas de los habitos
 
   @override
   Widget build(BuildContext context) {

@@ -1,4 +1,5 @@
 import 'package:appsam/src/blocs/habitos_bloc.dart';
+import 'package:appsam/src/blocs/historialGineco_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:appsam/src/blocs/asistentes_bloc.dart';
 import 'package:appsam/src/blocs/asistentes_bloc/create_edit_asistentes.dart';
@@ -19,6 +20,7 @@ class Provider extends InheritedWidget {
   final blocTheme = new ThemeBloc();
   final _consultaBloc = new ConsultaBloc();
   final _habitosBloc = new HabitosBloc();
+  final _historialGinecoBloc = new HistorialGinecoObstetraBloc();
 
   static Provider _instancia;
 
@@ -80,5 +82,11 @@ class Provider extends InheritedWidget {
 
   static HabitosBloc habitosBloc(BuildContext context) {
     return context.dependOnInheritedWidgetOfExactType<Provider>()._habitosBloc;
+  }
+
+  static HistorialGinecoObstetraBloc historialGinecoBloc(BuildContext context) {
+    return context
+        .dependOnInheritedWidgetOfExactType<Provider>()
+        ._historialGinecoBloc;
   }
 }

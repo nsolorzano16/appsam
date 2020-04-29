@@ -1,13 +1,20 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:appsam/src/blocs/consulta_bloc.dart';
+import 'package:appsam/src/blocs/historialGineco_bloc.dart';
 
 import 'package:appsam/src/models/consulta_model.dart';
+import 'package:appsam/src/models/historialGinecoObstetra_model.dart';
 import 'package:appsam/src/models/paginados/preclinica_paginadoVM.dart';
+import 'package:appsam/src/models/usuario_model.dart';
+import 'package:appsam/src/pages/consulta/historialGinecoObstetra/crear_HistorialGineco_page.dart';
+import 'package:appsam/src/utils/storage_util.dart';
 import 'package:appsam/src/utils/utils.dart';
 import 'package:appsam/src/widgets/drawer.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:getflutter/getflutter.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 
 class MenuConsultaPage extends StatefulWidget {
   static final String routeName = 'menu_consulta';
@@ -24,6 +31,8 @@ class _MenuConsultaPageState extends State<MenuConsultaPage> {
   final _consultaBloc = new ConsultaBloc();
 
   Future<ConsultaModel> _consultaFuture;
+  final UsuarioModel _usuario =
+      usuarioModelFromJson(StorageUtil.getString('usuarioGlobal'));
 
   @override
   void dispose() {
@@ -115,13 +124,14 @@ class _MenuConsultaPageState extends State<MenuConsultaPage> {
                     ]),
                     TableRow(children: [
                       FadeInLeft(
-                        child: _cardItem(
+                        child: _cardItemHistorialGineco(
                             _preclinica,
                             FontAwesomeIcons.baby,
                             'Historial Gineco Obstetra',
                             'crear_historial_gineco',
                             Colors.blueGrey,
-                            context),
+                            context,
+                            _usuario),
                       ),
                       FadeInRight(
                         child: _cardItem(
@@ -250,6 +260,104 @@ class _MenuConsultaPageState extends State<MenuConsultaPage> {
     return GestureDetector(
       onTap: () {
         Navigator.pushReplacementNamed(context, ruta, arguments: preclinica);
+      },
+      child: GFCard(
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
+        elevation: 6.0,
+        height: 110.0,
+        color: color,
+        content: Column(
+          children: <Widget>[
+            Container(
+              // decoration: BoxDecoration(
+              //     shape: BoxShape.circle, color: Colors.red),
+              margin: EdgeInsets.only(top: 5.0),
+              child: FaIcon(
+                icon,
+                size: 40.0,
+                color: Colors.white,
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(top: 6.0),
+              child: Text(
+                texto,
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.white, fontSize: 15.0),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _cardItemHistorialGineco(
+      PreclinicaViewModel preclinica,
+      IconData icon,
+      String texto,
+      String ruta,
+      Color color,
+      BuildContext context,
+      UsuarioModel usuario) {
+    final _historialGinecoBloc = new HistorialGinecoObstetraBloc();
+
+    final HistorialGinecoObstetra _historialEmpty =
+        new HistorialGinecoObstetra();
+
+    _historialEmpty.historialId = 0;
+    _historialEmpty.pacienteId = preclinica.pacienteId;
+    _historialEmpty.doctorId = preclinica.doctorId;
+    _historialEmpty.preclinicaId = preclinica.preclinicaId;
+    _historialEmpty.activo = true;
+    _historialEmpty.creadoPor = usuario.userName;
+    _historialEmpty.creadoFecha = DateTime.now();
+    _historialEmpty.modificadoPor = usuario.userName;
+    _historialEmpty.modificadoFecha = DateTime.now();
+
+    return GestureDetector(
+      onTap: () async {
+        final ProgressDialog _pr = new ProgressDialog(
+          context,
+          type: ProgressDialogType.Normal,
+          isDismissible: false,
+          showLogs: false,
+        );
+        _pr.update(
+          progress: 50.0,
+          message: "Espere...",
+          progressWidget: Container(
+              padding: EdgeInsets.all(8.0), child: CircularProgressIndicator()),
+          maxProgress: 100.0,
+          progressTextStyle: TextStyle(
+              color: Colors.black, fontSize: 13.0, fontWeight: FontWeight.w400),
+          messageTextStyle: TextStyle(
+              color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600),
+        );
+        await _pr.show();
+
+        final HistorialGinecoObstetra historial =
+            await _historialGinecoBloc.getHistorialGinecoObstetra(
+                preclinica.pacienteId, preclinica.doctorId);
+        _pr.hide();
+        if (historial != null) {
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => CrearHistorialGinecoObstetraPage(
+                        historial: historial,
+                        preclinica: preclinica,
+                      )));
+        } else {
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => CrearHistorialGinecoObstetraPage(
+                        historial: _historialEmpty,
+                        preclinica: preclinica,
+                      )));
+        }
       },
       child: GFCard(
         shape:
