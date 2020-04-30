@@ -24,6 +24,8 @@ class _CrearFarmacosUsoActualPageState
   final List<FarmacosUsoActual> _listaFarmacos = new List<FarmacosUsoActual>();
   final FarmacosUsoActualBloc _farmacosBloc = new FarmacosUsoActualBloc();
 
+  Future<List<FarmacosUsoActual>> _farmacosFuture;
+
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
   final GlobalKey<FormState> _formkeyEditar = GlobalKey<FormState>();
   final _nombreController = new TextEditingController();
@@ -52,6 +54,9 @@ class _CrearFarmacosUsoActualPageState
     final PreclinicaViewModel _preclinica =
         ModalRoute.of(context).settings.arguments;
 
+    _farmacosFuture =
+        _farmacosBloc.getFarmacos(_preclinica.pacienteId, _preclinica.doctorId);
+
     return WillPopScope(
         child: Scaffold(
             key: mScaffoldState,
@@ -69,30 +74,42 @@ class _CrearFarmacosUsoActualPageState
               ],
             ),
             drawer: MenuWidget(),
-            body: Column(
-              children: <Widget>[
-                Container(
-                    alignment: Alignment.centerLeft,
-                    padding: EdgeInsets.only(
-                      left: 20.0,
-                      top: 10.0,
-                      right: 10.0,
-                    ),
-                    child: ListTile(
-                      title: Text('Farmacos de Uso Actual'),
-                      subtitle: Text('Click en el boton \"+\" para agregar'),
-                    )),
-                Divider(
-                  thickness: 2.0,
-                  indent: 20.0,
-                  endIndent: 20.0,
-                ),
-                Flexible(
-                  child: ListView(
-                    children: items(_listaFarmacos),
-                  ),
-                ),
-              ],
+            body: FutureBuilder(
+              future: _farmacosFuture,
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                if (snapshot.hasData) {
+                  _listaFarmacos.clear();
+                  _listaFarmacos.addAll(snapshot.data);
+                  return Column(
+                    children: <Widget>[
+                      Container(
+                          alignment: Alignment.centerLeft,
+                          padding: EdgeInsets.only(
+                            left: 20.0,
+                            top: 10.0,
+                            right: 10.0,
+                          ),
+                          child: ListTile(
+                            title: Text('Farmacos de Uso Actual'),
+                            subtitle:
+                                Text('Click en el boton \"+\" para agregar'),
+                          )),
+                      Divider(
+                        thickness: 2.0,
+                        indent: 20.0,
+                        endIndent: 20.0,
+                      ),
+                      Flexible(
+                        child: ListView(
+                          children: items(_listaFarmacos),
+                        ),
+                      ),
+                    ],
+                  );
+                } else {
+                  return loadingIndicator(context);
+                }
+              },
             ),
             floatingActionButton: FloatingActionButton(
               backgroundColor: Theme.of(context).primaryColor,

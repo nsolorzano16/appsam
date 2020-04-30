@@ -16,7 +16,8 @@ class CrearHistorialGinecoObstetraPage extends StatefulWidget {
   final HistorialGinecoObstetra historial;
   final PreclinicaViewModel preclinica;
 
-  const CrearHistorialGinecoObstetraPage({this.historial, this.preclinica});
+  const CrearHistorialGinecoObstetraPage(
+      {@required this.historial, @required this.preclinica});
 
   @override
   _CrearHistorialGinecoObstetraPageState createState() =>
@@ -53,6 +54,7 @@ class _CrearHistorialGinecoObstetraPageState
     super.initState();
     StorageUtil.putString(
         'ultimaPagina', CrearHistorialGinecoObstetraPage.routeName);
+    labelBoton = (widget.historial.historialId == 0) ? 'Guardar' : 'Editar';
 
     var format = DateFormat('dd/MM/yyyy');
 

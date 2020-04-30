@@ -91,10 +91,10 @@ class FarmacosUsoActualService {
         '$_apiURL/api/FarmacosUsoActual/pacienteId/$pacienteId/doctorId/$doctorId';
     final List<FarmacosUsoActual> lista = new List();
 
-    final resp = await http.put(url, headers: headers);
-    final decodedData = json.decode(resp.body);
+    final resp = await http.get(url, headers: headers);
 
-    if (resp.statusCode == 200) {
+    if (resp.statusCode == 200 && resp.body.isNotEmpty) {
+      final decodedData = json.decode(resp.body);
       decodedData.forEach((farmaco) {
         final farmacoTemp = FarmacosUsoActual.fromJson(farmaco);
         lista.add(farmacoTemp);
