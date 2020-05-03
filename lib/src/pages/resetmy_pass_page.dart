@@ -12,8 +12,7 @@ class ResetMyPasswordPage extends StatelessWidget {
   Widget build(BuildContext context) {
     StorageUtil.putString('ultimaPagina', ResetMyPasswordPage.routeName);
     final int _usuarioId = ModalRoute.of(context).settings.arguments;
-    print('USUARIO ID EN RESTE PASS $_usuarioId');
-    final _resetPasswordBloc = new ResetPasswordBloc();
+
     final blocService = new CrearEditarAsistentesBloc();
 
     return WillPopScope(
@@ -35,15 +34,15 @@ class ResetMyPasswordPage extends StatelessWidget {
                   SizedBox(
                     height: 15.0,
                   ),
-                  _crearCampoPassword1(context, _resetPasswordBloc),
+                  _crearCampoPassword1(context),
                   SizedBox(
                     height: 8.0,
                   ),
-                  _crearRepetirPassword(context, _resetPasswordBloc),
+                  _crearRepetirPassword(context),
                   SizedBox(
                     height: 8.0,
                   ),
-                  _crearBoton(_resetPasswordBloc, blocService, _usuarioId)
+                  _crearBoton(context, blocService, _usuarioId)
                 ],
               ),
             ),
@@ -52,109 +51,85 @@ class ResetMyPasswordPage extends StatelessWidget {
         onWillPop: () async => false);
   }
 
-  Widget _crearCampoPassword1(BuildContext context, ResetPasswordBloc bloc) {
-    return StreamBuilder(
-      stream: bloc.password,
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        return Container(
-          padding: EdgeInsets.symmetric(horizontal: 20.0),
-          child: TextField(
-              keyboardType: TextInputType.text,
-              decoration: InputDecoration(
-                prefixIcon: Icon(
-                  Icons.lock_outline,
-                  color: Colors.redAccent,
-                ),
-                border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20.0)),
-                labelText: 'Nueva contraseña',
-                errorText: snapshot.error,
-              ),
-              onChanged: bloc.onPasswordChanged),
-        );
-      },
+  Widget _crearCampoPassword1(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 20.0),
+      child: TextField(
+        keyboardType: TextInputType.text,
+        decoration: InputDecoration(
+          prefixIcon: Icon(
+            Icons.lock_outline,
+            color: Colors.redAccent,
+          ),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
+          labelText: 'Nueva contraseña',
+          errorText: '',
+        ),
+      ),
     );
   }
 
-  Widget _crearRepetirPassword(BuildContext context, ResetPasswordBloc bloc) {
-    return StreamBuilder(
-      stream: bloc.confirmPassword,
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        return Container(
-          padding: EdgeInsets.symmetric(horizontal: 20.0),
-          child: TextField(
-              keyboardType: TextInputType.text,
-              decoration: InputDecoration(
-                prefixIcon: Icon(
-                  Icons.lock_outline,
-                  color: Colors.redAccent,
-                ),
-                border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20.0)),
-                labelText: 'Repetir Contraseña',
-                errorText: snapshot.error,
-              ),
-              onChanged: bloc.onRetypePasswordChanged),
-        );
-      },
+  Widget _crearRepetirPassword(
+    BuildContext context,
+  ) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 20.0),
+      child: TextField(
+        keyboardType: TextInputType.text,
+        decoration: InputDecoration(
+          prefixIcon: Icon(
+            Icons.lock_outline,
+            color: Colors.redAccent,
+          ),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
+          labelText: 'Repetir Contraseña',
+          errorText: '',
+        ),
+      ),
     );
   }
 
   Widget _crearBoton(
-      ResetPasswordBloc bloc, CrearEditarAsistentesBloc blocService, int id) {
-    return StreamBuilder(
-      stream: bloc.registerValue,
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        return RaisedButton(
-          child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 80.0, vertical: 15.0),
-            child: Text('Guardar'),
-          ),
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-          elevation: 0.0,
-          color: Colors.red,
-          disabledTextColor: Colors.white,
-          textColor: Colors.white,
-          onPressed: (snapshot.hasData && snapshot.data == true)
-              ? () {
-                  final ProgressDialog _pr = new ProgressDialog(
-                    context,
-                    type: ProgressDialogType.Normal,
-                    isDismissible: false,
-                    showLogs: false,
-                  );
-                  _pr.update(
-                    progress: 50.0,
-                    message: "Espere...",
-                    progressWidget: Container(
-                        padding: EdgeInsets.all(8.0),
-                        child: CircularProgressIndicator()),
-                    maxProgress: 100.0,
-                    progressTextStyle: TextStyle(
-                        color: Colors.black,
-                        fontSize: 13.0,
-                        fontWeight: FontWeight.w400),
-                    messageTextStyle: TextStyle(
-                        color: Colors.black,
-                        fontSize: 19.0,
-                        fontWeight: FontWeight.w600),
-                  );
-                  _pr.show();
-
-                  var pass = bloc.confirmPassValue;
-                  var modificadoPor = StorageUtil.getString('userName');
-
-                  blocService
-                      .resetPassword(id, pass, modificadoPor)
-                      .then((user) {
-                    _pr.hide();
-                    StorageUtil.removeAll();
-                    Navigator.pushReplacementNamed(context, 'login');
-                  });
-                }
-              : null,
+      BuildContext context, CrearEditarAsistentesBloc blocService, int id) {
+    return RaisedButton(
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 80.0, vertical: 15.0),
+        child: Text('Guardar'),
+      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+      elevation: 0.0,
+      color: Colors.red,
+      disabledTextColor: Colors.white,
+      textColor: Colors.white,
+      onPressed: () {
+        final ProgressDialog _pr = new ProgressDialog(
+          context,
+          type: ProgressDialogType.Normal,
+          isDismissible: false,
+          showLogs: false,
         );
+        _pr.update(
+          progress: 50.0,
+          message: "Espere...",
+          progressWidget: Container(
+              padding: EdgeInsets.all(8.0), child: CircularProgressIndicator()),
+          maxProgress: 100.0,
+          progressTextStyle: TextStyle(
+              color: Colors.black, fontSize: 13.0, fontWeight: FontWeight.w400),
+          messageTextStyle: TextStyle(
+              color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600),
+        );
+        _pr.show();
+
+// TODO: arreglar aquii
+        var pass = 'x mientras';
+        var modificadoPor = StorageUtil.getString('userName');
+
+        blocService.resetPassword(id, pass, modificadoPor).then((user) {
+          _pr.hide();
+
+          Navigator.pushReplacementNamed(context, 'login');
+        });
       },
     );
   }

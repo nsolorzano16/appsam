@@ -132,8 +132,8 @@ class UsuarioProvider {
     final resp = await http.put('$_apiURL/api/Usuarios/changePassword',
         headers: headersas, body: json.encode(resetModel));
 
-    final decodedData = json.decode(resp.body);
-    if (resp.statusCode == 200) {
+    if (resp.statusCode == 200 && resp.body.isNotEmpty) {
+      final decodedData = json.decode(resp.body);
       final usuario = new UsuarioModel.fromJson(decodedData);
       return usuario;
     }

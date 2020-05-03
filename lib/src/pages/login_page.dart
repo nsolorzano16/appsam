@@ -24,6 +24,11 @@ class _LoginPageState extends State<LoginPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: Stack(
@@ -206,21 +211,21 @@ class _LoginPageState extends State<LoginPage> {
         messageTextStyle: TextStyle(
             color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600),
       );
-      _pr.show();
       _formKey.currentState.save();
-      Map info = await usuarioProvider.login(usuario, password);
-      _pr.hide();
-      setState(() {
-        logueando = true;
-      });
-      if (info['ok']) {
-        Navigator.pushReplacementNamed(context, 'home');
-        final UsuarioModel usuario = UsuarioModel.fromJson(info['usuario']);
+      await _pr.show();
+      final info = await usuarioProvider.login(usuario, password);
 
+      if (info['ok']) {
+        await _pr.hide();
+        final UsuarioModel usuario = UsuarioModel.fromJson(info['usuario']);
         StorageUtil.putString('usuarioGlobal', usuarioModelToJson(usuario));
-        StorageUtil.putInt('usuarioId', usuario.usuarioId);
+        Navigator.pushReplacementNamed(context, 'home');
       } else {
+        await _pr.hide();
         _formKey.currentState.reset();
+        setState(() {
+          logueando = true;
+        });
         mostrarAlerta(context, info['mensaje']);
       }
     }

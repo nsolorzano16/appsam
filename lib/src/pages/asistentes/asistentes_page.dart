@@ -19,7 +19,8 @@ class _AsistentesPageState extends State<AsistentesPage> {
   AsistentesBloc asistentesBloc = new AsistentesBloc();
   ScrollController _scrollController = new ScrollController();
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-  final int _usuarioId = StorageUtil.getInt('usuarioId');
+  final UsuarioModel _usuario =
+      usuarioModelFromJson(StorageUtil.getString('usuarioGlobal'));
 
   int totalPages = 0;
 
@@ -36,13 +37,11 @@ class _AsistentesPageState extends State<AsistentesPage> {
   void initState() {
     super.initState();
     StorageUtil.putString('ultimaPagina', AsistentesPage.routeName);
-    asistentesBloc.cargarAsistentesPaginado(1, '', _usuarioId);
+    asistentesBloc.cargarAsistentesPaginado(1, '', _usuario.usuarioId);
   }
 
   @override
   Widget build(BuildContext context) {
-    final UsuarioModel _usuario = ModalRoute.of(context).settings.arguments;
-
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
@@ -77,7 +76,7 @@ class _AsistentesPageState extends State<AsistentesPage> {
           floatingActionButton: FloatingActionButton(
             backgroundColor: Theme.of(context).primaryColor,
             child: Icon(Icons.add),
-            onPressed: () => _goToCrearAsistente(_usuario),
+            onPressed: () => _goToCrearAsistente(),
           ),
         ),
         onWillPop: () async => false);
@@ -160,6 +159,7 @@ class _AsistentesPageState extends State<AsistentesPage> {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(30.0),
                 child: FadeInImage(
+                    fit: BoxFit.cover,
                     width: 40.0,
                     height: 40.0,
                     placeholder: AssetImage('assets/jar-loading.gif'),
@@ -210,19 +210,19 @@ class _AsistentesPageState extends State<AsistentesPage> {
     );
   }
 
-  void _goToCrearAsistente(UsuarioModel usuario) {
+  void _goToCrearAsistente() {
     final _asistente = new UsuarioModel();
 
     _asistente.usuarioId = 0;
     _asistente.rolId = 3;
-    _asistente.asistenteId = usuario.usuarioId;
+    _asistente.asistenteId = _usuario.usuarioId;
     _asistente.sexo = 'M';
     _asistente.edad = 0;
     _asistente.activo = true;
     _asistente.creadoFecha = new DateTime.now();
-    _asistente.creadoPor = usuario.userName;
+    _asistente.creadoPor = _usuario.userName;
     _asistente.modificadoFecha = new DateTime.now();
-    _asistente.modificadoPor = usuario.userName;
+    _asistente.modificadoPor = _usuario.userName;
     Navigator.pushReplacementNamed(context, 'crear-editar-asistente',
         arguments: _asistente);
   }

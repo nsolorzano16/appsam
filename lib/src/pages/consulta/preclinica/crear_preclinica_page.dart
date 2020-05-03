@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:math';
+import 'package:appsam/src/widgets/drawer.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -43,6 +44,7 @@ class _CrearPreclinicaPageState extends State<CrearPreclinicaPage> {
             appBar: AppBar(
               title: Text('Nueva Preclinica'),
             ),
+            drawer: MenuWidget(),
             body: Stack(
               children: <Widget>[_crearFormulario(_usuario, _paciente)],
             )),

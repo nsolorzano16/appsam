@@ -367,7 +367,6 @@ class _CrearPacientePageState extends State<CrearPacientePage> {
           child: TextFormField(
             initialValue: _formBloc.identificacion,
             autovalidate: true,
-            validator: validaIdentificacion,
             inputFormatters: [mask],
             onSaved: _formBloc.onChangeIdentificacion,
             maxLength: 13,

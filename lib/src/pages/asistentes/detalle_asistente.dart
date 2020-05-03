@@ -33,6 +33,10 @@ class _AsistenteDetalleState extends State<AsistenteDetalle> {
             appBar: AppBar(
               title: Text('${_usuario.nombres}'),
               actions: <Widget>[
+                IconButton(
+                    icon: Icon(Icons.arrow_back_ios),
+                    onPressed: () =>
+                        Navigator.pushReplacementNamed(context, 'asistentes')),
                 PopupMenuButton(
                   elevation: 10.0,
                   shape: RoundedRectangleBorder(
@@ -89,6 +93,7 @@ class _AsistenteDetalleState extends State<AsistenteDetalle> {
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(100.0),
                             child: FadeInImage(
+                                fit: BoxFit.cover,
                                 width: 150,
                                 height: 150,
                                 placeholder:

@@ -38,8 +38,10 @@ class MenuWidget extends StatelessWidget {
                     onPressed: () => Navigator.pop(context),
                     child: Text('Cancelar')),
                 FlatButton(
-                    onPressed: () =>
-                        Navigator.pushReplacementNamed(context, 'login'),
+                    onPressed: () {
+                      Navigator.of(context).pushNamedAndRemoveUntil(
+                          'login', (Route<dynamic> route) => false);
+                    },
                     child: Text('Aceptar'))
               ],
             );
@@ -121,8 +123,10 @@ class MenuWidget extends StatelessWidget {
               ],
             ),
             onTap: () {
-              Navigator.pushReplacementNamed(context, opt.ruta.toString(),
-                  arguments: usuario);
+              Navigator.pushReplacementNamed(
+                context,
+                opt.ruta.toString(),
+              );
             },
           );
           opciones..add(widgetTemp)..add(Divider());
@@ -145,7 +149,6 @@ class MenuWidget extends StatelessWidget {
     Widget continueButton = FlatButton(
       child: Text('Ok'),
       onPressed: () {
-        StorageUtil.removeAll();
         StorageUtil.removeUsuario();
         StorageUtil.putString('ultimaPagina', ruta);
         Navigator.pushReplacementNamed(context, ruta);

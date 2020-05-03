@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'dart:async';
 import 'package:getflutter/getflutter.dart';
 import 'package:intl/intl.dart';
@@ -33,6 +34,10 @@ class _CrearAsistentesPageState extends State<CrearAsistentesPage> {
       new TextEditingController();
   TextEditingController _txtControllerIdentificacion =
       new TextEditingController();
+  final UsuarioModel _usuario =
+      usuarioModelFromJson(StorageUtil.getString('usuarioGlobal'));
+  MaskTextInputFormatter maskIdentificacion = new MaskTextInputFormatter(
+      mask: '#############', filter: {"#": RegExp(r'[0-9]')});
 
   @override
   void initState() {
@@ -50,6 +55,8 @@ class _CrearAsistentesPageState extends State<CrearAsistentesPage> {
         mask: '####-####', filter: {"#": RegExp(r'[0-9]')});
     MaskTextInputFormatter maskTelefono2 = new MaskTextInputFormatter(
         mask: '####-####', filter: {"#": RegExp(r'[0-9]')});
+    MaskTextInputFormatter maskNumeroColegiado = new MaskTextInputFormatter(
+        mask: '#######', filter: {"#": RegExp(r'[0-9]')});
 
     final bloc = Provider.crearEditarAsistentesBloc(context);
     return WillPopScope(
@@ -57,12 +64,30 @@ class _CrearAsistentesPageState extends State<CrearAsistentesPage> {
             appBar: AppBar(
               key: _scaffoldKey,
               title: Text('Nuevo Asistente'),
+              actions: <Widget>[
+                IconButton(
+                    icon: Icon(
+                      Icons.arrow_back_ios,
+                      color: Colors.white,
+                    ),
+                    onPressed: () =>
+                        Navigator.pushReplacementNamed(context, 'asistentes'))
+              ],
             ),
             drawer: MenuWidget(),
             body: SingleChildScrollView(
               child: Form(
                   key: _formKey,
                   child: GFCard(
+                    title: GFListTile(
+                        color: Colors.red,
+                        title: Text('Información Personal',
+                            style: TextStyle(
+                                fontSize: 18.0,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white)),
+                        icon:
+                            FaIcon(FontAwesomeIcons.user, color: Colors.white)),
                     content: Column(
                       children: <Widget>[
                         _espacio(),
@@ -72,7 +97,8 @@ class _CrearAsistentesPageState extends State<CrearAsistentesPage> {
                         _espacio(),
                         _crearCampoSegundoAppellido(_asistente),
                         _espacio(),
-                        _crearCampoIdentificacion(_asistente),
+                        _crearCampoIdentificacion(
+                            _asistente, maskIdentificacion),
                         _espacio(),
                         _crearFecha(context, bloc.fechaNacimientoStream,
                             bloc.changeFechaNacimiento),
@@ -94,7 +120,8 @@ class _CrearAsistentesPageState extends State<CrearAsistentesPage> {
                         _espacio(),
                         _crearCampoTelefono2(maskTelefono2, _asistente),
                         _espacio(),
-                        _crearCampoColegioNumero(_asistente),
+                        _crearCampoColegioNumero(
+                            _asistente, maskNumeroColegiado),
                         _espacio(),
                         _crearCampoEmail(_asistente),
                         _espacio(),
@@ -123,7 +150,7 @@ class _CrearAsistentesPageState extends State<CrearAsistentesPage> {
   }
 
   String validaTexto(String value) {
-    if (value.length <= 3) {
+    if (value.length < 3) {
       return 'Campo obligatorio';
     } else {
       return null;
@@ -174,15 +201,17 @@ class _CrearAsistentesPageState extends State<CrearAsistentesPage> {
     );
   }
 
-  _crearCampoIdentificacion(UsuarioModel _asistente) {
+  _crearCampoIdentificacion(
+      UsuarioModel _asistente, MaskTextInputFormatter mask) {
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
         controller: _txtControllerIdentificacion,
         autovalidate: true,
         maxLength: 13,
+        inputFormatters: [mask],
         validator: (value) {
-          if (value.length <= 13) {
+          if (value.length < 13) {
             return 'Campo obligatorio';
           } else {
             return null;
@@ -228,10 +257,13 @@ class _CrearAsistentesPageState extends State<CrearAsistentesPage> {
     );
   }
 
-  _crearCampoColegioNumero(UsuarioModel _asistente) {
+  _crearCampoColegioNumero(
+      UsuarioModel _asistente, MaskTextInputFormatter mask) {
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
+        inputFormatters: [mask],
+        keyboardType: TextInputType.number,
         decoration:
             inputsDecorations('Numero Colegiado', Icons.confirmation_number),
         onSaved: (value) => _asistente.colegioNumero = value,
@@ -321,7 +353,8 @@ class _CrearAsistentesPageState extends State<CrearAsistentesPage> {
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
-        decoration: inputsDecorations('Notas', Icons.person),
+        maxLines: 2,
+        decoration: inputsDecorations('Notas', Icons.note),
         onSaved: (value) => _asistente.notas = value,
       ),
     );
@@ -344,12 +377,13 @@ class _CrearAsistentesPageState extends State<CrearAsistentesPage> {
     );
   }
 
+// se modifico la fecha final como el dia actual
   _selectDate(BuildContext context) async {
     picked = await showDatePicker(
         context: context,
         initialDate: new DateTime.now(),
         firstDate: new DateTime(1950),
-        lastDate: new DateTime(2050),
+        lastDate: new DateTime.now(),
         locale: Locale('es', 'ES'));
 
     if (picked != null) {
@@ -377,9 +411,7 @@ class _CrearAsistentesPageState extends State<CrearAsistentesPage> {
 
   Widget _crearBotones(
       UsuarioModel _asistente, CrearEditarAsistentesBloc bloc) {
-    final UsuarioModel _user =
-        usuarioModelFromJson(StorageUtil.getString('usuarioGlobal'));
-    if (_user != null) {
+    if (_usuario != null) {
       return Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
@@ -392,7 +424,7 @@ class _CrearAsistentesPageState extends State<CrearAsistentesPage> {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20.0)),
                 onPressed: () {
-                  Navigator.pop(context);
+                  Navigator.pushReplacementNamed(context, 'asistentes');
                 },
                 icon: Icon(Icons.clear),
                 label: Text('Cancelar')),
@@ -407,7 +439,7 @@ class _CrearAsistentesPageState extends State<CrearAsistentesPage> {
                       borderRadius: BorderRadius.circular(20.0)),
                   icon: Icon(Icons.save),
                   label: Text('Guardar'),
-                  onPressed: () {
+                  onPressed: () async {
                     if (!_formKey.currentState.validate()) {
                       mostrarFlushBar(
                           context,
@@ -442,20 +474,34 @@ class _CrearAsistentesPageState extends State<CrearAsistentesPage> {
                             fontSize: 19.0,
                             fontWeight: FontWeight.w600),
                       );
-                      _pr.show();
-                      Timer(Duration(seconds: 2), () {
-                        _asistente.fechaNacimiento = picked;
-                        bloc.addUser(_asistente);
-
-                        _pr.hide();
+                      await _pr.show();
+                      _asistente.fechaNacimiento = picked;
+                      _asistente.identificacion =
+                          maskIdentificacion.getMaskedText();
+                      print(usuarioModelToJson(_asistente));
+                      final resp = await bloc.addUser(_asistente);
+                      await _pr.hide();
+                      if (resp) {
                         _formKey.currentState.reset();
                         _txtControllerIdentificacion.text = '';
+
                         _txtControllerNombres.text = '';
                         _txtControllerPass.text = '';
                         _txtControllerPrimerApellido.text = '';
                         _controllerUsuario.text = '';
                         _inputFieldDateController.text = '';
-                      });
+                        Navigator.pushReplacementNamed(context, 'asistentes');
+                      } else {
+                        mostrarFlushBar(
+                            context,
+                            Colors.red,
+                            'Info',
+                            'Ha ocurrido un error o el usuario ya existe, revise el correo,identificación, nombre de usuario, ó email.',
+                            4,
+                            FlushbarPosition.TOP,
+                            Icons.info,
+                            Colors.white);
+                      }
                     }
                   }))
         ],

@@ -78,8 +78,8 @@ class CrearEditarAsistentesBloc with Validators {
       passwordStream,
       (n, pa, sa, i, t, e, u, p) => true);
 
-  void addUser(UsuarioModel usuario) async {
-    await _usuarioProvider.addAsistente(usuario);
+  Future<bool> addUser(UsuarioModel usuario) async {
+    return await _usuarioProvider.addAsistente(usuario);
   }
 
   Future<UsuarioModel> updateUser(UsuarioModel usuario) async {

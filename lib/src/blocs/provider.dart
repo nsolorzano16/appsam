@@ -3,7 +3,6 @@ import 'package:appsam/src/blocs/historialGineco_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:appsam/src/blocs/asistentes_bloc.dart';
 import 'package:appsam/src/blocs/asistentes_bloc/create_edit_asistentes.dart';
-import 'package:appsam/src/blocs/asistentes_bloc/resetPassword_bloc.dart';
 import 'package:appsam/src/blocs/consulta_bloc.dart';
 import 'package:appsam/src/blocs/login_bloc.dart';
 import 'package:appsam/src/blocs/pacientes_bloc/pacientes_bloc.dart';
@@ -14,7 +13,7 @@ class Provider extends InheritedWidget {
   final _loginBloc = new LoginBloc();
   final _asistentesBloc = new AsistentesBloc();
   final _crearEditarAsistentesBloc = new CrearEditarAsistentesBloc();
-  final _resetPasswordBloc = new ResetPasswordBloc();
+
   final _pacientesBloc = new PacientesBloc();
   final _preclinicaBloc = new PreclinicaBloc();
   final blocTheme = new ThemeBloc();
@@ -52,12 +51,6 @@ class Provider extends InheritedWidget {
     return context
         .dependOnInheritedWidgetOfExactType<Provider>()
         ._crearEditarAsistentesBloc;
-  }
-
-  static ResetPasswordBloc resetPasswordBloc(BuildContext context) {
-    return context
-        .dependOnInheritedWidgetOfExactType<Provider>()
-        ._resetPasswordBloc;
   }
 
   static ThemeBloc themeBloc(BuildContext context) {

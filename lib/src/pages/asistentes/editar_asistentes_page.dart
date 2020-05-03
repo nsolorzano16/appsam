@@ -25,6 +25,12 @@ class _EditarAsistentesPageState extends State<EditarAsistentesPage> {
         child: Scaffold(
           appBar: AppBar(
             title: Text('Editar Asistente'),
+            actions: <Widget>[
+              IconButton(
+                  icon: Icon(Icons.arrow_back_ios),
+                  onPressed: () =>
+                      Navigator.pushReplacementNamed(context, 'asistentes'))
+            ],
           ),
           drawer: MenuWidget(),
           body: SingleChildScrollView(

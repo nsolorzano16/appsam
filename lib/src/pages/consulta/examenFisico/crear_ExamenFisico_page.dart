@@ -161,7 +161,7 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
                   height: size.height,
                   onPageChanged: (index) {
                     setState(() {
-                      index;
+                      //TODO: aqui se quito index
                     });
                   },
                   items: [

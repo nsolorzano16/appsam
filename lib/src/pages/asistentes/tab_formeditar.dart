@@ -1,5 +1,6 @@
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:getflutter/getflutter.dart';
 import 'package:intl/intl.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
@@ -36,6 +37,14 @@ class _FormEditarPageState extends State<FormEditarPage> {
       child: Form(
           key: _formKey,
           child: GFCard(
+            title: GFListTile(
+                color: Colors.red,
+                title: Text('Información Personal',
+                    style: TextStyle(
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white)),
+                icon: FaIcon(FontAwesomeIcons.user, color: Colors.white)),
             content: Column(
               children: <Widget>[
                 _espacio(),
@@ -84,7 +93,8 @@ class _FormEditarPageState extends State<FormEditarPage> {
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20.0)),
                           onPressed: () {
-                            Navigator.pop(context);
+                            Navigator.pushReplacementNamed(
+                                context, 'asistentes');
                           },
                           icon: Icon(Icons.clear),
                           label: Text('Cancelar')),
@@ -168,7 +178,7 @@ class _FormEditarPageState extends State<FormEditarPage> {
   }
 
   String validaTexto(String value) {
-    if (value.length <= 3) {
+    if (value.length < 3) {
       return 'mas de 3 caracteres';
     } else {
       return null;

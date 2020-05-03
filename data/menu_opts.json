@@ -1,77 +1,77 @@
 {
-  "nombreApp": "Movil SAM",
-  "rutas": [
-    {
-      "ruta": "home",
-      "icon": "add_alert",
-      "texto": "Inicio",
-      "roles": [
-        {
-          "autorizados": 2
-        },
-        {
-          "autorizados": 3
-        }
-      ]
-    },
-    {
-      "ruta": "pacientes",
-      "icon": "person",
-      "texto": "Pacientes",
-      "roles": [
-        {
-          "autorizados": 2
-        },
-        {
-          "autorizados": 3
-        }
-      ]
-    },
-    {
-      "ruta": "asistentes",
-      "icon": "account_box",
-      "texto": "Asistentes",
-      "roles": [
-        {
-          "autorizados": 2
-        }
-      ]
-    },
-    {
-      "ruta": "preclinica",
-      "icon": "assignment_ind",
-      "texto": "Preclinica",
-      "roles": [
-        {
-          "autorizados": 2
-        },
-        {
-          "autorizados": 3
-        }
-      ]
-    },
-    {
-      "ruta": "home",
-      "icon": "supervised_user_circle",
-      "texto": "Consultas",
-      "roles": [
-        {
-          "autorizados": 2
-        }
-      ]
-    },
-    {
-      "ruta": "settings",
-      "icon": "settings",
-      "texto": "Configuración",
-      "roles": [
-        {
-          "autorizados": 2
-        },
-        {
-          "autorizados": 3
-        }
-      ]
-    }
-  ]
+	"nombreApp": "Movil SAM",
+	"rutas": [
+		{
+			"ruta": "home",
+			"icon": "add_alert",
+			"texto": "Inicio",
+			"roles": [
+				{
+					"autorizados": 2
+				},
+				{
+					"autorizados": 3
+				}
+			]
+		},
+		{
+			"ruta": "asistentes",
+			"icon": "account_box",
+			"texto": "Asistentes",
+			"roles": [
+				{
+					"autorizados": 2
+				}
+			]
+		},
+		{
+			"ruta": "pacientes",
+			"icon": "person",
+			"texto": "Pacientes",
+			"roles": [
+				{
+					"autorizados": 2
+				},
+				{
+					"autorizados": 3
+				}
+			]
+		},
+		{
+			"ruta": "preclinica",
+			"icon": "assignment_ind",
+			"texto": "Preclinica",
+			"roles": [
+				{
+					"autorizados": 2
+				},
+				{
+					"autorizados": 3
+				}
+			]
+		},
+		{
+			"ruta": "home",
+			"icon": "supervised_user_circle",
+			"texto": "Consultas",
+			"roles": [
+				{
+					"autorizados": 2
+				}
+			]
+		},
+		{
+			"ruta": "settings",
+			"icon": "settings",
+			"texto": "Configuración",
+			"roles": [
+				{
+					"autorizados": 2
+				},
+				{
+					"autorizados": 3
+				}
+			]
+		}
+	]
 }

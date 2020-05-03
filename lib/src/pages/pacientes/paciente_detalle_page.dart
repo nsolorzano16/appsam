@@ -68,24 +68,12 @@ class _PacienteDetalleState extends State<PacienteDetalle> {
                         ),
                       ),
                       content: _detallePaciente(_paciente, context),
-                      buttonBar: _barraBotones(),
                     ),
                   ],
                 ),
               ),
             )),
         onWillPop: () async => false);
-  }
-
-  GFButtonBar _barraBotones() {
-    return GFButtonBar(
-      children: <Widget>[
-        GFButton(
-          onPressed: () {},
-          text: 'Expediente',
-        )
-      ],
-    );
   }
 
   Widget _detallePaciente(PacientesViewModel paciente, BuildContext context) {

@@ -18,7 +18,8 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPageState extends State<SettingsPage> {
   bool activado = StorageUtil.getBool('temaDark');
-
+  final UsuarioModel _usuario =
+      usuarioModelFromJson(StorageUtil.getString('usuarioGlobal'));
   @override
   void initState() {
     super.initState();
@@ -42,8 +43,6 @@ class _SettingsPageState extends State<SettingsPage> {
 
   Widget _crearLista(BuildContext context, ThemeBloc bloc,
       CrearEditarAsistentesBloc blocAsistentes) {
-    final UsuarioModel _usuario =
-        usuarioModelFromJson(StorageUtil.getString('usuarioGlobal'));
     if (_usuario != null) {
       return ListView(
         children: <Widget>[
