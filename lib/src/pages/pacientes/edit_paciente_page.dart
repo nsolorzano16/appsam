@@ -108,6 +108,12 @@ class _EditarPacientePageState extends State<EditarPacientePage> {
         child: Scaffold(
           appBar: AppBar(
             title: Text('Editar Paciente'),
+            actions: <Widget>[
+              IconButton(
+                  icon: Icon(Icons.arrow_back_ios),
+                  onPressed: () =>
+                      Navigator.pushReplacementNamed(context, 'pacientes'))
+            ],
           ),
           drawer: MenuWidget(),
           body: Form(
@@ -376,8 +382,6 @@ class _EditarPacientePageState extends State<EditarPacientePage> {
           padding: EdgeInsets.only(left: 8.0, right: 8.0),
           child: TextFormField(
             initialValue: _formBloc.identificacion,
-            autovalidate: true,
-            validator: validaIdentificacion,
             inputFormatters: [mask],
             onSaved: _formBloc.onChangeIdentificacion,
             maxLength: 13,
@@ -414,7 +418,7 @@ class _EditarPacientePageState extends State<EditarPacientePage> {
         context: context,
         initialDate: new DateTime.now(),
         firstDate: new DateTime(1950),
-        lastDate: new DateTime(2050),
+        lastDate: new DateTime.now(),
         locale: Locale('es', 'ES'));
 
     if (picked != null) {
@@ -1225,7 +1229,6 @@ class _EditarPacientePageState extends State<EditarPacientePage> {
           Colors.white);
     } else {
       _formKey.currentState.save();
-      print(_formBloc.estadoCivil);
       _pacienteGuardar.pacienteId = _paciente.pacienteId;
       _pacienteGuardar.doctorId = _paciente.doctorId;
       _pacienteGuardar.paisId = _formBloc.paisId;

@@ -46,6 +46,10 @@ class _MyProfilePageState extends State<MyProfilePage> {
                       icon: Icon(Icons.add_a_photo),
                       onPressed: () =>
                           _procesarImagen(ImageSource.camera, _usuario, bloc)),
+                  IconButton(
+                      icon: Icon(Icons.arrow_back_ios),
+                      onPressed: () =>
+                          Navigator.popAndPushNamed(context, 'settings')),
                 ],
               ),
               drawer: MenuWidget(),

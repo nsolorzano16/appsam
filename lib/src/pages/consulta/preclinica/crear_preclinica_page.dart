@@ -43,6 +43,12 @@ class _CrearPreclinicaPageState extends State<CrearPreclinicaPage> {
         child: Scaffold(
             appBar: AppBar(
               title: Text('Nueva Preclinica'),
+              actions: <Widget>[
+                IconButton(
+                    icon: Icon(Icons.arrow_back_ios),
+                    onPressed: () =>
+                        Navigator.pushReplacementNamed(context, 'pacientes'))
+              ],
             ),
             drawer: MenuWidget(),
             body: Stack(
@@ -95,6 +101,8 @@ class _CrearPreclinicaPageState extends State<CrearPreclinicaPage> {
                   _crearPeso(_preclinica),
                   _espacio(),
                   _crearAltura(_preclinica),
+                  _espacio(),
+                  _crearTemperatura(_preclinica),
                   _espacio(),
                   _crearFrecuenciaRespiratoria(_preclinica),
                   _espacio(),
@@ -151,6 +159,20 @@ class _CrearPreclinicaPageState extends State<CrearPreclinicaPage> {
         keyboardType: TextInputType.numberWithOptions(decimal: true),
         decoration: inputsDecorations('Altura', Icons.account_circle,
             hintTexto: 'Centimetros'),
+      ),
+    );
+  }
+
+  Widget _crearTemperatura(Preclinica preclinica) {
+    return Padding(
+      padding: EdgeInsets.only(left: 8.0, right: 8.0),
+      child: TextFormField(
+        autovalidate: true,
+        validator: isNumeric,
+        onSaved: (value) => _preclinica.temperatura = double.parse(value),
+        keyboardType: TextInputType.numberWithOptions(decimal: true),
+        decoration: inputsDecorations('Temperatura', Icons.account_circle,
+            hintTexto: 'Cº'),
       ),
     );
   }

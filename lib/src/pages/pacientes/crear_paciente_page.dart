@@ -92,12 +92,17 @@ class _CrearPacientePageState extends State<CrearPacientePage> {
     // bloc.cargarMunicipiosResi(_formBloc.departamentoResidenciaId);
     //final size = MediaQuery.of(context).size;
 
-    //TODO: mejorar esas cards
     return WillPopScope(
         child: Scaffold(
           key: _scaffoldKey,
           appBar: AppBar(
             title: Text('Nuevo Paciente'),
+            actions: <Widget>[
+              IconButton(
+                  icon: Icon(Icons.arrow_back_ios),
+                  onPressed: () =>
+                      Navigator.pushReplacementNamed(context, 'pacientes'))
+            ],
           ),
           drawer: MenuWidget(),
           body: Form(
@@ -366,7 +371,6 @@ class _CrearPacientePageState extends State<CrearPacientePage> {
           padding: EdgeInsets.only(left: 8.0, right: 8.0),
           child: TextFormField(
             initialValue: _formBloc.identificacion,
-            autovalidate: true,
             inputFormatters: [mask],
             onSaved: _formBloc.onChangeIdentificacion,
             maxLength: 13,
@@ -403,7 +407,7 @@ class _CrearPacientePageState extends State<CrearPacientePage> {
         context: context,
         initialDate: new DateTime.now(),
         firstDate: new DateTime(1950),
-        lastDate: new DateTime(2050),
+        lastDate: new DateTime.now(),
         locale: Locale('es', 'ES'));
 
     if (picked != null) {

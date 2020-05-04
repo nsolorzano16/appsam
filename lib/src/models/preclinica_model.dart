@@ -11,6 +11,7 @@ class Preclinica {
   int doctorId;
   double peso;
   double altura;
+  double temperatura;
   int frecuenciaRespiratoria;
   int ritmoCardiaco;
   int presionSistolica;
@@ -31,6 +32,7 @@ class Preclinica {
     this.doctorId,
     this.peso,
     this.altura,
+    this.temperatura,
     this.frecuenciaRespiratoria,
     this.ritmoCardiaco,
     this.presionSistolica,
@@ -52,6 +54,7 @@ class Preclinica {
         doctorId: json["doctorId"],
         peso: json["peso"].toDouble(),
         altura: json["altura"].toDouble(),
+        temperatura: json["temperatura"].toDouble(),
         frecuenciaRespiratoria: json["frecuenciaRespiratoria"],
         ritmoCardiaco: json["ritmoCardiaco"],
         presionSistolica: json["presionSistolica"],
@@ -73,6 +76,7 @@ class Preclinica {
         "doctorId": doctorId,
         "peso": peso,
         "altura": altura,
+        "temperatura": temperatura,
         "frecuenciaRespiratoria": frecuenciaRespiratoria,
         "ritmoCardiaco": ritmoCardiaco,
         "presionSistolica": presionSistolica,

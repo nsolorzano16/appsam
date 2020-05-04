@@ -256,7 +256,7 @@ class _CrearHistorialGinecoObstetraPageState
         context: context,
         initialDate: new DateTime.now(),
         firstDate: new DateTime(1930),
-        lastDate: new DateTime(2050),
+        lastDate: new DateTime.now(),
         locale: Locale('es', 'ES'));
 
     if (pickedMenarquia != null) {
@@ -286,7 +286,7 @@ class _CrearHistorialGinecoObstetraPageState
         context: context,
         initialDate: new DateTime.now(),
         firstDate: new DateTime(1930),
-        lastDate: new DateTime(2050),
+        lastDate: new DateTime.now(),
         locale: Locale('es', 'ES'));
 
     if (pickedFur != null) {
@@ -400,7 +400,7 @@ class _CrearHistorialGinecoObstetraPageState
         context: context,
         initialDate: new DateTime.now(),
         firstDate: new DateTime(1930),
-        lastDate: new DateTime(2050),
+        lastDate: new DateTime.now(),
         locale: Locale('es', 'ES'));
 
     if (pickedMenopausia != null) {

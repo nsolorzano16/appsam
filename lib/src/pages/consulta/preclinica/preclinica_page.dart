@@ -29,6 +29,7 @@ class _PreclinicaPageState extends State<PreclinicaPage> {
   void initState() {
     StorageUtil.putString('ultimaPagina', PreclinicaPage.routeName);
     _preclinicaBloc.cargarPreclinicasPaginado(1, _usuario.usuarioId, 0);
+
     super.initState();
   }
 

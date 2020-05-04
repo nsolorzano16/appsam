@@ -33,7 +33,11 @@ class PreclinicaDetallePage extends StatelessWidget {
                   icon: Icon(Icons.edit),
                   onPressed: () => Navigator.pushNamed(
                       context, 'editar_preclinica',
-                      arguments: _preclinica))
+                      arguments: _preclinica)),
+              IconButton(
+                  icon: Icon(Icons.arrow_back_ios),
+                  onPressed: () =>
+                      Navigator.popAndPushNamed(context, 'preclinica'))
             ],
           ),
           drawer: MenuWidget(),
@@ -439,6 +443,26 @@ class PreclinicaDetallePage extends StatelessWidget {
             Divider()
           ],
         )
+      ]),
+      TableRow(children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              '${preclinica.temperatura}',
+              textAlign: TextAlign.justify,
+              style: estiloDatos,
+            ),
+            Text(
+              'Temperatura',
+              textAlign: TextAlign.left,
+              style: _estiloSubt,
+            ),
+            Divider()
+          ],
+        ),
+        Column(),
+        Column()
       ]),
     ];
 

@@ -39,7 +39,11 @@ class _PacienteDetalleState extends State<PacienteDetalle> {
                               builder: (context) => EditarPacientePage(
                                     paciente: _paciente,
                                   )));
-                    })
+                    }),
+                IconButton(
+                    icon: Icon(Icons.arrow_back_ios),
+                    onPressed: () =>
+                        Navigator.pushReplacementNamed(context, 'pacientes'))
               ],
             ),
             drawer: MenuWidget(),
@@ -101,8 +105,14 @@ class _PacienteDetalleState extends State<PacienteDetalle> {
               TableRow(
                   children: [Text('Fecha de Nacimiento:'), Text('$_fechaNac')]),
               TableRow(children: [
+                Text('Identificación:'),
+                (paciente.identificacion != null)
+                    ? Text('${paciente.identificacion}')
+                    : Text('*****'),
+              ]),
+              TableRow(children: [
                 Text('Edad:'),
-                (paciente.pais != null)
+                (paciente.edad != null)
                     ? Text('${paciente.edad}')
                     : Text('*****'),
               ]),
@@ -199,7 +209,7 @@ class _PacienteDetalleState extends State<PacienteDetalle> {
               TableRow(
                 children: [
                   Text('Municipio de Nacimiento:'),
-                  (paciente.departamento != null)
+                  (paciente.municipio != null)
                       ? Text('${paciente.municipio}')
                       : Text('*****')
                 ],
@@ -207,7 +217,7 @@ class _PacienteDetalleState extends State<PacienteDetalle> {
               TableRow(
                 children: [
                   Text('Departamento de Residencia:'),
-                  (paciente.departamento != null)
+                  (paciente.departamentoResidencia != null)
                       ? Text('${paciente.departamentoResidencia}')
                       : Text('*****')
                 ],
@@ -215,7 +225,7 @@ class _PacienteDetalleState extends State<PacienteDetalle> {
               TableRow(
                 children: [
                   Text('Municipio de Residencia:'),
-                  (paciente.departamento != null)
+                  (paciente.municipioResidencia != null)
                       ? Text('${paciente.municipioResidencia}')
                       : Text('*****')
                 ],
@@ -223,13 +233,14 @@ class _PacienteDetalleState extends State<PacienteDetalle> {
               TableRow(
                 children: [
                   Text('Dirección:'),
-                  (paciente.departamento != null)
+                  (paciente.direccion != null)
                       ? Text('${paciente.direccion}')
                       : Text('*****')
                 ],
               ),
             ],
           ),
+          (paciente.menorDeEdad) ? _tablaMenorEdad(paciente) : Container(),
           Divider(),
           Row(
             children: <Widget>[
@@ -248,14 +259,13 @@ class _PacienteDetalleState extends State<PacienteDetalle> {
               TableRow(
                 children: [
                   Text('Notas:'),
-                  (paciente.departamento != null)
+                  (paciente.notas != null)
                       ? Text('${paciente.notas}')
                       : Text('*****')
                 ],
               ),
             ],
           ),
-          (paciente.menorDeEdad) ? _tablaMenorEdad(paciente) : Container()
         ],
       ),
     );
@@ -295,7 +305,7 @@ class _PacienteDetalleState extends State<PacienteDetalle> {
             TableRow(
               children: [
                 Text('Nombre Madre:'),
-                (paciente.departamento != null)
+                (paciente.nombreMadre != null)
                     ? Text('${paciente.nombreMadre}')
                     : Text('*****')
               ],
@@ -303,7 +313,7 @@ class _PacienteDetalleState extends State<PacienteDetalle> {
             TableRow(
               children: [
                 Text('Identificación Madre:'),
-                (paciente.departamento != null)
+                (paciente.identificacionMadre != null)
                     ? Text('${paciente.identificacionMadre}')
                     : Text('*****')
               ],
@@ -311,7 +321,7 @@ class _PacienteDetalleState extends State<PacienteDetalle> {
             TableRow(
               children: [
                 Text('Nombre Padre:'),
-                (paciente.departamento != null)
+                (paciente.nombrePadre != null)
                     ? Text('${paciente.nombrePadre}')
                     : Text('*****')
               ],
@@ -319,7 +329,7 @@ class _PacienteDetalleState extends State<PacienteDetalle> {
             TableRow(
               children: [
                 Text('Identificación Padre:'),
-                (paciente.departamento != null)
+                (paciente.identificacionPadre != null)
                     ? Text('${paciente.identificacionPadre}')
                     : Text('*****')
               ],
@@ -327,7 +337,7 @@ class _PacienteDetalleState extends State<PacienteDetalle> {
             TableRow(
               children: [
                 Text('Carne de Vacuna:'),
-                (paciente.departamento != null)
+                (paciente.carneVacuna != null)
                     ? Text('${paciente.carneVacuna}')
                     : Text('*****')
               ],

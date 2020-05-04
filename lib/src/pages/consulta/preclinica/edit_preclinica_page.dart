@@ -41,6 +41,12 @@ class _EditarPreclinicaPageState extends State<EditarPreclinicaPage> {
         child: Scaffold(
             appBar: AppBar(
               title: Text('Editar Preclinica'),
+              actions: <Widget>[
+                IconButton(
+                    icon: Icon(Icons.arrow_back_ios),
+                    onPressed: () =>
+                        Navigator.popAndPushNamed(context, 'preclinica'))
+              ],
             ),
             drawer: MenuWidget(),
             body: Stack(
@@ -94,6 +100,8 @@ class _EditarPreclinicaPageState extends State<EditarPreclinicaPage> {
                   _crearPeso(preclinica),
                   _espacio(),
                   _crearAltura(preclinica),
+                  _espacio(),
+                  _crearTemperatura(preclinica),
                   _espacio(),
                   _crearFrecuenciaRespiratoria(preclinica),
                   _espacio(),
@@ -152,6 +160,21 @@ class _EditarPreclinicaPageState extends State<EditarPreclinicaPage> {
         keyboardType: TextInputType.numberWithOptions(decimal: true),
         decoration: inputsDecorations('Altura', Icons.account_circle,
             hintTexto: 'Centimetros'),
+      ),
+    );
+  }
+
+  Widget _crearTemperatura(PreclinicaViewModel preclinica) {
+    return Padding(
+      padding: EdgeInsets.only(left: 8.0, right: 8.0),
+      child: TextFormField(
+        initialValue: preclinica.temperatura.toString(),
+        autovalidate: true,
+        validator: isNumeric,
+        onSaved: (value) => preclinica.temperatura = double.parse(value),
+        keyboardType: TextInputType.numberWithOptions(decimal: true),
+        decoration: inputsDecorations('Temperatura', Icons.account_circle,
+            hintTexto: 'Cº'),
       ),
     );
   }
@@ -241,9 +264,7 @@ class _EditarPreclinicaPageState extends State<EditarPreclinicaPage> {
               color: Colors.blueGrey,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20.0)),
-              onPressed: () {
-                _formKey.currentState.reset();
-              },
+              onPressed: () => Navigator.popAndPushNamed(context, 'preclinica'),
               icon: Icon(Icons.clear),
               label: Text('Cancelar')),
         ),
