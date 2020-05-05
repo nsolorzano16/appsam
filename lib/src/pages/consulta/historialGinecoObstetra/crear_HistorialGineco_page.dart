@@ -1,4 +1,3 @@
-import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:getflutter/getflutter.dart';
 import 'package:intl/intl.dart';
@@ -498,15 +497,8 @@ class _CrearHistorialGinecoObstetraPageState
         _anticonceptivoController.text.isEmpty &&
         _vacunacionController.text.isEmpty &&
         _notasController.text.isEmpty) {
-      mostrarFlushBar(
-          context,
-          Colors.black,
-          'Info',
-          'El formulario no puede estar vacio',
-          3,
-          FlushbarPosition.BOTTOM,
-          Icons.info,
-          Colors.white);
+      mostrarFlushBar(context, Colors.black, 'Info',
+          'El formulario no puede estar vacio', 3, Icons.info, Colors.white);
     } else {
       _formkey.currentState.save();
       await _pr.show();
@@ -523,16 +515,16 @@ class _CrearHistorialGinecoObstetraPageState
       }
 
       if (_historialGuardado != null) {
-        _pr.hide();
+        await _pr.hide();
         mostrarFlushBar(context, Colors.green, 'Info', 'Datos Guardados', 2,
-            FlushbarPosition.TOP, Icons.info, Colors.black);
+            Icons.info, Colors.black);
         widget.historial.historialId = _historialGuardado.historialId;
         setState(() {
           labelBoton = 'Editar';
         });
       } else {
         mostrarFlushBar(context, Colors.red, 'Info', 'Ha ocurrido un error', 2,
-            FlushbarPosition.TOP, Icons.info, Colors.white);
+            Icons.info, Colors.white);
       }
     }
   }

@@ -227,6 +227,7 @@ class _AsistentesPageState extends State<AsistentesPage> {
     _asistente.creadoPor = _usuario.userName;
     _asistente.modificadoFecha = new DateTime.now();
     _asistente.modificadoPor = _usuario.userName;
+
     Navigator.pushReplacementNamed(context, 'crear-editar-asistente',
         arguments: _asistente);
   }

@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:appsam/src/widgets/drawer.dart';
-import 'package:flushbar/flushbar.dart';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:progress_dialog/progress_dialog.dart';
@@ -282,7 +282,6 @@ class _CrearPreclinicaPageState extends State<CrearPreclinicaPage> {
                         'Información',
                         'Rellene todos los campos',
                         2,
-                        FlushbarPosition.BOTTOM,
                         Icons.info,
                         Colors.black);
                   } else {
@@ -331,23 +330,16 @@ class _CrearPreclinicaPageState extends State<CrearPreclinicaPage> {
 
     final bool resp = await bloc.addPreclinica(_preclinica);
 
-    _pr.hide();
+    await _pr.hide();
     if (resp) {
-      mostrarFlushBar(
-          context,
-          Colors.green,
-          'Info',
-          'Preclinica creada correctamente',
-          3,
-          FlushbarPosition.TOP,
-          Icons.info,
-          Colors.black);
+      mostrarFlushBar(context, Colors.green, 'Info',
+          'Preclinica creada correctamente', 3, Icons.info, Colors.black);
       Timer(Duration(seconds: 3), () {
         Navigator.pushReplacementNamed(context, 'home');
       });
     } else {
       mostrarFlushBar(context, Colors.red, 'Info', 'Ha ocurrido un error', 3,
-          FlushbarPosition.BOTTOM, Icons.info, Colors.black);
+          Icons.info, Colors.black);
     }
   }
 }

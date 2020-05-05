@@ -1,7 +1,6 @@
 import 'package:appsam/src/blocs/preclinica_bloc.dart';
 
 import 'package:appsam/src/utils/utils.dart';
-import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:getflutter/getflutter.dart';
@@ -548,13 +547,13 @@ class PreclinicaDetallePage extends StatelessWidget {
     final preclinicaEdit = await _preclinicaBloc.updatePreclinica(preclinica);
 
     if (preclinicaEdit != null) {
-      _pr.hide();
+      await _pr.hide();
 
       Navigator.pushReplacementNamed(context, 'menu_consulta',
           arguments: preclinicaEdit);
     } else {
       mostrarFlushBar(context, Colors.red, 'Info', 'Ha ocurrido un error', 2,
-          FlushbarPosition.TOP, Icons.info, Colors.white);
+          Icons.info, Colors.white);
     }
   }
 }

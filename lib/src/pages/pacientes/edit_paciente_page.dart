@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -1222,15 +1221,8 @@ class _EditarPacientePageState extends State<EditarPacientePage> {
     UsuarioModel _usuario,
   ) async {
     if (!_formKey.currentState.validate()) {
-      mostrarFlushBar(
-          context,
-          Colors.black,
-          'Información',
-          'Rellene todos los campos',
-          2,
-          FlushbarPosition.BOTTOM,
-          Icons.info,
-          Colors.white);
+      mostrarFlushBar(context, Colors.black, 'Información',
+          'Rellene todos los campos', 2, Icons.info, Colors.white);
     } else {
       _formKey.currentState.save();
       _pacienteGuardar.pacienteId = _paciente.pacienteId;
@@ -1317,18 +1309,11 @@ class _EditarPacientePageState extends State<EditarPacientePage> {
       _formKey.currentState.reset();
       final PacientesViewModel resp =
           await blocPaciente.updatePaciente(_pacienteGuardar);
-      _pr.hide();
+      await _pr.hide();
 
       if (resp != null) {
-        mostrarFlushBar(
-            context,
-            Colors.green,
-            'Info',
-            'Paciente editado correctamente',
-            3,
-            FlushbarPosition.TOP,
-            Icons.info,
-            Colors.black);
+        mostrarFlushBar(context, Colors.green, 'Info',
+            'Paciente editado correctamente', 3, Icons.info, Colors.black);
         Timer(Duration(seconds: 3), () {
           Navigator.pushReplacementNamed(context, 'paciente_detalle',
               arguments: resp);
@@ -1340,7 +1325,6 @@ class _EditarPacientePageState extends State<EditarPacientePage> {
             'Info',
             'Ha ocurrido un error o el paciente ya existe',
             3,
-            FlushbarPosition.BOTTOM,
             Icons.info,
             Colors.black);
       }

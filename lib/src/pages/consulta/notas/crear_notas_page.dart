@@ -1,4 +1,3 @@
-import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 
 import 'package:appsam/src/blocs/notas_bloc.dart';
@@ -368,12 +367,12 @@ class _CrearNotasPageState extends State<CrearNotasPage> {
     await _pr.show();
     final List<Notas> lista = await _notasBloc.addListaNotas(_listaNotas);
 
-    _pr.hide();
+    await _pr.hide();
     if (lista != null) {
       _listaNotas.replaceRange(0, _listaNotas.length, lista);
     } else {
       mostrarFlushBar(context, Colors.red, 'Info', 'Ha ocurrido un error', 3,
-          FlushbarPosition.BOTTOM, Icons.info, Colors.black);
+          Icons.info, Colors.black);
     }
   }
 
@@ -397,13 +396,13 @@ class _CrearNotasPageState extends State<CrearNotasPage> {
     );
     await _pr.show();
     final List<Notas> lista = await _notasBloc.updateListaNotas(_listaNotas);
-    _pr.hide();
+    await _pr.hide();
 
     if (lista != null) {
       _listaNotas.replaceRange(0, _listaNotas.length, lista);
     } else {
       mostrarFlushBar(context, Colors.red, 'Info', 'Ha ocurrido un error', 3,
-          FlushbarPosition.BOTTOM, Icons.info, Colors.black);
+          Icons.info, Colors.black);
     }
   }
 
@@ -429,13 +428,13 @@ class _CrearNotasPageState extends State<CrearNotasPage> {
     f.activo = false;
     bool resp = await _notasBloc.desactivar(f);
     _listaNotas.remove(f);
-    _pr.hide();
+    await _pr.hide();
     if (resp) {
       mostrarFlushBar(context, Colors.green, 'Info', 'Datos Guardados', 2,
-          FlushbarPosition.TOP, Icons.info, Colors.black);
+          Icons.info, Colors.black);
     } else {
       mostrarFlushBar(context, Colors.red, 'Info', 'Ha ocurrido un error', 3,
-          FlushbarPosition.BOTTOM, Icons.info, Colors.black);
+          Icons.info, Colors.black);
     }
     setState(() {});
   }

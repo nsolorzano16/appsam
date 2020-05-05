@@ -1,4 +1,3 @@
-import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:getflutter/getflutter.dart';
@@ -165,40 +164,19 @@ class ResetMyPasswordPage extends StatelessWidget {
                   usuario.usuarioId, pass, modificadoPor);
               if (user != null) {
                 await _pr.hide();
-                mostrarFlushBar(
-                    context,
-                    Colors.green,
-                    'Info',
-                    'Datos Guardados',
-                    2,
-                    FlushbarPosition.TOP,
-                    Icons.info,
-                    Colors.black);
+                mostrarFlushBar(context, Colors.green, 'Info',
+                    'Datos Guardados', 2, Icons.info, Colors.black);
                 Future.delayed(Duration(seconds: 2)).then((_) {
                   Navigator.of(context).pushNamedAndRemoveUntil(
                       'login', (Route<dynamic> route) => false);
                 });
               } else {
-                mostrarFlushBar(
-                    context,
-                    Colors.red,
-                    'Info',
-                    'Ha ocurrido un error',
-                    2,
-                    FlushbarPosition.TOP,
-                    Icons.info,
-                    Colors.white);
+                mostrarFlushBar(context, Colors.red, 'Info',
+                    'Ha ocurrido un error', 2, Icons.info, Colors.white);
               }
             } else {
-              mostrarFlushBar(
-                  context,
-                  Colors.black,
-                  'Info',
-                  'Las contraseñas no coinciden.',
-                  2,
-                  FlushbarPosition.TOP,
-                  Icons.info,
-                  Colors.white);
+              mostrarFlushBar(context, Colors.black, 'Info',
+                  'Las contraseñas no coinciden.', 2, Icons.info, Colors.white);
             }
           } else {
             mostrarFlushBar(
@@ -207,7 +185,6 @@ class ResetMyPasswordPage extends StatelessWidget {
                 'Info',
                 'Por favor rellene todos los campos',
                 2,
-                FlushbarPosition.TOP,
                 Icons.info,
                 Colors.white);
           }

@@ -5,7 +5,7 @@ import 'package:appsam/src/models/usuario_model.dart';
 import 'package:appsam/src/utils/storage_util.dart';
 import 'package:appsam/src/utils/utils.dart';
 import 'package:appsam/src/widgets/drawer.dart';
-import 'package:flushbar/flushbar.dart';
+
 import 'package:flutter/material.dart';
 import 'package:getflutter/getflutter.dart';
 import 'package:progress_dialog/progress_dialog.dart';
@@ -169,7 +169,7 @@ class _CrearExamenGinecologicoPageState
       if (_examenGinecologicoGuardado != null) {
         _pr.hide();
         mostrarFlushBar(context, Colors.green, 'Info', 'Datos Guardados', 2,
-            FlushbarPosition.TOP, Icons.info, Colors.black);
+            Icons.info, Colors.black);
         _examenGinecologico.examenId = 0;
         _examenGinecologico.activo = true;
         _afuController.text = '';
@@ -184,7 +184,7 @@ class _CrearExamenGinecologicoPageState
         });
       } else {
         mostrarFlushBar(context, Colors.red, 'Info', 'Ha ocurrido un error', 2,
-            FlushbarPosition.TOP, Icons.info, Colors.white);
+            Icons.info, Colors.white);
       }
     } else {
       print('nada');
@@ -313,15 +313,8 @@ class _CrearExamenGinecologicoPageState
         _fcfController.text.isEmpty &&
         _apController.text.isEmpty &&
         _notasController.text.isEmpty) {
-      mostrarFlushBar(
-          context,
-          Colors.black,
-          'Info',
-          'El formulario no puede estar vacio',
-          3,
-          FlushbarPosition.BOTTOM,
-          Icons.info,
-          Colors.white);
+      mostrarFlushBar(context, Colors.black, 'Info',
+          'El formulario no puede estar vacio', 3, Icons.info, Colors.white);
     } else {
       _formkey.currentState.save();
       await _pr.show();
@@ -337,10 +330,10 @@ class _CrearExamenGinecologicoPageState
             .updateExamenGinecologico(_examenGinecologico);
       }
 
-      _pr.hide();
+      await _pr.hide();
       if (_examenGinecologicoGuardado != null) {
         mostrarFlushBar(context, Colors.green, 'Info', 'Datos Guardados', 2,
-            FlushbarPosition.TOP, Icons.info, Colors.black);
+            Icons.info, Colors.black);
         _examenGinecologico.examenId = _examenGinecologicoGuardado.examenId;
         _examenGinecologico.creadoFecha =
             _examenGinecologicoGuardado.creadoFecha;
@@ -355,7 +348,7 @@ class _CrearExamenGinecologicoPageState
         });
       } else {
         mostrarFlushBar(context, Colors.red, 'Info', 'Ha ocurrido un error', 2,
-            FlushbarPosition.TOP, Icons.info, Colors.white);
+            Icons.info, Colors.white);
       }
     }
   }

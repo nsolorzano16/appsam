@@ -3,7 +3,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'dart:async';
 import 'package:getflutter/getflutter.dart';
 import 'package:intl/intl.dart';
-import 'package:flushbar/flushbar.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 
@@ -447,7 +446,6 @@ class _CrearAsistentesPageState extends State<CrearAsistentesPage> {
                           'Información',
                           'Rellene todos los campos',
                           2,
-                          FlushbarPosition.BOTTOM,
                           Icons.info,
                           Colors.black);
                     } else {
@@ -498,7 +496,6 @@ class _CrearAsistentesPageState extends State<CrearAsistentesPage> {
                             'Info',
                             'Ha ocurrido un error o el usuario ya existe, revise el correo,identificación, nombre de usuario, ó email.',
                             4,
-                            FlushbarPosition.TOP,
                             Icons.info,
                             Colors.white);
                       }

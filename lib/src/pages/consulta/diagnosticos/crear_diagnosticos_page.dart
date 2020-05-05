@@ -5,7 +5,7 @@ import 'package:appsam/src/models/usuario_model.dart';
 import 'package:appsam/src/utils/storage_util.dart';
 import 'package:appsam/src/utils/utils.dart';
 import 'package:appsam/src/widgets/drawer.dart';
-import 'package:flushbar/flushbar.dart';
+
 import 'package:flutter/material.dart';
 import 'package:getflutter/getflutter.dart';
 import 'package:progress_dialog/progress_dialog.dart';
@@ -376,7 +376,7 @@ class _CrearDiagnosticosPageState extends State<CrearDiagnosticosPage> {
       _listaDiagnosticos.replaceRange(0, _listaDiagnosticos.length, lista);
     } else {
       mostrarFlushBar(context, Colors.red, 'Info', 'Ha ocurrido un error', 3,
-          FlushbarPosition.BOTTOM, Icons.info, Colors.black);
+          Icons.info, Colors.black);
     }
   }
 
@@ -407,7 +407,7 @@ class _CrearDiagnosticosPageState extends State<CrearDiagnosticosPage> {
       _listaDiagnosticos.replaceRange(0, _listaDiagnosticos.length, lista);
     } else {
       mostrarFlushBar(context, Colors.red, 'Info', 'Ha ocurrido un error', 3,
-          FlushbarPosition.BOTTOM, Icons.info, Colors.black);
+          Icons.info, Colors.black);
     }
   }
 
@@ -436,10 +436,10 @@ class _CrearDiagnosticosPageState extends State<CrearDiagnosticosPage> {
     _pr.hide();
     if (resp) {
       mostrarFlushBar(context, Colors.green, 'Info', 'Datos Guardados', 2,
-          FlushbarPosition.TOP, Icons.info, Colors.black);
+          Icons.info, Colors.black);
     } else {
       mostrarFlushBar(context, Colors.red, 'Info', 'Ha ocurrido un error', 3,
-          FlushbarPosition.BOTTOM, Icons.info, Colors.black);
+          Icons.info, Colors.black);
     }
     setState(() {});
   }

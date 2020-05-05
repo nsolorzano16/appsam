@@ -1,4 +1,3 @@
-import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:getflutter/getflutter.dart';
@@ -160,9 +159,7 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
                   pagination: true,
                   height: size.height,
                   onPageChanged: (index) {
-                    setState(() {
-                      //TODO: aqui se quito index
-                    });
+                    setState(() {});
                   },
                   items: [
                     _formParte1(context),
@@ -935,15 +932,8 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
         _rectoProstaticoController.text.isEmpty &&
         _miembrosController.text.isEmpty &&
         _neuroligicoController.text.isEmpty) {
-      mostrarFlushBar(
-          context,
-          Colors.black,
-          'Info',
-          'El formulario no puede estar vacio',
-          3,
-          FlushbarPosition.BOTTOM,
-          Icons.info,
-          Colors.white);
+      mostrarFlushBar(context, Colors.black, 'Info',
+          'El formulario no puede estar vacio', 3, Icons.info, Colors.white);
     } else {
       _formkey.currentState.save();
       obtenerValores();
@@ -959,11 +949,11 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
         _examenFisicoGuardado =
             await _examenFisicoBloc.updateExamenFisico(_examenFisico);
       }
-      _pr.hide();
+      await _pr.hide();
 
       if (_examenFisicoGuardado != null) {
         mostrarFlushBar(context, Colors.green, 'Info', 'Datos Guardados', 2,
-            FlushbarPosition.TOP, Icons.info, Colors.black);
+            Icons.info, Colors.black);
         _examenFisico.examenFisicoId = _examenFisicoGuardado.examenFisicoId;
         _examenFisico.creadoFecha = _examenFisicoGuardado.creadoFecha;
         _examenFisico.creadoPor = _examenFisicoGuardado.creadoPor;
@@ -975,7 +965,7 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
         });
       } else {
         mostrarFlushBar(context, Colors.red, 'Info', 'Ha ocurrido un error', 2,
-            FlushbarPosition.TOP, Icons.info, Colors.white);
+            Icons.info, Colors.white);
       }
     }
   }
@@ -1007,7 +997,7 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
       _pr.hide();
       if (_examenFisicoGuardado != null) {
         mostrarFlushBar(context, Colors.green, 'Info', 'Datos Guardados', 2,
-            FlushbarPosition.TOP, Icons.info, Colors.black);
+            Icons.info, Colors.black);
         _examenFisico.examenFisicoId = 0;
         _examenFisico.activo = true;
         // limpiar todo
@@ -1017,7 +1007,7 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
         });
       } else {
         mostrarFlushBar(context, Colors.red, 'Info', 'Ha ocurrido un error', 2,
-            FlushbarPosition.TOP, Icons.info, Colors.white);
+            Icons.info, Colors.white);
       }
     } else {
       print('nada');

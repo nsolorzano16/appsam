@@ -1,4 +1,3 @@
-import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:getflutter/getflutter.dart';
 import 'package:progress_dialog/progress_dialog.dart';
@@ -306,9 +305,9 @@ class _CrearHabitosPageState extends State<CrearHabitosPage> {
     }
 
     if (_habitosGuardado != null) {
-      _pr.hide();
+      await _pr.hide();
       mostrarFlushBar(context, Colors.green, 'Info', 'Datos Guardados', 2,
-          FlushbarPosition.TOP, Icons.info, Colors.black);
+          Icons.info, Colors.black);
       _habitos.activo = true;
       _habitos.habitoId = _habitosGuardado.habitoId;
       _habitos.creadoFecha = _habitosGuardado.creadoFecha;
@@ -323,7 +322,7 @@ class _CrearHabitosPageState extends State<CrearHabitosPage> {
       _habitosBloc.onChangeLabelBoton('Editar');
     } else {
       mostrarFlushBar(context, Colors.red, 'Info', 'Ha ocurrido un error', 2,
-          FlushbarPosition.TOP, Icons.info, Colors.black);
+          Icons.info, Colors.black);
     }
   }
 }

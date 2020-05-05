@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -1209,15 +1208,8 @@ class _CrearPacientePageState extends State<CrearPacientePage> {
     UsuarioModel _usuario,
   ) async {
     if (!_formKey.currentState.validate()) {
-      mostrarFlushBar(
-          context,
-          Colors.black,
-          'Información',
-          'Rellene todos los campos',
-          2,
-          FlushbarPosition.BOTTOM,
-          Icons.info,
-          Colors.white);
+      mostrarFlushBar(context, Colors.black, 'Información',
+          'Rellene todos los campos', 2, Icons.info, Colors.white);
     } else {
       _formKey.currentState.save();
       _paciente.activo = true;
@@ -1287,18 +1279,11 @@ class _CrearPacientePageState extends State<CrearPacientePage> {
       _inputFieldDateController.text = "";
       _formKey.currentState.reset();
       final bool resp = await blocPaciente.addPaciente(_paciente);
-      _pr.hide();
+      await _pr.hide();
 
       if (resp) {
-        mostrarFlushBar(
-            context,
-            Colors.green,
-            'Info',
-            'Paciente creado correctamente',
-            3,
-            FlushbarPosition.TOP,
-            Icons.info,
-            Colors.black);
+        mostrarFlushBar(context, Colors.green, 'Info',
+            'Paciente creado correctamente', 3, Icons.info, Colors.black);
         Timer(Duration(seconds: 3), () {
           Navigator.pushReplacementNamed(context, 'home');
         });
@@ -1309,7 +1294,6 @@ class _CrearPacientePageState extends State<CrearPacientePage> {
             'Info',
             'Ha ocurrido un error o el paciente ya existe',
             3,
-            FlushbarPosition.BOTTOM,
             Icons.info,
             Colors.black);
       }

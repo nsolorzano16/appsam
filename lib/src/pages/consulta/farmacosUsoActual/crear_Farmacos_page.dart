@@ -1,4 +1,3 @@
-import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 
@@ -540,12 +539,12 @@ class _CrearFarmacosUsoActualPageState
     final List<FarmacosUsoActual> lista =
         await _farmacosBloc.addListaFarmacos(_listaFarmacos);
 
-    _pr.hide();
+    await _pr.hide();
     if (lista != null) {
       _listaFarmacos.replaceRange(0, _listaFarmacos.length, lista);
     } else {
       mostrarFlushBar(context, Colors.red, 'Info', 'Ha ocurrido un error', 3,
-          FlushbarPosition.BOTTOM, Icons.info, Colors.black);
+          Icons.info, Colors.black);
     }
   }
 
@@ -570,13 +569,13 @@ class _CrearFarmacosUsoActualPageState
     await _pr.show();
     final List<FarmacosUsoActual> lista =
         await _farmacosBloc.updateListaFarmacos(_listaFarmacos);
-    _pr.hide();
+    await _pr.hide();
 
     if (lista != null) {
       _listaFarmacos.replaceRange(0, _listaFarmacos.length, lista);
     } else {
       mostrarFlushBar(context, Colors.red, 'Info', 'Ha ocurrido un error', 3,
-          FlushbarPosition.BOTTOM, Icons.info, Colors.black);
+          Icons.info, Colors.black);
     }
   }
 
@@ -602,13 +601,13 @@ class _CrearFarmacosUsoActualPageState
     f.activo = false;
     bool resp = await _farmacosBloc.desactivar(f);
     _listaFarmacos.remove(f);
-    _pr.hide();
+    await _pr.hide();
     if (resp) {
       mostrarFlushBar(context, Colors.green, 'Info', 'Datos Guardados', 2,
-          FlushbarPosition.TOP, Icons.info, Colors.black);
+          Icons.info, Colors.black);
     } else {
-      mostrarFlushBar(context, Colors.red, 'Info', 'Ha ocurrido un error', 3,
-          FlushbarPosition.BOTTOM, Icons.info, Colors.black);
+      mostrarFlushBar(context, Colors.red, 'Info', 'Ha ocurrido un error', 2,
+          Icons.info, Colors.black);
     }
     setState(() {});
   }

@@ -45,19 +45,12 @@ Widget loadingIndicator(BuildContext context) {
   );
 }
 
-void mostrarFlushBar(
-    BuildContext context,
-    Color color,
-    String title,
-    String mensaje,
-    int segundos,
-    FlushbarPosition position,
-    IconData icon,
-    Color iconColor) {
+void mostrarFlushBar(BuildContext context, Color color, String title,
+    String mensaje, int segundos, IconData icon, Color iconColor) {
   Flushbar(
     borderRadius: 20.0,
     flushbarStyle: FlushbarStyle.FLOATING,
-    flushbarPosition: position,
+    flushbarPosition: FlushbarPosition.TOP,
     backgroundColor: color,
     margin: EdgeInsets.all(10.0),
     title: title,

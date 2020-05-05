@@ -1,4 +1,3 @@
-import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:getflutter/getflutter.dart';
 import 'package:progress_dialog/progress_dialog.dart';
@@ -276,15 +275,8 @@ class _CrearAntecedentesPageState extends State<CrearAntecedentesPage> {
         _antNoPatologicosFamiCtrl.text.isEmpty &&
         _antNoPatologicosPersCtrl.text.isEmpty &&
         _antInmunoAlergicosCtrl.text.isEmpty) {
-      mostrarFlushBar(
-          context,
-          Colors.black,
-          'Info',
-          'El formulario no puede estar vacio',
-          3,
-          FlushbarPosition.BOTTOM,
-          Icons.info,
-          Colors.white);
+      mostrarFlushBar(context, Colors.black, 'Info',
+          'El formulario no puede estar vacio', 3, Icons.info, Colors.white);
     } else {
       _formkey.currentState.save();
       await _pr.show();
@@ -303,7 +295,7 @@ class _CrearAntecedentesPageState extends State<CrearAntecedentesPage> {
       if (_antecedentesGuardado != null) {
         _pr.hide();
         mostrarFlushBar(context, Colors.green, 'Info', 'Datos Guardados', 2,
-            FlushbarPosition.TOP, Icons.info, Colors.black);
+            Icons.info, Colors.black);
         _antecedentes.antecedentesFamiliaresPersonalesId =
             _antecedentesGuardado.antecedentesFamiliaresPersonalesId;
         _antecedentes.creadoFecha = _antecedentesGuardado.creadoFecha;
@@ -316,7 +308,7 @@ class _CrearAntecedentesPageState extends State<CrearAntecedentesPage> {
         });
       } else {
         mostrarFlushBar(context, Colors.red, 'Info', 'Ha ocurrido un error', 2,
-            FlushbarPosition.TOP, Icons.info, Colors.white);
+            Icons.info, Colors.white);
       }
     }
   }
