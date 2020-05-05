@@ -109,7 +109,7 @@ class _FormEditarPageState extends State<FormEditarPage> {
                                 borderRadius: BorderRadius.circular(20.0)),
                             icon: Icon(Icons.save),
                             label: Text('Guardar'),
-                            onPressed: () {
+                            onPressed: () async {
                               if (!_formKey.currentState.validate()) {
                                 Flushbar(
                                   title: 'Información',
@@ -145,9 +145,9 @@ class _FormEditarPageState extends State<FormEditarPage> {
                                       fontSize: 19.0,
                                       fontWeight: FontWeight.w600),
                                 );
-                                _pr.show();
-                                bloc.updateUser(_asistente).then((user) {
-                                  _pr.hide();
+                                await _pr.show();
+                                bloc.updateUser(_asistente).then((user) async {
+                                  await _pr.hide();
                                   Navigator.pushReplacementNamed(
                                       context, 'asistente_detalle',
                                       arguments: user);

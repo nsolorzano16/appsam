@@ -275,14 +275,14 @@ class _MyProfilePageState extends State<MyProfilePage> {
         messageTextStyle: TextStyle(
             color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600),
       );
-      _pr.show();
+      await _pr.show();
       final UsuarioModel usuario =
           await bloc.subirFotoApi(user.usuarioId, foto);
       setState(() {
         StorageUtil.putString('usuarioGlobal', usuarioModelToJson(usuario));
       });
 
-      _pr.hide();
+      await _pr.hide();
       foto = null;
     }
   }

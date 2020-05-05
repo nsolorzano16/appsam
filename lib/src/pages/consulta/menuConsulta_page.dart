@@ -339,7 +339,7 @@ class _MenuConsultaPageState extends State<MenuConsultaPage> {
         final HistorialGinecoObstetra historial =
             await _historialGinecoBloc.getHistorialGinecoObstetra(
                 preclinica.pacienteId, preclinica.doctorId);
-        _pr.hide();
+        await _pr.hide();
         if (historial != null) {
           Navigator.pushReplacement(
               context,

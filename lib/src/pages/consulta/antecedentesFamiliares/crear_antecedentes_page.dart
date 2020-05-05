@@ -293,7 +293,7 @@ class _CrearAntecedentesPageState extends State<CrearAntecedentesPage> {
       }
 
       if (_antecedentesGuardado != null) {
-        _pr.hide();
+        await _pr.hide();
         mostrarFlushBar(context, Colors.green, 'Info', 'Datos Guardados', 2,
             Icons.info, Colors.black);
         _antecedentes.antecedentesFamiliaresPersonalesId =

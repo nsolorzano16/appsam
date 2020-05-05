@@ -994,7 +994,7 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
       _examenFisico.activo = false;
       _examenFisicoGuardado =
           await _examenFisicoBloc.updateExamenFisico(_examenFisico);
-      _pr.hide();
+      await _pr.hide();
       if (_examenFisicoGuardado != null) {
         mostrarFlushBar(context, Colors.green, 'Info', 'Datos Guardados', 2,
             Icons.info, Colors.black);

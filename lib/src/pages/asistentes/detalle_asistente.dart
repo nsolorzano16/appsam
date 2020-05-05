@@ -112,14 +112,13 @@ class _AsistenteDetalleState extends State<AsistenteDetalle> {
   }
 
   _desactivar(BuildContext context, CrearEditarAsistentesBloc bloc,
-      UsuarioModel usuario) {
+      UsuarioModel usuario) async {
     final _pr = new ProgressDialog(
       context,
       type: ProgressDialogType.Normal,
       isDismissible: false,
       showLogs: false,
     );
-    _pr.show();
     _pr.update(
       progress: 50.0,
       message: "Espere...",
@@ -127,12 +126,13 @@ class _AsistenteDetalleState extends State<AsistenteDetalle> {
           padding: EdgeInsets.all(5.0), child: CircularProgressIndicator()),
       maxProgress: 100.0,
     );
-    Timer(Duration(seconds: 2), () {
+    await _pr.show();
+    Timer(Duration(seconds: 2), () async {
       setState(() {
         usuario.activo = !usuario.activo;
         bloc.updateUser(usuario);
       });
-      _pr.hide();
+      await _pr.hide();
     });
   }
 

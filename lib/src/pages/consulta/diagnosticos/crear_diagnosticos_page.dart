@@ -371,7 +371,7 @@ class _CrearDiagnosticosPageState extends State<CrearDiagnosticosPage> {
     final List<Diagnosticos> lista =
         await _diagnosticosBloc.addListaDiagnosticos(_listaDiagnosticos);
 
-    _pr.hide();
+    await _pr.hide();
     if (lista != null) {
       _listaDiagnosticos.replaceRange(0, _listaDiagnosticos.length, lista);
     } else {
@@ -401,7 +401,7 @@ class _CrearDiagnosticosPageState extends State<CrearDiagnosticosPage> {
     await _pr.show();
     final List<Diagnosticos> lista =
         await _diagnosticosBloc.updateListaDiagnosticos(_listaDiagnosticos);
-    _pr.hide();
+    await _pr.hide();
 
     if (lista != null) {
       _listaDiagnosticos.replaceRange(0, _listaDiagnosticos.length, lista);
@@ -433,7 +433,7 @@ class _CrearDiagnosticosPageState extends State<CrearDiagnosticosPage> {
     f.activo = false;
     bool resp = await _diagnosticosBloc.desactivar(f);
     _listaDiagnosticos.remove(f);
-    _pr.hide();
+    await _pr.hide();
     if (resp) {
       mostrarFlushBar(context, Colors.green, 'Info', 'Datos Guardados', 2,
           Icons.info, Colors.black);

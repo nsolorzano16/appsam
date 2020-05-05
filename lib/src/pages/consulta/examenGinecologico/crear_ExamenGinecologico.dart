@@ -167,7 +167,7 @@ class _CrearExamenGinecologicoPageState
       _examenGinecologicoGuardado = await _examenGinecologicoBloc
           .updateExamenGinecologico(_examenGinecologico);
       if (_examenGinecologicoGuardado != null) {
-        _pr.hide();
+        await _pr.hide();
         mostrarFlushBar(context, Colors.green, 'Info', 'Datos Guardados', 2,
             Icons.info, Colors.black);
         _examenGinecologico.examenId = 0;
