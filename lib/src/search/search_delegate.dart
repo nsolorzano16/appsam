@@ -38,11 +38,13 @@ class DataSearch extends SearchDelegate {
 
   @override
   Widget buildSuggestions(BuildContext context) {
+    final UsuarioModel _usuario =
+        usuarioModelFromJson(StorageUtil.getString('usuarioGlobal'));
     // son las sugerencias que aparecen cuando la persona escribe
     final bloc = Provider.asistentesBloc(context);
     if (query.isEmpty) return Container();
-    final doctorId = StorageUtil.getInt('usuarioId');
-    bloc.cargarAsistentesPaginadoBusqueda(1, query, doctorId);
+
+    bloc.cargarAsistentesPaginadoBusqueda(1, query, _usuario.usuarioId);
     return StreamBuilder(
       stream: bloc.asistentesBusquedaStream,
       builder:
@@ -87,10 +89,11 @@ class DataSearch extends SearchDelegate {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(30.0),
                 child: FadeInImage(
+                    fit: BoxFit.cover,
                     width: 40.0,
                     height: 40.0,
                     placeholder: AssetImage('assets/jar-loading.gif'),
-                    image: NetworkImage('https://i.pravatar.cc/300?img=5')),
+                    image: NetworkImage(usuario.fotoUrl)),
               )),
           title: Container(
             child: Text(

@@ -259,7 +259,7 @@ class _CrearPreclinicaPageState extends State<CrearPreclinicaPage> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20.0)),
               onPressed: () {
-                _formKey.currentState.reset();
+                Navigator.popAndPushNamed(context, 'pacientes');
               },
               icon: Icon(Icons.clear),
               label: Text('Cancelar')),

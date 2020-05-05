@@ -168,12 +168,16 @@ class _PacientesPageState extends State<PacientesPage> {
           default:
             final asistentes = snapshot.data;
 
-            return ListView.builder(
-                controller: _scrollController,
-                itemCount: asistentes.length,
-                itemBuilder: (context, int index) {
-                  return _crearItem(context, asistentes[index]);
-                });
+            return (asistentes.length == 0)
+                ? Center(
+                    child: Text('No hay registros para mostrar'),
+                  )
+                : ListView.builder(
+                    controller: _scrollController,
+                    itemCount: asistentes.length,
+                    itemBuilder: (context, int index) {
+                      return _crearItem(context, asistentes[index]);
+                    });
         }
       },
     );

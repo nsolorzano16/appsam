@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -37,6 +38,7 @@ class MyApp extends StatelessWidget {
               localizationsDelegates: [
                 GlobalMaterialLocalizations.delegate,
                 GlobalWidgetsLocalizations.delegate,
+                CustomLocalizationDelegate(),
               ],
               supportedLocales: [
                 const Locale('en', 'US'), // English
@@ -56,4 +58,29 @@ class MyApp extends StatelessWidget {
       ),
     );
   }
+}
+
+class CustomLocalizationDelegate
+    extends LocalizationsDelegate<MaterialLocalizations> {
+  const CustomLocalizationDelegate();
+
+  @override
+  bool isSupported(Locale locale) => locale.languageCode == 'es';
+
+  @override
+  Future<MaterialLocalizations> load(Locale locale) =>
+      SynchronousFuture<MaterialLocalizations>(const CustomLocalization());
+
+  @override
+  bool shouldReload(CustomLocalizationDelegate old) => false;
+
+  @override
+  String toString() => 'CustomLocalization.delegate(es_ES)';
+}
+
+class CustomLocalization extends DefaultMaterialLocalizations {
+  const CustomLocalization();
+
+  @override
+  String get searchFieldLabel => "My hint text";
 }

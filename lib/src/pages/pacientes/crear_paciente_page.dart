@@ -498,9 +498,13 @@ class _CrearPacientePageState extends State<CrearPacientePage> {
 
   Widget _crearCampoParentesco() {
     final parentescoLista = new List<ParentescoModel>();
-    parentescoLista.add(new ParentescoModel(texto: 'Hij@', valor: 'hij@'));
-    parentescoLista.add(new ParentescoModel(texto: 'Madre', valor: 'madre'));
-    parentescoLista.add(new ParentescoModel(texto: 'Padre', valor: 'padre'));
+    parentescoLista
+        .add(new ParentescoModel(texto: 'Familiar', valor: 'familiar'));
+    parentescoLista.add(new ParentescoModel(texto: 'Amigo', valor: 'amigo'));
+    parentescoLista
+        .add(new ParentescoModel(texto: 'Conyugue', valor: 'conyugue'));
+    parentescoLista
+        .add(new ParentescoModel(texto: 'Hijo(a)', valor: 'hijo(a)'));
     parentescoLista.add(new ParentescoModel(texto: 'Otro', valor: 'otro'));
 
     return StreamBuilder(

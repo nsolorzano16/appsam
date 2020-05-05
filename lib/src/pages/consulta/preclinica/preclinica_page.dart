@@ -114,12 +114,16 @@ class _PreclinicaPageState extends State<PreclinicaPage> {
           default:
             final preclinicas = snapshot.data;
 
-            return ListView.builder(
-                controller: _scrollController,
-                itemCount: preclinicas.length,
-                itemBuilder: (context, int index) {
-                  return _crearItem(context, preclinicas[index]);
-                });
+            return (preclinicas.length == 0)
+                ? Center(
+                    child: Text('No hay registros para mostrar'),
+                  )
+                : ListView.builder(
+                    controller: _scrollController,
+                    itemCount: preclinicas.length,
+                    itemBuilder: (context, int index) {
+                      return _crearItem(context, preclinicas[index]);
+                    });
         }
       },
     );
