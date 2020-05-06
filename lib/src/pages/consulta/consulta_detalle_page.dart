@@ -1,5 +1,6 @@
 import 'package:appsam/src/blocs/consulta_bloc.dart';
 import 'package:appsam/src/models/antecedentesFamiliaresPersonales_model.dart';
+import 'package:appsam/src/models/consultaGeneral_model.dart';
 import 'package:appsam/src/models/consulta_model.dart';
 import 'package:appsam/src/models/diagnosticos_model.dart';
 import 'package:appsam/src/models/examenFisicoGinecologico_model.dart';
@@ -129,6 +130,12 @@ class _ConsultaDetallePageState extends State<ConsultaDetallePage> {
                               estiloDatos: estiloDatos,
                               estiloSubt: _estiloSubt)
                           : Container(),
+                      (_consultaDetalle.consultaGeneral != null)
+                          ? _AccordionDetalleConsulta(
+                              consultaGeneral: _consultaDetalle.consultaGeneral,
+                              estiloDatos: estiloDatos,
+                              estiloSubt: _estiloSubt)
+                          : Container(),
                       (_consultaDetalle.examenFisico != null)
                           ? _AccordionExamenFisico(
                               examenFisico: _consultaDetalle.examenFisico,
@@ -157,9 +164,7 @@ class _ConsultaDetallePageState extends State<ConsultaDetallePage> {
                   ),
                 );
               } else {
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
+                return loadingIndicator(context);
               }
             },
           ),
@@ -576,8 +581,7 @@ class _AccordionAntecedentes extends StatelessWidget {
             style: _estiloSubt,
           ),
           Text(
-            validaNulo(
-                _antecedentes.antecedentesPatologicosFamiliares.toString()),
+            validaNulo(_antecedentes.antecedentesPatologicosFamiliares),
             textAlign: TextAlign.justify,
             style: estiloDatos,
           ),
@@ -587,8 +591,7 @@ class _AccordionAntecedentes extends StatelessWidget {
             style: _estiloSubt,
           ),
           Text(
-            validaNulo(
-                _antecedentes.antecedentesPatologicosPersonales.toString()),
+            validaNulo(_antecedentes.antecedentesPatologicosPersonales),
             textAlign: TextAlign.justify,
             style: estiloDatos,
           ),
@@ -598,8 +601,7 @@ class _AccordionAntecedentes extends StatelessWidget {
             style: _estiloSubt,
           ),
           Text(
-            validaNulo(
-                _antecedentes.antecedentesNoPatologicosFamiliares.toString()),
+            validaNulo(_antecedentes.antecedentesNoPatologicosFamiliares),
             textAlign: TextAlign.justify,
             style: estiloDatos,
           ),
@@ -609,8 +611,7 @@ class _AccordionAntecedentes extends StatelessWidget {
             style: _estiloSubt,
           ),
           Text(
-            validaNulo(
-                _antecedentes.antecedentesNoPatologicosPersonales.toString()),
+            validaNulo(_antecedentes.antecedentesNoPatologicosPersonales),
             textAlign: TextAlign.justify,
             style: estiloDatos,
           ),
@@ -620,8 +621,7 @@ class _AccordionAntecedentes extends StatelessWidget {
             style: _estiloSubt,
           ),
           Text(
-            validaNulo(
-                _antecedentes.antecedentesInmunoAlergicosPersonales.toString()),
+            validaNulo(_antecedentes.antecedentesInmunoAlergicosPersonales),
             textAlign: TextAlign.justify,
             style: estiloDatos,
           ),
@@ -856,7 +856,7 @@ class _AccordionHistorialGinecoObstetra extends StatelessWidget {
             style: _estiloSubt,
           ),
           Text(
-            validaNulo(_historial.sg.toString()),
+            validaNulo(_historial.sg),
             textAlign: TextAlign.justify,
             style: estiloDatos,
           ),
@@ -866,7 +866,7 @@ class _AccordionHistorialGinecoObstetra extends StatelessWidget {
             style: _estiloSubt,
           ),
           Text(
-            validaNulo(_historial.g.toString()),
+            validaNulo(_historial.g),
             textAlign: TextAlign.justify,
             style: estiloDatos,
           ),
@@ -876,7 +876,7 @@ class _AccordionHistorialGinecoObstetra extends StatelessWidget {
             style: _estiloSubt,
           ),
           Text(
-            validaNulo(_historial.p.toString()),
+            validaNulo(_historial.p),
             textAlign: TextAlign.justify,
             style: estiloDatos,
           ),
@@ -886,7 +886,7 @@ class _AccordionHistorialGinecoObstetra extends StatelessWidget {
             style: _estiloSubt,
           ),
           Text(
-            validaNulo(_historial.c.toString()),
+            validaNulo(_historial.c),
             textAlign: TextAlign.justify,
             style: estiloDatos,
           ),
@@ -896,7 +896,7 @@ class _AccordionHistorialGinecoObstetra extends StatelessWidget {
             style: _estiloSubt,
           ),
           Text(
-            validaNulo(_historial.hv.toString()),
+            validaNulo(_historial.hv),
             textAlign: TextAlign.justify,
             style: estiloDatos,
           ),
@@ -906,7 +906,7 @@ class _AccordionHistorialGinecoObstetra extends StatelessWidget {
             style: _estiloSubt,
           ),
           Text(
-            validaNulo(_historial.fpp.toString()),
+            validaNulo(_historial.fpp),
             textAlign: TextAlign.justify,
             style: estiloDatos,
           ),
@@ -916,7 +916,7 @@ class _AccordionHistorialGinecoObstetra extends StatelessWidget {
             style: _estiloSubt,
           ),
           Text(
-            validaNulo(_historial.uc.toString()),
+            validaNulo(_historial.uc),
             textAlign: TextAlign.justify,
             style: estiloDatos,
           ),
@@ -936,7 +936,7 @@ class _AccordionHistorialGinecoObstetra extends StatelessWidget {
             style: _estiloSubt,
           ),
           Text(
-            validaNulo(_historial.anticonceptivo.toString()),
+            validaNulo(_historial.anticonceptivo),
             textAlign: TextAlign.justify,
             style: estiloDatos,
           ),
@@ -946,7 +946,7 @@ class _AccordionHistorialGinecoObstetra extends StatelessWidget {
             style: _estiloSubt,
           ),
           Text(
-            validaNulo(_historial.vacunacion.toString()),
+            validaNulo(_historial.vacunacion),
             textAlign: TextAlign.justify,
             style: estiloDatos,
           ),
@@ -956,7 +956,7 @@ class _AccordionHistorialGinecoObstetra extends StatelessWidget {
             style: _estiloSubt,
           ),
           Text(
-            validaNulo(_historial.notas.toString()),
+            validaNulo(_historial.notas),
             textAlign: TextAlign.justify,
             style: estiloDatos,
           ),
@@ -1699,5 +1699,88 @@ class _AccordionNotas extends StatelessWidget {
         ],
       );
     }).toList();
+  }
+}
+
+class _AccordionDetalleConsulta extends StatelessWidget {
+  const _AccordionDetalleConsulta({
+    Key key,
+    @required ConsultaGeneralModel consultaGeneral,
+    @required this.estiloDatos,
+    @required TextStyle estiloSubt,
+  })  : _consultaGeneral = consultaGeneral,
+        _estiloSubt = estiloSubt,
+        super(key: key);
+
+  final ConsultaGeneralModel _consultaGeneral;
+  final TextStyle estiloDatos;
+  final TextStyle _estiloSubt;
+
+  @override
+  Widget build(BuildContext context) {
+    return GFAccordion(
+      contentPadding: EdgeInsets.all(3.0),
+      collapsedTitlebackgroundColor: Theme.of(context).accentColor,
+      expandedTitlebackgroundColor: Colors.redAccent,
+      collapsedIcon: Icon(
+        Icons.keyboard_arrow_down,
+        color: Colors.white,
+      ),
+      expandedIcon: Icon(
+        Icons.keyboard_arrow_up,
+        color: Colors.white,
+      ),
+      titleChild: Text(
+        'Información Consulta General',
+        style: TextStyle(color: Colors.white, fontSize: 16.0),
+      ),
+      contentChild: GFCard(
+          content: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            'Motivo de consulta:',
+            style: _estiloSubt,
+          ),
+          Text(
+            validaNulo(_consultaGeneral.motivoConsulta),
+            textAlign: TextAlign.justify,
+            style: estiloDatos,
+          ),
+          Divider(),
+          Text(
+            'Fog:',
+            style: _estiloSubt,
+          ),
+          Text(
+            validaNulo(_consultaGeneral.fog),
+            textAlign: TextAlign.justify,
+            style: estiloDatos,
+          ),
+          Divider(),
+          Text(
+            'Hea:',
+            style: _estiloSubt,
+          ),
+          Text(
+            validaNulo(_consultaGeneral.hea),
+            textAlign: TextAlign.justify,
+            style: estiloDatos,
+          ),
+          Divider(),
+          Text(
+            'Notas:',
+            style: _estiloSubt,
+          ),
+          Text(
+            validaNulo(_consultaGeneral.notas),
+            textAlign: TextAlign.justify,
+            style: estiloDatos,
+          ),
+          Divider(),
+        ],
+      )),
+    );
   }
 }

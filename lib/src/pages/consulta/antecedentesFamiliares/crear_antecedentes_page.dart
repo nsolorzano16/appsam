@@ -91,6 +91,7 @@ class _CrearAntecedentesPageState extends State<CrearAntecedentesPage> {
                   _antecedentes.creadoFecha = x.creadoFecha;
                   _antecedentes.modificadoPor = _usuario.userName;
                   _antecedentes.modificadoFecha = DateTime.now();
+
                   _antPatologicosFamiCtrl.text =
                       x.antecedentesPatologicosFamiliares;
                   _antPatologicosPersCtrl.text =

@@ -5,13 +5,16 @@
 import 'dart:convert';
 
 import 'package:appsam/src/models/antecedentesFamiliaresPersonales_model.dart';
+import 'package:appsam/src/models/consultaGeneral_model.dart';
 import 'package:appsam/src/models/diagnosticos_model.dart';
 import 'package:appsam/src/models/examenFisicoGinecologico_model.dart';
 import 'package:appsam/src/models/examenFisico_model.dart';
+import 'package:appsam/src/models/examenesIndicados_viewmodel.dart';
 import 'package:appsam/src/models/farmacosUsoActual_model.dart';
 import 'package:appsam/src/models/habitos_model.dart';
 import 'package:appsam/src/models/historialGinecoObstetra_model.dart';
 import 'package:appsam/src/models/notas_model.dart';
+import 'package:appsam/src/models/planTerapeutico_model.dart';
 import 'package:appsam/src/models/preclinica_model.dart';
 
 ConsultaModel consultaModelFromJson(String str) =>
@@ -29,6 +32,9 @@ class ConsultaModel {
   ExamenFisicoGinecologico examenFisicoGinecologico;
   List<Diagnosticos> diagnosticos;
   List<Notas> notas;
+  ConsultaGeneralModel consultaGeneral;
+  List<ExamenesIndicadosViewModel> examenesIndicados;
+  PlanTerapeuticoModel planTerapeutico;
 
   ConsultaModel({
     this.preclinica,
@@ -40,10 +46,15 @@ class ConsultaModel {
     this.examenFisicoGinecologico,
     this.diagnosticos,
     this.notas,
+    this.consultaGeneral,
+    this.examenesIndicados,
+    this.planTerapeutico,
   });
 
   factory ConsultaModel.fromJson(Map<String, dynamic> json) => ConsultaModel(
-        preclinica: Preclinica.fromJson(json["preclinica"]),
+        preclinica: json["preclinica"] == null
+            ? null
+            : Preclinica.fromJson(json["preclinica"]),
         antecedentesFamiliaresPersonales:
             json["antecedentesFamiliaresPersonales"] == null
                 ? null
@@ -55,7 +66,7 @@ class ConsultaModel {
             ? null
             : HistorialGinecoObstetra.fromJson(json["historialGinecoObstetra"]),
         farmacosUsoActual: json["farmacosUsoActual"] == null
-            ? []
+            ? null
             : List<FarmacosUsoActual>.from(json["farmacosUsoActual"]
                 .map((x) => FarmacosUsoActual.fromJson(x))),
         examenFisico: json["examenFisico"] == null
@@ -66,12 +77,22 @@ class ConsultaModel {
             : ExamenFisicoGinecologico.fromJson(
                 json["examenFisicoGinecologico"]),
         diagnosticos: json["diagnosticos"] == null
-            ? []
+            ? null
             : List<Diagnosticos>.from(
                 json["diagnosticos"].map((x) => Diagnosticos.fromJson(x))),
         notas: json["notas"] == null
-            ? []
+            ? null
             : List<Notas>.from(json["notas"].map((x) => Notas.fromJson(x))),
+        consultaGeneral: json["consultaGeneral"] == null
+            ? null
+            : ConsultaGeneralModel.fromJson(json["consultaGeneral"]),
+        examenesIndicados: json["examenesIndicados"] == null
+            ? null
+            : List<ExamenesIndicadosViewModel>.from(json["examenesIndicados"]
+                .map((x) => ExamenesIndicadosViewModel.fromJson(x))),
+        planTerapeutico: json["planTerapeutico"] == null
+            ? null
+            : PlanTerapeuticoModel.fromJson(json["planTerapeutico"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -84,7 +105,11 @@ class ConsultaModel {
             List<dynamic>.from(farmacosUsoActual.map((x) => x.toJson())),
         "examenFisico": examenFisico.toJson(),
         "examenFisicoGinecologico": examenFisicoGinecologico.toJson(),
-        "diagnosticos": List<dynamic>.from(notas.map((x) => x.toJson())),
+        "diagnosticos": List<dynamic>.from(diagnosticos.map((x) => x.toJson())),
         "notas": List<dynamic>.from(notas.map((x) => x.toJson())),
+        "consultaGeneral": consultaGeneral.toJson(),
+        "examenesIndicados":
+            List<dynamic>.from(examenesIndicados.map((x) => x.toJson())),
+        "planTerapeutico": planTerapeutico.toJson(),
       };
 }

@@ -231,6 +231,30 @@ class _MenuConsultaPageState extends State<MenuConsultaPage> {
                       FadeInLeft(
                         child: _cardItem(
                             _preclinica,
+                            FontAwesomeIcons.briefcaseMedical,
+                            'Consulta General',
+                            'crear_consulta_general',
+                            Colors.red,
+                            context),
+                      ),
+                      (_consultaDetalle.notas.length == 0)
+                          ? FadeInRight(
+                              child: _cardItem(
+                                  _preclinica,
+                                  Icons.note_add,
+                                  'Bulto',
+                                  'crear_notas',
+                                  Colors.deepPurple,
+                                  context),
+                            )
+                          : FadeInRight(
+                              child: _cardItemFake(
+                                  Icons.note_add, 'Bulto', Colors.grey))
+                    ]),
+                    TableRow(children: [
+                      FadeInLeft(
+                        child: _cardItem(
+                            _preclinica,
                             FontAwesomeIcons.userMd,
                             'Resumen de Consulta',
                             'consulta_detalle',
