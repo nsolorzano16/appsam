@@ -183,20 +183,15 @@ class _MenuConsultaPageState extends State<MenuConsultaPage> {
                               child: _cardItemFake(FontAwesomeIcons.child,
                                   'Examen Físico', Colors.grey),
                             ),
-                      (_consultaDetalle.examenFisicoGinecologico == null)
-                          ? FadeInRight(
-                              child: _cardItem(
-                                  _preclinica,
-                                  FontAwesomeIcons.female,
-                                  'Examen Físico Ginecológico',
-                                  'crear_examen_ginecologico',
-                                  Colors.purple,
-                                  context),
-                            )
-                          : FadeInRight(
-                              child: _cardItemFake(FontAwesomeIcons.female,
-                                  'Examen Físico Ginecológico', Colors.grey),
-                            ),
+                      FadeInRight(
+                        child: _cardItem(
+                            _preclinica,
+                            FontAwesomeIcons.female,
+                            'Examen Físico Ginecológico',
+                            'crear_examen_ginecologico',
+                            Colors.purple,
+                            context),
+                      ),
                     ]),
                     TableRow(children: [
                       (_consultaDetalle.diagnosticos.length == 0)

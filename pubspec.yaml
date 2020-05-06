@@ -35,7 +35,7 @@ dependencies:
   flutter_spinkit: ^4.1.1+1
   mask_text_input_formatter: ^1.0.6
   intl:
-  flushbar: ^1.9.1
+  flushbar: ^1.10.0
   image_picker: ^0.6.3+4
   mime_type: ^0.2.7
   flutter_svg: ^0.17.3+1

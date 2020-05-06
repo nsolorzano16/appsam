@@ -26,8 +26,6 @@ class _CrearExamenGinecologicoPageState
   final _examenGinecologicoBloc = new ExamenGinecologicoBloc();
   final UsuarioModel _usuario =
       usuarioModelFromJson(StorageUtil.getString('usuarioGlobal'));
-  bool quieroEditar = true;
-  String labelBoton = 'Guardar';
 
   final TextEditingController _afuController = new TextEditingController();
   final TextEditingController _pelvisController = new TextEditingController();
@@ -36,17 +34,14 @@ class _CrearExamenGinecologicoPageState
   final TextEditingController _apController = new TextEditingController();
   final TextEditingController _notasController = new TextEditingController();
 
+  Future<ExamenFisicoGinecologico> _examenGinecologicoFuture;
+  String labelBoton = 'Guardar';
+
   @override
   void initState() {
     super.initState();
     StorageUtil.putString(
         'ultimaPagina', CrearExamenGinecologicoPage.routeName);
-    _examenGinecologico.examenId = 0;
-    _examenGinecologico.activo = true;
-    _examenGinecologico.creadoPor = _usuario.userName;
-    _examenGinecologico.creadoFecha = DateTime.now();
-    _examenGinecologico.modificadoPor = _usuario.userName;
-    _examenGinecologico.modificadoFecha = DateTime.now();
   }
 
   @override
@@ -64,9 +59,12 @@ class _CrearExamenGinecologicoPageState
   Widget build(BuildContext context) {
     final PreclinicaViewModel _preclinica =
         ModalRoute.of(context).settings.arguments;
-    _examenGinecologico.pacienteId = _preclinica.pacienteId;
-    _examenGinecologico.doctorId = _preclinica.doctorId;
-    _examenGinecologico.preclinicaId = _preclinica.preclinicaId;
+
+    _examenGinecologicoFuture =
+        _examenGinecologicoBloc.getExamenFisicoGinecologico(
+            _preclinica.pacienteId,
+            _preclinica.doctorId,
+            _preclinica.preclinicaId);
 
     return WillPopScope(
         child: Scaffold(
@@ -84,111 +82,87 @@ class _CrearExamenGinecologicoPageState
             ],
           ),
           drawer: MenuWidget(),
-          body: SingleChildScrollView(
-            child: Column(
-              children: <Widget>[
-                GFCard(
-                  elevation: 6.0,
-                  title: GFListTile(
-                    title: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: <Widget>[
-                        Text(
-                          'Examen Ginecológico',
-                          style: TextStyle(fontSize: 16.0),
-                        ),
-                        IconButton(
-                            icon: Icon(Icons.edit,
-                                color: Theme.of(context).primaryColor),
-                            onPressed: () {
-                              if (!quieroEditar) {
-                                setState(() {
-                                  quieroEditar = true;
-                                  labelBoton = 'Editar';
-                                });
-                              }
-                            }),
-                        IconButton(
-                          icon: Icon(
-                            Icons.delete,
-                            color: Theme.of(context).primaryColor,
-                          ),
-                          onPressed: (!quieroEditar)
-                              ? () => confirmAction(
-                                  context, 'Desea eliminar el registro')
-                              : () {},
-                        )
-                      ],
-                    ),
-                  ),
-                  content: Form(
-                      key: _formkey,
-                      child: Column(
-                        children: <Widget>[
-                          _campoAfu(),
-                          _campoPelvis(),
-                          _campoDorso(),
-                          _campoFcf(),
-                          _campoAp(),
-                          _campoNotas(),
-                          _crearBotones(context)
-                        ],
-                      )),
-                )
-              ],
-            ),
+          body: FutureBuilder(
+            future: _examenGinecologicoFuture,
+            builder: (BuildContext context,
+                AsyncSnapshot<ExamenFisicoGinecologico> snapshot) {
+              final x = snapshot.data;
+              if (snapshot.connectionState == ConnectionState.done) {
+                if (x != null) {
+                  _examenGinecologico.examenId = x.examenId;
+                  _examenGinecologico.pacienteId = x.pacienteId;
+                  _examenGinecologico.doctorId = x.doctorId;
+                  _examenGinecologico.preclinicaId = x.preclinicaId;
+                  _examenGinecologico.activo = x.activo;
+                  _examenGinecologico.creadoPor = x.creadoPor;
+                  _examenGinecologico.creadoFecha = x.creadoFecha;
+                  _examenGinecologico.modificadoPor = _usuario.userName;
+                  _examenGinecologico.modificadoFecha = DateTime.now();
+
+                  _afuController.text = x.afu;
+                  _pelvisController.text = x.pelvis;
+                  _dorsoController.text = x.dorso;
+                  _fcfController.text = x.fcf;
+                  _apController.text = x.ap;
+                  _notasController.text = x.notas;
+
+                  return _formExamenGinecologico(context);
+                } else {
+                  _examenGinecologico.examenId = 0;
+                  _examenGinecologico.pacienteId = _preclinica.pacienteId;
+                  _examenGinecologico.doctorId = _preclinica.doctorId;
+                  _examenGinecologico.preclinicaId = _preclinica.preclinicaId;
+                  _examenGinecologico.activo = true;
+                  _examenGinecologico.creadoPor = _usuario.userName;
+                  _examenGinecologico.creadoFecha = new DateTime.now();
+                  _examenGinecologico.modificadoPor = _usuario.userName;
+                  _examenGinecologico.modificadoFecha = new DateTime.now();
+
+                  return _formExamenGinecologico(context);
+                }
+              } else {
+                return loadingIndicator(context);
+              }
+            },
           ),
         ),
         onWillPop: () async => false);
   }
 
-  void _desactivar() async {
-    if (_examenGinecologico.examenId != 0) {
-      final ProgressDialog _pr = new ProgressDialog(
-        context,
-        type: ProgressDialogType.Normal,
-        isDismissible: false,
-        showLogs: false,
-      );
-      _pr.update(
-        progress: 50.0,
-        message: "Espere...",
-        progressWidget: Container(
-            padding: EdgeInsets.all(8.0), child: CircularProgressIndicator()),
-        maxProgress: 100.0,
-        progressTextStyle: TextStyle(
-            color: Colors.black, fontSize: 13.0, fontWeight: FontWeight.w400),
-        messageTextStyle: TextStyle(
-            color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600),
-      );
-      await _pr.show();
-      ExamenFisicoGinecologico _examenGinecologicoGuardado;
-      _examenGinecologico.activo = false;
-      _examenGinecologicoGuardado = await _examenGinecologicoBloc
-          .updateExamenGinecologico(_examenGinecologico);
-      if (_examenGinecologicoGuardado != null) {
-        await _pr.hide();
-        mostrarFlushBar(context, Colors.green, 'Info', 'Datos Guardados', 2,
-            Icons.info, Colors.black);
-        _examenGinecologico.examenId = 0;
-        _examenGinecologico.activo = true;
-        _afuController.text = '';
-        _pelvisController.text = '';
-        _dorsoController.text = '';
-        _fcfController.text = '';
-        _apController.text = '';
-        _notasController.text = '';
-        setState(() {
-          quieroEditar = true;
-          labelBoton = 'Guardar';
-        });
-      } else {
-        mostrarFlushBar(context, Colors.red, 'Info', 'Ha ocurrido un error', 2,
-            Icons.info, Colors.white);
-      }
-    } else {
-      print('nada');
-    }
+  SingleChildScrollView _formExamenGinecologico(BuildContext context) {
+    return SingleChildScrollView(
+      child: Column(
+        children: <Widget>[
+          GFCard(
+            elevation: 6.0,
+            title: GFListTile(
+              title: Row(
+                mainAxisSize: MainAxisSize.max,
+                children: <Widget>[
+                  Text(
+                    'Examen Ginecológico',
+                    style: TextStyle(fontSize: 16.0),
+                  ),
+                ],
+              ),
+            ),
+            content: Form(
+                key: _formkey,
+                child: Column(
+                  children: <Widget>[
+                    _campoAfu(),
+                    _campoPelvis(),
+                    _campoDorso(),
+                    _campoFcf(),
+                    _campoAp(),
+                    _campoNotas(),
+                    _crearBotones(context)
+                  ],
+                )),
+          )
+        ],
+      ),
+    );
   }
 
   Widget _campoAfu() {
@@ -199,7 +173,6 @@ class _CrearExamenGinecologicoPageState
         onSaved: (value) => _examenGinecologico.afu = value,
         keyboardType: TextInputType.text,
         decoration: inputsDecorations('Afu', Icons.note),
-        enabled: quieroEditar,
       ),
     );
   }
@@ -212,7 +185,6 @@ class _CrearExamenGinecologicoPageState
         onSaved: (value) => _examenGinecologico.pelvis = value,
         keyboardType: TextInputType.text,
         decoration: inputsDecorations('Pelvis', Icons.note),
-        enabled: quieroEditar,
       ),
     );
   }
@@ -225,7 +197,6 @@ class _CrearExamenGinecologicoPageState
         onSaved: (value) => _examenGinecologico.dorso = value,
         keyboardType: TextInputType.text,
         decoration: inputsDecorations('Dorso', Icons.note),
-        enabled: quieroEditar,
       ),
     );
   }
@@ -238,7 +209,6 @@ class _CrearExamenGinecologicoPageState
         onSaved: (value) => _examenGinecologico.fcf = value,
         keyboardType: TextInputType.text,
         decoration: inputsDecorations('Fcf', Icons.note),
-        enabled: quieroEditar,
       ),
     );
   }
@@ -251,7 +221,6 @@ class _CrearExamenGinecologicoPageState
         onSaved: (value) => _examenGinecologico.ap = value,
         keyboardType: TextInputType.text,
         decoration: inputsDecorations('Ap', Icons.note),
-        enabled: quieroEditar,
       ),
     );
   }
@@ -265,18 +234,36 @@ class _CrearExamenGinecologicoPageState
         onSaved: (value) => _examenGinecologico.notas = value,
         keyboardType: TextInputType.text,
         decoration: inputsDecorations('Notas Adicionales', Icons.note),
-        enabled: quieroEditar,
       ),
     );
   }
 
   Widget _crearBotones(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: <Widget>[
         RaisedButton.icon(
             color: Theme.of(context).primaryColor,
-            onPressed: (quieroEditar) ? () => _guardar(context) : null,
+            onPressed: (_examenGinecologico.examenId == 0)
+                ? null
+                : () => _confirmDesactivar(context),
+            textColor: Colors.white,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20.0)),
+            icon: Icon(
+              Icons.delete,
+              color: Colors.white,
+            ),
+            label: Container(
+              width: 60.0,
+              child: Text(
+                'Eliminar',
+                textAlign: TextAlign.center,
+              ),
+            )),
+        RaisedButton.icon(
+            color: Theme.of(context).primaryColor,
+            onPressed: () => _guardar(context),
             textColor: Colors.white,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20.0)),
@@ -284,7 +271,13 @@ class _CrearExamenGinecologicoPageState
               Icons.save,
               color: Colors.white,
             ),
-            label: Text(labelBoton))
+            label: Container(
+              width: 60.0,
+              child: Text(
+                labelBoton,
+                textAlign: TextAlign.center,
+              ),
+            ))
       ],
     );
   }
@@ -343,7 +336,6 @@ class _CrearExamenGinecologicoPageState
         _examenGinecologicoGuardado.modificadoFecha =
             _examenGinecologicoGuardado.modificadoFecha;
         setState(() {
-          quieroEditar = false;
           labelBoton = 'Editar';
         });
       } else {
@@ -353,36 +345,26 @@ class _CrearExamenGinecologicoPageState
     }
   }
 
-  showConfirmDialog(
-      BuildContext context, String ruta, PreclinicaViewModel args) {
-    // set up the buttons
-    Widget cancelButton = FlatButton(
-      child: Text('Cancelar'),
-      onPressed: () {
-        Navigator.pop(context);
-      },
-    );
-    Widget continueButton = FlatButton(
-      child: Text('Ok'),
-      onPressed: () {
-        Navigator.pushReplacementNamed(context, ruta, arguments: args);
-      },
-    );
-
+  void _confirmDesactivar(BuildContext context) {
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
       title: Text("Información"),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          Text('Desea continuar a la siguiente pagina?'),
-          Text('Esta acción no se podra deshacer.')
+          Text('Desea completar esta acción?'),
         ],
       ),
       elevation: 24.0,
       actions: [
-        cancelButton,
-        continueButton,
+        FlatButton(
+            onPressed: () => Navigator.pop(context), child: Text('Cancelar')),
+        FlatButton(
+            onPressed: () {
+              Navigator.pop(context);
+              _desactivar(context);
+            },
+            child: Text('Aceptar'))
       ],
     );
 
@@ -395,48 +377,58 @@ class _CrearExamenGinecologicoPageState
         barrierDismissible: false);
   }
 
-  void confirmAction(
-    BuildContext context,
-    String texto,
-  ) {
-    // set up the buttons
-    Widget cancelButton = FlatButton(
-      child: Text('Cancelar'),
-      onPressed: () {
-        Navigator.pop(context);
-      },
+  void _desactivar(BuildContext context) async {
+    final ProgressDialog _pr = new ProgressDialog(
+      context,
+      type: ProgressDialogType.Normal,
+      isDismissible: false,
+      showLogs: false,
     );
-    Widget continueButton = FlatButton(
-      child: Text('Ok'),
-      onPressed: () {
-        Navigator.pop(context);
-        _desactivar();
-      },
-    );
-
-    // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-      title: Text("Información"),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Text(texto),
-          Text('Esta acción no se podra deshacer.')
-        ],
-      ),
-      elevation: 24.0,
-      actions: [
-        cancelButton,
-        continueButton,
-      ],
+    _pr.update(
+      progress: 50.0,
+      message: "Espere...",
+      progressWidget: Container(
+          padding: EdgeInsets.all(8.0), child: CircularProgressIndicator()),
+      maxProgress: 100.0,
+      progressTextStyle: TextStyle(
+          color: Colors.black, fontSize: 13.0, fontWeight: FontWeight.w400),
+      messageTextStyle: TextStyle(
+          color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600),
     );
 
-    // show the dialog
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return alert;
-        },
-        barrierDismissible: false);
+    _formkey.currentState.save();
+    await _pr.show();
+    ExamenFisicoGinecologico _examenGuardado;
+    _examenGinecologico.activo = false;
+    _examenGinecologico.modificadoPor = _usuario.userName;
+    _examenGuardado = await _examenGinecologicoBloc
+        .updateExamenGinecologico(_examenGinecologico);
+
+    if (_examenGuardado != null) {
+      await _pr.hide();
+      mostrarFlushBar(context, Colors.green, 'Info', 'Datos Guardados', 2,
+          Icons.info, Colors.black);
+
+      _afuController.text = '';
+      _pelvisController.text = '';
+      _dorsoController.text = '';
+      _fcfController.text = '';
+      _apController.text = '';
+      _notasController.text = '';
+
+      _examenGinecologico.examenId = 0;
+      _examenGinecologico.activo = true;
+      _examenGinecologico.creadoFecha = DateTime.now();
+      _examenGinecologico.creadoPor = _usuario.userName;
+      _examenGinecologico.modificadoPor = _usuario.userName;
+      _examenGuardado.modificadoFecha = DateTime.now();
+
+      setState(() {
+        labelBoton = 'Guardar';
+      });
+    } else {
+      mostrarFlushBar(context, Colors.red, 'Info', 'Ha ocurrido un error', 2,
+          Icons.info, Colors.white);
+    }
   }
 }

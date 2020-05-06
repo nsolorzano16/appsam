@@ -252,6 +252,10 @@ class _CrearHistorialGinecoObstetraPageState
 
   void selectDateMenarquia(BuildContext context) async {
     pickedMenarquia = await showDatePicker(
+        fieldLabelText: 'Rellene con el formato correcto',
+        errorInvalidText: 'Formato invalido',
+        errorFormatText: 'Error en la fecha',
+        helpText: 'Seleccione fecha',
         context: context,
         initialDate: new DateTime.now(),
         firstDate: new DateTime(1930),
@@ -282,6 +286,10 @@ class _CrearHistorialGinecoObstetraPageState
 
   void selectDateFur(BuildContext context) async {
     pickedFur = await showDatePicker(
+        fieldLabelText: 'Rellene con el formato correcto',
+        errorInvalidText: 'Formato invalido',
+        errorFormatText: 'Error en la fecha',
+        helpText: 'Seleccione fecha',
         context: context,
         initialDate: new DateTime.now(),
         firstDate: new DateTime(1930),
@@ -396,6 +404,10 @@ class _CrearHistorialGinecoObstetraPageState
 
   void selectDateMenopausia(BuildContext context) async {
     pickedMenopausia = await showDatePicker(
+        fieldLabelText: 'Rellene con el formato correcto',
+        errorInvalidText: 'Formato invalido',
+        errorFormatText: 'Error en la fecha',
+        helpText: 'Seleccione fecha',
         context: context,
         initialDate: new DateTime.now(),
         firstDate: new DateTime(1930),

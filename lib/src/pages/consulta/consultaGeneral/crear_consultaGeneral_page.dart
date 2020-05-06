@@ -378,7 +378,9 @@ class _CrearConsultaGeneralPageState extends State<CrearConsultaGeneralPage> {
       _consultaGeneral.modificadoPor = _usuario.userName;
       _consultaGeneralGuardada.modificadoFecha = DateTime.now();
 
-      setState(() {});
+      setState(() {
+        labelBoton = 'Guardar';
+      });
     } else {
       mostrarFlushBar(context, Colors.red, 'Info', 'Ha ocurrido un error', 2,
           Icons.info, Colors.white);

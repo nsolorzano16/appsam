@@ -54,4 +54,30 @@ class ExamenGinecologicoService {
 
     return null;
   }
+
+  Future<ExamenFisicoGinecologico> getExamenFisicoGinecologico(
+      int pacienteId, int doctorId, int preclinicaId) async {
+    final String token = StorageUtil.getString('token');
+    final headers = {
+      "content-type": "application/json",
+      "accept": "application/json",
+      'authorization': 'Bearer $token',
+    };
+    final url =
+        '$_apiURL/api/ExamenFisicoGinecologico/pacienteId/$pacienteId/doctorId/$doctorId/preclinicaid/$preclinicaId';
+
+    //print(usuarioModelToJson(usuario));
+    final resp = await http.get(
+      url,
+      headers: headers,
+    );
+
+    if (resp.statusCode == 200 && resp.body.isNotEmpty) {
+      final decodedData = json.decode(resp.body);
+      final examen = new ExamenFisicoGinecologico.fromJson(decodedData);
+      return examen;
+    }
+
+    return null;
+  }
 } // fin clase

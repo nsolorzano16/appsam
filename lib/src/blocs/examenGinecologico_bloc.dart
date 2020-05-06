@@ -17,5 +17,11 @@ class ExamenGinecologicoBloc with Validators {
         .updateExamenGinecologico(examenGinecologico);
   }
 
+  Future<ExamenFisicoGinecologico> getExamenFisicoGinecologico(
+      int pacienteId, int doctorId, int preclinicaId) async {
+    return await _examenGinecologicoService.getExamenFisicoGinecologico(
+        pacienteId, doctorId, preclinicaId);
+  }
+
   dispose() {}
 }
