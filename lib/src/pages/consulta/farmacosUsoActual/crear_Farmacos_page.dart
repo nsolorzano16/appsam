@@ -75,7 +75,8 @@ class _CrearFarmacosUsoActualPageState
             drawer: MenuWidget(),
             body: FutureBuilder(
               future: _farmacosFuture,
-              builder: (BuildContext context, AsyncSnapshot snapshot) {
+              builder: (BuildContext context,
+                  AsyncSnapshot<List<FarmacosUsoActual>> snapshot) {
                 if (snapshot.hasData) {
                   _listaFarmacos.clear();
                   _listaFarmacos.addAll(snapshot.data);

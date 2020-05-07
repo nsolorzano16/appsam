@@ -19,5 +19,11 @@ class DiagnosticosBloc with Validators {
     return await _diagnosticosService.desactivar(diagnostico);
   }
 
+  Future<List<Diagnosticos>> getDiagnosticos(
+      int pacienteId, int doctorId, int preclinicaId) async {
+    return await _diagnosticosService.getDiagnosticos(
+        pacienteId, doctorId, preclinicaId);
+  }
+
   dispose() {}
 }

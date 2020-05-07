@@ -17,5 +17,10 @@ class NotasBloc with Validators {
     return await _notasService.desactivar(nota);
   }
 
+  Future<List<Notas>> getNotas(
+      int pacienteId, int doctorId, int preclinicaId) async {
+    return await _notasService.getNotas(pacienteId, doctorId, preclinicaId);
+  }
+
   dispose() {}
 }

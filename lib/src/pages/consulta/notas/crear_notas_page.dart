@@ -31,6 +31,8 @@ class _CrearNotasPageState extends State<CrearNotasPage> {
   final GlobalKey<ScaffoldState> mScaffoldState =
       new GlobalKey<ScaffoldState>();
 
+  Future<List<Notas>> _notasFuture;
+
   @override
   void initState() {
     super.initState();
@@ -41,6 +43,10 @@ class _CrearNotasPageState extends State<CrearNotasPage> {
   Widget build(BuildContext context) {
     final PreclinicaViewModel _preclinica =
         ModalRoute.of(context).settings.arguments;
+
+    _notasFuture = _notasBloc.getNotas(
+        _preclinica.pacienteId, _preclinica.doctorId, _preclinica.preclinicaId);
+
     return WillPopScope(
         child: Scaffold(
             key: mScaffoldState,
@@ -58,29 +64,42 @@ class _CrearNotasPageState extends State<CrearNotasPage> {
               ],
             ),
             drawer: MenuWidget(),
-            body: Column(
-              children: <Widget>[
-                Container(
-                    alignment: Alignment.centerLeft,
-                    padding: EdgeInsets.only(
-                      left: 20.0,
-                      top: 10.0,
-                      right: 10.0,
-                    ),
-                    child: ListTile(
-                      title: Text('Notas'),
-                      subtitle: Text('Click en el boton \"+\" para agregar'),
-                    )),
-                Divider(
-                  thickness: 2.0,
-                  indent: 20.0,
-                  endIndent: 20.0,
-                ),
-                Flexible(
-                    child: ListView(
-                  children: items(_listaNotas),
-                ))
-              ],
+            body: FutureBuilder(
+              future: _notasFuture,
+              builder:
+                  (BuildContext context, AsyncSnapshot<List<Notas>> snapshot) {
+                if (snapshot.hasData) {
+                  _listaNotas.clear();
+                  _listaNotas.addAll(snapshot.data);
+                  return Column(
+                    children: <Widget>[
+                      Container(
+                          alignment: Alignment.centerLeft,
+                          padding: EdgeInsets.only(
+                            left: 20.0,
+                            top: 10.0,
+                            right: 10.0,
+                          ),
+                          child: ListTile(
+                            title: Text('Notas'),
+                            subtitle:
+                                Text('Click en el boton \"+\" para agregar'),
+                          )),
+                      Divider(
+                        thickness: 2.0,
+                        indent: 20.0,
+                        endIndent: 20.0,
+                      ),
+                      Flexible(
+                          child: ListView(
+                        children: items(_listaNotas),
+                      ))
+                    ],
+                  );
+                } else {
+                  return loadingIndicator(context);
+                }
+              },
             ),
             floatingActionButton: FloatingActionButton(
               backgroundColor: Theme.of(context).primaryColor,

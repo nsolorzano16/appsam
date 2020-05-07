@@ -76,12 +76,34 @@ class DiagnosticosService {
     final resp = await http.put(url,
         headers: headers, body: diagnosticosToJson(diagnostico));
 
-    // final decodedData = json.decode(resp.body);
-
-    // print(decodedData);
-
     if (resp.statusCode == 200) return true;
 
     return false;
+  }
+
+  Future<List<Diagnosticos>> getDiagnosticos(
+      int pacienteId, int doctorId, int preclinicaId) async {
+    final String token = StorageUtil.getString('token');
+    final headers = {
+      "content-type": "application/json",
+      "accept": "application/json",
+      'authorization': 'Bearer $token',
+    };
+    final url =
+        '$_apiURL/api/Diagnosticos/pacienteId/$pacienteId/doctorId/$doctorId/preclinicaid/$preclinicaId';
+    final List<Diagnosticos> lista = new List();
+
+    final resp = await http.get(url, headers: headers);
+
+    if (resp.statusCode == 200 && resp.body.isNotEmpty) {
+      final decodedData = json.decode(resp.body);
+      decodedData.forEach((diagnostico) {
+        final diagnosticoTemp = Diagnosticos.fromJson(diagnostico);
+        lista.add(diagnosticoTemp);
+      });
+      if (lista != null) return lista;
+    }
+
+    return [];
   }
 }

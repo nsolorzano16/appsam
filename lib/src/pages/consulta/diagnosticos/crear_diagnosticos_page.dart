@@ -32,6 +32,8 @@ class _CrearDiagnosticosPageState extends State<CrearDiagnosticosPage> {
   final GlobalKey<ScaffoldState> mScaffoldState =
       new GlobalKey<ScaffoldState>();
 
+  Future<List<Diagnosticos>> _diagnosticosFuture;
+
   @override
   void initState() {
     super.initState();
@@ -42,6 +44,9 @@ class _CrearDiagnosticosPageState extends State<CrearDiagnosticosPage> {
   Widget build(BuildContext context) {
     final PreclinicaViewModel _preclinica =
         ModalRoute.of(context).settings.arguments;
+
+    _diagnosticosFuture = _diagnosticosBloc.getDiagnosticos(
+        _preclinica.pacienteId, _preclinica.doctorId, _preclinica.preclinicaId);
 
     return WillPopScope(
         child: Scaffold(
@@ -60,29 +65,42 @@ class _CrearDiagnosticosPageState extends State<CrearDiagnosticosPage> {
               ],
             ),
             drawer: MenuWidget(),
-            body: Column(
-              children: <Widget>[
-                Container(
-                    alignment: Alignment.centerLeft,
-                    padding: EdgeInsets.only(
-                      left: 20.0,
-                      top: 10.0,
-                      right: 10.0,
-                    ),
-                    child: ListTile(
-                      title: Text('Diagnosticos'),
-                      subtitle: Text('Click en el boton \"+\" para agregar'),
-                    )),
-                Divider(
-                  thickness: 2.0,
-                  indent: 20.0,
-                  endIndent: 20.0,
-                ),
-                Flexible(
-                    child: ListView(
-                  children: items(_listaDiagnosticos),
-                ))
-              ],
+            body: FutureBuilder(
+              future: _diagnosticosFuture,
+              builder: (BuildContext context,
+                  AsyncSnapshot<List<Diagnosticos>> snapshot) {
+                if (snapshot.hasData) {
+                  _listaDiagnosticos.clear();
+                  _listaDiagnosticos.addAll(snapshot.data);
+                  return Column(
+                    children: <Widget>[
+                      Container(
+                          alignment: Alignment.centerLeft,
+                          padding: EdgeInsets.only(
+                            left: 20.0,
+                            top: 10.0,
+                            right: 10.0,
+                          ),
+                          child: ListTile(
+                            title: Text('Diagnosticos'),
+                            subtitle:
+                                Text('Click en el boton \"+\" para agregar'),
+                          )),
+                      Divider(
+                        thickness: 2.0,
+                        indent: 20.0,
+                        endIndent: 20.0,
+                      ),
+                      Flexible(
+                          child: ListView(
+                        children: items(_listaDiagnosticos),
+                      ))
+                    ],
+                  );
+                } else {
+                  return loadingIndicator(context);
+                }
+              },
             ),
             floatingActionButton: FloatingActionButton(
               backgroundColor: Theme.of(context).primaryColor,

@@ -194,33 +194,19 @@ class _MenuConsultaPageState extends State<MenuConsultaPage> {
                       ),
                     ]),
                     TableRow(children: [
-                      (_consultaDetalle.diagnosticos.length == 0)
-                          ? FadeInLeft(
-                              child: _cardItem(
-                                  _preclinica,
-                                  Icons.note,
-                                  'Diagnosticos',
-                                  'crear_diagnosticos',
-                                  Colors.pink,
-                                  context),
-                            )
-                          : FadeInLeft(
-                              child: _cardItemFake(
-                                  Icons.note, 'Diagnosticos', Colors.grey),
-                            ),
-                      (_consultaDetalle.notas.length == 0)
-                          ? FadeInRight(
-                              child: _cardItem(
-                                  _preclinica,
-                                  Icons.note_add,
-                                  'Notas',
-                                  'crear_notas',
-                                  Colors.deepPurple,
-                                  context),
-                            )
-                          : FadeInRight(
-                              child: _cardItemFake(
-                                  Icons.note_add, 'Notas', Colors.grey))
+                      FadeInLeft(
+                        child: _cardItem(
+                            _preclinica,
+                            Icons.note,
+                            'Diagnosticos',
+                            'crear_diagnosticos',
+                            Colors.pink,
+                            context),
+                      ),
+                      FadeInRight(
+                        child: _cardItem(_preclinica, Icons.note_add, 'Notas',
+                            'crear_notas', Colors.deepPurple, context),
+                      ),
                     ]),
                     TableRow(children: [
                       FadeInLeft(
