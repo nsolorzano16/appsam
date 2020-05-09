@@ -136,7 +136,7 @@ class _CrearPreclinicaPageState extends State<CrearPreclinicaPage> {
         onSaved: (value) => _preclinica.peso = double.parse(value),
         keyboardType: TextInputType.numberWithOptions(decimal: true),
         decoration: inputsDecorations('Peso', Icons.account_circle,
-            hintTexto: 'Libras'),
+            hintTexto: 'Libras', counterTexto: 'peso en lb.'),
       ),
     );
   }
@@ -158,7 +158,7 @@ class _CrearPreclinicaPageState extends State<CrearPreclinicaPage> {
         onSaved: (value) => _preclinica.altura = double.parse(value),
         keyboardType: TextInputType.numberWithOptions(decimal: true),
         decoration: inputsDecorations('Altura', Icons.account_circle,
-            hintTexto: 'Centimetros'),
+            hintTexto: 'Centimetros', counterTexto: 'altura en cm.'),
       ),
     );
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:getflutter/getflutter.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 
@@ -129,26 +130,23 @@ class _CrearAntecedentesPageState extends State<CrearAntecedentesPage> {
       child: Column(
         children: <Widget>[
           GFCard(
-            elevation: 6.0,
             title: GFListTile(
-              title: Row(
-                mainAxisSize: MainAxisSize.max,
-                children: <Widget>[
-                  Text(
-                    'Antecedentes Personales',
-                    style: TextStyle(fontSize: 16.0),
-                  ),
-                ],
-              ),
-            ),
+                color: Colors.red,
+                title: Text('Antecedentes',
+                    style: TextStyle(
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white)),
+                icon: FaIcon(FontAwesomeIcons.user, color: Colors.white)),
+            elevation: 6.0,
             content: Form(
                 key: _formkey,
                 child: Column(
                   children: <Widget>[
-                    _campoAntecedentesPatologicosFamiliares(),
                     _campoAntecedentesPatologicosPersonales(),
-                    _campoAntecedentesNoPatologicosFamiliares(),
                     _campoAntecedentesNoPatologicosPersonales(),
+                    _campoAntecedentesPatologicosFamiliares(),
+                    _campoAntecedentesNoPatologicosFamiliares(),
                     _campoAntecedentesInmunoAlergicosPersonales(),
                     _crearBotones(context),
                   ],
@@ -168,8 +166,8 @@ class _CrearAntecedentesPageState extends State<CrearAntecedentesPage> {
             _antecedentes.antecedentesPatologicosFamiliares = value,
         maxLines: 3,
         keyboardType: TextInputType.text,
-        decoration: inputsDecorations(
-            'Antecedentes Patologicos Familiares', Icons.note),
+        decoration:
+            inputsDecorations('Ant. Patologicos Familiares', Icons.note),
       ),
     );
   }
@@ -183,8 +181,7 @@ class _CrearAntecedentesPageState extends State<CrearAntecedentesPage> {
             _antecedentes.antecedentesPatologicosPersonales = value,
         maxLines: 3,
         keyboardType: TextInputType.text,
-        decoration: inputsDecorations(
-            'Antecedentes Patologicos Personales', Icons.note),
+        decoration: inputsDecorations('AP Personales', Icons.note),
       ),
     );
   }
@@ -198,8 +195,8 @@ class _CrearAntecedentesPageState extends State<CrearAntecedentesPage> {
             _antecedentes.antecedentesNoPatologicosFamiliares = value,
         maxLines: 3,
         keyboardType: TextInputType.text,
-        decoration: inputsDecorations(
-            'Antecedentes No Patologicos Familiares', Icons.note),
+        decoration:
+            inputsDecorations('Ant. No Patologicos Familiares', Icons.note),
       ),
     );
   }
@@ -213,8 +210,7 @@ class _CrearAntecedentesPageState extends State<CrearAntecedentesPage> {
             _antecedentes.antecedentesNoPatologicosPersonales = value,
         maxLines: 3,
         keyboardType: TextInputType.text,
-        decoration: inputsDecorations(
-            'Antecedentes No Patologicos Personales', Icons.note),
+        decoration: inputsDecorations('Ant. No Patologicos', Icons.note),
       ),
     );
   }
@@ -228,8 +224,7 @@ class _CrearAntecedentesPageState extends State<CrearAntecedentesPage> {
             _antecedentes.antecedentesInmunoAlergicosPersonales = value,
         maxLines: 3,
         keyboardType: TextInputType.text,
-        decoration:
-            inputsDecorations('Antecedentes Inmuno Alergicos', Icons.note),
+        decoration: inputsDecorations('Ant. Inmuno Alergicos', Icons.note),
       ),
     );
   }

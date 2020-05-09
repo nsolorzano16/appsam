@@ -568,7 +568,7 @@ class _AccordionAntecedentes extends StatelessWidget {
         color: Colors.white,
       ),
       titleChild: Text(
-        'Antecedentes Personales',
+        'Antecedentes',
         style: TextStyle(color: Colors.white, fontSize: 16.0),
       ),
       contentChild: GFCard(
@@ -607,7 +607,7 @@ class _AccordionAntecedentes extends StatelessWidget {
           ),
           Divider(),
           Text(
-            'Antecedentes Patológicos Personales:',
+            'Antecedentes No Patológicos Personales:',
             style: _estiloSubt,
           ),
           Text(
@@ -1107,7 +1107,9 @@ class _AccordionExamenFisico extends StatelessWidget {
             style: _estiloSubt,
           ),
           Text(
-            validaNulo(_examenFisico.edadAparente.toString()),
+            (_examenFisico.edadAparente != null)
+                ? _examenFisico.edadAparente.toString()
+                : '',
             textAlign: TextAlign.justify,
             style: estiloDatos,
           ),
@@ -1128,16 +1130,6 @@ class _AccordionExamenFisico extends StatelessWidget {
           ),
           Text(
             validaNulo(_examenFisico.orientaciones),
-            textAlign: TextAlign.justify,
-            style: estiloDatos,
-          ),
-          Divider(),
-          Text(
-            'Pulso:',
-            style: _estiloSubt,
-          ),
-          Text(
-            validaNulo(_examenFisico.pulso),
             textAlign: TextAlign.justify,
             style: estiloDatos,
           ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:getflutter/getflutter.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:unicorndial/unicorndial.dart';
@@ -7,13 +8,17 @@ import 'package:unicorndial/unicorndial.dart';
 import 'package:appsam/src/blocs/examenFisico_bloc.dart';
 import 'package:appsam/src/models/examenFisico_model.dart';
 import 'package:appsam/src/models/paginados/preclinica_paginadoVM.dart';
-import 'package:appsam/src/models/usuario_model.dart';
 import 'package:appsam/src/utils/storage_util.dart';
 import 'package:appsam/src/utils/utils.dart';
 import 'package:appsam/src/widgets/drawer.dart';
 
 class CrearExamenFisicoPage extends StatefulWidget {
   static final String routeName = 'crear_examen_fisico';
+  final ExamenFisico examen;
+  final PreclinicaViewModel preclinica;
+
+  const CrearExamenFisicoPage(
+      {@required this.examen, @required this.preclinica});
 
   @override
   _CrearExamenFisicoPageState createState() => _CrearExamenFisicoPageState();
@@ -21,9 +26,6 @@ class CrearExamenFisicoPage extends StatefulWidget {
 
 class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
-  final ExamenFisico _examenFisico = new ExamenFisico();
-  final UsuarioModel _usuario =
-      usuarioModelFromJson(StorageUtil.getString('usuarioGlobal'));
 
   final ExamenFisicoBloc _examenFisicoBloc = new ExamenFisicoBloc();
 
@@ -39,12 +41,12 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
   final TextEditingController _pToraxController = new TextEditingController();
   final TextEditingController _observacionesController =
       new TextEditingController();
-  bool _dolorAusente = false;
-  bool _dolorPresente = false;
-  bool _dolorPresenteLeve = false;
-  bool _dolorPresenteModerado = false;
-  bool _dolorPresenteSevero = false;
-  bool _excesoDePeso = false;
+  bool _dolorAusente;
+  bool _dolorPresente;
+  bool _dolorPresenteLeve;
+  bool _dolorPresenteModerado;
+  bool _dolorPresenteSevero;
+  bool _excesoDePeso;
   final TextEditingController _pesoIdealController =
       new TextEditingController();
   final TextEditingController _interpretacionController =
@@ -75,19 +77,84 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
   final TextEditingController _neuroligicoController =
       new TextEditingController();
 
-  bool quieroEditar = true;
   String labelBoton = 'Guardar';
 
   @override
   void initState() {
     super.initState();
     StorageUtil.putString('ultimaPagina', CrearExamenFisicoPage.routeName);
-    _examenFisico.examenFisicoId = 0;
-    _examenFisico.activo = true;
-    _examenFisico.creadoPor = _usuario.userName;
-    _examenFisico.creadoFecha = DateTime.now();
-    _examenFisico.modificadoPor = _usuario.userName;
-    _examenFisico.modificadoFecha = DateTime.now();
+    labelBoton = (widget.examen.examenFisicoId == 0) ? 'Guardar' : 'Editar';
+    _dolorAusente = widget.examen.dolorAusente;
+    _dolorPresente = widget.examen.dolorPresente;
+    _dolorPresenteLeve = widget.examen.dolorPresenteLeve;
+    _dolorPresenteModerado = widget.examen.dolorPresenteModerado;
+    _dolorPresenteSevero = widget.examen.dolorPresenteSevero;
+    _excesoDePeso = widget.examen.excesoDePeso;
+
+    _aspectoGeneralController.text = (widget.examen.aspectoGeneral != null)
+        ? widget.examen.aspectoGeneral
+        : '';
+    _edadAparenteController.text = (widget.examen.edadAparente != null)
+        ? widget.examen.edadAparente.toString()
+        : '';
+    _marchaController.text =
+        (widget.examen.marcha != null) ? widget.examen.marcha : '';
+    _orientacionesController.text = (widget.examen.orientaciones != null)
+        ? widget.examen.orientaciones
+        : '';
+    _pulsoController.text =
+        (widget.examen.pulso != null) ? widget.examen.pulso : '';
+    _pabdController.text =
+        (widget.examen.pabd != null) ? widget.examen.pabd : '';
+    _pToraxController.text =
+        (widget.examen.ptorax != null) ? widget.examen.ptorax : '';
+    _observacionesController.text = (widget.examen.observaciones != null)
+        ? widget.examen.observaciones
+        : '';
+    _pesoIdealController.text = (widget.examen.pesoIdeal != null)
+        ? widget.examen.pesoIdeal.toString()
+        : '';
+    _interpretacionController.text = (widget.examen.interpretacion != null)
+        ? widget.examen.interpretacion
+        : '';
+    _librasABajarController.text = (widget.examen.librasABajar != null)
+        ? widget.examen.librasABajar.toString()
+        : '';
+    _cabezaController.text =
+        (widget.examen.cabeza != null) ? widget.examen.cabeza : '';
+    _oidosController.text =
+        (widget.examen.oidos != null) ? widget.examen.oidos : '';
+    _ojosController.text =
+        (widget.examen.ojos != null) ? widget.examen.ojos : '';
+    _foController.text = (widget.examen.fo != null) ? widget.examen.fo : '';
+    _narizController.text =
+        (widget.examen.nariz != null) ? widget.examen.nariz : '';
+    _orofaringeController.text =
+        (widget.examen.oroFaringe != null) ? widget.examen.oroFaringe : '';
+    _cuelloController.text =
+        (widget.examen.cuello != null) ? widget.examen.cuello : '';
+    _toraxController.text =
+        (widget.examen.torax != null) ? widget.examen.torax : '';
+    _mamasController.text =
+        (widget.examen.mamas != null) ? widget.examen.mamas : '';
+    _pulmonesController.text =
+        (widget.examen.pulmones != null) ? widget.examen.pulmones : '';
+    _corazonController.text =
+        (widget.examen.corazon != null) ? widget.examen.corazon : '';
+    _rotController.text = (widget.examen.rot != null) ? widget.examen.rot : '';
+    _abdomenController.text =
+        (widget.examen.abdomen != null) ? widget.examen.abdomen : '';
+    _pielFonerasController.text =
+        (widget.examen.pielfoneras != null) ? widget.examen.pielfoneras : '';
+    _genitalesController.text =
+        (widget.examen.genitales != null) ? widget.examen.genitales : '';
+    _rectoProstaticoController.text = (widget.examen.rectoProstatico != null)
+        ? widget.examen.rectoProstatico
+        : '';
+    _miembrosController.text =
+        (widget.examen.miembros != null) ? widget.examen.miembros : '';
+    _neuroligicoController.text =
+        (widget.examen.neurologico != null) ? widget.examen.neurologico : '';
   }
 
   @override
@@ -126,11 +193,8 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
 
   @override
   Widget build(BuildContext context) {
-    final PreclinicaViewModel _preclinica =
-        ModalRoute.of(context).settings.arguments;
-    _examenFisico.pacienteId = _preclinica.pacienteId;
-    _examenFisico.doctorId = _preclinica.doctorId;
-    _examenFisico.preclinicaId = _preclinica.preclinicaId;
+    final PreclinicaViewModel _preclinica = widget.preclinica;
+
     final size = MediaQuery.of(context).size;
 
     return WillPopScope(
@@ -167,7 +231,6 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
                     _formParte3(context),
                     _formParte4(context),
                     _formParte5(context),
-                    _formParte6(context),
                   ])),
           floatingActionButton: UnicornDialer(
               backgroundColor: Color.fromRGBO(255, 255, 255, 0.6),
@@ -175,12 +238,12 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
               parentButtonBackground: Theme.of(context).primaryColor,
               orientation: UnicornOrientation.VERTICAL,
               parentButton: Icon(Icons.add),
-              childButtons: botones()),
+              childButtons: botones(_preclinica)),
         ),
         onWillPop: () async => false);
   }
 
-  List<UnicornButton> botones() {
+  List<UnicornButton> botones(PreclinicaViewModel preclinica) {
     var childButtons = List<UnicornButton>();
 
     childButtons.add(UnicornButton(
@@ -189,25 +252,7 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
       backgroundColor: Colors.redAccent,
       mini: true,
       child: Icon(Icons.delete),
-      onPressed: (!quieroEditar)
-          ? () => confirmAction(context, 'Desea eliminar el registro')
-          : () {},
-    )));
-
-    childButtons.add(UnicornButton(
-        currentButton: FloatingActionButton(
-      heroTag: 'editar',
-      backgroundColor: Colors.blue,
-      mini: true,
-      child: Icon(Icons.edit),
-      onPressed: () {
-        if (!quieroEditar) {
-          setState(() {
-            quieroEditar = true;
-            labelBoton = 'Editar';
-          });
-        }
-      },
+      onPressed: () => _confirmDesactivar(context),
     )));
 
     childButtons.add(UnicornButton(
@@ -216,67 +261,30 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
       backgroundColor: Colors.greenAccent,
       mini: true,
       child: Icon(Icons.save),
-      onPressed: (quieroEditar) ? () => _guardar(context) : null,
+      onPressed: () => _guardar(context, preclinica),
     )));
     return childButtons;
   }
 
   Widget _formParte1(BuildContext context) {
-    final size = MediaQuery.of(context).size;
     return SingleChildScrollView(
       child: GFCard(
         elevation: 6.0,
-        height: size.height * 0.82,
         title: GFListTile(
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            mainAxisSize: MainAxisSize.max,
-            children: <Widget>[
-              Text(
-                'Examen Físico - página 1',
-                style: TextStyle(fontSize: 16.0),
-              ),
-            ],
-          ),
-        ),
+            color: Colors.red,
+            title: Text('Examen físico - página 1',
+                style: TextStyle(
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white)),
+            icon: FaIcon(FontAwesomeIcons.user, color: Colors.white)),
         content: Column(
           children: <Widget>[
             _campoAspectoGeneral(),
             _campoEdadAparente(),
-            _campoMarcha(),
-            _campoOrientaciones(),
-            _campoPulso(),
-            _campoPabd(),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _formParte2(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    return SingleChildScrollView(
-      child: GFCard(
-        elevation: 6.0,
-        height: size.height * 0.82,
-        title: GFListTile(
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            mainAxisSize: MainAxisSize.max,
-            children: <Widget>[
-              Text(
-                'Examen Físico - página 2',
-                style: TextStyle(fontSize: 16.0),
-              ),
-            ],
-          ),
-        ),
-        content: Column(
-          children: <Widget>[
-            _campoPtorax(),
-            _campoObservaciones(),
-            _campoInterpretacion(),
             _campoCabeza(),
+            _campoCuello(),
+            _campoOrofaringe(),
             _campoOidos(),
             _campoOjos(),
           ],
@@ -285,32 +293,56 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
     );
   }
 
-  Widget _formParte3(BuildContext context) {
-    final size = MediaQuery.of(context).size;
+  Widget _formParte2(BuildContext context) {
     return SingleChildScrollView(
       child: GFCard(
         elevation: 6.0,
-        height: size.height * 0.82,
         title: GFListTile(
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            mainAxisSize: MainAxisSize.max,
-            children: <Widget>[
-              Text(
-                'Examen Físico - página 3',
-                style: TextStyle(fontSize: 16.0),
-              ),
-            ],
-          ),
-        ),
+            color: Colors.red,
+            title: Text('Examen físico - página 2',
+                style: TextStyle(
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white)),
+            icon: FaIcon(FontAwesomeIcons.user, color: Colors.white)),
         content: Column(
           children: <Widget>[
-            _campoFo(),
+            // 2
             _campoNariz(),
-            _campoOrofaringe(),
-            _campoCuello(),
             _campoTorax(),
+            _campoPtorax(),
+            _campoCorazon(),
+            _campoPulmones(),
             _campoMamas(),
+            _campoAbdomen(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _formParte3(BuildContext context) {
+    return SingleChildScrollView(
+      child: GFCard(
+        elevation: 6.0,
+        title: GFListTile(
+            color: Colors.red,
+            title: Text('Examen físico - página 3',
+                style: TextStyle(
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white)),
+            icon: FaIcon(FontAwesomeIcons.user, color: Colors.white)),
+        content: Column(
+          children: <Widget>[
+            // 3
+            _campoGenitales(),
+            _campoMiembros(),
+            _campoRot(),
+            _campoPielFoneras(),
+            _campoNeurologico(),
+            _campoOrientaciones(),
+            _campoMarcha(),
           ],
         ),
       ),
@@ -318,31 +350,27 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
   }
 
   Widget _formParte4(BuildContext context) {
-    final size = MediaQuery.of(context).size;
     return SingleChildScrollView(
       child: GFCard(
         elevation: 6.0,
-        height: size.height * 0.82,
         title: GFListTile(
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            mainAxisSize: MainAxisSize.max,
-            children: <Widget>[
-              Text(
-                'Examen Físico - página 4',
-                style: TextStyle(fontSize: 16.0),
-              ),
-            ],
-          ),
-        ),
+            color: Colors.red,
+            title: Text('Examen físico - página 4',
+                style: TextStyle(
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white)),
+            icon: FaIcon(FontAwesomeIcons.user, color: Colors.white)),
         content: Column(
           children: <Widget>[
-            _campoPulmones(),
-            _campoCorazon(),
-            _campoRot(),
-            _campoAbdomen(),
-            _campoPielFoneras(),
-            _campoGenitales(),
+            // 4
+            _campoFo(),
+            _campoObservaciones(),
+            _campoInterpretacion(),
+            _campoRectoProstatico(),
+            _campoPabd(),
+            _campoPesoIdeal(),
+            _campoLibrasABajar(),
           ],
         ),
       ),
@@ -350,62 +378,26 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
   }
 
   Widget _formParte5(BuildContext context) {
-    final size = MediaQuery.of(context).size;
     return SingleChildScrollView(
       child: GFCard(
         elevation: 6.0,
-        height: size.height * 0.82,
         title: GFListTile(
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            mainAxisSize: MainAxisSize.max,
-            children: <Widget>[
-              Text(
-                'Examen Físico - página 5',
-                style: TextStyle(fontSize: 16.0),
-              ),
-            ],
-          ),
-        ),
+            color: Colors.red,
+            title: Text('Examen físico - página 5',
+                style: TextStyle(
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white)),
+            icon: FaIcon(FontAwesomeIcons.user, color: Colors.white)),
         content: Column(
           children: <Widget>[
-            _campoRectoProstatico(),
-            _campoMiembros(),
-            _campoNeurologico(),
+            // 5
+            _campoExcesoDePeso(),
             _campoDolorAusente(),
             _campoDolorPresente(),
             _campoDolorPresenteLeve(),
             _campoDolorPresenteModerado(),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _formParte6(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    return SingleChildScrollView(
-      child: GFCard(
-        elevation: 6.0,
-        height: size.height * 0.82,
-        title: GFListTile(
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            mainAxisSize: MainAxisSize.max,
-            children: <Widget>[
-              Text(
-                'Examen Físico - página 6',
-                style: TextStyle(fontSize: 16.0),
-              ),
-            ],
-          ),
-        ),
-        content: Column(
-          children: <Widget>[
             _campoDolorPresenteSevero(),
-            _campoExcesoDePeso(),
-            _campoPesoIdeal(),
-            _campoLibrasABajar(),
           ],
         ),
       ),
@@ -423,10 +415,9 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
       padding: EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
         controller: _aspectoGeneralController,
-        onSaved: (value) => _examenFisico.aspectoGeneral = value,
+        onSaved: (value) => widget.examen.aspectoGeneral = value,
         keyboardType: TextInputType.text,
         decoration: inputsDecorations('Aspecto General', Icons.person_outline),
-        enabled: quieroEditar,
       ),
     );
   }
@@ -441,7 +432,6 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
         controller: _edadAparenteController,
         keyboardType: TextInputType.number,
         decoration: inputsDecorations('Edad Aparente', Icons.person_outline),
-        enabled: quieroEditar,
       ),
     );
   }
@@ -451,10 +441,9 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
       padding: EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
         controller: _marchaController,
-        onSaved: (value) => _examenFisico.marcha = value,
+        onSaved: (value) => widget.examen.marcha = value,
         keyboardType: TextInputType.text,
         decoration: inputsDecorations('Marcha', Icons.person_outline),
-        enabled: quieroEditar,
       ),
     );
   }
@@ -464,23 +453,9 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
       padding: EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
         controller: _orientacionesController,
-        onSaved: (value) => _examenFisico.orientaciones = value,
+        onSaved: (value) => widget.examen.orientaciones = value,
         keyboardType: TextInputType.text,
         decoration: inputsDecorations('Orientaciones', Icons.person_outline),
-        enabled: quieroEditar,
-      ),
-    );
-  }
-
-  Widget _campoPulso() {
-    return Padding(
-      padding: EdgeInsets.only(left: 8.0, right: 8.0),
-      child: TextFormField(
-        controller: _pulsoController,
-        onSaved: (value) => _examenFisico.pulso = value,
-        keyboardType: TextInputType.text,
-        decoration: inputsDecorations('Pulso', Icons.person_outline),
-        enabled: quieroEditar,
       ),
     );
   }
@@ -490,10 +465,9 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
       padding: EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
         controller: _pabdController,
-        onSaved: (value) => _examenFisico.pabd = value,
+        onSaved: (value) => widget.examen.pabd = value,
         keyboardType: TextInputType.text,
         decoration: inputsDecorations('Pabd', Icons.person_outline),
-        enabled: quieroEditar,
       ),
     );
   }
@@ -503,10 +477,9 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
       padding: EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
         controller: _pToraxController,
-        onSaved: (value) => _examenFisico.ptorax = value,
+        onSaved: (value) => widget.examen.ptorax = value,
         keyboardType: TextInputType.text,
         decoration: inputsDecorations('Ptorax', Icons.person_outline),
-        enabled: quieroEditar,
       ),
     );
   }
@@ -516,10 +489,9 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
       padding: EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
         controller: _observacionesController,
-        onSaved: (value) => _examenFisico.observaciones = value,
+        onSaved: (value) => widget.examen.observaciones = value,
         keyboardType: TextInputType.text,
         decoration: inputsDecorations('Observaciones', Icons.person_outline),
-        enabled: quieroEditar,
       ),
     );
   }
@@ -528,70 +500,60 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
     return SwitchListTile(
         title: Text('Dolor ausente'),
         value: _dolorAusente,
-        onChanged: (quieroEditar)
-            ? (value) {
-                setState(() {
-                  _dolorAusente = value;
-                  _examenFisico.dolorAusente = value;
-                });
-              }
-            : null);
+        onChanged: (value) {
+          setState(() {
+            _dolorAusente = value;
+            widget.examen.dolorAusente = value;
+          });
+        });
   }
 
   Widget _campoDolorPresente() {
     return SwitchListTile(
         title: Text('Dolor presente'),
         value: _dolorPresente,
-        onChanged: (quieroEditar)
-            ? (value) {
-                setState(() {
-                  _dolorPresente = value;
-                  _examenFisico.dolorPresente = value;
-                });
-              }
-            : null);
+        onChanged: (value) {
+          setState(() {
+            _dolorPresente = value;
+            widget.examen.dolorPresente = value;
+          });
+        });
   }
 
   Widget _campoDolorPresenteLeve() {
     return SwitchListTile(
         title: Text('Dolor presente leve'),
         value: _dolorPresenteLeve,
-        onChanged: (quieroEditar)
-            ? (value) {
-                setState(() {
-                  _dolorPresenteLeve = value;
-                  _examenFisico.dolorPresenteLeve = value;
-                });
-              }
-            : null);
+        onChanged: (value) {
+          setState(() {
+            _dolorPresenteLeve = value;
+            widget.examen.dolorPresenteLeve = value;
+          });
+        });
   }
 
   Widget _campoDolorPresenteModerado() {
     return SwitchListTile(
         title: Text('Dolor presente moderado'),
         value: _dolorPresenteModerado,
-        onChanged: (quieroEditar)
-            ? (value) {
-                setState(() {
-                  _dolorPresenteModerado = value;
-                  _examenFisico.dolorPresenteModerado = value;
-                });
-              }
-            : null);
+        onChanged: (value) {
+          setState(() {
+            _dolorPresenteModerado = value;
+            widget.examen.dolorPresenteModerado = value;
+          });
+        });
   }
 
   Widget _campoDolorPresenteSevero() {
     return SwitchListTile(
         title: Text('Dolor presente severo'),
         value: _dolorPresenteSevero,
-        onChanged: (quieroEditar)
-            ? (value) {
-                setState(() {
-                  _dolorPresenteSevero = value;
-                  _examenFisico.dolorPresenteSevero = value;
-                });
-              }
-            : null);
+        onChanged: (value) {
+          setState(() {
+            _dolorPresenteSevero = value;
+            widget.examen.dolorPresenteSevero = value;
+          });
+        });
   }
 
   Widget _campoPesoIdeal() {
@@ -604,7 +566,6 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
         controller: _pesoIdealController,
         keyboardType: TextInputType.number,
         decoration: inputsDecorations('Peso Ideal', Icons.person_outline),
-        enabled: quieroEditar,
       ),
     );
   }
@@ -614,10 +575,9 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
       padding: EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
         controller: _interpretacionController,
-        onSaved: (value) => _examenFisico.interpretacion = value,
+        onSaved: (value) => widget.examen.interpretacion = value,
         keyboardType: TextInputType.text,
         decoration: inputsDecorations('Interpretación', Icons.person_outline),
-        enabled: quieroEditar,
       ),
     );
   }
@@ -626,14 +586,12 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
     return SwitchListTile(
         title: Text('Exceso de peso'),
         value: _excesoDePeso,
-        onChanged: (quieroEditar)
-            ? (value) {
-                setState(() {
-                  _excesoDePeso = value;
-                  _examenFisico.excesoDePeso = value;
-                });
-              }
-            : null);
+        onChanged: (value) {
+          setState(() {
+            _excesoDePeso = value;
+            widget.examen.excesoDePeso = value;
+          });
+        });
   }
 
   Widget _campoLibrasABajar() {
@@ -646,7 +604,6 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
         controller: _librasABajarController,
         keyboardType: TextInputType.number,
         decoration: inputsDecorations('Libras a bajar', Icons.person_outline),
-        enabled: quieroEditar,
       ),
     );
   }
@@ -656,10 +613,9 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
       padding: EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
         controller: _cabezaController,
-        onSaved: (value) => _examenFisico.cabeza = value,
+        onSaved: (value) => widget.examen.cabeza = value,
         keyboardType: TextInputType.text,
         decoration: inputsDecorations('Cabeza', Icons.person_outline),
-        enabled: quieroEditar,
       ),
     );
   }
@@ -669,10 +625,9 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
       padding: EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
         controller: _oidosController,
-        onSaved: (value) => _examenFisico.oidos = value,
+        onSaved: (value) => widget.examen.oidos = value,
         keyboardType: TextInputType.text,
         decoration: inputsDecorations('Oidos', Icons.person_outline),
-        enabled: quieroEditar,
       ),
     );
   }
@@ -682,10 +637,9 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
       padding: EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
         controller: _ojosController,
-        onSaved: (value) => _examenFisico.ojos = value,
+        onSaved: (value) => widget.examen.ojos = value,
         keyboardType: TextInputType.text,
         decoration: inputsDecorations('Ojos', Icons.person_outline),
-        enabled: quieroEditar,
       ),
     );
   }
@@ -695,10 +649,9 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
       padding: EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
         controller: _foController,
-        onSaved: (value) => _examenFisico.fo = value,
+        onSaved: (value) => widget.examen.fo = value,
         keyboardType: TextInputType.text,
         decoration: inputsDecorations('Fo', Icons.person_outline),
-        enabled: quieroEditar,
       ),
     );
   }
@@ -708,10 +661,9 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
       padding: EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
         controller: _narizController,
-        onSaved: (value) => _examenFisico.nariz = value,
+        onSaved: (value) => widget.examen.nariz = value,
         keyboardType: TextInputType.text,
         decoration: inputsDecorations('Nariz', Icons.person_outline),
-        enabled: quieroEditar,
       ),
     );
   }
@@ -721,10 +673,9 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
       padding: EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
         controller: _orofaringeController,
-        onSaved: (value) => _examenFisico.oroFaringe = value,
+        onSaved: (value) => widget.examen.oroFaringe = value,
         keyboardType: TextInputType.text,
         decoration: inputsDecorations('Orofaringe', Icons.person_outline),
-        enabled: quieroEditar,
       ),
     );
   }
@@ -734,10 +685,9 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
       padding: EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
         controller: _cuelloController,
-        onSaved: (value) => _examenFisico.cuello = value,
+        onSaved: (value) => widget.examen.cuello = value,
         keyboardType: TextInputType.text,
         decoration: inputsDecorations('Cuello', Icons.person_outline),
-        enabled: quieroEditar,
       ),
     );
   }
@@ -747,10 +697,9 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
       padding: EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
         controller: _toraxController,
-        onSaved: (value) => _examenFisico.torax = value,
+        onSaved: (value) => widget.examen.torax = value,
         keyboardType: TextInputType.text,
         decoration: inputsDecorations('Torax', Icons.person_outline),
-        enabled: quieroEditar,
       ),
     );
   }
@@ -760,10 +709,9 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
       padding: EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
         controller: _mamasController,
-        onSaved: (value) => _examenFisico.mamas = value,
+        onSaved: (value) => widget.examen.mamas = value,
         keyboardType: TextInputType.text,
         decoration: inputsDecorations('Mamas', Icons.person_outline),
-        enabled: quieroEditar,
       ),
     );
   }
@@ -773,10 +721,9 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
       padding: EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
         controller: _pulmonesController,
-        onSaved: (value) => _examenFisico.pulmones = value,
+        onSaved: (value) => widget.examen.pulmones = value,
         keyboardType: TextInputType.text,
         decoration: inputsDecorations('Pulmones', Icons.person_outline),
-        enabled: quieroEditar,
       ),
     );
   }
@@ -786,10 +733,9 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
       padding: EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
         controller: _corazonController,
-        onSaved: (value) => _examenFisico.corazon = value,
+        onSaved: (value) => widget.examen.corazon = value,
         keyboardType: TextInputType.text,
         decoration: inputsDecorations('Corazón', Icons.person_outline),
-        enabled: quieroEditar,
       ),
     );
   }
@@ -799,10 +745,9 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
       padding: EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
         controller: _rotController,
-        onSaved: (value) => _examenFisico.rot = value,
+        onSaved: (value) => widget.examen.rot = value,
         keyboardType: TextInputType.text,
         decoration: inputsDecorations('Rot', Icons.person_outline),
-        enabled: quieroEditar,
       ),
     );
   }
@@ -812,10 +757,9 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
       padding: EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
         controller: _abdomenController,
-        onSaved: (value) => _examenFisico.abdomen = value,
+        onSaved: (value) => widget.examen.abdomen = value,
         keyboardType: TextInputType.text,
         decoration: inputsDecorations('Abdomen', Icons.person_outline),
-        enabled: quieroEditar,
       ),
     );
   }
@@ -825,10 +769,9 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
       padding: EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
         controller: _pielFonerasController,
-        onSaved: (value) => _examenFisico.pielfoneras = value,
+        onSaved: (value) => widget.examen.pielfoneras = value,
         keyboardType: TextInputType.text,
         decoration: inputsDecorations('Piel foneras', Icons.person_outline),
-        enabled: quieroEditar,
       ),
     );
   }
@@ -838,10 +781,9 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
       padding: EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
         controller: _genitalesController,
-        onSaved: (value) => _examenFisico.genitales = value,
+        onSaved: (value) => widget.examen.genitales = value,
         keyboardType: TextInputType.text,
         decoration: inputsDecorations('Genitales', Icons.person_outline),
-        enabled: quieroEditar,
       ),
     );
   }
@@ -851,10 +793,9 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
       padding: EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
         controller: _rectoProstaticoController,
-        onSaved: (value) => _examenFisico.rectoProstatico = value,
+        onSaved: (value) => widget.examen.rectoProstatico = value,
         keyboardType: TextInputType.text,
         decoration: inputsDecorations('Recto prostatico', Icons.person_outline),
-        enabled: quieroEditar,
       ),
     );
   }
@@ -864,10 +805,9 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
       padding: EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
         controller: _miembrosController,
-        onSaved: (value) => _examenFisico.miembros = value,
+        onSaved: (value) => widget.examen.miembros = value,
         keyboardType: TextInputType.text,
         decoration: inputsDecorations('Miembros', Icons.person_outline),
-        enabled: quieroEditar,
       ),
     );
   }
@@ -877,15 +817,14 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
       padding: EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
         controller: _neuroligicoController,
-        onSaved: (value) => _examenFisico.neurologico = value,
+        onSaved: (value) => widget.examen.neurologico = value,
         keyboardType: TextInputType.text,
         decoration: inputsDecorations('Neurologico', Icons.person_outline),
-        enabled: quieroEditar,
       ),
     );
   }
 
-  void _guardar(BuildContext context) async {
+  void _guardar(BuildContext context, PreclinicaViewModel preclinica) async {
     final ProgressDialog _pr = new ProgressDialog(
       context,
       type: ProgressDialogType.Normal,
@@ -936,33 +875,29 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
           'El formulario no puede estar vacio', 3, Icons.info, Colors.white);
     } else {
       _formkey.currentState.save();
-      obtenerValores();
+      obtenerValores(preclinica);
       await _pr.show();
 
       ExamenFisico _examenFisicoGuardado;
 
-      if (_examenFisico.examenFisicoId == 0) {
+      if (widget.examen.examenFisicoId == 0) {
         //guarda
         _examenFisicoGuardado =
-            await _examenFisicoBloc.addExamenFisico(_examenFisico);
+            await _examenFisicoBloc.addExamenFisico(widget.examen);
       } else {
         _examenFisicoGuardado =
-            await _examenFisicoBloc.updateExamenFisico(_examenFisico);
+            await _examenFisicoBloc.updateExamenFisico(widget.examen);
       }
       await _pr.hide();
 
       if (_examenFisicoGuardado != null) {
         mostrarFlushBar(context, Colors.green, 'Info', 'Datos Guardados', 2,
             Icons.info, Colors.black);
-        _examenFisico.examenFisicoId = _examenFisicoGuardado.examenFisicoId;
-        _examenFisico.creadoFecha = _examenFisicoGuardado.creadoFecha;
-        _examenFisico.creadoPor = _examenFisicoGuardado.creadoPor;
-        _examenFisico.modificadoPor = _examenFisicoGuardado.modificadoPor;
-        _examenFisicoGuardado.modificadoFecha =
-            _examenFisicoGuardado.modificadoFecha;
-        setState(() {
-          quieroEditar = false;
-        });
+        widget.examen.examenFisicoId = _examenFisicoGuardado.examenFisicoId;
+        widget.examen.creadoFecha = _examenFisicoGuardado.creadoFecha;
+        widget.examen.creadoPor = _examenFisicoGuardado.creadoPor;
+        widget.examen.modificadoPor = _examenFisicoGuardado.modificadoPor;
+        widget.examen.modificadoFecha = _examenFisicoGuardado.modificadoFecha;
       } else {
         mostrarFlushBar(context, Colors.red, 'Info', 'Ha ocurrido un error', 2,
             Icons.info, Colors.white);
@@ -970,94 +905,52 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
     }
   }
 
-  void _desactivar() async {
-    if (_examenFisico.examenFisicoId != 0) {
-      final ProgressDialog _pr = new ProgressDialog(
-        context,
-        type: ProgressDialogType.Normal,
-        isDismissible: false,
-        showLogs: false,
-      );
-      _pr.update(
-        progress: 50.0,
-        message: "Espere...",
-        progressWidget: Container(
-            padding: EdgeInsets.all(8.0), child: CircularProgressIndicator()),
-        maxProgress: 100.0,
-        progressTextStyle: TextStyle(
-            color: Colors.black, fontSize: 13.0, fontWeight: FontWeight.w400),
-        messageTextStyle: TextStyle(
-            color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600),
-      );
-      await _pr.show();
-      ExamenFisico _examenFisicoGuardado;
-      _examenFisico.activo = false;
-      _examenFisicoGuardado =
-          await _examenFisicoBloc.updateExamenFisico(_examenFisico);
-      await _pr.hide();
-      if (_examenFisicoGuardado != null) {
-        mostrarFlushBar(context, Colors.green, 'Info', 'Datos Guardados', 2,
-            Icons.info, Colors.black);
-        _examenFisico.examenFisicoId = 0;
-        _examenFisico.activo = true;
-        // limpiar todo
-        limpiar();
-        setState(() {
-          quieroEditar = true;
-        });
-      } else {
-        mostrarFlushBar(context, Colors.red, 'Info', 'Ha ocurrido un error', 2,
-            Icons.info, Colors.white);
-      }
-    } else {
-      print('nada');
-    }
-  }
-
-  void obtenerValores() {
-    _examenFisico.aspectoGeneral = _aspectoGeneralController.text;
-    _examenFisico.edadAparente = (_edadAparenteController.text.isEmpty)
+  void obtenerValores(PreclinicaViewModel preclinica) {
+    widget.examen.aspectoGeneral = _aspectoGeneralController.text;
+    widget.examen.edadAparente = (_edadAparenteController.text.isEmpty)
         ? null
         : int.parse(_edadAparenteController.text);
-    _examenFisico.marcha = _marchaController.text;
-    _examenFisico.orientaciones = _orientacionesController.text;
-    _examenFisico.pulso = _pulsoController.text;
-    _examenFisico.pabd = _pabdController.text;
-    _examenFisico.ptorax = _pToraxController.text;
-    _examenFisico.observaciones = _observacionesController.text;
-    _examenFisico.pesoIdeal = (_pesoIdealController.text.isEmpty)
+    widget.examen.marcha = _marchaController.text;
+    widget.examen.orientaciones = _orientacionesController.text;
+    widget.examen.pulso = _pulsoController.text;
+    widget.examen.pabd = _pabdController.text;
+    widget.examen.ptorax = _pToraxController.text;
+    widget.examen.observaciones = _observacionesController.text;
+    widget.examen.pesoIdeal = (_pesoIdealController.text.isEmpty)
         ? null
         : int.parse(_pesoIdealController.text);
-    _examenFisico.interpretacion = (_interpretacionController.text.isEmpty)
+    widget.examen.interpretacion = (_interpretacionController.text.isEmpty)
         ? null
         : _interpretacionController.text;
-    _examenFisico.librasABajar = (_interpretacionController.text.isEmpty)
+    widget.examen.librasABajar = (_interpretacionController.text.isEmpty)
         ? null
         : int.parse(_librasABajarController.text);
-    _examenFisico.cabeza = _cabezaController.text;
-    _examenFisico.oidos = _oidosController.text;
-    _examenFisico.ojos = _ojosController.text;
-    _examenFisico.fo = _foController.text;
-    _examenFisico.nariz = _narizController.text;
-    _examenFisico.oroFaringe = _orofaringeController.text;
-    _examenFisico.cuello = _cuelloController.text;
-    _examenFisico.torax = _toraxController.text;
-    _examenFisico.mamas = _mamasController.text;
-    _examenFisico.pulmones = _pulmonesController.text;
-    _examenFisico.corazon = _corazonController.text;
-    _examenFisico.rot = _rotController.text;
-    _examenFisico.abdomen = _abdomenController.text;
-    _examenFisico.pielfoneras = _pielFonerasController.text;
-    _examenFisico.genitales = _genitalesController.text;
-    _examenFisico.rectoProstatico = _rectoProstaticoController.text;
-    _examenFisico.miembros = _miembrosController.text;
-    _examenFisico.neurologico = _neuroligicoController.text;
-    _examenFisico.dolorAusente = _dolorAusente;
-    _examenFisico.dolorPresente = _dolorPresente;
-    _examenFisico.dolorPresenteLeve = _dolorPresenteLeve;
-    _examenFisico.dolorPresenteModerado = _dolorPresenteModerado;
-    _examenFisico.dolorPresenteSevero = _dolorPresenteSevero;
-    _examenFisico.excesoDePeso = _excesoDePeso;
+    widget.examen.cabeza = _cabezaController.text;
+    widget.examen.oidos = _oidosController.text;
+    widget.examen.ojos = _ojosController.text;
+    widget.examen.fo = _foController.text;
+    widget.examen.nariz = _narizController.text;
+    widget.examen.oroFaringe = _orofaringeController.text;
+    widget.examen.cuello = _cuelloController.text;
+    widget.examen.torax = _toraxController.text;
+    widget.examen.mamas = _mamasController.text;
+    widget.examen.pulmones = _pulmonesController.text;
+    widget.examen.corazon = _corazonController.text;
+    widget.examen.rot = _rotController.text;
+    widget.examen.abdomen = _abdomenController.text;
+    widget.examen.pielfoneras = _pielFonerasController.text;
+    widget.examen.genitales = _genitalesController.text;
+    widget.examen.rectoProstatico = _rectoProstaticoController.text;
+    widget.examen.miembros = _miembrosController.text;
+    widget.examen.neurologico = _neuroligicoController.text;
+    widget.examen.dolorAusente = _dolorAusente;
+    widget.examen.dolorPresente = _dolorPresente;
+    widget.examen.dolorPresenteLeve = _dolorPresenteLeve;
+    widget.examen.dolorPresenteModerado = _dolorPresenteModerado;
+    widget.examen.dolorPresenteSevero = _dolorPresenteSevero;
+    widget.examen.excesoDePeso = _excesoDePeso;
+    widget.examen.imc = preclinica.imc;
+    widget.examen.pulso = preclinica.ritmoCardiaco.toString();
   }
 
   void limpiar() {
@@ -1098,39 +991,26 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
     _excesoDePeso = false;
   }
 
-  void confirmAction(
-    BuildContext context,
-    String texto,
-  ) {
-    // set up the buttons
-    Widget cancelButton = FlatButton(
-      child: Text('Cancelar'),
-      onPressed: () {
-        Navigator.pop(context);
-      },
-    );
-    Widget continueButton = FlatButton(
-      child: Text('Ok'),
-      onPressed: () {
-        Navigator.pop(context);
-        _desactivar();
-      },
-    );
-
+  void _confirmDesactivar(BuildContext context) {
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
       title: Text("Información"),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          Text(texto),
-          Text('Esta acción no se podra deshacer.')
+          Text('Desea completar esta acción?'),
         ],
       ),
       elevation: 24.0,
       actions: [
-        cancelButton,
-        continueButton,
+        FlatButton(
+            onPressed: () => Navigator.pop(context), child: Text('Cancelar')),
+        FlatButton(
+            onPressed: () {
+              Navigator.pop(context);
+              _desactivar(context);
+            },
+            child: Text('Aceptar'))
       ],
     );
 
@@ -1143,45 +1023,50 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
         barrierDismissible: false);
   }
 
-  showConfirmDialog(
-      BuildContext context, String ruta, PreclinicaViewModel args) {
-    // set up the buttons
-    Widget cancelButton = FlatButton(
-      child: Text('Cancelar'),
-      onPressed: () {
-        Navigator.pop(context);
-      },
+  void _desactivar(BuildContext context) async {
+    final ProgressDialog _pr = new ProgressDialog(
+      context,
+      type: ProgressDialogType.Normal,
+      isDismissible: false,
+      showLogs: false,
     );
-    Widget continueButton = FlatButton(
-      child: Text('Ok'),
-      onPressed: () {
-        Navigator.pushReplacementNamed(context, ruta, arguments: args);
-      },
-    );
-
-    // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-      title: Text("Información"),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Text('Desea continuar a la siguiente pagina?'),
-          Text('Esta acción no se podra deshacer.')
-        ],
-      ),
-      elevation: 24.0,
-      actions: [
-        cancelButton,
-        continueButton,
-      ],
+    _pr.update(
+      progress: 50.0,
+      message: "Espere...",
+      progressWidget: Container(
+          padding: EdgeInsets.all(8.0), child: CircularProgressIndicator()),
+      maxProgress: 100.0,
+      progressTextStyle: TextStyle(
+          color: Colors.black, fontSize: 13.0, fontWeight: FontWeight.w400),
+      messageTextStyle: TextStyle(
+          color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600),
     );
 
-    // show the dialog
-    showDialog(
-        context: context,
-        builder: (context) {
-          return alert;
-        },
-        barrierDismissible: false);
+    _formkey.currentState.save();
+    await _pr.show();
+    ExamenFisico _examenGuardado;
+    widget.examen.activo = false;
+
+    _examenGuardado = await _examenFisicoBloc.updateExamenFisico(widget.examen);
+
+    if (_examenGuardado != null) {
+      await _pr.hide();
+      mostrarFlushBar(context, Colors.green, 'Info', 'Datos Guardados', 2,
+          Icons.info, Colors.black);
+
+      limpiar();
+
+      widget.examen.examenFisicoId = 0;
+      widget.examen.activo = true;
+      widget.examen.creadoFecha = DateTime.now();
+      _examenGuardado.modificadoFecha = DateTime.now();
+
+      setState(() {
+        labelBoton = 'Guardar';
+      });
+    } else {
+      mostrarFlushBar(context, Colors.red, 'Info', 'Ha ocurrido un error', 2,
+          Icons.info, Colors.white);
+    }
   }
 }

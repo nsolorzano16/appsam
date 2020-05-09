@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:getflutter/getflutter.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 
@@ -134,16 +135,13 @@ class _CrearHabitosPageState extends State<CrearHabitosPage> {
           GFCard(
             elevation: 6.0,
             title: GFListTile(
-              title: Row(
-                mainAxisSize: MainAxisSize.max,
-                children: <Widget>[
-                  Text(
-                    'Habitos',
-                    style: TextStyle(fontSize: 16.0),
-                  ),
-                ],
-              ),
-            ),
+                color: Colors.red,
+                title: Text('Habitos',
+                    style: TextStyle(
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white)),
+                icon: FaIcon(FontAwesomeIcons.user, color: Colors.white)),
             content: Form(
                 key: _formkey,
                 child: Column(

@@ -63,49 +63,8 @@ void mostrarFlushBar(BuildContext context, Color color, String title,
   )..show(context);
 }
 
-// showConfirmDialog(BuildContext context, String ruta, PreclinicaViewModel args) {
-//   // set up the buttons
-//   Widget cancelButton = FlatButton(
-//     child: Text('Cancelar'),
-//     onPressed: () {
-//       Navigator.pop(context);
-//     },
-//   );
-//   Widget continueButton = FlatButton(
-//     child: Text('Ok'),
-//     onPressed: () {
-//       Navigator.pushReplacementNamed(context, ruta, arguments: args);
-//     },
-//   );
-
-//   // set up the AlertDialog
-//   AlertDialog alert = AlertDialog(
-//     title: Text("Información"),
-//     content: Column(
-//       mainAxisSize: MainAxisSize.min,
-//       children: <Widget>[
-//         Text('Desea continuar a la siguiente pagina?'),
-//         Text('Esta acción no se podra deshacer.')
-//       ],
-//     ),
-//     elevation: 24.0,
-//     actions: [
-//       cancelButton,
-//       continueButton,
-//     ],
-//   );
-
-//   // show the dialog
-//   showDialog(
-//       context: context,
-//       builder: (context) {
-//         return alert;
-//       },
-//       barrierDismissible: false);
-// }
-
 InputDecoration inputsDecorations(String label, IconData icon,
-    {String helperTexto = '', String hintTexto = ''}) {
+    {String helperTexto = '', String hintTexto = '', String counterTexto}) {
   return InputDecoration(
       filled: true,
       fillColor: Colors.white,
@@ -113,6 +72,7 @@ InputDecoration inputsDecorations(String label, IconData icon,
         icon,
         color: Colors.redAccent,
       ),
+      counterText: counterTexto,
       border: OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
       labelText: label,
       helperText: helperTexto,

@@ -1,11 +1,14 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:appsam/src/blocs/consulta_bloc.dart';
+import 'package:appsam/src/blocs/examenFisico_bloc.dart';
 import 'package:appsam/src/blocs/historialGineco_bloc.dart';
 
 import 'package:appsam/src/models/consulta_model.dart';
+import 'package:appsam/src/models/examenFisico_model.dart';
 import 'package:appsam/src/models/historialGinecoObstetra_model.dart';
 import 'package:appsam/src/models/paginados/preclinica_paginadoVM.dart';
 import 'package:appsam/src/models/usuario_model.dart';
+import 'package:appsam/src/pages/consulta/examenFisico/crear_ExamenFisico_page.dart';
 import 'package:appsam/src/pages/consulta/historialGinecoObstetra/crear_HistorialGineco_page.dart';
 import 'package:appsam/src/utils/storage_util.dart';
 import 'package:appsam/src/utils/utils.dart';
@@ -169,20 +172,16 @@ class _MenuConsultaPageState extends State<MenuConsultaPage> {
                 Table(
                   children: [
                     TableRow(children: [
-                      (_consultaDetalle.examenFisico == null)
-                          ? FadeInLeft(
-                              child: _cardItem(
-                                  _preclinica,
-                                  FontAwesomeIcons.child,
-                                  'Examen Físico',
-                                  'crear_examen_fisico',
-                                  Colors.brown,
-                                  context),
-                            )
-                          : FadeInLeft(
-                              child: _cardItemFake(FontAwesomeIcons.child,
-                                  'Examen Físico', Colors.grey),
-                            ),
+                      FadeInLeft(
+                        child: _cardItemExamenFisico(
+                            _preclinica,
+                            FontAwesomeIcons.child,
+                            'Examen Físico',
+                            'crear_examen_fisico',
+                            Colors.brown,
+                            context,
+                            _usuario),
+                      ),
                       FadeInRight(
                         child: _cardItem(
                             _preclinica,
@@ -359,6 +358,109 @@ class _MenuConsultaPageState extends State<MenuConsultaPage> {
               MaterialPageRoute(
                   builder: (context) => CrearHistorialGinecoObstetraPage(
                         historial: _historialEmpty,
+                        preclinica: preclinica,
+                      )));
+        }
+      },
+      child: GFCard(
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
+        elevation: 6.0,
+        height: 110.0,
+        color: color,
+        content: Column(
+          children: <Widget>[
+            Container(
+              // decoration: BoxDecoration(
+              //     shape: BoxShape.circle, color: Colors.red),
+              margin: EdgeInsets.only(top: 5.0),
+              child: FaIcon(
+                icon,
+                size: 40.0,
+                color: Colors.white,
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(top: 6.0),
+              child: Text(
+                texto,
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.white, fontSize: 15.0),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _cardItemExamenFisico(
+      PreclinicaViewModel preclinica,
+      IconData icon,
+      String texto,
+      String ruta,
+      Color color,
+      BuildContext context,
+      UsuarioModel usuario) {
+    final _examenFisicoBloc = new ExamenFisicoBloc();
+
+    final ExamenFisico _examenEmpty = new ExamenFisico();
+
+    _examenEmpty.examenFisicoId = 0;
+    _examenEmpty.pacienteId = preclinica.pacienteId;
+    _examenEmpty.doctorId = preclinica.doctorId;
+    _examenEmpty.preclinicaId = preclinica.preclinicaId;
+    _examenEmpty.activo = true;
+    _examenEmpty.creadoPor = usuario.userName;
+    _examenEmpty.creadoFecha = DateTime.now();
+    _examenEmpty.modificadoPor = usuario.userName;
+    _examenEmpty.modificadoFecha = DateTime.now();
+    _examenEmpty.dolorAusente = false;
+    _examenEmpty.dolorPresente = false;
+    _examenEmpty.dolorPresenteLeve = false;
+    _examenEmpty.dolorPresenteModerado = false;
+    _examenEmpty.dolorPresenteSevero = false;
+    _examenEmpty.excesoDePeso = false;
+
+    return GestureDetector(
+      onTap: () async {
+        final ProgressDialog _pr = new ProgressDialog(
+          context,
+          type: ProgressDialogType.Normal,
+          isDismissible: false,
+          showLogs: false,
+        );
+        _pr.update(
+          progress: 50.0,
+          message: "Espere...",
+          progressWidget: Container(
+              padding: EdgeInsets.all(8.0), child: CircularProgressIndicator()),
+          maxProgress: 100.0,
+          progressTextStyle: TextStyle(
+              color: Colors.black, fontSize: 13.0, fontWeight: FontWeight.w400),
+          messageTextStyle: TextStyle(
+              color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600),
+        );
+        await _pr.show();
+
+        final ExamenFisico examenFisico =
+            await _examenFisicoBloc.getExamenFisico(preclinica.pacienteId,
+                preclinica.doctorId, preclinica.preclinicaId);
+        await _pr.hide();
+        if (examenFisico != null) {
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => CrearExamenFisicoPage(
+                        examen: examenFisico,
+                        preclinica: preclinica,
+                      )));
+        } else {
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => CrearExamenFisicoPage(
+                        examen: _examenEmpty,
                         preclinica: preclinica,
                       )));
         }

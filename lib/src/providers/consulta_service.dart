@@ -22,7 +22,7 @@ class ConsultaService {
 
     //print(usuarioModelToJson(usuario));
     final resp = await http.get(url, headers: headers);
-//TODO: jalar imc de preclinica en examen fisico
+
     if (resp.statusCode == 200) {
       final decodedData = json.decode(resp.body);
       final consulta = new ConsultaModel.fromJson(decodedData);

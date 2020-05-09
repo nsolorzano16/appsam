@@ -14,7 +14,7 @@ import 'package:appsam/src/pages/asistentes/detalle_asistente.dart';
 import 'package:appsam/src/pages/asistentes/editar_asistentes_page.dart';
 import 'package:appsam/src/pages/asistentes/tab_resetpassword_page.dart';
 import 'package:appsam/src/pages/consulta/antecedentesFamiliares/crear_antecedentes_page.dart';
-import 'package:appsam/src/pages/consulta/examenFisico/crear_ExamenFisico_page.dart';
+
 import 'package:appsam/src/pages/consulta/farmacosUsoActual/crear_Farmacos_page.dart';
 import 'package:appsam/src/pages/consulta/habitos/crear_habitos_page.dart';
 
@@ -64,12 +64,8 @@ Map<String, WidgetBuilder> getApplicationRoutes(ThemeBloc bloc) {
     CrearAntecedentesPage.routeName: (BuildContext context) =>
         CrearAntecedentesPage(),
     CrearHabitosPage.routeName: (BuildContext context) => CrearHabitosPage(),
-    // CrearHistorialGinecoObstetraPage.routeName: (BuildContext context) =>
-    //     CrearHistorialGinecoObstetraPage(),
     CrearFarmacosUsoActualPage.routeName: (BuildContext context) =>
         CrearFarmacosUsoActualPage(),
-    CrearExamenFisicoPage.routeName: (BuildContext context) =>
-        CrearExamenFisicoPage(),
     CrearExamenGinecologicoPage.routeName: (BuildContext context) =>
         CrearExamenGinecologicoPage(),
     CrearDiagnosticosPage.routeName: (BuildContext context) =>

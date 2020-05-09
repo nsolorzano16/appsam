@@ -13,5 +13,11 @@ class ExamenFisicoBloc with Validators {
     return await _examenFisicoService.updateExamenFisico(examenFisico);
   }
 
+  Future<ExamenFisico> getExamenFisico(
+      int pacienteId, int doctorId, int preclinicaId) async {
+    return await _examenFisicoService.getExamenFisico(
+        pacienteId, doctorId, preclinicaId);
+  }
+
   dispose() {}
 }

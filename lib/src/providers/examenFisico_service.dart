@@ -50,4 +50,29 @@ class ExamenFisicoService {
 
     return null;
   }
+
+  Future<ExamenFisico> getExamenFisico(
+      int pacienteId, int doctorId, int preclinicaId) async {
+    final String token = StorageUtil.getString('token');
+    final headers = {
+      "content-type": "application/json",
+      "accept": "application/json",
+      'authorization': 'Bearer $token',
+    };
+    final url =
+        '$_apiURL/api/ExamenFisico/pacienteId/$pacienteId/doctorId/$doctorId/preclinicaId/$preclinicaId';
+
+    final resp = await http.get(
+      url,
+      headers: headers,
+    );
+
+    if (resp.statusCode == 200 && resp.body.isNotEmpty) {
+      final decodedData = json.decode(resp.body);
+      final antecedente = new ExamenFisico.fromJson(decodedData);
+      return antecedente;
+    }
+
+    return null;
+  }
 } // fin clase

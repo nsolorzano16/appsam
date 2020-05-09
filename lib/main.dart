@@ -53,7 +53,9 @@ class MyApp extends StatelessWidget {
               },
               theme: snapshot.data
                   ? ThemeData.dark()
-                  : ThemeData(primaryColor: Colors.red));
+                  : ThemeData(
+                      primaryColor: Colors.red,
+                    ));
         },
       ),
     );

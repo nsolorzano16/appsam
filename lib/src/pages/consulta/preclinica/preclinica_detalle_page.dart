@@ -331,7 +331,9 @@ class PreclinicaDetallePage extends StatelessWidget {
   }
 
   Widget _infoPreclinica(PreclinicaViewModel preclinica) {
-    return Table(children: _camposPreclinica(preclinica));
+    return Table(
+        columnWidths: {2: FractionColumnWidth(0.41)},
+        children: _camposPreclinica(preclinica));
   }
 
   List<TableRow> _camposPreclinica(PreclinicaViewModel preclinica) {
@@ -347,12 +349,12 @@ class PreclinicaDetallePage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text(
-                '${preclinica.peso} Lb.',
+                '${preclinica.peso}',
                 textAlign: TextAlign.justify,
                 style: estiloDatos,
               ),
               Text(
-                'Peso',
+                'Peso lb.',
                 textAlign: TextAlign.left,
                 style: _estiloSubt,
               ),
@@ -363,12 +365,12 @@ class PreclinicaDetallePage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text(
-                '${preclinica.altura} cm.',
+                '${preclinica.altura}',
                 textAlign: TextAlign.justify,
                 style: estiloDatos,
               ),
               Text(
-                'Altura',
+                'Altura cm.',
                 textAlign: TextAlign.left,
                 style: _estiloSubt,
               ),
@@ -384,7 +386,7 @@ class PreclinicaDetallePage extends StatelessWidget {
                 style: estiloDatos,
               ),
               Text(
-                'Frecuencia Respiratoria',
+                'Frec. Respiratoria/min',
                 textAlign: TextAlign.left,
                 style: _estiloSubt,
               ),
@@ -394,6 +396,38 @@ class PreclinicaDetallePage extends StatelessWidget {
         ],
       ),
       TableRow(children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              '${preclinica.imc}',
+              textAlign: TextAlign.justify,
+              style: estiloDatos,
+            ),
+            Text(
+              'IMC',
+              textAlign: TextAlign.left,
+              style: _estiloSubt,
+            ),
+            Divider()
+          ],
+        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              '${preclinica.presionSistolica} / ${preclinica.presionDiastolica}',
+              textAlign: TextAlign.justify,
+              style: estiloDatos,
+            ),
+            Text(
+              'Presion/mmHg',
+              textAlign: TextAlign.left,
+              style: _estiloSubt,
+            ),
+            Divider()
+          ],
+        ),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -410,38 +444,6 @@ class PreclinicaDetallePage extends StatelessWidget {
             Divider()
           ],
         ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(
-              '${preclinica.presionSistolica} / ${preclinica.presionDiastolica}',
-              textAlign: TextAlign.justify,
-              style: estiloDatos,
-            ),
-            Text(
-              'Presion',
-              textAlign: TextAlign.left,
-              style: _estiloSubt,
-            ),
-            Divider()
-          ],
-        ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(
-              '${preclinica.imc}',
-              textAlign: TextAlign.justify,
-              style: estiloDatos,
-            ),
-            Text(
-              'IMC',
-              textAlign: TextAlign.left,
-              style: _estiloSubt,
-            ),
-            Divider()
-          ],
-        )
       ]),
       TableRow(children: [
         Column(
@@ -453,7 +455,7 @@ class PreclinicaDetallePage extends StatelessWidget {
               style: estiloDatos,
             ),
             Text(
-              'Temperatura',
+              'Temperatura Cº',
               textAlign: TextAlign.left,
               style: _estiloSubt,
             ),

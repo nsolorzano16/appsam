@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:getflutter/getflutter.dart';
 import 'package:intl/intl.dart';
 import 'package:progress_dialog/progress_dialog.dart';
@@ -137,16 +138,13 @@ class _CrearHistorialGinecoObstetraPageState
           GFCard(
             elevation: 6.0,
             title: GFListTile(
-              title: Row(
-                mainAxisSize: MainAxisSize.max,
-                children: <Widget>[
-                  Text(
-                    'Historial Gineco Obstetra',
-                    style: TextStyle(fontSize: 16.0),
-                  ),
-                ],
-              ),
-            ),
+                color: Colors.red,
+                title: Text('Historial Gineco Obstetra',
+                    style: TextStyle(
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white)),
+                icon: FaIcon(FontAwesomeIcons.user, color: Colors.white)),
             content: Form(
                 key: _formkey,
                 child: Column(
@@ -275,7 +273,7 @@ class _CrearHistorialGinecoObstetraPageState
       child: TextFormField(
         enableInteractiveSelection: false,
         controller: _furController,
-        decoration: inputsDecorations('Fur', Icons.calendar_today),
+        decoration: inputsDecorations('Fum  ', Icons.calendar_today),
         onTap: () {
           FocusScope.of(context).requestFocus(new FocusNode());
           selectDateFur(context);
