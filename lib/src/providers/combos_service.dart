@@ -1,4 +1,8 @@
 import 'dart:convert';
+import 'package:appsam/src/models/examenCategoria_model.dart';
+import 'package:appsam/src/models/examenDetalle_model.dart';
+import 'package:appsam/src/models/examenTipo_model.dart';
+import 'package:appsam/src/utils/storage_util.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:appsam/src/models/departamento_model.dart';
@@ -22,8 +26,6 @@ class CombosService {
     if (decodeResp == null) return [];
 
     final List<DepartamentoModel> lista = new List();
-
-    if (decodeResp == null) return [];
 
     decodeResp.forEach((depto) {
       final deptoTemp = DepartamentoModel.fromJson(depto);
@@ -183,6 +185,90 @@ class CombosService {
     decodeResp.forEach((pais) {
       final paisTemp = PaisModel.fromJson(pais);
       lista.add(paisTemp);
+    });
+
+    if (resp.statusCode == 200 && lista != null) {
+      return lista;
+    }
+    return [];
+  }
+
+  Future<List<ExamenCategoriaModel>> getCategoriasExamenes() async {
+    final String token = StorageUtil.getString('token');
+    final headers = {
+      "content-type": "application/json",
+      "accept": "application/json",
+      'authorization': 'Bearer $token',
+    };
+    final url = '$_apiURL/api/ExamenCategoria';
+
+    final List<ExamenCategoriaModel> lista = new List();
+    final resp = await http.get(url, headers: headers);
+    final decodeResp = json.decode(resp.body);
+
+    if (decodeResp == null) return [];
+
+    decodeResp.forEach((categoria) {
+      final categoriaTemp = ExamenCategoriaModel.fromJson(categoria);
+      lista.add(categoriaTemp);
+    });
+
+    if (resp.statusCode == 200 && lista != null) {
+      return lista;
+    }
+    return [];
+  }
+
+  Future<List<ExamenTipoModel>> getTiposExamenes(int categoriaId) async {
+    final String token = StorageUtil.getString('token');
+    final headers = {
+      "content-type": "application/json",
+      "accept": "application/json",
+      'authorization': 'Bearer $token',
+    };
+    final url = '$_apiURL/api/ExamenTipo/categoriaid/$categoriaId';
+
+    final List<ExamenTipoModel> lista = new List();
+    final resp = await http.get(url, headers: headers);
+    final decodeResp = json.decode(resp.body);
+
+    if (decodeResp == null) return [];
+
+    decodeResp.forEach((tipo) {
+      final tipoTemp = ExamenTipoModel.fromJson(tipo);
+      lista.add(tipoTemp);
+    });
+
+    if (resp.statusCode == 200 && lista != null) {
+      return lista;
+    }
+    return [];
+  }
+
+  Future<List<ExamenDetalleModel>> getDetalleExamenes(
+      int tipoId, int categoriaId) async {
+    final String token = StorageUtil.getString('token');
+    final headers = {
+      "content-type": "application/json",
+      "accept": "application/json",
+      'authorization': 'Bearer $token',
+    };
+    final url =
+        '$_apiURL/api/ExamenDetalle/examentipoid/$tipoId/examencategoriaid/$categoriaId';
+
+    final List<ExamenDetalleModel> lista = new List();
+    if (tipoId == null || categoriaId == null) {
+      return [];
+    }
+    final resp = await http.get(url, headers: headers);
+
+    if (resp.body.isEmpty) return [];
+
+    final decodeResp = json.decode(resp.body);
+
+    decodeResp.forEach((detalle) {
+      final detalleTemp = ExamenDetalleModel.fromJson(detalle);
+      lista.add(detalleTemp);
     });
 
     if (resp.statusCode == 200 && lista != null) {

@@ -138,7 +138,7 @@ class _MenuConsultaPageState extends State<MenuConsultaPage> {
                       FadeInRight(
                         child: _cardItem(
                             _preclinica,
-                            Icons.people,
+                            FontAwesomeIcons.capsules,
                             'Farmacos de Uso Actual',
                             'crear_farmacos_uso_actual',
                             Colors.orange,
@@ -175,7 +175,7 @@ class _MenuConsultaPageState extends State<MenuConsultaPage> {
                       FadeInLeft(
                         child: _cardItemExamenFisico(
                             _preclinica,
-                            FontAwesomeIcons.child,
+                            FontAwesomeIcons.diagnoses,
                             'Examen Físico',
                             'crear_examen_fisico',
                             Colors.brown,
@@ -217,19 +217,15 @@ class _MenuConsultaPageState extends State<MenuConsultaPage> {
                             Colors.red,
                             context),
                       ),
-                      (_consultaDetalle.notas.length == 0)
-                          ? FadeInRight(
-                              child: _cardItem(
-                                  _preclinica,
-                                  Icons.note_add,
-                                  'Bulto',
-                                  'crear_notas',
-                                  Colors.deepPurple,
-                                  context),
-                            )
-                          : FadeInRight(
-                              child: _cardItemFake(
-                                  Icons.note_add, 'Bulto', Colors.grey))
+                      FadeInRight(
+                        child: _cardItem(
+                            _preclinica,
+                            FontAwesomeIcons.flask,
+                            'Examenes',
+                            'examenes_indicados',
+                            Colors.cyan,
+                            context),
+                      ),
                     ]),
                     TableRow(children: [
                       FadeInLeft(
@@ -493,36 +489,6 @@ class _MenuConsultaPageState extends State<MenuConsultaPage> {
             )
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _cardItemFake(IconData icon, String texto, Color color) {
-    return GFCard(
-      elevation: 3.0,
-      height: 110.0,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
-      content: Column(
-        children: <Widget>[
-          Container(
-            // decoration: BoxDecoration(
-            //     shape: BoxShape.circle, color: Colors.red),
-            margin: EdgeInsets.only(top: 5.0),
-            child: FaIcon(
-              icon,
-              size: 40.0,
-              color: color,
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.only(top: 6.0),
-            child: Text(
-              texto,
-              textAlign: TextAlign.center,
-              style: TextStyle(color: color, fontSize: 15.0),
-            ),
-          )
-        ],
       ),
     );
   }

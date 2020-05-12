@@ -42,6 +42,7 @@ dependencies:
   getflutter: ^1.0.11
   unicorndial: ^1.1.5
   animate_do: ^1.7.2
+  fl_chart: ^0.9.4
 
 dev_dependencies:
   flutter_test:
