@@ -3,6 +3,7 @@ import 'package:appsam/src/pages/consulta/consulta_detalle_page.dart';
 import 'package:appsam/src/pages/consulta/diagnosticos/crear_diagnosticos_page.dart';
 import 'package:appsam/src/pages/consulta/examenGinecologico/crear_ExamenGinecologico.dart';
 import 'package:appsam/src/pages/consulta/examenesIndicados/crear_ExamenIndicado_page.dart';
+
 import 'package:appsam/src/pages/consulta/examenesIndicados/examenesIndicados_page.dart';
 import 'package:appsam/src/pages/consulta/menuConsulta_page.dart';
 import 'package:appsam/src/pages/consulta/notas/crear_notas_page.dart';
@@ -81,6 +82,6 @@ Map<String, WidgetBuilder> getApplicationRoutes(ThemeBloc bloc) {
     ExamenesIndicadosPage.routeName: (BuildContext context) =>
         ExamenesIndicadosPage(),
     CrearExamenIndicadoPage.routeName: (BuildContext context) =>
-        CrearExamenIndicadoPage()
+        CrearExamenIndicadoPage(),
   };
 }

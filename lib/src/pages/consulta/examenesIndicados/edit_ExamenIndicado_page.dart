@@ -1,8 +1,8 @@
 import 'package:appsam/src/blocs/examenes_bloc.dart';
 import 'package:appsam/src/models/examenCategoria_model.dart';
 import 'package:appsam/src/models/examenDetalle_model.dart';
-import 'package:appsam/src/models/examenIndicado_Model.dart';
 import 'package:appsam/src/models/examenTipo_model.dart';
+import 'package:appsam/src/models/examenesIndicados_viewmodel.dart';
 import 'package:appsam/src/models/paginados/preclinica_paginadoVM.dart';
 import 'package:appsam/src/models/usuario_model.dart';
 import 'package:appsam/src/providers/combos_service.dart';
@@ -14,16 +14,21 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:getflutter/getflutter.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 
-class CrearExamenIndicadoPage extends StatefulWidget {
-  static final String routeName = 'crear_examen_indicado';
+class EditarExamenIndicadoPage extends StatefulWidget {
+  static final String routeName = 'editar_examen_indicado';
+  final ExamenesIndicadosViewModel examen;
+  final PreclinicaViewModel preclinica;
+
+  const EditarExamenIndicadoPage({this.examen, this.preclinica});
+
   @override
-  _CrearExamenIndicadoPageState createState() =>
-      _CrearExamenIndicadoPageState();
+  _EditarExamenIndicadoPageState createState() =>
+      _EditarExamenIndicadoPageState();
 }
 
-class _CrearExamenIndicadoPageState extends State<CrearExamenIndicadoPage> {
+class _EditarExamenIndicadoPageState extends State<EditarExamenIndicadoPage> {
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
-  final ExamenIndicadoModel _examen = new ExamenIndicadoModel();
+  final ExamenesIndicadosViewModel _examen = new ExamenesIndicadosViewModel();
 
   final _examenesBloc = new ExamenesBloc();
   final UsuarioModel _usuario =
@@ -31,28 +36,33 @@ class _CrearExamenIndicadoPageState extends State<CrearExamenIndicadoPage> {
 
   final _combosService = new CombosService();
   final _comboModel = new ListCombosExamenes(
-      listCategorias: [],
-      listExamenDetalle: [],
-      listExamenTipo: [],
-      examenCategoriaId: 1,
-      examenTipoId: 1,
-      examenDetalleId: 1);
+      listCategorias: [], listExamenDetalle: [], listExamenTipo: []);
 
   final TextEditingController _nombreController = new TextEditingController();
   final TextEditingController _notasController = new TextEditingController();
 
-  String labelBoton = 'Guardar';
+  String labelBoton = 'Editar';
 
   @override
   void initState() {
     super.initState();
-    StorageUtil.putString('ultimaPagina', CrearExamenIndicadoPage.routeName);
-    _examen.examenIndicadoId = 0;
-    _examen.activo = true;
-    _examen.creadoPor = _usuario.userName;
-    _examen.creadoFecha = DateTime.now();
+    StorageUtil.putString('ultimaPagina', EditarExamenIndicadoPage.routeName);
+    _examen.examenIndicadoId = widget.examen.examenIndicadoId;
+    _examen.pacienteId = widget.examen.pacienteId;
+    _examen.doctorId = widget.examen.doctorId;
+    _examen.preclinicaId = widget.examen.preclinicaId;
+    _examen.activo = widget.examen.activo;
+    _examen.creadoPor = widget.examen.creadoPor;
+    _examen.creadoFecha = widget.examen.creadoFecha;
     _examen.modificadoPor = _usuario.userName;
     _examen.modificadoFecha = DateTime.now();
+    _comboModel.examenCategoriaId = widget.examen.examenCategoriaId;
+    _comboModel.examenTipoId = widget.examen.examenTipoId;
+    _comboModel.examenDetalleId = (widget.examen.examenDetalleId != 0)
+        ? widget.examen.examenDetalleId
+        : null;
+    _nombreController.text = widget.examen.nombre;
+    _notasController.text = widget.examen.notas;
   }
 
   @override
@@ -63,12 +73,6 @@ class _CrearExamenIndicadoPageState extends State<CrearExamenIndicadoPage> {
 
   @override
   Widget build(BuildContext context) {
-    final PreclinicaViewModel _preclinica =
-        ModalRoute.of(context).settings.arguments;
-    _examen.pacienteId = _preclinica.pacienteId;
-    _examen.preclinicaId = _preclinica.preclinicaId;
-    _examen.doctorId = _preclinica.doctorId;
-
     return WillPopScope(
         child: Scaffold(
             appBar: AppBar(
@@ -81,7 +85,7 @@ class _CrearExamenIndicadoPageState extends State<CrearExamenIndicadoPage> {
                     ),
                     onPressed: () => Navigator.pushReplacementNamed(
                         context, 'examenes_indicados',
-                        arguments: _preclinica))
+                        arguments: widget.preclinica))
               ],
             ),
             drawer: MenuWidget(),
@@ -111,7 +115,7 @@ class _CrearExamenIndicadoPageState extends State<CrearExamenIndicadoPage> {
                           _campoNombre(),
                           _espacio(),
                           _campoNotas(),
-                          _crearBotones(context, _preclinica),
+                          _crearBotones(context, widget.preclinica)
                         ])),
                   )
                 ],
@@ -383,11 +387,10 @@ class _CrearExamenIndicadoPageState extends State<CrearExamenIndicadoPage> {
           : _comboModel.examenDetalleId;
       await _pr.show();
 
-      ExamenIndicadoModel _examenIndicadoGuard;
-      if (_examen.examenIndicadoId == 0) {
-        //guarda
-        _examenIndicadoGuard = await _examenesBloc.addExamen(_examen);
-      }
+      ExamenesIndicadosViewModel _examenIndicadoGuard;
+
+      //guarda
+      _examenIndicadoGuard = await _examenesBloc.updateExamen(_examen);
 
       if (_examenIndicadoGuard != null) {
         await _pr.hide();

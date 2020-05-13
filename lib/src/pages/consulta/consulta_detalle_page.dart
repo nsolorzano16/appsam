@@ -5,6 +5,7 @@ import 'package:appsam/src/models/consulta_model.dart';
 import 'package:appsam/src/models/diagnosticos_model.dart';
 import 'package:appsam/src/models/examenFisicoGinecologico_model.dart';
 import 'package:appsam/src/models/examenFisico_model.dart';
+import 'package:appsam/src/models/examenesIndicados_viewmodel.dart';
 import 'package:appsam/src/models/farmacosUsoActual_model.dart';
 import 'package:appsam/src/models/habitos_model.dart';
 import 'package:appsam/src/models/historialGinecoObstetra_model.dart';
@@ -159,6 +160,13 @@ class _ConsultaDetallePageState extends State<ConsultaDetallePage> {
                           ? _AccordionNotas(
                               notas: _consultaDetalle.notas,
                               estiloDatos: estiloDatos)
+                          : Container(),
+                      (_consultaDetalle.examenesIndicados.length != 0)
+                          ? _AccordionExamenesIndicados(
+                              examenes: _consultaDetalle.examenesIndicados,
+                              estiloDatos: estiloDatos,
+                              estiloSubt: _estiloSubt,
+                            )
                           : Container(),
                     ],
                   ),
@@ -1774,5 +1782,96 @@ class _AccordionDetalleConsulta extends StatelessWidget {
         ],
       )),
     );
+  }
+}
+
+class _AccordionExamenesIndicados extends StatelessWidget {
+  const _AccordionExamenesIndicados({
+    Key key,
+    @required List<ExamenesIndicadosViewModel> examenes,
+    @required this.estiloDatos,
+    @required TextStyle estiloSubt,
+  })  : _examenes = examenes,
+        super(key: key);
+
+  final List<ExamenesIndicadosViewModel> _examenes;
+  final TextStyle estiloDatos;
+
+  @override
+  Widget build(BuildContext context) {
+    return GFAccordion(
+      contentPadding: EdgeInsets.all(3.0),
+      collapsedTitlebackgroundColor: Theme.of(context).accentColor,
+      expandedTitlebackgroundColor: Colors.redAccent,
+      collapsedIcon: Icon(
+        Icons.keyboard_arrow_down,
+        color: Colors.white,
+      ),
+      expandedIcon: Icon(
+        Icons.keyboard_arrow_up,
+        color: Colors.white,
+      ),
+      titleChild: Text(
+        'Examenes indicados',
+        style: TextStyle(color: Colors.white, fontSize: 16.0),
+      ),
+      contentChild: GFCard(
+          content: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: _crearItems(_examenes))),
+    );
+  }
+
+  List<Widget> _crearItems(List<ExamenesIndicadosViewModel> lista) {
+    return lista.map((f) {
+      return Column(
+        children: <Widget>[
+          ExpansionTile(
+            title: Text('Nombre: ${f.nombre}'),
+            children: <Widget>[
+              Container(
+                  alignment: Alignment.centerLeft,
+                  padding: EdgeInsets.all(10.0),
+                  child: Table(
+                    children: [
+                      TableRow(children: [
+                        Text('Examen categoria:'),
+                        Text(
+                          f.examenCategoria,
+                          textAlign: TextAlign.justify,
+                        )
+                      ]),
+                      TableRow(children: [
+                        Text('Examen tipo:'),
+                        Text(
+                          f.examenTipo,
+                          textAlign: TextAlign.justify,
+                        )
+                      ]),
+                      TableRow(children: [
+                        Text('Examen detalle:'),
+                        Text(
+                          (f.examenDetalle != null)
+                              ? (f.examenDetalle[0].toUpperCase() +
+                                  f.examenDetalle.substring(1).toLowerCase())
+                              : '',
+                          textAlign: TextAlign.justify,
+                        )
+                      ]),
+                      TableRow(children: [
+                        Text('Notas:'),
+                        Text(
+                          (f.notas != null) ? f.notas : '',
+                          textAlign: TextAlign.justify,
+                        )
+                      ])
+                    ],
+                  ))
+            ],
+          ),
+        ],
+      );
+    }).toList();
   }
 }

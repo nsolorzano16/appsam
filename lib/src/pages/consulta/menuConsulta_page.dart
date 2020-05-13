@@ -145,6 +145,18 @@ class _MenuConsultaPageState extends State<MenuConsultaPage> {
                             context),
                       )
                     ]),
+                    TableRow(children: [
+                      FadeInLeft(
+                        child: _cardItem(
+                            _preclinica,
+                            FontAwesomeIcons.userMd,
+                            'Resumen de Consulta',
+                            'consulta_detalle',
+                            Colors.teal,
+                            context),
+                      ),
+                      Container()
+                    ]),
                   ],
                 )
               ],
@@ -161,7 +173,6 @@ class _MenuConsultaPageState extends State<MenuConsultaPage> {
     return FutureBuilder(
       future: _consultaFuture,
       builder: (BuildContext context, AsyncSnapshot<ConsultaModel> snapshot) {
-        final _consultaDetalle = snapshot.data;
         if (snapshot.hasData) {
           return SingleChildScrollView(
             child: Column(
@@ -226,21 +237,6 @@ class _MenuConsultaPageState extends State<MenuConsultaPage> {
                             Colors.cyan,
                             context),
                       ),
-                    ]),
-                    TableRow(children: [
-                      FadeInLeft(
-                        child: _cardItem(
-                            _preclinica,
-                            FontAwesomeIcons.userMd,
-                            'Resumen de Consulta',
-                            'consulta_detalle',
-                            Colors.teal,
-                            context),
-                      ),
-                      FadeInRight(
-                        child: _cardItem(_preclinica, FontAwesomeIcons.book,
-                            'Receta', 'crear_historial', Colors.lime, context),
-                      )
                     ]),
                   ],
                 )
