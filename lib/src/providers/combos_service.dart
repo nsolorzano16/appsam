@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:appsam/src/models/examenCategoria_model.dart';
 import 'package:appsam/src/models/examenDetalle_model.dart';
 import 'package:appsam/src/models/examenTipo_model.dart';
+import 'package:appsam/src/models/viaAdministracion_model.dart';
 import 'package:appsam/src/utils/storage_util.dart';
 import 'package:http/http.dart' as http;
 
@@ -268,6 +269,32 @@ class CombosService {
 
     decodeResp.forEach((detalle) {
       final detalleTemp = ExamenDetalleModel.fromJson(detalle);
+      lista.add(detalleTemp);
+    });
+
+    if (resp.statusCode == 200 && lista != null) {
+      return lista;
+    }
+    return [];
+  }
+
+  Future<List<ViaAdministracionModel>> getViasAdministracion() async {
+    final headers = {
+      "content-type": "application/json",
+      "accept": "application/json",
+    };
+    final url = '$_apiURL/api/ViaAdministracion';
+
+    final List<ViaAdministracionModel> lista = new List();
+
+    final resp = await http.get(url, headers: headers);
+
+    if (resp.body.isEmpty) return [];
+
+    final decodeResp = json.decode(resp.body);
+
+    decodeResp.forEach((detalle) {
+      final detalleTemp = ViaAdministracionModel.fromJson(detalle);
       lista.add(detalleTemp);
     });
 

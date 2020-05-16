@@ -25,12 +25,6 @@ class ExamenesBloc with Validators {
     return await _examenService.updateExamen(examen);
   }
 
-  Future<List<ExamenIndicadoModel>> getExamenesIndicados(
-      int pacienteId, int doctorId, int preclinicaId) async {
-    return await _examenService.getExamenesIndicados(
-        pacienteId, doctorId, preclinicaId);
-  }
-
   Future<List<ExamenesIndicadosViewModel>> getDetalleExamenesIndicados(
       int pacienteId, int doctorId, int preclinicaId) async {
     return await _examenService.getDetalleExamenesIndicados(

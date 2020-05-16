@@ -1,16 +1,17 @@
 // To parse this JSON data, do
 //
-//     final planTerapeuticoModel = planTerapeuticoModelFromJson(jsonString);
+//     final planTerapeuticoViewModel = planTerapeuticoViewModelFromJson(jsonString);
 
 import 'dart:convert';
 
-PlanTerapeuticoModel planTerapeuticoModelFromJson(String str) =>
-    PlanTerapeuticoModel.fromJson(json.decode(str));
+PlanTerapeuticoViewModel planTerapeuticoViewModelFromJson(String str) =>
+    PlanTerapeuticoViewModel.fromJson(json.decode(str));
 
-String planTerapeuticoModelToJson(PlanTerapeuticoModel data) =>
+String planTerapeuticoViewModelToJson(PlanTerapeuticoViewModel data) =>
     json.encode(data.toJson());
 
-class PlanTerapeuticoModel {
+class PlanTerapeuticoViewModel {
+  String viaAdministracion;
   int planTerapeuticoId;
   int pacienteId;
   int doctorId;
@@ -28,7 +29,8 @@ class PlanTerapeuticoModel {
   DateTime modificadoFecha;
   String notas;
 
-  PlanTerapeuticoModel({
+  PlanTerapeuticoViewModel({
+    this.viaAdministracion,
     this.planTerapeuticoId,
     this.pacienteId,
     this.doctorId,
@@ -47,8 +49,9 @@ class PlanTerapeuticoModel {
     this.notas,
   });
 
-  factory PlanTerapeuticoModel.fromJson(Map<String, dynamic> json) =>
-      PlanTerapeuticoModel(
+  factory PlanTerapeuticoViewModel.fromJson(Map<String, dynamic> json) =>
+      PlanTerapeuticoViewModel(
+        viaAdministracion: json["viaAdministracion"],
         planTerapeuticoId: json["planTerapeuticoId"],
         pacienteId: json["pacienteId"],
         doctorId: json["doctorId"],
@@ -68,6 +71,7 @@ class PlanTerapeuticoModel {
       );
 
   Map<String, dynamic> toJson() => {
+        "viaAdministracion": viaAdministracion,
         "planTerapeuticoId": planTerapeuticoId,
         "pacienteId": pacienteId,
         "doctorId": doctorId,

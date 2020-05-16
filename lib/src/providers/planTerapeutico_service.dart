@@ -1,58 +1,58 @@
 import 'dart:convert';
-import 'package:appsam/src/models/examenesIndicados_viewmodel.dart';
+import 'package:appsam/src/models/planTerapeutico_model.dart';
+import 'package:appsam/src/models/planTerapeutico_viewmodel.dart';
 import 'package:http/http.dart' as http;
 
-import 'package:appsam/src/models/examenIndicado_Model.dart';
 import 'package:appsam/src/utils/storage_util.dart';
 import 'package:appsam/src/utils/utils.dart';
 
-class ExamenesService {
+class PlanTerapeuticoService {
   final _apiURL = EnviromentVariables().getApiURL();
 
-  Future<ExamenIndicadoModel> addExamen(ExamenIndicadoModel examen) async {
+  Future<PlanTerapeuticoModel> addPlan(PlanTerapeuticoModel plan) async {
     final String token = StorageUtil.getString('token');
     final headers = {
       "content-type": "application/json",
       "accept": "application/json",
       'authorization': 'Bearer $token',
     };
-    final url = '$_apiURL/api/ExamenIndicado';
+    final url = '$_apiURL/api/PlanTerapeutico';
 
     final resp = await http.post(url,
-        headers: headers, body: examenIndicadoModelToJson(examen));
+        headers: headers, body: planTerapeuticoModelToJson(plan));
     final decodedData = json.decode(resp.body);
 
     if (resp.statusCode == 200) {
-      final examen = new ExamenIndicadoModel.fromJson(decodedData);
-      return examen;
+      final _plan = new PlanTerapeuticoModel.fromJson(decodedData);
+      return _plan;
     }
 
     return null;
   }
 
-  Future<ExamenesIndicadosViewModel> updateExamen(
-      ExamenesIndicadosViewModel examen) async {
+  Future<PlanTerapeuticoViewModel> updatePlan(
+      PlanTerapeuticoViewModel plan) async {
     final String token = StorageUtil.getString('token');
     final headers = {
       "content-type": "application/json",
       "accept": "application/json",
       'authorization': 'Bearer $token',
     };
-    final url = '$_apiURL/api/ExamenIndicado/edit';
+    final url = '$_apiURL/api/PlanTerapeutico/edit';
 
     final resp = await http.put(url,
-        headers: headers, body: examenesIndicadosViewModelToJson(examen));
+        headers: headers, body: planTerapeuticoViewModelToJson(plan));
     final decodedData = json.decode(resp.body);
 
     if (resp.statusCode == 200) {
-      final examen = new ExamenesIndicadosViewModel.fromJson(decodedData);
-      return examen;
+      final _plan = new PlanTerapeuticoViewModel.fromJson(decodedData);
+      return _plan;
     }
 
     return null;
   }
 
-  Future<List<ExamenesIndicadosViewModel>> getDetalleExamenesIndicados(
+  Future<List<PlanTerapeuticoViewModel>> getPlanes(
       int pacienteId, int doctorId, int preclinicaId) async {
     final String token = StorageUtil.getString('token');
     final headers = {
@@ -61,20 +61,16 @@ class ExamenesService {
       'authorization': 'Bearer $token',
     };
     final url =
-        '$_apiURL/api/ExamenIndicado/detail/pacienteId/$pacienteId/doctorId/$doctorId/preclinicaid/$preclinicaId';
-    final List<ExamenesIndicadosViewModel> lista = new List();
+        '$_apiURL/api/PlanTerapeutico/movil/listar/pacienteId/$pacienteId/doctorId/$doctorId/preclinicaid/$preclinicaId';
+    final List<PlanTerapeuticoViewModel> lista = new List();
 
     final resp = await http.get(url, headers: headers);
 
     if (resp.statusCode == 200 && resp.body.isNotEmpty) {
       final decodedData = json.decode(resp.body);
-      decodedData.forEach((examen) {
-        final examenTemp = ExamenesIndicadosViewModel.fromJson(examen);
-        if (examenTemp.examenDetalle != null) {
-          examenTemp.examenDetalle = examenTemp.examenDetalle[0].toUpperCase() +
-              examenTemp.examenDetalle.substring(1).toLowerCase();
-        }
-        lista.add(examenTemp);
+      decodedData.forEach((plan) {
+        final planTemp = PlanTerapeuticoViewModel.fromJson(plan);
+        lista.add(planTemp);
       });
       if (lista != null) return lista;
     }

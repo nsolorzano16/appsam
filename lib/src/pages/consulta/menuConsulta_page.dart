@@ -238,6 +238,18 @@ class _MenuConsultaPageState extends State<MenuConsultaPage> {
                             context),
                       ),
                     ]),
+                    TableRow(children: [
+                      FadeInLeft(
+                        child: _cardItem(
+                            _preclinica,
+                            FontAwesomeIcons.stickyNote,
+                            'Plan Terapeutico',
+                            'planes_terapeuticos',
+                            Colors.lightGreen,
+                            context),
+                      ),
+                      Container(),
+                    ]),
                   ],
                 )
               ],
