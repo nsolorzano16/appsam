@@ -49,6 +49,7 @@ class _CrearPlanTerapeuticoPageState extends State<CrearPlanTerapeuticoPage> {
     _plan.modificadoPor = _usuario.userName;
     _plan.modificadoFecha = DateTime.now();
     _plan.viaAdministracionId = 7;
+    _plan.permanente = _permanente;
   }
 
   @override

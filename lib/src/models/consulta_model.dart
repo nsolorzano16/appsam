@@ -14,7 +14,7 @@ import 'package:appsam/src/models/farmacosUsoActual_model.dart';
 import 'package:appsam/src/models/habitos_model.dart';
 import 'package:appsam/src/models/historialGinecoObstetra_model.dart';
 import 'package:appsam/src/models/notas_model.dart';
-import 'package:appsam/src/models/planTerapeutico_model.dart';
+import 'package:appsam/src/models/planTerapeutico_viewmodel.dart';
 import 'package:appsam/src/models/preclinica_model.dart';
 
 ConsultaModel consultaModelFromJson(String str) =>
@@ -34,7 +34,7 @@ class ConsultaModel {
   List<Notas> notas;
   ConsultaGeneralModel consultaGeneral;
   List<ExamenesIndicadosViewModel> examenesIndicados;
-  PlanTerapeuticoModel planTerapeutico;
+  List<PlanTerapeuticoViewModel> planesTerapeuticos;
 
   ConsultaModel({
     this.preclinica,
@@ -48,7 +48,7 @@ class ConsultaModel {
     this.notas,
     this.consultaGeneral,
     this.examenesIndicados,
-    this.planTerapeutico,
+    this.planesTerapeuticos,
   });
 
   factory ConsultaModel.fromJson(Map<String, dynamic> json) => ConsultaModel(
@@ -90,9 +90,10 @@ class ConsultaModel {
             ? null
             : List<ExamenesIndicadosViewModel>.from(json["examenesIndicados"]
                 .map((x) => ExamenesIndicadosViewModel.fromJson(x))),
-        planTerapeutico: json["planTerapeutico"] == null
+        planesTerapeuticos: json["planesTerapeuticos"] == null
             ? null
-            : PlanTerapeuticoModel.fromJson(json["planTerapeutico"]),
+            : List<PlanTerapeuticoViewModel>.from(json["planesTerapeuticos"]
+                .map((x) => PlanTerapeuticoViewModel.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -110,6 +111,7 @@ class ConsultaModel {
         "consultaGeneral": consultaGeneral.toJson(),
         "examenesIndicados":
             List<dynamic>.from(examenesIndicados.map((x) => x.toJson())),
-        "planTerapeutico": planTerapeutico.toJson(),
+        "planesTerapeuticos":
+            List<dynamic>.from(planesTerapeuticos.map((x) => x.toJson())),
       };
 }

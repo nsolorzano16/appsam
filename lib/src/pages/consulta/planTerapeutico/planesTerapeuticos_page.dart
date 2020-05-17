@@ -1,6 +1,7 @@
 import 'package:appsam/src/blocs/planTerapeutico_bloc.dart';
 import 'package:appsam/src/models/paginados/preclinica_paginadoVM.dart';
 import 'package:appsam/src/models/planTerapeutico_viewmodel.dart';
+import 'package:appsam/src/pages/consulta/planTerapeutico/edit_PlanTerapeutico_page.dart';
 import 'package:appsam/src/utils/storage_util.dart';
 import 'package:appsam/src/utils/utils.dart';
 import 'package:appsam/src/widgets/drawer.dart';
@@ -116,15 +117,13 @@ class _PlanesTerapeuticosPageState extends State<PlanesTerapeuticosPage> {
                       size: 16.0,
                       color: Theme.of(context).primaryColor,
                     ),
-                    onPressed: () {}
-                    // => Navigator.pushReplacement(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //         builder: (context) => EditarExamenIndicadoPage(
-                    //               examen: f,
-                    //               preclinica: preclinica,
-                    //             )))
-                    ),
+                    onPressed: () => Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => EditPlanTerapeuticoPage(
+                                  plan: f,
+                                  preclinica: preclinica,
+                                )))),
                 IconButton(
                     icon: Icon(
                       Icons.delete,

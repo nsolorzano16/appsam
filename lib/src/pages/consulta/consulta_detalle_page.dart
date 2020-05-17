@@ -11,10 +11,12 @@ import 'package:appsam/src/models/habitos_model.dart';
 import 'package:appsam/src/models/historialGinecoObstetra_model.dart';
 import 'package:appsam/src/models/notas_model.dart';
 import 'package:appsam/src/models/paginados/preclinica_paginadoVM.dart';
+import 'package:appsam/src/models/planTerapeutico_viewmodel.dart';
 
 import 'package:appsam/src/utils/utils.dart';
 import 'package:appsam/src/widgets/drawer.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:getflutter/getflutter.dart';
 import 'package:intl/intl.dart';
 
@@ -164,6 +166,13 @@ class _ConsultaDetallePageState extends State<ConsultaDetallePage> {
                       (_consultaDetalle.examenesIndicados.length != 0)
                           ? _AccordionExamenesIndicados(
                               examenes: _consultaDetalle.examenesIndicados,
+                              estiloDatos: estiloDatos,
+                              estiloSubt: _estiloSubt,
+                            )
+                          : Container(),
+                      (_consultaDetalle.planesTerapeuticos.length != 0)
+                          ? _AccordionPlanTerapeutico(
+                              planes: _consultaDetalle.planesTerapeuticos,
                               estiloDatos: estiloDatos,
                               estiloSubt: _estiloSubt,
                             )
@@ -1858,6 +1867,127 @@ class _AccordionExamenesIndicados extends StatelessWidget {
                               : '',
                           textAlign: TextAlign.justify,
                         )
+                      ]),
+                      TableRow(children: [
+                        Text('Notas:'),
+                        Text(
+                          (f.notas != null) ? f.notas : '',
+                          textAlign: TextAlign.justify,
+                        )
+                      ])
+                    ],
+                  ))
+            ],
+          ),
+        ],
+      );
+    }).toList();
+  }
+}
+
+class _AccordionPlanTerapeutico extends StatelessWidget {
+  const _AccordionPlanTerapeutico({
+    Key key,
+    @required List<PlanTerapeuticoViewModel> planes,
+    @required this.estiloDatos,
+    @required TextStyle estiloSubt,
+  })  : _planes = planes,
+        super(key: key);
+
+  final List<PlanTerapeuticoViewModel> _planes;
+  final TextStyle estiloDatos;
+
+  @override
+  Widget build(BuildContext context) {
+    return GFAccordion(
+      contentPadding: EdgeInsets.all(3.0),
+      collapsedTitlebackgroundColor: Theme.of(context).accentColor,
+      expandedTitlebackgroundColor: Colors.redAccent,
+      collapsedIcon: Icon(
+        Icons.keyboard_arrow_down,
+        color: Colors.white,
+      ),
+      expandedIcon: Icon(
+        Icons.keyboard_arrow_up,
+        color: Colors.white,
+      ),
+      titleChild: Text(
+        'Plan Terapeutico',
+        style: TextStyle(color: Colors.white, fontSize: 16.0),
+      ),
+      contentChild: GFCard(
+          content: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: _crearItems(_planes))),
+    );
+  }
+
+  List<Widget> _crearItems(List<PlanTerapeuticoViewModel> lista) {
+    return lista.map((f) {
+      return Column(
+        children: <Widget>[
+          ExpansionTile(
+            title: Text('Nombre: ${f.nombreMedicamento}'),
+            children: <Widget>[
+              Container(
+                  alignment: Alignment.centerLeft,
+                  padding: EdgeInsets.all(10.0),
+                  child: Table(
+                    children: [
+                      TableRow(children: [
+                        Text('Via administración:'),
+                        Text(
+                          f.viaAdministracion,
+                          textAlign: TextAlign.justify,
+                        )
+                      ]),
+                      TableRow(children: [
+                        Text('Dosis:'),
+                        Text(
+                          f.dosis,
+                          textAlign: TextAlign.justify,
+                        )
+                      ]),
+                      TableRow(children: [
+                        Text('Horario:'),
+                        Text(
+                          (f.horario),
+                          textAlign: TextAlign.justify,
+                        )
+                      ]),
+                      TableRow(children: [
+                        Text('Dias requeridos:'),
+                        Text(
+                          (f.diasRequeridos),
+                          textAlign: TextAlign.justify,
+                        )
+                      ]),
+                      TableRow(children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text('Permanente:'),
+                            Divider(),
+                          ],
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            (f.permanente)
+                                ? Icon(
+                                    Icons.check_circle,
+                                    size: 16.0,
+                                    color: Colors.green,
+                                  )
+                                : Icon(
+                                    FontAwesomeIcons.timesCircle,
+                                    size: 16.0,
+                                    color: Colors.red,
+                                  ),
+                            Divider(),
+                          ],
+                        ),
                       ]),
                       TableRow(children: [
                         Text('Notas:'),
