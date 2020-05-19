@@ -31,6 +31,8 @@ class _FormEditarPageState extends State<FormEditarPage> {
         mask: '####-####', filter: {"#": RegExp(r'[0-9]')});
     MaskTextInputFormatter maskTelefono2 = new MaskTextInputFormatter(
         mask: '####-####', filter: {"#": RegExp(r'[0-9]')});
+    MaskTextInputFormatter maskNumeroColegiado = new MaskTextInputFormatter(
+        mask: '#######', filter: {"#": RegExp(r'[0-9]')});
     final bloc = new CrearEditarAsistentesBloc();
 
     return SingleChildScrollView(
@@ -75,7 +77,7 @@ class _FormEditarPageState extends State<FormEditarPage> {
                 _espacio(),
                 _crearCampoTelefono2(maskTelefono2, _asistente),
                 _espacio(),
-                _crearCampoColegioNumero(_asistente),
+                _crearCampoColegioNumero(_asistente, maskNumeroColegiado),
                 _espacio(),
                 _crearCampoEmail(_asistente),
                 _espacio(),
@@ -281,10 +283,12 @@ class _FormEditarPageState extends State<FormEditarPage> {
     );
   }
 
-  _crearCampoColegioNumero(UsuarioModel _asistente) {
+  _crearCampoColegioNumero(
+      UsuarioModel _asistente, MaskTextInputFormatter mask) {
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
+        inputFormatters: [mask],
         decoration:
             inputsDecorations('Numero Colegiado', Icons.confirmation_number),
         initialValue:

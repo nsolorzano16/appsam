@@ -43,6 +43,7 @@ dependencies:
   unicorndial: ^1.1.5
   animate_do: ^1.7.2
   fl_chart: ^0.9.4
+  firebase_messaging: ^6.0.15
 
 dev_dependencies:
   flutter_test:

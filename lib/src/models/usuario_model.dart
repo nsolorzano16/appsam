@@ -31,6 +31,7 @@ class UsuarioModel {
   DateTime modificadoFecha;
   String notas;
   String fotoUrl;
+  String tokenDevice;
 
   UsuarioModel({
     this.usuarioId,
@@ -58,6 +59,7 @@ class UsuarioModel {
     this.modificadoFecha,
     this.notas,
     this.fotoUrl,
+    this.tokenDevice,
   });
 
   factory UsuarioModel.fromJson(Map<String, dynamic> json) => UsuarioModel(
@@ -85,7 +87,8 @@ class UsuarioModel {
       modificadoPor: json["modificadoPor"],
       modificadoFecha: DateTime.parse(json["modificadoFecha"]),
       notas: json["notas"],
-      fotoUrl: json["fotoUrl"]);
+      fotoUrl: json["fotoUrl"],
+      tokenDevice: json["tokenDevice"]);
 
   Map<String, dynamic> toJson() => {
         "usuarioId": usuarioId,
@@ -113,5 +116,6 @@ class UsuarioModel {
         "modificadoFecha": modificadoFecha.toIso8601String(),
         "notas": notas,
         "fotoUrl": fotoUrl,
+        "tokenDevice": tokenDevice
       };
 }
