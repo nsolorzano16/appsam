@@ -1,3 +1,6 @@
+import 'package:appsam/src/models/device_model.dart';
+import 'package:appsam/src/models/usuario_model.dart';
+import 'package:appsam/src/providers/devices_service.dart';
 import 'package:appsam/src/providers/pushNotificationService.dart';
 
 import 'package:flutter/material.dart';
@@ -12,12 +15,23 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final UsuarioModel _usuario =
+      usuarioModelFromJson(StorageUtil.getString('usuarioGlobal'));
+
   @override
   void initState() {
     super.initState();
     StorageUtil.putString('ultimaPagina', HomePage.routeName);
     final _pushService = new PushNotificationService();
     _pushService.initNotifications();
+
+    final _devicesService = new DevicesService();
+    final device = new DevicesModel();
+    device.deviceId = 0;
+    device.usuarioId = _usuario.usuarioId;
+    device.tokenDevice = StorageUtil.getString('tokenDevice');
+    print(devicesModelToJson(device));
+    _devicesService.addDevice(device);
   }
 
   @override

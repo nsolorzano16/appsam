@@ -22,9 +22,9 @@ class AntecedentesService {
     final resp = await http.post(url,
         headers: headers,
         body: antecedentesFamiliaresPersonalesToJson(antecedentes));
-    final decodedData = json.decode(resp.body);
 
     if (resp.statusCode == 200) {
+      final decodedData = json.decode(resp.body);
       final antecedente =
           new AntecedentesFamiliaresPersonales.fromJson(decodedData);
       return antecedente;
@@ -47,9 +47,9 @@ class AntecedentesService {
     final resp = await http.put(url,
         headers: headers,
         body: antecedentesFamiliaresPersonalesToJson(antecedentes));
-    final decodedData = json.decode(resp.body);
 
     if (resp.statusCode == 200) {
+      final decodedData = json.decode(resp.body);
       final antecedente =
           new AntecedentesFamiliaresPersonales.fromJson(decodedData);
       return antecedente;

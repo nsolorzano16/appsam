@@ -20,9 +20,9 @@ class ExamenesService {
 
     final resp = await http.post(url,
         headers: headers, body: examenIndicadoModelToJson(examen));
-    final decodedData = json.decode(resp.body);
 
-    if (resp.statusCode == 200) {
+    if (resp.statusCode == 200 && resp.body.isNotEmpty) {
+      final decodedData = json.decode(resp.body);
       final examen = new ExamenIndicadoModel.fromJson(decodedData);
       return examen;
     }
@@ -42,9 +42,9 @@ class ExamenesService {
 
     final resp = await http.put(url,
         headers: headers, body: examenesIndicadosViewModelToJson(examen));
-    final decodedData = json.decode(resp.body);
 
-    if (resp.statusCode == 200) {
+    if (resp.statusCode == 200 && resp.body.isNotEmpty) {
+      final decodedData = json.decode(resp.body);
       final examen = new ExamenesIndicadosViewModel.fromJson(decodedData);
       return examen;
     }

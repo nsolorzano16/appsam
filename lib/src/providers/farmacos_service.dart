@@ -11,20 +11,19 @@ class FarmacosUsoActualService {
   Future<List<FarmacosUsoActual>> addListaFarmacos(
       List<FarmacosUsoActual> farmacos) async {
     final String token = StorageUtil.getString('token');
+    final List<FarmacosUsoActual> lista = new List();
     final headers = {
       "content-type": "application/json",
       "accept": "application/json",
       'authorization': 'Bearer $token',
     };
     final url = '$_apiURL/api/FarmacosUsoActual';
-    final List<FarmacosUsoActual> lista = new List();
 
     final resp = await http.post(url,
         headers: headers, body: farmacosUsoActualToJsonList(farmacos));
-    final decodedData = json.decode(resp.body);
-    //print(decodedData);
 
-    if (resp.statusCode == 200) {
+    if (resp.statusCode == 200 && resp.body.isNotEmpty) {
+      final decodedData = json.decode(resp.body);
       decodedData.forEach((farmaco) {
         final farmacoTemp = FarmacosUsoActual.fromJson(farmaco);
         lista.add(farmacoTemp);
@@ -39,6 +38,7 @@ class FarmacosUsoActualService {
 
   Future<List<FarmacosUsoActual>> updateListaFarmacos(
       List<FarmacosUsoActual> farmacos) async {
+    final List<FarmacosUsoActual> lista = new List();
     final String token = StorageUtil.getString('token');
     final headers = {
       "content-type": "application/json",
@@ -46,13 +46,12 @@ class FarmacosUsoActualService {
       'authorization': 'Bearer $token',
     };
     final url = '$_apiURL/api/FarmacosUsoActual';
-    final List<FarmacosUsoActual> lista = new List();
 
     final resp = await http.put(url,
         headers: headers, body: farmacosUsoActualToJsonList(farmacos));
-    final decodedData = json.decode(resp.body);
 
-    if (resp.statusCode == 200) {
+    if (resp.statusCode == 200 && resp.body.isNotEmpty) {
+      final decodedData = json.decode(resp.body);
       decodedData.forEach((farmaco) {
         final farmacoTemp = FarmacosUsoActual.fromJson(farmaco);
         lista.add(farmacoTemp);

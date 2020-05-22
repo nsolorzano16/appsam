@@ -20,10 +20,9 @@ class ConsultaService {
     final url =
         '$_apiURL/api/Consulta/pacienteId/$pacienteId/doctorId/$doctorId/preclinicaId/$preclinicaId';
 
-    //print(usuarioModelToJson(usuario));
     final resp = await http.get(url, headers: headers);
 
-    if (resp.statusCode == 200) {
+    if (resp.statusCode == 200 && resp.body.isNotEmpty) {
       final decodedData = json.decode(resp.body);
       final consulta = new ConsultaModel.fromJson(decodedData);
       return consulta;
@@ -45,7 +44,7 @@ class ConsultaService {
     final resp = await http.post(url,
         headers: headers, body: consultaGeneralModelToJson(consultaGeneral));
 
-    if (resp.statusCode == 200) {
+    if (resp.statusCode == 200 && resp.body.isNotEmpty) {
       final decodedData = json.decode(resp.body);
       final consulta = new ConsultaGeneralModel.fromJson(decodedData);
       return consulta;
@@ -62,12 +61,10 @@ class ConsultaService {
       'authorization': 'Bearer $token',
     };
     final url = '$_apiURL/api/Consulta';
-
-    //print(usuarioModelToJson(usuario));
     final resp = await http.put(url,
         headers: headers, body: consultaGeneralModelToJson(consultaGeneral));
 
-    if (resp.statusCode == 200) {
+    if (resp.statusCode == 200 && resp.body.isNotEmpty) {
       final decodedData = json.decode(resp.body);
       final consulta = new ConsultaGeneralModel.fromJson(decodedData);
       return consulta;
@@ -87,11 +84,7 @@ class ConsultaService {
     final url =
         '$_apiURL/api/Consulta/getconsultageneral/pacienteid/$pacienteId/doctorid/$doctorId/preclinicaid/$preclinicaId';
 
-    //print(usuarioModelToJson(usuario));
-    final resp = await http.get(
-      url,
-      headers: headers,
-    );
+    final resp = await http.get(url, headers: headers);
 
     if (resp.statusCode == 200 && resp.body.isNotEmpty) {
       final decodedData = json.decode(resp.body);

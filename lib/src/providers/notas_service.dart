@@ -20,16 +20,14 @@ class NotasService {
 
     final resp =
         await http.post(url, headers: headers, body: notasToJsonList(notas));
-    final decodedData = json.decode(resp.body);
 
-    if (resp.statusCode == 200) {
+    if (resp.statusCode == 200 && resp.body.isNotEmpty) {
+      final decodedData = json.decode(resp.body);
       decodedData.forEach((nota) {
         final notaTemp = Notas.fromJson(nota);
         lista.add(notaTemp);
       });
-      if (lista != null) {
-        return lista;
-      }
+      return lista;
     }
 
     return [];
@@ -47,14 +45,14 @@ class NotasService {
 
     final resp =
         await http.put(url, headers: headers, body: notasToJsonList(notas));
-    final decodedData = json.decode(resp.body);
 
-    if (resp.statusCode == 200) {
+    if (resp.statusCode == 200 && resp.body.isNotEmpty) {
+      final decodedData = json.decode(resp.body);
       decodedData.forEach((nota) {
         final notaTemp = Notas.fromJson(nota);
         lista.add(notaTemp);
       });
-      if (lista != null) return lista;
+      return lista;
     }
 
     return [];
@@ -69,7 +67,6 @@ class NotasService {
     };
     final url = '$_apiURL/api/Notas/desactivar';
 
-    //print(usuarioModelToJson(usuario));
     final resp = await http.put(url, headers: headers, body: notasToJson(nota));
 
     if (resp.statusCode == 200) return true;

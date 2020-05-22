@@ -21,9 +21,9 @@ class ExamenGinecologicoService {
     final resp = await http.post(url,
         headers: headers,
         body: examenFisicoGinecologicoToJson(examenGinecologico));
-    final decodedData = json.decode(resp.body);
 
-    if (resp.statusCode == 200) {
+    if (resp.statusCode == 200 && resp.body.isNotEmpty) {
+      final decodedData = json.decode(resp.body);
       final examen = new ExamenFisicoGinecologico.fromJson(decodedData);
       return examen;
     }
@@ -45,9 +45,9 @@ class ExamenGinecologicoService {
     final resp = await http.put(url,
         headers: headers,
         body: examenFisicoGinecologicoToJson(examenGinecologico));
-    final decodedData = json.decode(resp.body);
 
-    if (resp.statusCode == 200) {
+    if (resp.statusCode == 200 && resp.body.isNotEmpty) {
+      final decodedData = json.decode(resp.body);
       final examen = new ExamenFisicoGinecologico.fromJson(decodedData);
       return examen;
     }
@@ -67,10 +67,7 @@ class ExamenGinecologicoService {
         '$_apiURL/api/ExamenFisicoGinecologico/pacienteId/$pacienteId/doctorId/$doctorId/preclinicaid/$preclinicaId';
 
     //print(usuarioModelToJson(usuario));
-    final resp = await http.get(
-      url,
-      headers: headers,
-    );
+    final resp = await http.get(url, headers: headers);
 
     if (resp.statusCode == 200 && resp.body.isNotEmpty) {
       final decodedData = json.decode(resp.body);

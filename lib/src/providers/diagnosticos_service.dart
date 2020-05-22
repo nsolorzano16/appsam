@@ -10,6 +10,7 @@ class DiagnosticosService {
 
   Future<List<Diagnosticos>> addListaDiagnosticos(
       List<Diagnosticos> diagnosticos) async {
+    final List<Diagnosticos> lista = new List();
     final String token = StorageUtil.getString('token');
     final headers = {
       "content-type": "application/json",
@@ -17,23 +18,17 @@ class DiagnosticosService {
       'authorization': 'Bearer $token',
     };
     final url = '$_apiURL/api/Diagnosticos';
-    final List<Diagnosticos> lista = new List();
-
     final resp = await http.post(url,
         headers: headers, body: diagnosticosToJsonList(diagnosticos));
-    final decodedData = json.decode(resp.body);
-    //print(decodedData);
 
-    if (resp.statusCode == 200) {
+    if (resp.statusCode == 200 && resp.body.isNotEmpty) {
+      final decodedData = json.decode(resp.body);
       decodedData.forEach((diagnostico) {
         final diagnosticoTemp = Diagnosticos.fromJson(diagnostico);
         lista.add(diagnosticoTemp);
       });
-      if (lista != null) {
-        return lista;
-      }
+      return lista;
     }
-
     return [];
   }
 
@@ -45,19 +40,19 @@ class DiagnosticosService {
       "accept": "application/json",
       'authorization': 'Bearer $token',
     };
-    final url = '$_apiURL/api/Diagnosticos';
     final List<Diagnosticos> lista = new List();
+    final url = '$_apiURL/api/Diagnosticos';
 
     final resp = await http.put(url,
         headers: headers, body: diagnosticosToJsonList(diagnosticos));
     final decodedData = json.decode(resp.body);
 
-    if (resp.statusCode == 200) {
+    if (resp.statusCode == 200 && resp.body.isNotEmpty) {
       decodedData.forEach((diagnostico) {
         final diagnosticoTemp = Diagnosticos.fromJson(diagnostico);
         lista.add(diagnosticoTemp);
       });
-      if (lista != null) return lista;
+      return lista;
     }
 
     return [];
@@ -72,7 +67,6 @@ class DiagnosticosService {
     };
     final url = '$_apiURL/api/Diagnosticos/desactivar';
 
-    //print(usuarioModelToJson(usuario));
     final resp = await http.put(url,
         headers: headers, body: diagnosticosToJson(diagnostico));
 
@@ -84,6 +78,7 @@ class DiagnosticosService {
   Future<List<Diagnosticos>> getDiagnosticos(
       int pacienteId, int doctorId, int preclinicaId) async {
     final String token = StorageUtil.getString('token');
+    final List<Diagnosticos> lista = new List();
     final headers = {
       "content-type": "application/json",
       "accept": "application/json",
@@ -91,7 +86,6 @@ class DiagnosticosService {
     };
     final url =
         '$_apiURL/api/Diagnosticos/pacienteId/$pacienteId/doctorId/$doctorId/preclinicaid/$preclinicaId';
-    final List<Diagnosticos> lista = new List();
 
     final resp = await http.get(url, headers: headers);
 

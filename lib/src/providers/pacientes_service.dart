@@ -20,12 +20,14 @@ class PacientesService {
     final url =
         '$_apiURL/api/Pacientes/page/$page/limit/50/doctor/$doctorId?filter=$filter';
     final resp = await http.get(url, headers: headers);
-    Map<String, dynamic> decodeResp = json.decode(resp.body);
-    var pacientes = new PacientesPaginadoModel();
-    pacientes = PacientesPaginadoModel.fromJson(decodeResp);
-    if (resp.statusCode == 200 && pacientes != null) {
+    if (resp.statusCode == 200 && resp.body.isNotEmpty) {
+      Map<String, dynamic> decodeResp = json.decode(resp.body);
+      var pacientes = new PacientesPaginadoModel();
+      pacientes = PacientesPaginadoModel.fromJson(decodeResp);
+
       return pacientes;
     }
+
     return null;
   }
 
@@ -41,9 +43,7 @@ class PacientesService {
 
     final resp = await http.post(url,
         headers: headers, body: pacienteModelToJson(paciente));
-    print("-------------------");
 
-    print(resp.body);
     if (resp.statusCode == 200) return true;
 
     return false;
@@ -58,14 +58,15 @@ class PacientesService {
     };
     final url = '$_apiURL/api/Pacientes';
 
-    //print(usuarioModelToJson(usuario));
     final resp = await http.put(url,
         headers: headers, body: pacientesViewModelToJson(paciente));
-    final decodedData = json.decode(resp.body);
+    print(pacientesViewModelToJson(paciente));
+    print('asdasd');
 
-    if (resp.statusCode == 200) {
-      final usuario = new PacientesViewModel.fromJson(decodedData);
-      return usuario;
+    if (resp.statusCode == 200 && resp.body.isNotEmpty) {
+      final decodedData = json.decode(resp.body);
+      final paciente = new PacientesViewModel.fromJson(decodedData);
+      return paciente;
     }
 
     return null;

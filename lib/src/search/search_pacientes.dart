@@ -113,7 +113,10 @@ class DataSearchPacientes extends SearchDelegate {
                 size: 20.0,
                 color: Theme.of(context).primaryColor,
               ),
-              onPressed: () {})),
+              onPressed: () {
+                Navigator.pushReplacementNamed(context, 'crear_preclinica',
+                    arguments: paciente);
+              })),
     );
   }
 }

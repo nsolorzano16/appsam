@@ -20,10 +20,10 @@ class PreclinicaService {
     final url =
         '$_apiURL/api/Preclinica/page/$page/limit/50/doctorId/$doctorId/atendida/$atendida';
     final resp = await http.get(url, headers: headers);
-    Map<String, dynamic> decodeResp = json.decode(resp.body);
-    var preclinicas = new PreclinicaPaginadoViewModel();
-    preclinicas = PreclinicaPaginadoViewModel.fromJson(decodeResp);
-    if (resp.statusCode == 200 && preclinicas != null) {
+    if (resp.statusCode == 200 && resp.body.isNotEmpty) {
+      Map<String, dynamic> decodeResp = json.decode(resp.body);
+      var preclinicas = new PreclinicaPaginadoViewModel();
+      preclinicas = PreclinicaPaginadoViewModel.fromJson(decodeResp);
       return preclinicas;
     }
     return null;
@@ -40,7 +40,6 @@ class PreclinicaService {
     final resp = await http.post(url,
         headers: headers, body: preclinicaToJson(preclinica));
 
-    //print(resp.body);
     if (resp.statusCode == 200) {
       return true;
     }
@@ -57,12 +56,11 @@ class PreclinicaService {
     };
     final url = '$_apiURL/api/Preclinica';
 
-    //print(usuarioModelToJson(usuario));
     final resp = await http.put(url,
         headers: headers, body: preclinicaViewModelToJson(preclinica));
-    final decodedData = json.decode(resp.body);
 
-    if (resp.statusCode == 200) {
+    if (resp.statusCode == 200 && resp.body.isNotEmpty) {
+      final decodedData = json.decode(resp.body);
       final preclinica = new PreclinicaViewModel.fromJson(decodedData);
       return preclinica;
     }

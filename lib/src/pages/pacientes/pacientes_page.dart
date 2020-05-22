@@ -226,7 +226,7 @@ class _PacientesPageState extends State<PacientesPage> {
                 color: Theme.of(context).primaryColor,
               ),
               onPressed: () {
-                Navigator.pushNamed(context, 'crear_preclinica',
+                Navigator.pushReplacementNamed(context, 'crear_preclinica',
                     arguments: paciente);
               })),
     );

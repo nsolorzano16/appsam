@@ -20,201 +20,156 @@ class CombosService {
   final _apiURL = EnviromentVariables().getApiURL();
 
   Future<List<DepartamentoModel>> getDepartamentos() async {
+    final List<DepartamentoModel> lista = new List();
     final url = '$_apiURL/api/Departamentos';
     final resp = await http.get(url);
-    final decodeResp = json.decode(resp.body);
 
-    if (decodeResp == null) return [];
-
-    final List<DepartamentoModel> lista = new List();
-
-    decodeResp.forEach((depto) {
-      final deptoTemp = DepartamentoModel.fromJson(depto);
-      lista.add(deptoTemp);
-    });
-
-    if (resp.statusCode == 200 && lista != null) {
+    if (resp.statusCode == 200 && resp.body.isNotEmpty) {
+      final decodeResp = json.decode(resp.body);
+      decodeResp.forEach((depto) {
+        final deptoTemp = DepartamentoModel.fromJson(depto);
+        lista.add(deptoTemp);
+      });
       return lista;
     }
     return [];
   }
 
   Future<List<EscolaridadModel>> getEscolaridades() async {
+    final List<EscolaridadModel> lista = new List();
     final url = '$_apiURL/api/Escolaridad';
     final resp = await http.get(url);
-    final decodeResp = json.decode(resp.body);
 
-    if (decodeResp == null) return [];
-
-    final List<EscolaridadModel> lista = new List();
-
-    if (decodeResp == null) return [];
-
-    decodeResp.forEach((escolaridad) {
-      final escolaridadTemp = EscolaridadModel.fromJson(escolaridad);
-      lista.add(escolaridadTemp);
-    });
-
-    if (resp.statusCode == 200 && lista != null) {
+    if (resp.statusCode == 200 && resp.body.isNotEmpty) {
+      final decodeResp = json.decode(resp.body);
+      decodeResp.forEach((escolaridad) {
+        final escolaridadTemp = EscolaridadModel.fromJson(escolaridad);
+        lista.add(escolaridadTemp);
+      });
       return lista;
     }
+
     return [];
   }
 
   Future<List<GrupoEtnicoModel>> getGruposEtnicos() async {
+    final List<GrupoEtnicoModel> lista = new List();
     final url = '$_apiURL/api/GrupoEtnico';
     final resp = await http.get(url);
-    final decodeResp = json.decode(resp.body);
 
-    if (decodeResp == null) return [];
-
-    final List<GrupoEtnicoModel> lista = new List();
-
-    if (decodeResp == null) return [];
-
-    decodeResp.forEach((grupo) {
-      final grupoTemp = GrupoEtnicoModel.fromJson(grupo);
-      lista.add(grupoTemp);
-    });
-
-    if (resp.statusCode == 200 && lista != null) {
+    if (resp.statusCode == 200 && resp.body.isNotEmpty) {
+      final decodeResp = json.decode(resp.body);
+      decodeResp.forEach((grupo) {
+        final grupoTemp = GrupoEtnicoModel.fromJson(grupo);
+        lista.add(grupoTemp);
+      });
       return lista;
     }
     return [];
   }
 
   Future<List<GrupoSanguineoModel>> getGrupoSanguineos() async {
+    final List<GrupoSanguineoModel> lista = new List();
     final url = '$_apiURL/api/GrupoSanguineo';
     final resp = await http.get(url);
-    final decodeResp = json.decode(resp.body);
 
-    if (decodeResp == null) return [];
-
-    final List<GrupoSanguineoModel> lista = new List();
-
-    if (decodeResp == null) return [];
-
-    decodeResp.forEach((grupo) {
-      final grupoTemp = GrupoSanguineoModel.fromJson(grupo);
-      lista.add(grupoTemp);
-    });
-
-    if (resp.statusCode == 200 && lista != null) {
+    if (resp.statusCode == 200 && resp.body.isNotEmpty) {
+      final decodeResp = json.decode(resp.body);
+      decodeResp.forEach((grupo) {
+        final grupoTemp = GrupoSanguineoModel.fromJson(grupo);
+        lista.add(grupoTemp);
+      });
       return lista;
     }
+
     return [];
   }
 
   Future<List<MunicipioModel>> getMunicipiosXDepartamento(
       int departamentoId) async {
+    final List<MunicipioModel> lista = new List();
     final url = '$_apiURL/api/Municipios/$departamentoId';
     final resp = await http.get(url);
-    final decodeResp = json.decode(resp.body);
 
-    if (decodeResp == null) return [];
-
-    final List<MunicipioModel> lista = new List();
-
-    if (decodeResp == null) return [];
-
-    decodeResp.forEach((municipio) {
-      final municipioTemp = MunicipioModel.fromJson(municipio);
-      lista.add(municipioTemp);
-    });
-
-    if (resp.statusCode == 200 && lista != null) {
+    if (resp.statusCode == 200 && resp.body.isNotEmpty) {
+      final decodeResp = json.decode(resp.body);
+      decodeResp.forEach((municipio) {
+        final municipioTemp = MunicipioModel.fromJson(municipio);
+        lista.add(municipioTemp);
+      });
       return lista;
     }
+
     return [];
   }
 
   Future<List<ProfesionModel>> getProfesiones() async {
+    final List<ProfesionModel> lista = new List();
     final url = '$_apiURL/api/Profesion';
     final resp = await http.get(url);
-    final decodeResp = json.decode(resp.body);
 
-    if (decodeResp == null) return [];
-
-    final List<ProfesionModel> lista = new List();
-
-    if (decodeResp == null) return [];
-
-    decodeResp.forEach((profesion) {
-      final profesionTemp = ProfesionModel.fromJson(profesion);
-      lista.add(profesionTemp);
-    });
-
-    if (resp.statusCode == 200 && lista != null) {
+    if (resp.statusCode == 200 && resp.body.isNotEmpty) {
+      final decodeResp = json.decode(resp.body);
+      decodeResp.forEach((profesion) {
+        final profesionTemp = ProfesionModel.fromJson(profesion);
+        lista.add(profesionTemp);
+      });
       return lista;
     }
     return [];
   }
 
   Future<List<ReligionModel>> getReligiones() async {
+    final List<ReligionModel> lista = new List();
     final url = '$_apiURL/api/Religion';
     final resp = await http.get(url);
-    final decodeResp = json.decode(resp.body);
 
-    if (decodeResp == null) return [];
-
-    final List<ReligionModel> lista = new List();
-
-    if (decodeResp == null) return [];
-
-    decodeResp.forEach((religion) {
-      final religionTemp = ReligionModel.fromJson(religion);
-      lista.add(religionTemp);
-    });
-
-    if (resp.statusCode == 200 && lista != null) {
+    if (resp.statusCode == 200 && resp.body.isNotEmpty) {
+      final decodeResp = json.decode(resp.body);
+      decodeResp.forEach((religion) {
+        final religionTemp = ReligionModel.fromJson(religion);
+        lista.add(religionTemp);
+      });
       return lista;
     }
+
     return [];
   }
 
   Future<List<PaisModel>> getPaises() async {
+    final List<PaisModel> lista = new List();
     final url = '$_apiURL/api/Pais';
     final resp = await http.get(url);
-    final decodeResp = json.decode(resp.body);
 
-    if (decodeResp == null) return [];
-
-    final List<PaisModel> lista = new List();
-
-    if (decodeResp == null) return [];
-
-    decodeResp.forEach((pais) {
-      final paisTemp = PaisModel.fromJson(pais);
-      lista.add(paisTemp);
-    });
-
-    if (resp.statusCode == 200 && lista != null) {
+    if (resp.statusCode == 200 && resp.body.isNotEmpty) {
+      final decodeResp = json.decode(resp.body);
+      decodeResp.forEach((pais) {
+        final paisTemp = PaisModel.fromJson(pais);
+        lista.add(paisTemp);
+      });
       return lista;
     }
+
     return [];
   }
 
   Future<List<ExamenCategoriaModel>> getCategoriasExamenes() async {
     final String token = StorageUtil.getString('token');
+    final List<ExamenCategoriaModel> lista = new List();
     final headers = {
       "content-type": "application/json",
       "accept": "application/json",
       'authorization': 'Bearer $token',
     };
     final url = '$_apiURL/api/ExamenCategoria';
-
-    final List<ExamenCategoriaModel> lista = new List();
     final resp = await http.get(url, headers: headers);
-    final decodeResp = json.decode(resp.body);
 
-    if (decodeResp == null) return [];
-
-    decodeResp.forEach((categoria) {
-      final categoriaTemp = ExamenCategoriaModel.fromJson(categoria);
-      lista.add(categoriaTemp);
-    });
-
-    if (resp.statusCode == 200 && lista != null) {
+    if (resp.statusCode == 200 && resp.body.isNotEmpty) {
+      final decodeResp = json.decode(resp.body);
+      decodeResp.forEach((categoria) {
+        final categoriaTemp = ExamenCategoriaModel.fromJson(categoria);
+        lista.add(categoriaTemp);
+      });
       return lista;
     }
     return [];
@@ -222,32 +177,30 @@ class CombosService {
 
   Future<List<ExamenTipoModel>> getTiposExamenes(int categoriaId) async {
     final String token = StorageUtil.getString('token');
+    final List<ExamenTipoModel> lista = new List();
     final headers = {
       "content-type": "application/json",
       "accept": "application/json",
       'authorization': 'Bearer $token',
     };
+
     final url = '$_apiURL/api/ExamenTipo/categoriaid/$categoriaId';
-
-    final List<ExamenTipoModel> lista = new List();
     final resp = await http.get(url, headers: headers);
-    final decodeResp = json.decode(resp.body);
-
-    if (decodeResp == null) return [];
-
-    decodeResp.forEach((tipo) {
-      final tipoTemp = ExamenTipoModel.fromJson(tipo);
-      lista.add(tipoTemp);
-    });
-
-    if (resp.statusCode == 200 && lista != null) {
+    if (resp.statusCode == 200 && resp.body.isNotEmpty) {
+      final decodeResp = json.decode(resp.body);
+      decodeResp.forEach((tipo) {
+        final tipoTemp = ExamenTipoModel.fromJson(tipo);
+        lista.add(tipoTemp);
+      });
       return lista;
     }
+
     return [];
   }
 
   Future<List<ExamenDetalleModel>> getDetalleExamenes(
       int tipoId, int categoriaId) async {
+    final List<ExamenDetalleModel> lista = new List();
     final String token = StorageUtil.getString('token');
     final headers = {
       "content-type": "application/json",
@@ -257,22 +210,17 @@ class CombosService {
     final url =
         '$_apiURL/api/ExamenDetalle/examentipoid/$tipoId/examencategoriaid/$categoriaId';
 
-    final List<ExamenDetalleModel> lista = new List();
     if (tipoId == null || categoriaId == null) {
       return [];
     }
+
     final resp = await http.get(url, headers: headers);
-
-    if (resp.body.isEmpty) return [];
-
-    final decodeResp = json.decode(resp.body);
-
-    decodeResp.forEach((detalle) {
-      final detalleTemp = ExamenDetalleModel.fromJson(detalle);
-      lista.add(detalleTemp);
-    });
-
-    if (resp.statusCode == 200 && lista != null) {
+    if (resp.statusCode == 200 && resp.body.isNotEmpty) {
+      final decodeResp = json.decode(resp.body);
+      decodeResp.forEach((detalle) {
+        final detalleTemp = ExamenDetalleModel.fromJson(detalle);
+        lista.add(detalleTemp);
+      });
       return lista;
     }
     return [];
@@ -283,22 +231,18 @@ class CombosService {
       "content-type": "application/json",
       "accept": "application/json",
     };
+
     final url = '$_apiURL/api/ViaAdministracion';
-
     final List<ViaAdministracionModel> lista = new List();
-
     final resp = await http.get(url, headers: headers);
 
-    if (resp.body.isEmpty) return [];
+    if (resp.statusCode == 200 && resp.body.isNotEmpty) {
+      final decodeResp = json.decode(resp.body);
+      decodeResp.forEach((detalle) {
+        final detalleTemp = ViaAdministracionModel.fromJson(detalle);
+        lista.add(detalleTemp);
+      });
 
-    final decodeResp = json.decode(resp.body);
-
-    decodeResp.forEach((detalle) {
-      final detalleTemp = ViaAdministracionModel.fromJson(detalle);
-      lista.add(detalleTemp);
-    });
-
-    if (resp.statusCode == 200 && lista != null) {
       return lista;
     }
     return [];

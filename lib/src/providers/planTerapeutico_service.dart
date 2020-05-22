@@ -20,9 +20,9 @@ class PlanTerapeuticoService {
 
     final resp = await http.post(url,
         headers: headers, body: planTerapeuticoModelToJson(plan));
-    final decodedData = json.decode(resp.body);
 
-    if (resp.statusCode == 200) {
+    if (resp.statusCode == 200 && resp.body.isNotEmpty) {
+      final decodedData = json.decode(resp.body);
       final _plan = new PlanTerapeuticoModel.fromJson(decodedData);
       return _plan;
     }
@@ -42,9 +42,9 @@ class PlanTerapeuticoService {
 
     final resp = await http.put(url,
         headers: headers, body: planTerapeuticoViewModelToJson(plan));
-    final decodedData = json.decode(resp.body);
 
-    if (resp.statusCode == 200) {
+    if (resp.statusCode == 200 && resp.body.isNotEmpty) {
+      final decodedData = json.decode(resp.body);
       final _plan = new PlanTerapeuticoViewModel.fromJson(decodedData);
       return _plan;
     }

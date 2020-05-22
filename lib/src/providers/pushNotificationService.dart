@@ -18,14 +18,7 @@ class PushNotificationService {
   initNotifications() {
     _firebaseMessaging.requestNotificationPermissions();
     _firebaseMessaging.getToken().then((token) {
-      print('========TOKENIZER======');
-      print(token);
-      if (StorageUtil.getString('usuarioGlobal').isNotEmpty) {
-        final usuario =
-            usuarioModelFromJson(StorageUtil.getString('usuarioGlobal'));
-        usuario.tokenDevice = token;
-        usuarioService.updateAsistente(usuario);
-      }
+      StorageUtil.putString('tokenDevice', token);
     });
 
     _firebaseMessaging.configure(onMessage: (info) async {

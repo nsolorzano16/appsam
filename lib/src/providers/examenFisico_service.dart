@@ -19,9 +19,9 @@ class ExamenFisicoService {
 
     final resp = await http.post(url,
         headers: headers, body: examenFisicoToJson(examenFisico));
-    final decodedData = json.decode(resp.body);
 
-    if (resp.statusCode == 200) {
+    if (resp.statusCode == 200 && resp.body.isNotEmpty) {
+      final decodedData = json.decode(resp.body);
       final examen = new ExamenFisico.fromJson(decodedData);
       return examen;
     }
@@ -41,9 +41,9 @@ class ExamenFisicoService {
     //print(usuarioModelToJson(usuario));
     final resp = await http.put(url,
         headers: headers, body: examenFisicoToJson(examenFisico));
-    final decodedData = json.decode(resp.body);
 
-    if (resp.statusCode == 200) {
+    if (resp.statusCode == 200 && resp.body.isNotEmpty) {
+      final decodedData = json.decode(resp.body);
       final examen = new ExamenFisico.fromJson(decodedData);
       return examen;
     }
@@ -62,10 +62,7 @@ class ExamenFisicoService {
     final url =
         '$_apiURL/api/ExamenFisico/pacienteId/$pacienteId/doctorId/$doctorId/preclinicaId/$preclinicaId';
 
-    final resp = await http.get(
-      url,
-      headers: headers,
-    );
+    final resp = await http.get(url, headers: headers);
 
     if (resp.statusCode == 200 && resp.body.isNotEmpty) {
       final decodedData = json.decode(resp.body);

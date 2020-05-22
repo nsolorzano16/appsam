@@ -81,12 +81,8 @@ class UsuarioProvider {
     };
     final url = '$_apiURL/api/usuarios';
 
-    //print(usuarioModelToJson(usuario));
     final resp = await http.post(url,
         headers: headers, body: usuarioModelToJson(usuario));
-    final decodedData = json.decode(resp.body);
-
-    print(decodedData);
 
     if (resp.statusCode == 200) return true;
 
@@ -102,12 +98,11 @@ class UsuarioProvider {
     };
     final url = '$_apiURL/api/usuarios';
 
-    // print(usuarioModelToJson(usuario));
     final resp = await http.put(url,
         headers: headers, body: usuarioModelToJson(usuario));
 
-    final decodedData = json.decode(resp.body);
-    if (resp.statusCode == 200) {
+    if (resp.statusCode == 200 && resp.body.isNotEmpty) {
+      final decodedData = json.decode(resp.body);
       final usuario = new UsuarioModel.fromJson(decodedData);
       return usuario;
     }
@@ -151,8 +146,8 @@ class UsuarioProvider {
     final resp =
         await http.get('$_apiURL/api/Usuarios/info/$id', headers: headers);
 
-    final decodedData = json.decode(resp.body);
-    if (resp.statusCode == 200) {
+    if (resp.statusCode == 200 && resp.body.isNotEmpty) {
+      final decodedData = json.decode(resp.body);
       final usuario = new UsuarioModel.fromJson(decodedData);
       return usuario;
     }
@@ -178,8 +173,6 @@ class UsuarioProvider {
     final streamResponse = await imageUploadRequest.send();
     final resp = await http.Response.fromStream(streamResponse);
     if (resp.statusCode != 200 && resp.statusCode != 201) {
-      print('Algo  salio mal en subir foto');
-      print(resp.body);
       return null;
     }
     final decodedData = json.decode(resp.body);

@@ -20,9 +20,9 @@ class HistorialGinecoObstetraService {
 
     final resp = await http.post(url,
         headers: headers, body: historialGinecoObstetraToJson(historial));
-    final decodedData = json.decode(resp.body);
 
-    if (resp.statusCode == 200) {
+    if (resp.statusCode == 200 && resp.body.isNotEmpty) {
+      final decodedData = json.decode(resp.body);
       final habito = new HistorialGinecoObstetra.fromJson(decodedData);
       return habito;
     }
@@ -42,9 +42,9 @@ class HistorialGinecoObstetraService {
 
     final resp = await http.put(url,
         headers: headers, body: historialGinecoObstetraToJson(historial));
-    final decodedData = json.decode(resp.body);
 
-    if (resp.statusCode == 200) {
+    if (resp.statusCode == 200 && resp.body.isNotEmpty) {
+      final decodedData = json.decode(resp.body);
       final habito = new HistorialGinecoObstetra.fromJson(decodedData);
       return habito;
     }
@@ -64,10 +64,7 @@ class HistorialGinecoObstetraService {
         '$_apiURL/api/HistorialGinecoObstetra/pacienteId/$pacienteId/doctorId/$doctorId';
 
     //print(usuarioModelToJson(usuario));
-    final resp = await http.get(
-      url,
-      headers: headers,
-    );
+    final resp = await http.get(url, headers: headers);
 
     if (resp.statusCode == 200 && resp.body.isNotEmpty) {
       final decodedData = json.decode(resp.body);

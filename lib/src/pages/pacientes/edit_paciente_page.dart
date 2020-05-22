@@ -1309,9 +1309,9 @@ class _EditarPacientePageState extends State<EditarPacientePage> {
       _formKey.currentState.reset();
       final PacientesViewModel resp =
           await blocPaciente.updatePaciente(_pacienteGuardar);
-      await _pr.hide();
 
       if (resp != null) {
+        await _pr.hide();
         mostrarFlushBar(context, Colors.green, 'Info',
             'Paciente editado correctamente', 3, Icons.info, Colors.black);
         Timer(Duration(seconds: 3), () {
@@ -1319,6 +1319,7 @@ class _EditarPacientePageState extends State<EditarPacientePage> {
               arguments: resp);
         });
       } else {
+        await _pr.hide();
         mostrarFlushBar(
             context,
             Colors.red,
