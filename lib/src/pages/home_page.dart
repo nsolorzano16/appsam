@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:appsam/src/models/device_model.dart';
 import 'package:appsam/src/models/usuario_model.dart';
+import 'package:appsam/src/providers/FirebaseNotificationService.dart';
 import 'package:appsam/src/providers/devices_service.dart';
-import 'package:appsam/src/providers/pushNotificationService.dart';
+import 'package:appsam/src/widgets/firebaseMessageWrapper.dart';
 
 import 'package:flutter/material.dart';
 
@@ -22,15 +25,22 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     StorageUtil.putString('ultimaPagina', HomePage.routeName);
-    final _pushService = new PushNotificationService();
-    _pushService.initNotifications();
-
+    //final _pushService = new Firebasem();
+    // _pushService.initNotifications();
+    FirebaseNotificationService.instance.sendDeviceToken();
     final _devicesService = new DevicesService();
     final device = new DevicesModel();
     device.deviceId = 0;
-    device.usuarioId = _usuario.usuarioId;
+
+    if (_usuario.rolId == 2) {
+      device.usuarioId = _usuario.usuarioId;
+    } else if (_usuario.rolId == 3) {
+      device.usuarioId = _usuario.asistenteId;
+    } else {
+      device.usuarioId = 0;
+    }
     device.tokenDevice = StorageUtil.getString('tokenDevice');
-    print(devicesModelToJson(device));
+    device.platform = Platform.operatingSystem;
     _devicesService.addDevice(device);
   }
 
@@ -38,38 +48,12 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return WillPopScope(
         child: Scaffold(
-            drawer: MenuWidget(),
-            appBar: AppBar(
-              title: Text('Inicio'),
-            ),
-            body: Container()
-
-            // FutureBuilder(
-            //   future: _covidFuture,
-            //   builder: (BuildContext context,
-            //       AsyncSnapshot<ReporteGlobalModel> snapshot) {
-            //     final reporte = snapshot.data;
-            //     var f = NumberFormat('###,###,###', 'en_US');
-            //     if (snapshot.hasData) {
-            //       return Container(
-            //         child: Column(
-            //           children: <Widget>[
-            //             FadeIn(
-            //               child: Text(
-            //                 'Casos confirmados en el mundo ${f.format(reporte.global.totalConfirmed)}',
-            //                 style: TextStyle(
-            //                     fontSize: 16.0, fontWeight: FontWeight.bold),
-            //               ),
-            //             )
-            //           ],
-            //         ),
-            //       );
-            //     } else {
-            //       return loadingIndicator(context);
-            //     }
-            //   },
-            // ),
-            ),
+          drawer: MenuWidget(),
+          appBar: AppBar(
+            title: Text('Inicio'),
+          ),
+          body: FirebaseMessageWrapper(child: Text('Iicion')),
+        ),
         onWillPop: () async => false);
   }
 }
