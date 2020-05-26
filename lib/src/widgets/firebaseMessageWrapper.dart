@@ -1,4 +1,5 @@
 import 'package:appsam/src/blocs/notifications_bloc/messageStream.dart';
+import 'package:appsam/src/utils/utils.dart';
 import 'package:flutter/material.dart';
 
 class FirebaseMessageWrapper extends StatefulWidget {
@@ -30,7 +31,7 @@ class _FirebaseMessageWrapperState extends State<FirebaseMessageWrapper> {
             // check if this instance is the current route or else message will be displayed on all instances
             if (ModalRoute.of(context).isCurrent) {
               WidgetsBinding.instance
-                  .addPostFrameCallback((_) => _showMessage(msg));
+                  .addPostFrameCallback((_) => _showMessage(msg, context));
             }
             // adding a null stops the previous message from being displayed again
             MessageStream.instance.addMessage(null);
@@ -39,31 +40,11 @@ class _FirebaseMessageWrapperState extends State<FirebaseMessageWrapper> {
         });
   }
 
-  void _showMessage(Map<String, dynamic> message) {
-    SnackBar bar = SnackBar(
-      backgroundColor: Colors.black,
-      behavior: SnackBarBehavior.floating,
-      duration: Duration(seconds: 2),
-      action: SnackBarAction(
-        label: "Cerrar",
-        textColor: Colors.white,
-        onPressed: () => Scaffold.of(context).hideCurrentSnackBar(),
-      ),
-      content: Padding(
-        padding: const EdgeInsets.only(bottom: 2.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(message['notification']["title"]),
-            Text(message['notification']["body"]),
-          ],
-        ),
-      ),
-    );
+  void _showMessage(Map<String, dynamic> message, BuildContext context) {
+    final title = message['notification']["title"];
+    final mensaje = message['notification']["body"];
 
-    Scaffold.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(bar);
+    mostrarFlushBar(
+        context, Colors.black, title, mensaje, 3, Icons.info, Colors.white);
   }
 }

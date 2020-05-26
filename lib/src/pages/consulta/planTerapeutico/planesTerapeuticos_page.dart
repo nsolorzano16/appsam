@@ -5,6 +5,7 @@ import 'package:appsam/src/pages/consulta/planTerapeutico/edit_PlanTerapeutico_p
 import 'package:appsam/src/utils/storage_util.dart';
 import 'package:appsam/src/utils/utils.dart';
 import 'package:appsam/src/widgets/drawer.dart';
+import 'package:appsam/src/widgets/firebaseMessageWrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:getflutter/getflutter.dart';
@@ -33,66 +34,68 @@ class _PlanesTerapeuticosPageState extends State<PlanesTerapeuticosPage> {
         _preclinica.pacienteId, _preclinica.doctorId, _preclinica.preclinicaId);
 
     return WillPopScope(
-        child: Scaffold(
-          appBar: AppBar(
-            title: Text('Consulta'),
-            actions: <Widget>[
-              IconButton(
-                  icon: Icon(
-                    Icons.arrow_back_ios,
-                    color: Colors.white,
-                  ),
-                  onPressed: () => Navigator.pushReplacementNamed(
-                      context, 'menu_consulta',
-                      arguments: _preclinica))
-            ],
-          ),
-          drawer: MenuWidget(),
-          body: FutureBuilder(
-            future: _planesFuture,
-            builder: (BuildContext context,
-                AsyncSnapshot<List<PlanTerapeuticoViewModel>> snapshot) {
-              if (snapshot.hasData) {
-                _lista.clear();
-                _lista.addAll(snapshot.data);
-              }
-              if (snapshot.connectionState == ConnectionState.done) {
-                return Column(
-                  children: <Widget>[
-                    Container(
-                        alignment: Alignment.centerLeft,
-                        padding: EdgeInsets.only(
-                          left: 20.0,
-                          top: 10.0,
-                          right: 10.0,
-                        ),
-                        child: ListTile(
-                          title: Text('Plan Terapeutico'),
-                          subtitle:
-                              Text('Click en el boton \"+\" para agregar'),
-                        )),
-                    Divider(
-                      thickness: 2.0,
-                      indent: 20.0,
-                      endIndent: 20.0,
+        child: FirebaseMessageWrapper(
+          child: Scaffold(
+            appBar: AppBar(
+              title: Text('Consulta'),
+              actions: <Widget>[
+                IconButton(
+                    icon: Icon(
+                      Icons.arrow_back_ios,
+                      color: Colors.white,
                     ),
-                    Flexible(
-                        child: ListView(
-                      children: items(_lista, context, _preclinica),
-                    ))
-                  ],
-                );
-              } else {
-                return loadingIndicator(context);
-              }
-            },
-          ),
-          floatingActionButton: FloatingActionButton(
-            backgroundColor: Theme.of(context).primaryColor,
-            onPressed: () => Navigator.pushReplacementNamed(
-                context, 'crear_plan_terapeutico',
-                arguments: _preclinica),
-            child: Icon(Icons.add),
+                    onPressed: () => Navigator.pushReplacementNamed(
+                        context, 'menu_consulta',
+                        arguments: _preclinica))
+              ],
+            ),
+            drawer: MenuWidget(),
+            body: FutureBuilder(
+              future: _planesFuture,
+              builder: (BuildContext context,
+                  AsyncSnapshot<List<PlanTerapeuticoViewModel>> snapshot) {
+                if (snapshot.hasData) {
+                  _lista.clear();
+                  _lista.addAll(snapshot.data);
+                }
+                if (snapshot.connectionState == ConnectionState.done) {
+                  return Column(
+                    children: <Widget>[
+                      Container(
+                          alignment: Alignment.centerLeft,
+                          padding: EdgeInsets.only(
+                            left: 20.0,
+                            top: 10.0,
+                            right: 10.0,
+                          ),
+                          child: ListTile(
+                            title: Text('Plan Terapeutico'),
+                            subtitle:
+                                Text('Click en el boton \"+\" para agregar'),
+                          )),
+                      Divider(
+                        thickness: 2.0,
+                        indent: 20.0,
+                        endIndent: 20.0,
+                      ),
+                      Flexible(
+                          child: ListView(
+                        children: items(_lista, context, _preclinica),
+                      ))
+                    ],
+                  );
+                } else {
+                  return loadingIndicator(context);
+                }
+              },
+            ),
+            floatingActionButton: FloatingActionButton(
+              backgroundColor: Theme.of(context).primaryColor,
+              onPressed: () => Navigator.pushReplacementNamed(
+                  context, 'crear_plan_terapeutico',
+                  arguments: _preclinica),
+              child: Icon(Icons.add),
+            ),
           ),
         ),
         onWillPop: () async => false);
@@ -161,30 +164,14 @@ class _PlanesTerapeuticosPageState extends State<PlanesTerapeuticosPage> {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                Text('Dosis:'),
+                                Container(height: 30.0, child: Text('Dosis:')),
                                 Divider(),
                               ],
                             ),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                Text(f.dosis),
-                                Divider(),
-                              ],
-                            ),
-                          ]),
-                          TableRow(children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Text('Horario:'),
-                                Divider(),
-                              ],
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Text(f.horario),
+                                Container(height: 30.0, child: Text(f.dosis)),
                                 Divider(),
                               ],
                             ),
@@ -193,14 +180,35 @@ class _PlanesTerapeuticosPageState extends State<PlanesTerapeuticosPage> {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                Text('Dias requeridos:'),
+                                Container(
+                                    height: 30.0, child: Text('Horario:')),
                                 Divider(),
                               ],
                             ),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                Text(f.diasRequeridos),
+                                Container(height: 30.0, child: Text(f.horario)),
+                                Divider(),
+                              ],
+                            ),
+                          ]),
+                          TableRow(children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Container(
+                                    height: 30.0,
+                                    child: Text('Dias requeridos:')),
+                                Divider(),
+                              ],
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Container(
+                                    height: 30.0,
+                                    child: Text(f.diasRequeridos)),
                                 Divider(),
                               ],
                             ),

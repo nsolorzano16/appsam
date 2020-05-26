@@ -1,4 +1,5 @@
 import 'package:appsam/src/widgets/drawer.dart';
+import 'package:appsam/src/widgets/firebaseMessageWrapper.dart';
 import 'package:flutter/material.dart';
 
 import 'package:appsam/src/pages/asistentes/tab_formeditar.dart';
@@ -22,19 +23,21 @@ class _EditarAsistentesPageState extends State<EditarAsistentesPage> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-        child: Scaffold(
-          appBar: AppBar(
-            title: Text('Editar Asistente'),
-            actions: <Widget>[
-              IconButton(
-                  icon: Icon(Icons.arrow_back_ios),
-                  onPressed: () =>
-                      Navigator.pushReplacementNamed(context, 'asistentes'))
-            ],
+        child: FirebaseMessageWrapper(
+          child: Scaffold(
+            appBar: AppBar(
+              title: Text('Editar Asistente'),
+              actions: <Widget>[
+                IconButton(
+                    icon: Icon(Icons.arrow_back_ios),
+                    onPressed: () =>
+                        Navigator.pushReplacementNamed(context, 'asistentes'))
+              ],
+            ),
+            drawer: MenuWidget(),
+            body: SingleChildScrollView(
+                child: (_currentIndex == 0) ? FormEditarPage() : Container()),
           ),
-          drawer: MenuWidget(),
-          body: SingleChildScrollView(
-              child: (_currentIndex == 0) ? FormEditarPage() : Container()),
         ),
         onWillPop: () async => false);
   }

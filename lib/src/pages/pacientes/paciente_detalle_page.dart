@@ -1,3 +1,4 @@
+import 'package:appsam/src/widgets/firebaseMessageWrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:getflutter/getflutter.dart';
 import 'package:intl/intl.dart';
@@ -26,57 +27,59 @@ class _PacienteDetalleState extends State<PacienteDetalle> {
         ModalRoute.of(context).settings.arguments;
     final _screenSize = MediaQuery.of(context).size;
     return WillPopScope(
-        child: Scaffold(
-            appBar: AppBar(
-              title: Text('${_paciente.nombres}'),
-              actions: <Widget>[
-                IconButton(
-                    icon: Icon(Icons.edit),
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => EditarPacientePage(
-                                    paciente: _paciente,
-                                  )));
-                    }),
-                IconButton(
-                    icon: Icon(Icons.arrow_back_ios),
-                    onPressed: () =>
-                        Navigator.pushReplacementNamed(context, 'pacientes'))
-              ],
-            ),
-            drawer: MenuWidget(),
-            body: SingleChildScrollView(
-              // physics: BouncingScrollPhysics(),
-              child: Container(
-                margin: EdgeInsets.only(top: 5.0),
-                width: _screenSize.width,
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    GFCard(
-                      boxFit: BoxFit.cover,
-                      title: GFListTile(
-                        avatar: FadeInImage(
-                            width: 100,
-                            height: 100,
-                            placeholder: AssetImage('assets/jar-loading.gif'),
-                            image: NetworkImage(_paciente.fotoUrl)),
-                        title: Text(
-                          '${_paciente.nombres} ${_paciente.primerApellido} ${_paciente.segundoApellido}',
-                        ),
-                        subTitle: Text(
-                          'Nombre Completo',
-                        ),
-                      ),
-                      content: _detallePaciente(_paciente, context),
-                    ),
-                  ],
-                ),
+        child: FirebaseMessageWrapper(
+          child: Scaffold(
+              appBar: AppBar(
+                title: Text('${_paciente.nombres}'),
+                actions: <Widget>[
+                  IconButton(
+                      icon: Icon(Icons.edit),
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => EditarPacientePage(
+                                      paciente: _paciente,
+                                    )));
+                      }),
+                  IconButton(
+                      icon: Icon(Icons.arrow_back_ios),
+                      onPressed: () =>
+                          Navigator.pushReplacementNamed(context, 'pacientes'))
+                ],
               ),
-            )),
+              drawer: MenuWidget(),
+              body: SingleChildScrollView(
+                // physics: BouncingScrollPhysics(),
+                child: Container(
+                  margin: EdgeInsets.only(top: 5.0),
+                  width: _screenSize.width,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      GFCard(
+                        boxFit: BoxFit.cover,
+                        title: GFListTile(
+                          avatar: FadeInImage(
+                              width: 100,
+                              height: 100,
+                              placeholder: AssetImage('assets/jar-loading.gif'),
+                              image: NetworkImage(_paciente.fotoUrl)),
+                          title: Text(
+                            '${_paciente.nombres} ${_paciente.primerApellido} ${_paciente.segundoApellido}',
+                          ),
+                          subTitle: Text(
+                            'Nombre Completo',
+                          ),
+                        ),
+                        content: _detallePaciente(_paciente, context),
+                      ),
+                    ],
+                  ),
+                ),
+              )),
+        ),
         onWillPop: () async => false);
   }
 

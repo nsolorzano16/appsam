@@ -9,6 +9,7 @@ import 'package:appsam/src/providers/combos_service.dart';
 import 'package:appsam/src/utils/storage_util.dart';
 import 'package:appsam/src/utils/utils.dart';
 import 'package:appsam/src/widgets/drawer.dart';
+import 'package:appsam/src/widgets/firebaseMessageWrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:getflutter/getflutter.dart';
@@ -74,53 +75,55 @@ class _EditarExamenIndicadoPageState extends State<EditarExamenIndicadoPage> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-        child: Scaffold(
-            appBar: AppBar(
-              title: Text('Consulta'),
-              actions: <Widget>[
-                IconButton(
-                    icon: Icon(
-                      Icons.arrow_back_ios,
-                      color: Colors.white,
-                    ),
-                    onPressed: () => Navigator.pushReplacementNamed(
-                        context, 'examenes_indicados',
-                        arguments: widget.preclinica))
-              ],
-            ),
-            drawer: MenuWidget(),
-            body: SingleChildScrollView(
-              child: Column(
-                children: <Widget>[
-                  GFCard(
-                    title: GFListTile(
-                        color: Colors.red,
-                        title: Text('Nuevo examen',
-                            style: TextStyle(
-                                fontSize: 18.0,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white)),
-                        icon:
-                            FaIcon(FontAwesomeIcons.user, color: Colors.white)),
-                    elevation: 6.0,
-                    content: Form(
-                        key: _formkey,
-                        child: Column(children: <Widget>[
-                          _crearDropDownExamenCategoria(),
-                          _crearDropDownExamenTipo(
-                              _comboModel.examenCategoriaId),
-                          _crearDropDownExamenDetalle(
-                              _comboModel.examenCategoriaId,
-                              _comboModel.examenTipoId),
-                          _campoNombre(),
-                          _espacio(),
-                          _campoNotas(),
-                          _crearBotones(context, widget.preclinica)
-                        ])),
-                  )
+        child: FirebaseMessageWrapper(
+          child: Scaffold(
+              appBar: AppBar(
+                title: Text('Consulta'),
+                actions: <Widget>[
+                  IconButton(
+                      icon: Icon(
+                        Icons.arrow_back_ios,
+                        color: Colors.white,
+                      ),
+                      onPressed: () => Navigator.pushReplacementNamed(
+                          context, 'examenes_indicados',
+                          arguments: widget.preclinica))
                 ],
               ),
-            )),
+              drawer: MenuWidget(),
+              body: SingleChildScrollView(
+                child: Column(
+                  children: <Widget>[
+                    GFCard(
+                      title: GFListTile(
+                          color: Colors.red,
+                          title: Text('Editar examen',
+                              style: TextStyle(
+                                  fontSize: 18.0,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white)),
+                          icon: FaIcon(FontAwesomeIcons.user,
+                              color: Colors.white)),
+                      elevation: 6.0,
+                      content: Form(
+                          key: _formkey,
+                          child: Column(children: <Widget>[
+                            _crearDropDownExamenCategoria(),
+                            _crearDropDownExamenTipo(
+                                _comboModel.examenCategoriaId),
+                            _crearDropDownExamenDetalle(
+                                _comboModel.examenCategoriaId,
+                                _comboModel.examenTipoId),
+                            _campoNombre(),
+                            _espacio(),
+                            _campoNotas(),
+                            _crearBotones(context, widget.preclinica)
+                          ])),
+                    )
+                  ],
+                ),
+              )),
+        ),
         onWillPop: () async => false);
   }
 
@@ -299,8 +302,6 @@ class _EditarExamenIndicadoPageState extends State<EditarExamenIndicadoPage> {
       padding: EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
         controller: _nombreController,
-        autovalidate: true,
-        validator: validaTexto,
         onSaved: (value) => _examen.nombre = value,
         keyboardType: TextInputType.text,
         decoration: inputsDecorations('Nombre', Icons.note),
@@ -375,9 +376,6 @@ class _EditarExamenIndicadoPageState extends State<EditarExamenIndicadoPage> {
     if (_comboModel.examenTipoId == null) {
       mostrarFlushBar(context, Colors.black, 'Info',
           'Seleccione el tipo de examen', 2, Icons.info, Colors.white);
-    } else if (_nombreController.text.isEmpty) {
-      mostrarFlushBar(context, Colors.black, 'Info',
-          'Rellene los campos obligatorios', 2, Icons.info, Colors.white);
     } else {
       _formkey.currentState.save();
       _examen.examenCategoriaId = _comboModel.examenCategoriaId;

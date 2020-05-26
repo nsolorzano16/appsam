@@ -346,10 +346,14 @@ class _FormEditarPageState extends State<FormEditarPage> {
 
   _selectDate(BuildContext context, UsuarioModel _asistente) async {
     DateTime picked = await showDatePicker(
+        helpText: 'Seleccione fecha.',
+        errorFormatText: 'Fecha invalida',
+        fieldLabelText: 'Ingrese fecha',
+        initialDatePickerMode: DatePickerMode.year,
         context: context,
         initialDate: new DateTime.now(),
-        firstDate: new DateTime(1950),
-        lastDate: new DateTime(2050),
+        firstDate: new DateTime(1930),
+        lastDate: new DateTime.now(),
         locale: Locale('es', 'ES'));
 
     if (picked != null) {

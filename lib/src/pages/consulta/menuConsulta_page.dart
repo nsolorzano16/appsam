@@ -13,6 +13,7 @@ import 'package:appsam/src/pages/consulta/historialGinecoObstetra/crear_Historia
 import 'package:appsam/src/utils/storage_util.dart';
 import 'package:appsam/src/utils/utils.dart';
 import 'package:appsam/src/widgets/drawer.dart';
+import 'package:appsam/src/widgets/firebaseMessageWrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:getflutter/getflutter.dart';
@@ -55,43 +56,46 @@ class _MenuConsultaPageState extends State<MenuConsultaPage> {
         _preclinica.pacienteId, _preclinica.doctorId, _preclinica.preclinicaId);
 
     return WillPopScope(
-        child: DefaultTabController(
-          length: 2,
-          child: Scaffold(
-              appBar: AppBar(
-                title: Text('Menu Consulta'),
-              ),
-              drawer: MenuWidget(),
-              body: TabBarView(children: [
-                _tabHistorial(_preclinica),
-                _tabConsulta(_preclinica)
-              ]),
-              bottomNavigationBar: Container(
-                color: Colors.red,
-                child: TabBar(
-                    labelColor: Colors.white,
-                    indicatorColor: Colors.white,
-                    tabs: [
-                      Tab(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: <Widget>[
-                            Icon(Icons.watch_later),
-                            Text('Historial')
-                          ],
+        child: FirebaseMessageWrapper(
+          child: DefaultTabController(
+            initialIndex: StorageUtil.getInt('indexTabMenuConsulta'),
+            length: 2,
+            child: Scaffold(
+                appBar: AppBar(
+                  title: Text('Menu Consulta'),
+                ),
+                drawer: MenuWidget(),
+                body: TabBarView(children: [
+                  _tabHistorial(_preclinica),
+                  _tabConsulta(_preclinica)
+                ]),
+                bottomNavigationBar: Container(
+                  color: Colors.red,
+                  child: TabBar(
+                      labelColor: Colors.white,
+                      indicatorColor: Colors.white,
+                      tabs: [
+                        Tab(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: <Widget>[
+                              Icon(Icons.watch_later),
+                              Text('Historial')
+                            ],
+                          ),
                         ),
-                      ),
-                      Tab(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: <Widget>[
-                            Icon(FontAwesomeIcons.notesMedical),
-                            Text('Consulta')
-                          ],
+                        Tab(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: <Widget>[
+                              Icon(FontAwesomeIcons.notesMedical),
+                              Text('Consulta')
+                            ],
+                          ),
                         ),
-                      ),
-                    ]),
-              )),
+                      ]),
+                )),
+          ),
         ),
         onWillPop: () async => false);
   }
@@ -109,6 +113,26 @@ class _MenuConsultaPageState extends State<MenuConsultaPage> {
                 ),
                 Table(
                   children: [
+                    TableRow(children: [
+                      FadeInLeft(
+                        child: _cardItem(
+                            _preclinica,
+                            FontAwesomeIcons.userMd,
+                            'Resumen de Consulta',
+                            'consulta_detalle',
+                            Colors.teal,
+                            context),
+                      ),
+                      FadeInRight(
+                        child: _cardItem(
+                            _preclinica,
+                            FontAwesomeIcons.briefcaseMedical,
+                            'Consulta General',
+                            'crear_consulta_general',
+                            Colors.red,
+                            context),
+                      ),
+                    ]),
                     TableRow(children: [
                       FadeInLeft(
                         child: _cardItem(
@@ -144,18 +168,6 @@ class _MenuConsultaPageState extends State<MenuConsultaPage> {
                             Colors.orange,
                             context),
                       )
-                    ]),
-                    TableRow(children: [
-                      FadeInLeft(
-                        child: _cardItem(
-                            _preclinica,
-                            FontAwesomeIcons.userMd,
-                            'Resumen de Consulta',
-                            'consulta_detalle',
-                            Colors.teal,
-                            context),
-                      ),
-                      Container()
                     ]),
                   ],
                 )
@@ -222,10 +234,10 @@ class _MenuConsultaPageState extends State<MenuConsultaPage> {
                       FadeInLeft(
                         child: _cardItem(
                             _preclinica,
-                            FontAwesomeIcons.briefcaseMedical,
-                            'Consulta General',
-                            'crear_consulta_general',
-                            Colors.red,
+                            FontAwesomeIcons.stickyNote,
+                            'Plan Terapeutico',
+                            'planes_terapeuticos',
+                            Colors.lightGreen,
                             context),
                       ),
                       FadeInRight(
@@ -237,18 +249,6 @@ class _MenuConsultaPageState extends State<MenuConsultaPage> {
                             Colors.cyan,
                             context),
                       ),
-                    ]),
-                    TableRow(children: [
-                      FadeInLeft(
-                        child: _cardItem(
-                            _preclinica,
-                            FontAwesomeIcons.stickyNote,
-                            'Plan Terapeutico',
-                            'planes_terapeuticos',
-                            Colors.lightGreen,
-                            context),
-                      ),
-                      Container(),
                     ]),
                   ],
                 )
@@ -266,6 +266,16 @@ class _MenuConsultaPageState extends State<MenuConsultaPage> {
       String ruta, Color color, BuildContext context) {
     return GestureDetector(
       onTap: () {
+        if (ruta == 'crear_examen_fisico' ||
+            ruta == 'crear_examen_ginecologico' ||
+            ruta == 'crear_diagnosticos' ||
+            ruta == 'crear_notas' ||
+            ruta == 'examenes_indicados' ||
+            ruta == 'planes_terapeuticos') {
+          StorageUtil.putInt('indexTabMenuConsulta', 1);
+        } else {
+          StorageUtil.putInt('indexTabMenuConsulta', 0);
+        }
         Navigator.pushReplacementNamed(context, ruta, arguments: preclinica);
       },
       child: GFCard(

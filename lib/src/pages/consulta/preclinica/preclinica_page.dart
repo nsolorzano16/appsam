@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:appsam/src/widgets/firebaseMessageWrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:progress_dialog/progress_dialog.dart';
@@ -58,15 +59,17 @@ class _PreclinicaPageState extends State<PreclinicaPage> {
     });
 
     return WillPopScope(
-        child: Scaffold(
-          drawer: MenuWidget(),
-          appBar: AppBar(
-            title: Text('Preclinica'),
-          ),
-          body: Stack(
-            children: <Widget>[
-              _crearListaPreclinicas(context),
-            ],
+        child: FirebaseMessageWrapper(
+          child: Scaffold(
+            drawer: MenuWidget(),
+            appBar: AppBar(
+              title: Text('Preclinica'),
+            ),
+            body: Stack(
+              children: <Widget>[
+                _crearListaPreclinicas(context),
+              ],
+            ),
           ),
         ),
         onWillPop: () async => false);

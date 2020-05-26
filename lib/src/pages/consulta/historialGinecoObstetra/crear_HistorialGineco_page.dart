@@ -1,3 +1,4 @@
+import 'package:appsam/src/widgets/firebaseMessageWrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:getflutter/getflutter.dart';
@@ -112,22 +113,24 @@ class _CrearHistorialGinecoObstetraPageState
     final PreclinicaViewModel _preclinica = widget.preclinica;
 
     return WillPopScope(
-        child: Scaffold(
-            appBar: AppBar(
-              title: Text('Consulta'),
-              actions: <Widget>[
-                IconButton(
-                    icon: Icon(
-                      Icons.arrow_back_ios,
-                      color: Colors.white,
-                    ),
-                    onPressed: () => Navigator.pushReplacementNamed(
-                        context, 'menu_consulta',
-                        arguments: _preclinica))
-              ],
-            ),
-            drawer: MenuWidget(),
-            body: _historialForm(context)),
+        child: FirebaseMessageWrapper(
+          child: Scaffold(
+              appBar: AppBar(
+                title: Text('Consulta'),
+                actions: <Widget>[
+                  IconButton(
+                      icon: Icon(
+                        Icons.arrow_back_ios,
+                        color: Colors.white,
+                      ),
+                      onPressed: () => Navigator.pushReplacementNamed(
+                          context, 'menu_consulta',
+                          arguments: _preclinica))
+                ],
+              ),
+              drawer: MenuWidget(),
+              body: _historialForm(context)),
+        ),
         onWillPop: () async => false);
   }
 
@@ -250,10 +253,10 @@ class _CrearHistorialGinecoObstetraPageState
 
   void selectDateMenarquia(BuildContext context) async {
     pickedMenarquia = await showDatePicker(
-        fieldLabelText: 'Rellene con el formato correcto',
-        errorInvalidText: 'Formato invalido',
-        errorFormatText: 'Error en la fecha',
-        helpText: 'Seleccione fecha',
+        helpText: 'Seleccione fecha.',
+        errorFormatText: 'Fecha invalida',
+        fieldLabelText: 'Ingrese fecha',
+        initialDatePickerMode: DatePickerMode.year,
         context: context,
         initialDate: new DateTime.now(),
         firstDate: new DateTime(1930),
@@ -284,10 +287,10 @@ class _CrearHistorialGinecoObstetraPageState
 
   void selectDateFur(BuildContext context) async {
     pickedFur = await showDatePicker(
-        fieldLabelText: 'Rellene con el formato correcto',
-        errorInvalidText: 'Formato invalido',
-        errorFormatText: 'Error en la fecha',
-        helpText: 'Seleccione fecha',
+        helpText: 'Seleccione fecha.',
+        errorFormatText: 'Fecha invalida',
+        fieldLabelText: 'Ingrese fecha',
+        initialDatePickerMode: DatePickerMode.year,
         context: context,
         initialDate: new DateTime.now(),
         firstDate: new DateTime(1930),
@@ -402,10 +405,10 @@ class _CrearHistorialGinecoObstetraPageState
 
   void selectDateMenopausia(BuildContext context) async {
     pickedMenopausia = await showDatePicker(
-        fieldLabelText: 'Rellene con el formato correcto',
-        errorInvalidText: 'Formato invalido',
-        errorFormatText: 'Error en la fecha',
-        helpText: 'Seleccione fecha',
+        helpText: 'Seleccione fecha.',
+        errorFormatText: 'Fecha invalida',
+        fieldLabelText: 'Ingrese fecha',
+        initialDatePickerMode: DatePickerMode.year,
         context: context,
         initialDate: new DateTime.now(),
         firstDate: new DateTime(1930),

@@ -5,6 +5,7 @@ import 'package:appsam/src/pages/consulta/examenesIndicados/edit_ExamenIndicado_
 import 'package:appsam/src/utils/storage_util.dart';
 import 'package:appsam/src/utils/utils.dart';
 import 'package:appsam/src/widgets/drawer.dart';
+import 'package:appsam/src/widgets/firebaseMessageWrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:getflutter/getflutter.dart';
 import 'package:progress_dialog/progress_dialog.dart';
@@ -32,66 +33,68 @@ class _ExamenesIndicadosPageState extends State<ExamenesIndicadosPage> {
         _preclinica.pacienteId, _preclinica.doctorId, _preclinica.preclinicaId);
 
     return WillPopScope(
-        child: Scaffold(
-          appBar: AppBar(
-            title: Text('Consulta'),
-            actions: <Widget>[
-              IconButton(
-                  icon: Icon(
-                    Icons.arrow_back_ios,
-                    color: Colors.white,
-                  ),
-                  onPressed: () => Navigator.pushReplacementNamed(
-                      context, 'menu_consulta',
-                      arguments: _preclinica))
-            ],
-          ),
-          drawer: MenuWidget(),
-          body: FutureBuilder(
-            future: _examenesFuture,
-            builder: (BuildContext context,
-                AsyncSnapshot<List<ExamenesIndicadosViewModel>> snapshot) {
-              if (snapshot.hasData) {
-                _lista.clear();
-                _lista.addAll(snapshot.data);
-              }
-              if (snapshot.connectionState == ConnectionState.done) {
-                return Column(
-                  children: <Widget>[
-                    Container(
-                        alignment: Alignment.centerLeft,
-                        padding: EdgeInsets.only(
-                          left: 20.0,
-                          top: 10.0,
-                          right: 10.0,
-                        ),
-                        child: ListTile(
-                          title: Text('Examenes'),
-                          subtitle:
-                              Text('Click en el boton \"+\" para agregar'),
-                        )),
-                    Divider(
-                      thickness: 2.0,
-                      indent: 20.0,
-                      endIndent: 20.0,
+        child: FirebaseMessageWrapper(
+          child: Scaffold(
+            appBar: AppBar(
+              title: Text('Consulta'),
+              actions: <Widget>[
+                IconButton(
+                    icon: Icon(
+                      Icons.arrow_back_ios,
+                      color: Colors.white,
                     ),
-                    Flexible(
-                        child: ListView(
-                      children: items(_lista, context, _preclinica),
-                    ))
-                  ],
-                );
-              } else {
-                return loadingIndicator(context);
-              }
-            },
-          ),
-          floatingActionButton: FloatingActionButton(
-            backgroundColor: Theme.of(context).primaryColor,
-            onPressed: () => Navigator.pushNamed(
-                context, 'crear_examen_indicado',
-                arguments: _preclinica),
-            child: Icon(Icons.add),
+                    onPressed: () => Navigator.pushReplacementNamed(
+                        context, 'menu_consulta',
+                        arguments: _preclinica))
+              ],
+            ),
+            drawer: MenuWidget(),
+            body: FutureBuilder(
+              future: _examenesFuture,
+              builder: (BuildContext context,
+                  AsyncSnapshot<List<ExamenesIndicadosViewModel>> snapshot) {
+                if (snapshot.hasData) {
+                  _lista.clear();
+                  _lista.addAll(snapshot.data);
+                }
+                if (snapshot.connectionState == ConnectionState.done) {
+                  return Column(
+                    children: <Widget>[
+                      Container(
+                          alignment: Alignment.centerLeft,
+                          padding: EdgeInsets.only(
+                            left: 20.0,
+                            top: 10.0,
+                            right: 10.0,
+                          ),
+                          child: ListTile(
+                            title: Text('Examenes'),
+                            subtitle:
+                                Text('Click en el boton \"+\" para agregar'),
+                          )),
+                      Divider(
+                        thickness: 2.0,
+                        indent: 20.0,
+                        endIndent: 20.0,
+                      ),
+                      Flexible(
+                          child: ListView(
+                        children: items(_lista, context, _preclinica),
+                      ))
+                    ],
+                  );
+                } else {
+                  return loadingIndicator(context);
+                }
+              },
+            ),
+            floatingActionButton: FloatingActionButton(
+              backgroundColor: Theme.of(context).primaryColor,
+              onPressed: () => Navigator.pushNamed(
+                  context, 'crear_examen_indicado',
+                  arguments: _preclinica),
+              child: Icon(Icons.add),
+            ),
           ),
         ),
         onWillPop: () async => false);
@@ -104,7 +107,7 @@ class _ExamenesIndicadosPageState extends State<ExamenesIndicadosPage> {
         children: <Widget>[
           ExpansionTile(
             title: Text(
-              'Examen: ${f.nombre}',
+              '${f.examenCategoria}',
               overflow: TextOverflow.ellipsis,
             ),
             leading: Row(
@@ -160,14 +163,16 @@ class _ExamenesIndicadosPageState extends State<ExamenesIndicadosPage> {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                Text('Examen tipo:'),
+                                Container(
+                                    height: 50.0, child: Text('Examen tipo:')),
                                 Divider(),
                               ],
                             ),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                Text(f.examenTipo),
+                                Container(
+                                    height: 50.0, child: Text(f.examenTipo)),
                                 Divider(),
                               ],
                             ),
@@ -176,16 +181,21 @@ class _ExamenesIndicadosPageState extends State<ExamenesIndicadosPage> {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                Text('Examen detalle:'),
+                                Container(
+                                    height: 50.0,
+                                    child: Text('Examen detalle:')),
                                 Divider(),
                               ],
                             ),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                Text((f.examenDetalle != null)
-                                    ? f.examenDetalle
-                                    : ''),
+                                Container(
+                                  height: 50.0,
+                                  child: Text((f.examenDetalle != null)
+                                      ? f.examenDetalle
+                                      : ''),
+                                ),
                                 Divider(),
                               ],
                             ),

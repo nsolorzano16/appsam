@@ -1,3 +1,4 @@
+import 'package:appsam/src/widgets/firebaseMessageWrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:getflutter/getflutter.dart';
@@ -60,66 +61,68 @@ class _CrearAntecedentesPageState extends State<CrearAntecedentesPage> {
         _preclinica.pacienteId, _preclinica.doctorId);
 
     return WillPopScope(
-        child: Scaffold(
-          appBar: AppBar(
-            title: Text('Consulta'),
-            actions: <Widget>[
-              IconButton(
-                  icon: Icon(
-                    Icons.arrow_back_ios,
-                    color: Colors.white,
-                  ),
-                  onPressed: () => Navigator.pushReplacementNamed(
-                      context, 'menu_consulta',
-                      arguments: _preclinica))
-            ],
-          ),
-          drawer: MenuWidget(),
-          body: FutureBuilder(
-            future: _antecedentesFuture,
-            builder: (BuildContext context,
-                AsyncSnapshot<AntecedentesFamiliaresPersonales> snapshot) {
-              final x = snapshot.data;
-              if (snapshot.connectionState == ConnectionState.done) {
-                if (x != null) {
-                  _antecedentes.pacienteId = x.pacienteId;
-                  _antecedentes.doctorId = x.doctorId;
-                  _antecedentes.preclinicaId = x.preclinicaId;
-                  _antecedentes.antecedentesFamiliaresPersonalesId =
-                      x.antecedentesFamiliaresPersonalesId;
-                  _antecedentes.activo = x.activo;
-                  _antecedentes.creadoPor = x.creadoPor;
-                  _antecedentes.creadoFecha = x.creadoFecha;
-                  _antecedentes.modificadoPor = _usuario.userName;
-                  _antecedentes.modificadoFecha = DateTime.now();
+        child: FirebaseMessageWrapper(
+          child: Scaffold(
+            appBar: AppBar(
+              title: Text('Consulta'),
+              actions: <Widget>[
+                IconButton(
+                    icon: Icon(
+                      Icons.arrow_back_ios,
+                      color: Colors.white,
+                    ),
+                    onPressed: () => Navigator.pushReplacementNamed(
+                        context, 'menu_consulta',
+                        arguments: _preclinica))
+              ],
+            ),
+            drawer: MenuWidget(),
+            body: FutureBuilder(
+              future: _antecedentesFuture,
+              builder: (BuildContext context,
+                  AsyncSnapshot<AntecedentesFamiliaresPersonales> snapshot) {
+                final x = snapshot.data;
+                if (snapshot.connectionState == ConnectionState.done) {
+                  if (x != null) {
+                    _antecedentes.pacienteId = x.pacienteId;
+                    _antecedentes.doctorId = x.doctorId;
+                    _antecedentes.preclinicaId = x.preclinicaId;
+                    _antecedentes.antecedentesFamiliaresPersonalesId =
+                        x.antecedentesFamiliaresPersonalesId;
+                    _antecedentes.activo = x.activo;
+                    _antecedentes.creadoPor = x.creadoPor;
+                    _antecedentes.creadoFecha = x.creadoFecha;
+                    _antecedentes.modificadoPor = _usuario.userName;
+                    _antecedentes.modificadoFecha = DateTime.now();
 
-                  _antPatologicosFamiCtrl.text =
-                      x.antecedentesPatologicosFamiliares;
-                  _antPatologicosPersCtrl.text =
-                      x.antecedentesPatologicosPersonales;
-                  _antNoPatologicosFamiCtrl.text =
-                      x.antecedentesNoPatologicosFamiliares;
-                  _antNoPatologicosPersCtrl.text =
-                      x.antecedentesNoPatologicosPersonales;
-                  _antInmunoAlergicosCtrl.text =
-                      x.antecedentesInmunoAlergicosPersonales;
-                  return _antecedentesForm(context);
+                    _antPatologicosFamiCtrl.text =
+                        x.antecedentesPatologicosFamiliares;
+                    _antPatologicosPersCtrl.text =
+                        x.antecedentesPatologicosPersonales;
+                    _antNoPatologicosFamiCtrl.text =
+                        x.antecedentesNoPatologicosFamiliares;
+                    _antNoPatologicosPersCtrl.text =
+                        x.antecedentesNoPatologicosPersonales;
+                    _antInmunoAlergicosCtrl.text =
+                        x.antecedentesInmunoAlergicosPersonales;
+                    return _antecedentesForm(context);
+                  } else {
+                    _antecedentes.pacienteId = _preclinica.pacienteId;
+                    _antecedentes.doctorId = _preclinica.doctorId;
+                    _antecedentes.preclinicaId = _preclinica.preclinicaId;
+                    _antecedentes.antecedentesFamiliaresPersonalesId = 0;
+                    _antecedentes.activo = true;
+                    _antecedentes.creadoPor = _usuario.userName;
+                    _antecedentes.creadoFecha = DateTime.now();
+                    _antecedentes.modificadoPor = _usuario.userName;
+                    _antecedentes.modificadoFecha = DateTime.now();
+                    return _antecedentesForm(context);
+                  }
                 } else {
-                  _antecedentes.pacienteId = _preclinica.pacienteId;
-                  _antecedentes.doctorId = _preclinica.doctorId;
-                  _antecedentes.preclinicaId = _preclinica.preclinicaId;
-                  _antecedentes.antecedentesFamiliaresPersonalesId = 0;
-                  _antecedentes.activo = true;
-                  _antecedentes.creadoPor = _usuario.userName;
-                  _antecedentes.creadoFecha = DateTime.now();
-                  _antecedentes.modificadoPor = _usuario.userName;
-                  _antecedentes.modificadoFecha = DateTime.now();
-                  return _antecedentesForm(context);
+                  return loadingIndicator(context);
                 }
-              } else {
-                return loadingIndicator(context);
-              }
-            },
+              },
+            ),
           ),
         ),
         onWillPop: () async => false);

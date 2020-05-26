@@ -5,6 +5,7 @@ import 'package:appsam/src/models/usuario_model.dart';
 import 'package:appsam/src/utils/storage_util.dart';
 import 'package:appsam/src/utils/utils.dart';
 import 'package:appsam/src/widgets/drawer.dart';
+import 'package:appsam/src/widgets/firebaseMessageWrapper.dart';
 
 import 'package:flutter/material.dart';
 import 'package:getflutter/getflutter.dart';
@@ -49,64 +50,66 @@ class _CrearDiagnosticosPageState extends State<CrearDiagnosticosPage> {
         _preclinica.pacienteId, _preclinica.doctorId, _preclinica.preclinicaId);
 
     return WillPopScope(
-        child: Scaffold(
-            key: mScaffoldState,
-            appBar: AppBar(
-              title: Text('Consulta'),
-              actions: <Widget>[
-                IconButton(
-                    icon: Icon(
-                      Icons.arrow_back_ios,
-                      color: Colors.white,
-                    ),
-                    onPressed: () => Navigator.pushReplacementNamed(
-                        context, 'menu_consulta',
-                        arguments: _preclinica))
-              ],
-            ),
-            drawer: MenuWidget(),
-            body: FutureBuilder(
-              future: _diagnosticosFuture,
-              builder: (BuildContext context,
-                  AsyncSnapshot<List<Diagnosticos>> snapshot) {
-                if (snapshot.hasData) {
-                  _listaDiagnosticos.clear();
-                  _listaDiagnosticos.addAll(snapshot.data);
-                  return Column(
-                    children: <Widget>[
-                      Container(
-                          alignment: Alignment.centerLeft,
-                          padding: EdgeInsets.only(
-                            left: 20.0,
-                            top: 10.0,
-                            right: 10.0,
-                          ),
-                          child: ListTile(
-                            title: Text('Diagnosticos'),
-                            subtitle:
-                                Text('Click en el boton \"+\" para agregar'),
-                          )),
-                      Divider(
-                        thickness: 2.0,
-                        indent: 20.0,
-                        endIndent: 20.0,
+        child: FirebaseMessageWrapper(
+          child: Scaffold(
+              key: mScaffoldState,
+              appBar: AppBar(
+                title: Text('Consulta'),
+                actions: <Widget>[
+                  IconButton(
+                      icon: Icon(
+                        Icons.arrow_back_ios,
+                        color: Colors.white,
                       ),
-                      Flexible(
-                          child: ListView(
-                        children: items(_listaDiagnosticos),
-                      ))
-                    ],
-                  );
-                } else {
-                  return loadingIndicator(context);
-                }
-              },
-            ),
-            floatingActionButton: FloatingActionButton(
-              backgroundColor: Theme.of(context).primaryColor,
-              onPressed: () => _dialogAdd(context, _preclinica),
-              child: Icon(Icons.add),
-            )),
+                      onPressed: () => Navigator.pushReplacementNamed(
+                          context, 'menu_consulta',
+                          arguments: _preclinica))
+                ],
+              ),
+              drawer: MenuWidget(),
+              body: FutureBuilder(
+                future: _diagnosticosFuture,
+                builder: (BuildContext context,
+                    AsyncSnapshot<List<Diagnosticos>> snapshot) {
+                  if (snapshot.hasData) {
+                    _listaDiagnosticos.clear();
+                    _listaDiagnosticos.addAll(snapshot.data);
+                    return Column(
+                      children: <Widget>[
+                        Container(
+                            alignment: Alignment.centerLeft,
+                            padding: EdgeInsets.only(
+                              left: 20.0,
+                              top: 10.0,
+                              right: 10.0,
+                            ),
+                            child: ListTile(
+                              title: Text('Diagnosticos'),
+                              subtitle:
+                                  Text('Click en el boton \"+\" para agregar'),
+                            )),
+                        Divider(
+                          thickness: 2.0,
+                          indent: 20.0,
+                          endIndent: 20.0,
+                        ),
+                        Flexible(
+                            child: ListView(
+                          children: items(_listaDiagnosticos),
+                        ))
+                      ],
+                    );
+                  } else {
+                    return loadingIndicator(context);
+                  }
+                },
+              ),
+              floatingActionButton: FloatingActionButton(
+                backgroundColor: Theme.of(context).primaryColor,
+                onPressed: () => _dialogAdd(context, _preclinica),
+                child: Icon(Icons.add),
+              )),
+        ),
         onWillPop: () async => false);
   } //fin build
 
@@ -255,13 +258,11 @@ class _CrearDiagnosticosPageState extends State<CrearDiagnosticosPage> {
                       onPressed: () => Navigator.pop(context),
                       child: Text(
                         'Cancelar',
-                        style: TextStyle(color: Colors.blue),
                       )),
                   FlatButton(
                       onPressed: () => _guardar(diagnostico, context),
                       child: Text(
                         'Guardar',
-                        style: TextStyle(color: Colors.blue),
                       ))
                 ],
               )

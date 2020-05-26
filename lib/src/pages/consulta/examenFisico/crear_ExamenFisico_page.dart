@@ -1,3 +1,4 @@
+import 'package:appsam/src/widgets/firebaseMessageWrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -198,47 +199,49 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
     final size = MediaQuery.of(context).size;
 
     return WillPopScope(
-        child: Scaffold(
-          appBar: AppBar(
-            title: Text('Consulta'),
-            actions: <Widget>[
-              IconButton(
-                  icon: Icon(
-                    Icons.arrow_back_ios,
-                    color: Colors.white,
-                  ),
-                  onPressed: () => Navigator.pushReplacementNamed(
-                      context, 'menu_consulta',
-                      arguments: _preclinica))
-            ],
+        child: FirebaseMessageWrapper(
+          child: Scaffold(
+            appBar: AppBar(
+              title: Text('Consulta'),
+              actions: <Widget>[
+                IconButton(
+                    icon: Icon(
+                      Icons.arrow_back_ios,
+                      color: Colors.white,
+                    ),
+                    onPressed: () => Navigator.pushReplacementNamed(
+                        context, 'menu_consulta',
+                        arguments: _preclinica))
+              ],
+            ),
+            drawer: MenuWidget(),
+            body: Form(
+                key: _formkey,
+                child: GFCarousel(
+                    pagerSize: 11.0,
+                    enableInfiniteScroll: false,
+                    activeIndicator: Colors.red,
+                    viewportFraction: 1.0,
+                    pagination: true,
+                    height: size.height,
+                    onPageChanged: (index) {
+                      setState(() {});
+                    },
+                    items: [
+                      _formParte1(context),
+                      _formParte2(context),
+                      _formParte3(context),
+                      _formParte4(context),
+                      _formParte5(context),
+                    ])),
+            floatingActionButton: UnicornDialer(
+                backgroundColor: Color.fromRGBO(255, 255, 255, 0.6),
+                hasBackground: false,
+                parentButtonBackground: Theme.of(context).primaryColor,
+                orientation: UnicornOrientation.VERTICAL,
+                parentButton: Icon(Icons.add),
+                childButtons: botones(_preclinica)),
           ),
-          drawer: MenuWidget(),
-          body: Form(
-              key: _formkey,
-              child: GFCarousel(
-                  pagerSize: 11.0,
-                  enableInfiniteScroll: false,
-                  activeIndicator: Colors.red,
-                  viewportFraction: 1.0,
-                  pagination: true,
-                  height: size.height,
-                  onPageChanged: (index) {
-                    setState(() {});
-                  },
-                  items: [
-                    _formParte1(context),
-                    _formParte2(context),
-                    _formParte3(context),
-                    _formParte4(context),
-                    _formParte5(context),
-                  ])),
-          floatingActionButton: UnicornDialer(
-              backgroundColor: Color.fromRGBO(255, 255, 255, 0.6),
-              hasBackground: false,
-              parentButtonBackground: Theme.of(context).primaryColor,
-              orientation: UnicornOrientation.VERTICAL,
-              parentButton: Icon(Icons.add),
-              childButtons: botones(_preclinica)),
         ),
         onWillPop: () async => false);
   }

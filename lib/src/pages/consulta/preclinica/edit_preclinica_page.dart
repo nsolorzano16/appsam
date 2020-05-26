@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:appsam/src/widgets/drawer.dart';
+import 'package:appsam/src/widgets/firebaseMessageWrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:getflutter/getflutter.dart';
@@ -37,20 +38,22 @@ class _EditarPreclinicaPageState extends State<EditarPreclinicaPage> {
     final PreclinicaViewModel _preclinica =
         ModalRoute.of(context).settings.arguments;
     return WillPopScope(
-        child: Scaffold(
-            appBar: AppBar(
-              title: Text('Editar Preclinica'),
-              actions: <Widget>[
-                IconButton(
-                    icon: Icon(Icons.arrow_back_ios),
-                    onPressed: () =>
-                        Navigator.popAndPushNamed(context, 'preclinica'))
-              ],
-            ),
-            drawer: MenuWidget(),
-            body: Stack(
-              children: <Widget>[_crearFormulario(_usuario, _preclinica)],
-            )),
+        child: FirebaseMessageWrapper(
+          child: Scaffold(
+              appBar: AppBar(
+                title: Text('Editar Preclinica'),
+                actions: <Widget>[
+                  IconButton(
+                      icon: Icon(Icons.arrow_back_ios),
+                      onPressed: () =>
+                          Navigator.popAndPushNamed(context, 'preclinica'))
+                ],
+              ),
+              drawer: MenuWidget(),
+              body: Stack(
+                children: <Widget>[_crearFormulario(_usuario, _preclinica)],
+              )),
+        ),
         onWillPop: () async => false);
   }
 

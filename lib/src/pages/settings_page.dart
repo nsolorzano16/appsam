@@ -1,3 +1,4 @@
+import 'package:appsam/src/widgets/firebaseMessageWrapper.dart';
 import 'package:flutter/material.dart';
 
 import 'package:appsam/src/blocs/asistentes_bloc/create_edit_asistentes.dart';
@@ -31,12 +32,14 @@ class _SettingsPageState extends State<SettingsPage> {
     final bloc = Provider.themeBloc(context);
     final blocAsistentes = Provider.crearEditarAsistentesBloc(context);
     return WillPopScope(
-        child: Scaffold(
-          drawer: MenuWidget(),
-          appBar: AppBar(
-            title: Text('Configuración'),
+        child: FirebaseMessageWrapper(
+          child: Scaffold(
+            drawer: MenuWidget(),
+            appBar: AppBar(
+              title: Text('Configuración'),
+            ),
+            body: _crearLista(context, bloc, blocAsistentes),
           ),
-          body: _crearLista(context, bloc, blocAsistentes),
         ),
         onWillPop: () async => false);
   }

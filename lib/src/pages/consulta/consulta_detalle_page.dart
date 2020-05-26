@@ -15,6 +15,7 @@ import 'package:appsam/src/models/planTerapeutico_viewmodel.dart';
 
 import 'package:appsam/src/utils/utils.dart';
 import 'package:appsam/src/widgets/drawer.dart';
+import 'package:appsam/src/widgets/firebaseMessageWrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:getflutter/getflutter.dart';
@@ -51,139 +52,142 @@ class _ConsultaDetallePageState extends State<ConsultaDetallePage> {
         _preclinicaDetalle.preclinicaId);
 
     return WillPopScope(
-        child: Scaffold(
-          appBar: AppBar(
-            title: Text('Detalle de Consulta'),
-            actions: <Widget>[
-              IconButton(
-                  icon: Icon(
-                    Icons.arrow_back_ios,
-                    color: Colors.white,
-                  ),
-                  onPressed: () => Navigator.pushReplacementNamed(
-                      context, 'menu_consulta',
-                      arguments: _preclinicaDetalle))
-            ],
-          ),
-          drawer: MenuWidget(),
-          body: FutureBuilder(
-            future: _consultaFuture,
-            builder:
-                (BuildContext context, AsyncSnapshot<ConsultaModel> snapshot) {
-              final _consultaDetalle = snapshot.data;
-              if (snapshot.hasData) {
-                return SingleChildScrollView(
-                  child: Column(
-                    children: <Widget>[
-                      GFCard(
-                        elevation: 5.0,
-                        title: GFListTile(
-                          avatar: ClipRRect(
-                            borderRadius: BorderRadius.circular(100.0),
-                            child: FadeInImage(
-                                width: 100,
-                                height: 100,
-                                placeholder:
-                                    AssetImage('assets/jar-loading.gif'),
-                                image:
-                                    NetworkImage(_preclinicaDetalle.fotoUrl)),
+        child: FirebaseMessageWrapper(
+          child: Scaffold(
+            appBar: AppBar(
+              title: Text('Detalle de Consulta'),
+              actions: <Widget>[
+                IconButton(
+                    icon: Icon(
+                      Icons.arrow_back_ios,
+                      color: Colors.white,
+                    ),
+                    onPressed: () => Navigator.pushReplacementNamed(
+                        context, 'menu_consulta',
+                        arguments: _preclinicaDetalle))
+              ],
+            ),
+            drawer: MenuWidget(),
+            body: FutureBuilder(
+              future: _consultaFuture,
+              builder: (BuildContext context,
+                  AsyncSnapshot<ConsultaModel> snapshot) {
+                final _consultaDetalle = snapshot.data;
+                if (snapshot.hasData) {
+                  return SingleChildScrollView(
+                    child: Column(
+                      children: <Widget>[
+                        GFCard(
+                          elevation: 5.0,
+                          title: GFListTile(
+                            avatar: ClipRRect(
+                              borderRadius: BorderRadius.circular(100.0),
+                              child: FadeInImage(
+                                  width: 100,
+                                  height: 100,
+                                  placeholder:
+                                      AssetImage('assets/jar-loading.gif'),
+                                  image:
+                                      NetworkImage(_preclinicaDetalle.fotoUrl)),
+                            ),
+                            title: Text(
+                                '${_preclinicaDetalle.nombres} ${_preclinicaDetalle.primerApellido} ${_preclinicaDetalle.segundoApellido}'),
+                            subTitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                    'Identificación: ${_preclinicaDetalle.identificacion}'),
+                              ],
+                            ),
                           ),
-                          title: Text(
-                              '${_preclinicaDetalle.nombres} ${_preclinicaDetalle.primerApellido} ${_preclinicaDetalle.segundoApellido}'),
-                          subTitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                  'Identificación: ${_preclinicaDetalle.identificacion}'),
-                            ],
-                          ),
+                          content: Table(
+                              children: _camposPaciente(_preclinicaDetalle)),
                         ),
-                        content: Table(
-                            children: _camposPaciente(_preclinicaDetalle)),
-                      ),
-                      _AccordionPreclinica(
-                          preclinica: _preclinicaDetalle,
-                          estiloDatos: estiloDatos,
-                          estiloSubt: _estiloSubt),
-                      (_consultaDetalle.antecedentesFamiliaresPersonales !=
-                              null)
-                          ? _AccordionAntecedentes(
-                              antecedentes: _consultaDetalle
-                                  .antecedentesFamiliaresPersonales,
-                              estiloDatos: estiloDatos,
-                              estiloSubt: _estiloSubt)
-                          : Container(),
-                      (_consultaDetalle.habitos != null)
-                          ? _AccordionHabitos(
-                              habitos: _consultaDetalle.habitos,
-                              estiloDatos: estiloDatos,
-                              estiloSubt: _estiloSubt,
-                            )
-                          : Container(),
-                      (_consultaDetalle.historialGinecoObstetra != null)
-                          ? _AccordionHistorialGinecoObstetra(
-                              historial:
-                                  _consultaDetalle.historialGinecoObstetra,
-                              estiloDatos: estiloDatos,
-                              estiloSubt: _estiloSubt)
-                          : Container(),
-                      (_consultaDetalle.farmacosUsoActual.length != 0)
-                          ? _AccordionFarmacos(
-                              farmacos: _consultaDetalle.farmacosUsoActual,
-                              estiloDatos: estiloDatos,
-                              estiloSubt: _estiloSubt)
-                          : Container(),
-                      (_consultaDetalle.consultaGeneral != null)
-                          ? _AccordionDetalleConsulta(
-                              consultaGeneral: _consultaDetalle.consultaGeneral,
-                              estiloDatos: estiloDatos,
-                              estiloSubt: _estiloSubt)
-                          : Container(),
-                      (_consultaDetalle.examenFisico != null)
-                          ? _AccordionExamenFisico(
-                              examenFisico: _consultaDetalle.examenFisico,
-                              estiloDatos: estiloDatos,
-                              estiloSubt: _estiloSubt)
-                          : Container(),
-                      (_consultaDetalle.examenFisicoGinecologico != null)
-                          ? _AccordionExamenGinecologico(
-                              examenGinecologico:
-                                  _consultaDetalle.examenFisicoGinecologico,
-                              estiloDatos: estiloDatos,
-                              estiloSubt: _estiloSubt)
-                          : Container(),
-                      (_consultaDetalle.diagnosticos.length != 0)
-                          ? _AccordionDiagnosticos(
-                              diagnosticos: _consultaDetalle.diagnosticos,
-                              estiloDatos: estiloDatos,
-                              estiloSubt: _estiloSubt)
-                          : Container(),
-                      (_consultaDetalle.notas.length != 0)
-                          ? _AccordionNotas(
-                              notas: _consultaDetalle.notas,
-                              estiloDatos: estiloDatos)
-                          : Container(),
-                      (_consultaDetalle.examenesIndicados.length != 0)
-                          ? _AccordionExamenesIndicados(
-                              examenes: _consultaDetalle.examenesIndicados,
-                              estiloDatos: estiloDatos,
-                              estiloSubt: _estiloSubt,
-                            )
-                          : Container(),
-                      (_consultaDetalle.planesTerapeuticos.length != 0)
-                          ? _AccordionPlanTerapeutico(
-                              planes: _consultaDetalle.planesTerapeuticos,
-                              estiloDatos: estiloDatos,
-                              estiloSubt: _estiloSubt,
-                            )
-                          : Container(),
-                    ],
-                  ),
-                );
-              } else {
-                return loadingIndicator(context);
-              }
-            },
+                        _AccordionPreclinica(
+                            preclinica: _preclinicaDetalle,
+                            estiloDatos: estiloDatos,
+                            estiloSubt: _estiloSubt),
+                        (_consultaDetalle.antecedentesFamiliaresPersonales !=
+                                null)
+                            ? _AccordionAntecedentes(
+                                antecedentes: _consultaDetalle
+                                    .antecedentesFamiliaresPersonales,
+                                estiloDatos: estiloDatos,
+                                estiloSubt: _estiloSubt)
+                            : Container(),
+                        (_consultaDetalle.habitos != null)
+                            ? _AccordionHabitos(
+                                habitos: _consultaDetalle.habitos,
+                                estiloDatos: estiloDatos,
+                                estiloSubt: _estiloSubt,
+                              )
+                            : Container(),
+                        (_consultaDetalle.historialGinecoObstetra != null)
+                            ? _AccordionHistorialGinecoObstetra(
+                                historial:
+                                    _consultaDetalle.historialGinecoObstetra,
+                                estiloDatos: estiloDatos,
+                                estiloSubt: _estiloSubt)
+                            : Container(),
+                        (_consultaDetalle.farmacosUsoActual.length != 0)
+                            ? _AccordionFarmacos(
+                                farmacos: _consultaDetalle.farmacosUsoActual,
+                                estiloDatos: estiloDatos,
+                                estiloSubt: _estiloSubt)
+                            : Container(),
+                        (_consultaDetalle.consultaGeneral != null)
+                            ? _AccordionDetalleConsulta(
+                                consultaGeneral:
+                                    _consultaDetalle.consultaGeneral,
+                                estiloDatos: estiloDatos,
+                                estiloSubt: _estiloSubt)
+                            : Container(),
+                        (_consultaDetalle.examenFisico != null)
+                            ? _AccordionExamenFisico(
+                                examenFisico: _consultaDetalle.examenFisico,
+                                estiloDatos: estiloDatos,
+                                estiloSubt: _estiloSubt)
+                            : Container(),
+                        (_consultaDetalle.examenFisicoGinecologico != null)
+                            ? _AccordionExamenGinecologico(
+                                examenGinecologico:
+                                    _consultaDetalle.examenFisicoGinecologico,
+                                estiloDatos: estiloDatos,
+                                estiloSubt: _estiloSubt)
+                            : Container(),
+                        (_consultaDetalle.diagnosticos.length != 0)
+                            ? _AccordionDiagnosticos(
+                                diagnosticos: _consultaDetalle.diagnosticos,
+                                estiloDatos: estiloDatos,
+                                estiloSubt: _estiloSubt)
+                            : Container(),
+                        (_consultaDetalle.notas.length != 0)
+                            ? _AccordionNotas(
+                                notas: _consultaDetalle.notas,
+                                estiloDatos: estiloDatos)
+                            : Container(),
+                        (_consultaDetalle.examenesIndicados.length != 0)
+                            ? _AccordionExamenesIndicados(
+                                examenes: _consultaDetalle.examenesIndicados,
+                                estiloDatos: estiloDatos,
+                                estiloSubt: _estiloSubt,
+                              )
+                            : Container(),
+                        (_consultaDetalle.planesTerapeuticos.length != 0)
+                            ? _AccordionPlanTerapeutico(
+                                planes: _consultaDetalle.planesTerapeuticos,
+                                estiloDatos: estiloDatos,
+                                estiloSubt: _estiloSubt,
+                              )
+                            : Container(),
+                      ],
+                    ),
+                  );
+                } else {
+                  return loadingIndicator(context);
+                }
+              },
+            ),
           ),
         ),
         onWillPop: () async => false);
@@ -421,135 +425,130 @@ class _AccordionPreclinica extends StatelessWidget {
         style: TextStyle(color: Colors.white, fontSize: 16.0),
       ),
       contentChild: GFCard(
-          content: Column(
-        children: <Widget>[
-          Table(
-            columnWidths: {2: FractionColumnWidth(0.5)},
+          content: Table(
+        children: [
+          TableRow(
             children: [
-              TableRow(children: [
-                Column(
-                  children: <Widget>[
-                    Text(
-                      '${_preclinica.peso}',
-                      style: estiloDatos,
-                    ),
-                    Text(
-                      'Peso',
-                      style: _estiloSubt,
-                    ),
-                    Divider()
-                  ],
-                ),
-                Column(
-                  children: <Widget>[
-                    Text(
-                      '${_preclinica.altura}',
-                      style: estiloDatos,
-                    ),
-                    Text(
-                      'Altura',
-                      style: _estiloSubt,
-                    ),
-                    Divider()
-                  ],
-                ),
-                Column(
-                  children: <Widget>[
-                    Text(
-                      '${_preclinica.frecuenciaRespiratoria}',
-                      style: estiloDatos,
-                    ),
-                    Text(
-                      'Frecuencia Respiratoria',
-                      style: _estiloSubt,
-                    ),
-                    Divider()
-                  ],
-                )
-              ]),
-              TableRow(children: [
-                Column(
-                  children: <Widget>[
-                    Text(
-                      '${_preclinica.presionSistolica}',
-                      style: estiloDatos,
-                    ),
-                    Text(
-                      'P. Sistolica',
-                      style: _estiloSubt,
-                    ),
-                    Divider()
-                  ],
-                ),
-                Column(
-                  children: <Widget>[
-                    Text(
-                      '${_preclinica.presionDiastolica}',
-                      style: estiloDatos,
-                    ),
-                    Text(
-                      'P. Diastolica',
-                      style: _estiloSubt,
-                    ),
-                    Divider()
-                  ],
-                ),
-                Column(
-                  children: <Widget>[
-                    Text(
-                      '${_preclinica.ritmoCardiaco}',
-                      style: estiloDatos,
-                    ),
-                    Text(
-                      'Ritmo Cardiaco',
-                      style: _estiloSubt,
-                    ),
-                    Divider()
-                  ],
-                )
-              ])
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    '${_preclinica.peso}',
+                    textAlign: TextAlign.justify,
+                    style: estiloDatos,
+                  ),
+                  Text(
+                    'Peso lb.',
+                    textAlign: TextAlign.left,
+                    style: _estiloSubt,
+                  ),
+                  Divider()
+                ],
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    '${_preclinica.altura}',
+                    textAlign: TextAlign.justify,
+                    style: estiloDatos,
+                  ),
+                  Text(
+                    'Altura cm.',
+                    textAlign: TextAlign.left,
+                    style: _estiloSubt,
+                  ),
+                  Divider()
+                ],
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    '${_preclinica.frecuenciaRespiratoria}',
+                    textAlign: TextAlign.justify,
+                    style: estiloDatos,
+                  ),
+                  Text(
+                    'Frec. Respiratoria/min',
+                    textAlign: TextAlign.left,
+                    style: _estiloSubt,
+                  ),
+                  Divider()
+                ],
+              ),
             ],
           ),
-          Table(
-            columnWidths: {1: FractionColumnWidth(0.7)},
-            children: [
-              TableRow(children: [
-                Column(
-                  children: <Widget>[
-                    Text(
-                      '${_preclinica.imc}',
-                      style: estiloDatos,
-                    ),
-                    Text(
-                      'IMC',
-                      style: _estiloSubt,
-                    ),
-                  ],
+          TableRow(children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  '${_preclinica.imc}',
+                  textAlign: TextAlign.justify,
+                  style: estiloDatos,
                 ),
-                Column(
-                  children: <Widget>[
-                    Text(
-                      validaNulo(_preclinica.pesoDescripcion),
-                      style: estiloDatos,
-                    ),
-                    Text(
-                      'Descripción de Peso',
-                      style: _estiloSubt,
-                    ),
-                  ],
-                )
-              ])
-            ],
-          ),
-          Divider(),
-          Text(
-            'Notas Preclinica',
-            style: _estiloSubt,
-          ),
-          Text(
-            validaNulo(_preclinica.notas),
-            textAlign: TextAlign.justify,
-          )
+                Text(
+                  'IMC',
+                  textAlign: TextAlign.left,
+                  style: _estiloSubt,
+                ),
+                Divider()
+              ],
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  '${_preclinica.presionSistolica} / ${_preclinica.presionDiastolica}',
+                  textAlign: TextAlign.justify,
+                  style: estiloDatos,
+                ),
+                Text(
+                  'Presion/mmHg',
+                  textAlign: TextAlign.left,
+                  style: _estiloSubt,
+                ),
+                Divider()
+              ],
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  '${_preclinica.ritmoCardiaco}',
+                  textAlign: TextAlign.justify,
+                  style: estiloDatos,
+                ),
+                Text(
+                  'Ritmo Cardiaco',
+                  textAlign: TextAlign.left,
+                  style: _estiloSubt,
+                ),
+                Divider()
+              ],
+            ),
+          ]),
+          TableRow(children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  '${_preclinica.temperatura}',
+                  textAlign: TextAlign.justify,
+                  style: estiloDatos,
+                ),
+                Text(
+                  'Temperatura Cº',
+                  textAlign: TextAlign.left,
+                  style: _estiloSubt,
+                ),
+                Divider()
+              ],
+            ),
+            Column(),
+            Column()
+          ]),
         ],
       )),
     );

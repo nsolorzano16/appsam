@@ -1,3 +1,4 @@
+import 'package:appsam/src/widgets/firebaseMessageWrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'dart:async';
@@ -59,82 +60,84 @@ class _CrearAsistentesPageState extends State<CrearAsistentesPage> {
 
     final bloc = Provider.crearEditarAsistentesBloc(context);
     return WillPopScope(
-        child: Scaffold(
-            appBar: AppBar(
-              key: _scaffoldKey,
-              title: Text('Nuevo Asistente'),
-              actions: <Widget>[
-                IconButton(
-                    icon: Icon(
-                      Icons.arrow_back_ios,
-                      color: Colors.white,
-                    ),
-                    onPressed: () =>
-                        Navigator.pushReplacementNamed(context, 'asistentes'))
-              ],
-            ),
-            drawer: MenuWidget(),
-            body: SingleChildScrollView(
-              child: Form(
-                  key: _formKey,
-                  child: GFCard(
-                    title: GFListTile(
-                        color: Colors.red,
-                        title: Text('Información Personal',
-                            style: TextStyle(
-                                fontSize: 18.0,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white)),
-                        icon:
-                            FaIcon(FontAwesomeIcons.user, color: Colors.white)),
-                    content: Column(
-                      children: <Widget>[
-                        _espacio(),
-                        _crearCampoNombre(_asistente),
-                        _espacio(),
-                        _crearCampoPrimerAppellido(_asistente),
-                        _espacio(),
-                        _crearCampoSegundoAppellido(_asistente),
-                        _espacio(),
-                        _crearCampoIdentificacion(
-                            _asistente, maskIdentificacion),
-                        _espacio(),
-                        _crearFecha(context, bloc.fechaNacimientoStream,
-                            bloc.changeFechaNacimiento),
-                        _espacio(),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Container(
-                                padding: EdgeInsets.only(left: 25),
-                                child: Text(
-                                  'Genero',
-                                  style: TextStyle(fontSize: 16.0),
-                                ))
-                          ],
-                        ),
-                        _crearSexo('M', 'Masculino'),
-                        _crearSexo('F', 'Femenino'),
-                        _crearCampoTelefono1(maskTelefono1, _asistente),
-                        _espacio(),
-                        _crearCampoTelefono2(maskTelefono2, _asistente),
-                        _espacio(),
-                        _crearCampoColegioNumero(
-                            _asistente, maskNumeroColegiado),
-                        _espacio(),
-                        _crearCampoEmail(_asistente),
-                        _espacio(),
-                        _crearCampoUsuario(_asistente),
-                        _espacio(),
-                        _crearCampoPassword(_asistente),
-                        _espacio(),
-                        _crearCampoNotas(_asistente),
-                        _espacio(),
-                        _crearBotones(_asistente, bloc),
-                      ],
-                    ),
-                  )),
-            )),
+        child: FirebaseMessageWrapper(
+          child: Scaffold(
+              appBar: AppBar(
+                key: _scaffoldKey,
+                title: Text('Nuevo Asistente'),
+                actions: <Widget>[
+                  IconButton(
+                      icon: Icon(
+                        Icons.arrow_back_ios,
+                        color: Colors.white,
+                      ),
+                      onPressed: () =>
+                          Navigator.pushReplacementNamed(context, 'asistentes'))
+                ],
+              ),
+              drawer: MenuWidget(),
+              body: SingleChildScrollView(
+                child: Form(
+                    key: _formKey,
+                    child: GFCard(
+                      title: GFListTile(
+                          color: Colors.red,
+                          title: Text('Información Personal',
+                              style: TextStyle(
+                                  fontSize: 18.0,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white)),
+                          icon: FaIcon(FontAwesomeIcons.user,
+                              color: Colors.white)),
+                      content: Column(
+                        children: <Widget>[
+                          _espacio(),
+                          _crearCampoNombre(_asistente),
+                          _espacio(),
+                          _crearCampoPrimerAppellido(_asistente),
+                          _espacio(),
+                          _crearCampoSegundoAppellido(_asistente),
+                          _espacio(),
+                          _crearCampoIdentificacion(
+                              _asistente, maskIdentificacion),
+                          _espacio(),
+                          _crearFecha(context, bloc.fechaNacimientoStream,
+                              bloc.changeFechaNacimiento),
+                          _espacio(),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Container(
+                                  padding: EdgeInsets.only(left: 25),
+                                  child: Text(
+                                    'Genero',
+                                    style: TextStyle(fontSize: 16.0),
+                                  ))
+                            ],
+                          ),
+                          _crearSexo('M', 'Masculino'),
+                          _crearSexo('F', 'Femenino'),
+                          _crearCampoTelefono1(maskTelefono1, _asistente),
+                          _espacio(),
+                          _crearCampoTelefono2(maskTelefono2, _asistente),
+                          _espacio(),
+                          _crearCampoColegioNumero(
+                              _asistente, maskNumeroColegiado),
+                          _espacio(),
+                          _crearCampoEmail(_asistente),
+                          _espacio(),
+                          _crearCampoUsuario(_asistente),
+                          _espacio(),
+                          _crearCampoPassword(_asistente),
+                          _espacio(),
+                          _crearCampoNotas(_asistente),
+                          _espacio(),
+                          _crearBotones(_asistente, bloc),
+                        ],
+                      ),
+                    )),
+              )),
+        ),
         onWillPop: () async => false);
   } // fin build
 
@@ -379,9 +382,13 @@ class _CrearAsistentesPageState extends State<CrearAsistentesPage> {
 // se modifico la fecha final como el dia actual
   _selectDate(BuildContext context) async {
     picked = await showDatePicker(
+        helpText: 'Seleccione fecha.',
+        errorFormatText: 'Fecha invalida',
+        fieldLabelText: 'Ingrese fecha',
+        initialDatePickerMode: DatePickerMode.year,
         context: context,
         initialDate: new DateTime.now(),
-        firstDate: new DateTime(1950),
+        firstDate: new DateTime(1930),
         lastDate: new DateTime.now(),
         locale: Locale('es', 'ES'));
 

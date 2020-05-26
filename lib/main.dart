@@ -39,38 +39,29 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    bool activado = StorageUtil.getBool('temaDark');
     return Provider(
-      child: StreamBuilder(
-        initialData: activado,
-        stream: bloc.darkThemeIsEnabled,
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
-          return MaterialApp(
-              debugShowCheckedModeBanner: false,
-              localizationsDelegates: [
-                GlobalMaterialLocalizations.delegate,
-                GlobalWidgetsLocalizations.delegate,
-                CustomLocalizationDelegate(),
-              ],
-              supportedLocales: [
-                const Locale('en', 'US'), // English
-                const Locale('es', 'ES'),
-              ],
-              title: 'Material App',
-              initialRoute: 'login',
-              routes: getApplicationRoutes(bloc),
-              onGenerateRoute: (RouteSettings settings) {
-                return MaterialPageRoute(
-                    builder: (context) => ErrorPageNotFound());
-              },
-              theme: snapshot.data
-                  ? ThemeData.dark()
-                  : ThemeData(
-                      primaryColor: Colors.red,
-                    ));
-        },
-      ),
-    );
+        child: MaterialApp(
+            debugShowCheckedModeBanner: false,
+            localizationsDelegates: [
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              CustomLocalizationDelegate(),
+            ],
+            supportedLocales: [
+              const Locale('en', 'US'), // English
+              const Locale('es', 'ES'),
+            ],
+            title: 'Material App',
+            initialRoute: 'login',
+            routes: getApplicationRoutes(bloc),
+            onGenerateRoute: (RouteSettings settings) {
+              return MaterialPageRoute(
+                  builder: (context) => ErrorPageNotFound());
+            },
+            theme: ThemeData(
+                primaryColor: Colors.red,
+                brightness: Brightness.light,
+                primarySwatch: Colors.red)));
   }
 }
 

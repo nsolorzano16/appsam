@@ -47,12 +47,14 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-        child: Scaffold(
-          drawer: MenuWidget(),
-          appBar: AppBar(
-            title: Text('Inicio'),
+        child: FirebaseMessageWrapper(
+          child: Scaffold(
+            drawer: MenuWidget(),
+            appBar: AppBar(
+              title: Text('Inicio'),
+            ),
+            body: Container(),
           ),
-          body: FirebaseMessageWrapper(child: Text('Iicion')),
         ),
         onWillPop: () async => false);
   }

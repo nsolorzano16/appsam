@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:appsam/src/widgets/firebaseMessageWrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -92,81 +93,83 @@ class _CrearPacientePageState extends State<CrearPacientePage> {
     //final size = MediaQuery.of(context).size;
 
     return WillPopScope(
-        child: Scaffold(
-          key: _scaffoldKey,
-          appBar: AppBar(
-            title: Text('Nuevo Paciente'),
-            actions: <Widget>[
-              IconButton(
-                  icon: Icon(Icons.arrow_back_ios),
-                  onPressed: () =>
-                      Navigator.pushReplacementNamed(context, 'pacientes'))
-            ],
-          ),
-          drawer: MenuWidget(),
-          body: Form(
-            key: _formKey,
-            child: SingleChildScrollView(
-              child: Column(
-                children: <Widget>[
-                  GFCard(
-                    elevation: 6.0,
-                    boxFit: BoxFit.cover,
-                    title: GFListTile(
-                        color: Colors.red,
-                        title: Text('Información Personal',
-                            style: TextStyle(
-                                fontSize: 18.0,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white)),
-                        icon:
-                            FaIcon(FontAwesomeIcons.user, color: Colors.white)),
-                    content: _formParteUno(),
-                  ),
-                  GFCard(
-                    elevation: 6.0,
-                    boxFit: BoxFit.cover,
-                    title: GFListTile(
-                        color: Colors.red,
-                        title: Text('Datos Generales',
-                            style: TextStyle(
-                                fontSize: 18.0,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white)),
-                        icon:
-                            FaIcon(FontAwesomeIcons.user, color: Colors.white)),
-                    content: _formParteDos(),
-                  ),
-                  GFCard(
-                    elevation: 6.0,
-                    boxFit: BoxFit.cover,
-                    title: GFListTile(
-                        color: Colors.red,
-                        title: Text('Datos Referenciales',
-                            style: TextStyle(
-                                fontSize: 18.0,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white)),
-                        icon:
-                            FaIcon(FontAwesomeIcons.user, color: Colors.white)),
-                    content: _formParteTres(),
-                  ),
-                  GFCard(
-                    elevation: 6.0,
-                    boxFit: BoxFit.cover,
-                    title: GFListTile(
-                        color: Colors.red,
-                        title: Text(
-                            'En caso de ser menor de edad complete los campos ',
-                            style: TextStyle(
-                                fontSize: 18.0,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white)),
-                        icon:
-                            FaIcon(FontAwesomeIcons.user, color: Colors.white)),
-                    content: _formParteCuatro(),
-                  ),
-                ],
+        child: FirebaseMessageWrapper(
+          child: Scaffold(
+            key: _scaffoldKey,
+            appBar: AppBar(
+              title: Text('Nuevo Paciente'),
+              actions: <Widget>[
+                IconButton(
+                    icon: Icon(Icons.arrow_back_ios),
+                    onPressed: () =>
+                        Navigator.pushReplacementNamed(context, 'pacientes'))
+              ],
+            ),
+            drawer: MenuWidget(),
+            body: Form(
+              key: _formKey,
+              child: SingleChildScrollView(
+                child: Column(
+                  children: <Widget>[
+                    GFCard(
+                      elevation: 6.0,
+                      boxFit: BoxFit.cover,
+                      title: GFListTile(
+                          color: Colors.red,
+                          title: Text('Información Personal',
+                              style: TextStyle(
+                                  fontSize: 18.0,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white)),
+                          icon: FaIcon(FontAwesomeIcons.user,
+                              color: Colors.white)),
+                      content: _formParteUno(),
+                    ),
+                    GFCard(
+                      elevation: 6.0,
+                      boxFit: BoxFit.cover,
+                      title: GFListTile(
+                          color: Colors.red,
+                          title: Text('Datos Generales',
+                              style: TextStyle(
+                                  fontSize: 18.0,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white)),
+                          icon: FaIcon(FontAwesomeIcons.user,
+                              color: Colors.white)),
+                      content: _formParteDos(),
+                    ),
+                    GFCard(
+                      elevation: 6.0,
+                      boxFit: BoxFit.cover,
+                      title: GFListTile(
+                          color: Colors.red,
+                          title: Text('Datos Referenciales',
+                              style: TextStyle(
+                                  fontSize: 18.0,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white)),
+                          icon: FaIcon(FontAwesomeIcons.user,
+                              color: Colors.white)),
+                      content: _formParteTres(),
+                    ),
+                    GFCard(
+                      elevation: 6.0,
+                      boxFit: BoxFit.cover,
+                      title: GFListTile(
+                          color: Colors.red,
+                          title: Text(
+                              'En caso de ser menor de edad complete los campos ',
+                              style: TextStyle(
+                                  fontSize: 18.0,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white)),
+                          icon: FaIcon(FontAwesomeIcons.user,
+                              color: Colors.white)),
+                      content: _formParteCuatro(),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -403,9 +406,13 @@ class _CrearPacientePageState extends State<CrearPacientePage> {
 
   _selectDate(BuildContext context) async {
     picked = await showDatePicker(
+        helpText: 'Seleccione fecha.',
+        errorFormatText: 'Fecha invalida',
+        fieldLabelText: 'Ingrese fecha',
+        initialDatePickerMode: DatePickerMode.year,
         context: context,
         initialDate: new DateTime.now(),
-        firstDate: new DateTime(1950),
+        firstDate: new DateTime(1930),
         lastDate: new DateTime.now(),
         locale: Locale('es', 'ES'));
 

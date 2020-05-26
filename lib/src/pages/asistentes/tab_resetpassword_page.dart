@@ -1,3 +1,4 @@
+import 'package:appsam/src/widgets/firebaseMessageWrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:getflutter/getflutter.dart';
@@ -24,60 +25,62 @@ class ResetPasswordPage extends StatelessWidget {
         new TextEditingController();
 
     return WillPopScope(
-        child: Scaffold(
-            drawer: MenuWidget(),
-            appBar: AppBar(
-              title: Text('Resetear Contraseña'),
-              actions: <Widget>[
-                IconButton(
-                    icon: Icon(Icons.arrow_back_ios),
-                    onPressed: () =>
-                        Navigator.pushReplacementNamed(context, 'asistentes'))
-              ],
-            ),
-            body: SingleChildScrollView(
-                child: GFCard(
-              elevation: 6.0,
-              title: GFListTile(
-                  color: Colors.red,
-                  title: Text('',
-                      style: TextStyle(
-                          fontSize: 18.0,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white)),
-                  icon: FaIcon(FontAwesomeIcons.lock, color: Colors.white)),
-              content: Column(
-                children: <Widget>[
-                  Form(
-                    key: _formkey,
-                    child: Column(
-                      children: <Widget>[
-                        SizedBox(
-                          height: 15.0,
-                        ),
-                        _crearCampoPassword1(context, _passwordController),
-                        SizedBox(
-                          height: 8.0,
-                        ),
-                        _crearRepetirPassword(
-                            context, _passwordConfirmController),
-                        SizedBox(
-                          height: 8.0,
-                        ),
-                        _crearBoton(
-                            blocService,
-                            _asistente,
-                            context,
-                            _usuario,
-                            _passwordController,
-                            _passwordConfirmController,
-                            _formkey)
-                      ],
-                    ),
-                  ),
+        child: FirebaseMessageWrapper(
+          child: Scaffold(
+              drawer: MenuWidget(),
+              appBar: AppBar(
+                title: Text('Resetear Contraseña'),
+                actions: <Widget>[
+                  IconButton(
+                      icon: Icon(Icons.arrow_back_ios),
+                      onPressed: () =>
+                          Navigator.pushReplacementNamed(context, 'asistentes'))
                 ],
               ),
-            ))),
+              body: SingleChildScrollView(
+                  child: GFCard(
+                elevation: 6.0,
+                title: GFListTile(
+                    color: Colors.red,
+                    title: Text('',
+                        style: TextStyle(
+                            fontSize: 18.0,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white)),
+                    icon: FaIcon(FontAwesomeIcons.lock, color: Colors.white)),
+                content: Column(
+                  children: <Widget>[
+                    Form(
+                      key: _formkey,
+                      child: Column(
+                        children: <Widget>[
+                          SizedBox(
+                            height: 15.0,
+                          ),
+                          _crearCampoPassword1(context, _passwordController),
+                          SizedBox(
+                            height: 8.0,
+                          ),
+                          _crearRepetirPassword(
+                              context, _passwordConfirmController),
+                          SizedBox(
+                            height: 8.0,
+                          ),
+                          _crearBoton(
+                              blocService,
+                              _asistente,
+                              context,
+                              _usuario,
+                              _passwordController,
+                              _passwordConfirmController,
+                              _formkey)
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ))),
+        ),
         onWillPop: () async => false);
   }
 

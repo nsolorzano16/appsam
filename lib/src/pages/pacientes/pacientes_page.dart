@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:appsam/src/widgets/firebaseMessageWrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -61,30 +62,32 @@ class _PacientesPageState extends State<PacientesPage> {
     });
 
     return WillPopScope(
-        child: Scaffold(
-          drawer: MenuWidget(),
-          appBar: AppBar(
-            actions: <Widget>[
-              IconButton(
-                  icon: Icon(Icons.search),
-                  onPressed: () {
-                    showSearch(
-                        context: context, delegate: DataSearchPacientes());
-                  }),
-            ],
-            title: Text('Pacientes'),
-          ),
-          body: Stack(
-            children: <Widget>[
-              RefreshIndicator(
-                  child: _crearListaPacientes(context),
-                  onRefresh: () => fetchDataRefresh(1))
-            ],
-          ),
-          floatingActionButton: FloatingActionButton(
-            backgroundColor: Theme.of(context).primaryColor,
-            child: Icon(Icons.add),
-            onPressed: () => _goToCrearPaciente(_usuario),
+        child: FirebaseMessageWrapper(
+          child: Scaffold(
+            drawer: MenuWidget(),
+            appBar: AppBar(
+              actions: <Widget>[
+                IconButton(
+                    icon: Icon(Icons.search),
+                    onPressed: () {
+                      showSearch(
+                          context: context, delegate: DataSearchPacientes());
+                    }),
+              ],
+              title: Text('Pacientes'),
+            ),
+            body: Stack(
+              children: <Widget>[
+                RefreshIndicator(
+                    child: _crearListaPacientes(context),
+                    onRefresh: () => fetchDataRefresh(1))
+              ],
+            ),
+            floatingActionButton: FloatingActionButton(
+              backgroundColor: Theme.of(context).primaryColor,
+              child: Icon(Icons.add),
+              onPressed: () => _goToCrearPaciente(_usuario),
+            ),
           ),
         ),
         onWillPop: () async => false);

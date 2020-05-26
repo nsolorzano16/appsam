@@ -4,6 +4,7 @@ import 'package:appsam/src/models/paginados/preclinica_paginadoVM.dart';
 import 'package:appsam/src/models/usuario_model.dart';
 import 'package:appsam/src/utils/storage_util.dart';
 import 'package:appsam/src/utils/utils.dart';
+import 'package:appsam/src/widgets/firebaseMessageWrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:getflutter/getflutter.dart';
 import 'package:progress_dialog/progress_dialog.dart';
@@ -57,58 +58,60 @@ class _CrearConsultaGeneralPageState extends State<CrearConsultaGeneralPage> {
         _preclinica.pacienteId, _preclinica.doctorId, _preclinica.preclinicaId);
 
     return WillPopScope(
-        child: Scaffold(
-          appBar: AppBar(
-            title: Text('Consulta'),
-            actions: <Widget>[
-              IconButton(
-                  icon: Icon(
-                    Icons.arrow_back_ios,
-                    color: Colors.white,
-                  ),
-                  onPressed: () => Navigator.pushReplacementNamed(
-                      context, 'menu_consulta',
-                      arguments: _preclinica))
-            ],
-          ),
-          body: FutureBuilder(
-            future: _consultaFuture,
-            builder: (BuildContext context,
-                AsyncSnapshot<ConsultaGeneralModel> snapshot) {
-              final x = snapshot.data;
-              if (snapshot.connectionState == ConnectionState.done) {
-                if (x != null) {
-                  _consultaGeneral.consultaId = x.consultaId;
-                  _consultaGeneral.pacienteId = x.pacienteId;
-                  _consultaGeneral.doctorId = x.doctorId;
-                  _consultaGeneral.preclinicaId = x.preclinicaId;
-                  _consultaGeneral.activo = x.activo;
-                  _consultaGeneral.creadoPor = x.creadoPor;
-                  _consultaGeneral.creadoFecha = x.creadoFecha;
-                  _consultaGeneral.modificadoPor = _usuario.userName;
-                  _consultaGeneral.modificadoFecha = new DateTime.now();
+        child: FirebaseMessageWrapper(
+          child: Scaffold(
+            appBar: AppBar(
+              title: Text('Consulta'),
+              actions: <Widget>[
+                IconButton(
+                    icon: Icon(
+                      Icons.arrow_back_ios,
+                      color: Colors.white,
+                    ),
+                    onPressed: () => Navigator.pushReplacementNamed(
+                        context, 'menu_consulta',
+                        arguments: _preclinica))
+              ],
+            ),
+            body: FutureBuilder(
+              future: _consultaFuture,
+              builder: (BuildContext context,
+                  AsyncSnapshot<ConsultaGeneralModel> snapshot) {
+                final x = snapshot.data;
+                if (snapshot.connectionState == ConnectionState.done) {
+                  if (x != null) {
+                    _consultaGeneral.consultaId = x.consultaId;
+                    _consultaGeneral.pacienteId = x.pacienteId;
+                    _consultaGeneral.doctorId = x.doctorId;
+                    _consultaGeneral.preclinicaId = x.preclinicaId;
+                    _consultaGeneral.activo = x.activo;
+                    _consultaGeneral.creadoPor = x.creadoPor;
+                    _consultaGeneral.creadoFecha = x.creadoFecha;
+                    _consultaGeneral.modificadoPor = _usuario.userName;
+                    _consultaGeneral.modificadoFecha = new DateTime.now();
 
-                  _motivoConsultaController.text = x.motivoConsulta;
-                  _fogController.text = x.fog;
-                  _heaController.text = x.hea;
-                  _notasController.text = x.notas;
-                  return _consultaForm(context);
+                    _motivoConsultaController.text = x.motivoConsulta;
+                    _fogController.text = x.fog;
+                    _heaController.text = x.hea;
+                    _notasController.text = x.notas;
+                    return _consultaForm(context);
+                  } else {
+                    _consultaGeneral.consultaId = 0;
+                    _consultaGeneral.pacienteId = _preclinica.pacienteId;
+                    _consultaGeneral.doctorId = _preclinica.doctorId;
+                    _consultaGeneral.preclinicaId = _preclinica.preclinicaId;
+                    _consultaGeneral.activo = true;
+                    _consultaGeneral.creadoPor = _usuario.userName;
+                    _consultaGeneral.creadoFecha = new DateTime.now();
+                    _consultaGeneral.modificadoPor = _usuario.userName;
+                    _consultaGeneral.modificadoFecha = new DateTime.now();
+                    return _consultaForm(context);
+                  }
                 } else {
-                  _consultaGeneral.consultaId = 0;
-                  _consultaGeneral.pacienteId = _preclinica.pacienteId;
-                  _consultaGeneral.doctorId = _preclinica.doctorId;
-                  _consultaGeneral.preclinicaId = _preclinica.preclinicaId;
-                  _consultaGeneral.activo = true;
-                  _consultaGeneral.creadoPor = _usuario.userName;
-                  _consultaGeneral.creadoFecha = new DateTime.now();
-                  _consultaGeneral.modificadoPor = _usuario.userName;
-                  _consultaGeneral.modificadoFecha = new DateTime.now();
-                  return _consultaForm(context);
+                  return loadingIndicator(context);
                 }
-              } else {
-                return loadingIndicator(context);
-              }
-            },
+              },
+            ),
           ),
         ),
         onWillPop: () async => false);

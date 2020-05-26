@@ -1,6 +1,7 @@
 import 'package:appsam/src/blocs/preclinica_bloc.dart';
 
 import 'package:appsam/src/utils/utils.dart';
+import 'package:appsam/src/widgets/firebaseMessageWrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:getflutter/getflutter.dart';
@@ -24,76 +25,78 @@ class PreclinicaDetallePage extends StatelessWidget {
         ModalRoute.of(context).settings.arguments;
     //final _screenSize = MediaQuery.of(context).size;
     return WillPopScope(
-        child: Scaffold(
-          appBar: AppBar(
-            title: Text('Preclinica Detalle'),
-            actions: <Widget>[
-              IconButton(
-                  icon: Icon(Icons.edit),
-                  onPressed: () => Navigator.pushNamed(
-                      context, 'editar_preclinica',
-                      arguments: _preclinica)),
-              IconButton(
-                  icon: Icon(Icons.arrow_back_ios),
-                  onPressed: () =>
-                      Navigator.popAndPushNamed(context, 'preclinica'))
-            ],
-          ),
-          drawer: MenuWidget(),
-          body: Stack(
-            children: <Widget>[
-              SingleChildScrollView(
-                child: Column(
-                  children: <Widget>[
-                    _crearDatosPaciente(_preclinica),
-                    _crearDatosPreclinica(_preclinica),
-                    _crearNotasPreclinica(_preclinica),
-                    _crearNotasPaciente(_preclinica),
-                  ],
-                ),
-              )
-            ],
-          ),
-          floatingActionButton: FloatingActionButton(
-            onPressed: () {
+        child: FirebaseMessageWrapper(
+          child: Scaffold(
+            appBar: AppBar(
+              title: Text('Preclinica Detalle'),
+              actions: <Widget>[
+                IconButton(
+                    icon: Icon(Icons.edit),
+                    onPressed: () => Navigator.pushNamed(
+                        context, 'editar_preclinica',
+                        arguments: _preclinica)),
+                IconButton(
+                    icon: Icon(Icons.arrow_back_ios),
+                    onPressed: () =>
+                        Navigator.popAndPushNamed(context, 'preclinica'))
+              ],
+            ),
+            drawer: MenuWidget(),
+            body: Stack(
+              children: <Widget>[
+                SingleChildScrollView(
+                  child: Column(
+                    children: <Widget>[
+                      _crearDatosPaciente(_preclinica),
+                      _crearDatosPreclinica(_preclinica),
+                      _crearNotasPreclinica(_preclinica),
+                      _crearNotasPaciente(_preclinica),
+                    ],
+                  ),
+                )
+              ],
+            ),
+            floatingActionButton: FloatingActionButton(
+              onPressed: () {
 // set up the AlertDialog
-              AlertDialog alert = AlertDialog(
-                title: Text("Información"),
-                content: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Text(
-                      'Al confirmar esta acción la preclinica se cambiara a estado \"Atendida\"',
-                      textAlign: TextAlign.center,
-                    ),
-                    Text('Desea completar esta acción?'),
+                AlertDialog alert = AlertDialog(
+                  title: Text("Información"),
+                  content: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Text(
+                        'Al confirmar esta acción la preclinica se cambiara a estado \"Atendida\"',
+                        textAlign: TextAlign.center,
+                      ),
+                      Text('Desea completar esta acción?'),
+                    ],
+                  ),
+                  elevation: 24.0,
+                  actions: [
+                    FlatButton(
+                        onPressed: () => Navigator.pop(context),
+                        child: Text('Cancelar')),
+                    FlatButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                          updatePreclinicaAndGoToDetalleConsulta(
+                              _preclinica, context);
+                        },
+                        child: Text('Aceptar'))
                   ],
-                ),
-                elevation: 24.0,
-                actions: [
-                  FlatButton(
-                      onPressed: () => Navigator.pop(context),
-                      child: Text('Cancelar')),
-                  FlatButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                        updatePreclinicaAndGoToDetalleConsulta(
-                            _preclinica, context);
-                      },
-                      child: Text('Aceptar'))
-                ],
-              );
+                );
 
-              // show the dialog
-              showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return alert;
-                  },
-                  barrierDismissible: false);
-            },
-            child: FaIcon(FontAwesomeIcons.notesMedical),
-            backgroundColor: Theme.of(context).primaryColor,
+                // show the dialog
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return alert;
+                    },
+                    barrierDismissible: false);
+              },
+              child: FaIcon(FontAwesomeIcons.notesMedical),
+              backgroundColor: Theme.of(context).primaryColor,
+            ),
           ),
         ),
         onWillPop: () async => false);
@@ -550,7 +553,7 @@ class PreclinicaDetallePage extends StatelessWidget {
 
     if (preclinicaEdit != null) {
       await _pr.hide();
-
+      StorageUtil.putInt('indexTabMenuConsulta', 0);
       Navigator.pushReplacementNamed(context, 'menu_consulta',
           arguments: preclinicaEdit);
     } else {

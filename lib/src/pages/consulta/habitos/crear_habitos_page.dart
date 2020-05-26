@@ -1,3 +1,4 @@
+import 'package:appsam/src/widgets/firebaseMessageWrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:getflutter/getflutter.dart';
@@ -58,71 +59,73 @@ class _CrearHabitosPageState extends State<CrearHabitosPage> {
     _habitos.preclinicaId = _preclinica.preclinicaId;
 
     return WillPopScope(
-        child: Scaffold(
-          appBar: AppBar(
-            title: Text('Consulta'),
-            actions: <Widget>[
-              IconButton(
-                  icon: Icon(
-                    Icons.arrow_back_ios,
-                    color: Colors.white,
-                  ),
-                  onPressed: () => Navigator.pushReplacementNamed(
-                      context, 'menu_consulta',
-                      arguments: _preclinica))
-            ],
-          ),
-          drawer: MenuWidget(),
-          body: FutureBuilder(
-            future: _habitosFuture,
-            builder: (BuildContext context, AsyncSnapshot<Habitos> snapshot) {
-              final x = snapshot.data;
-              if (snapshot.connectionState == ConnectionState.done) {
-                if (x != null) {
-                  _habitosBloc.onChangeLabelBoton('Editar');
-                  _habitos.habitoId = x.habitoId;
-                  _habitos.activo = x.activo;
-                  _habitos.creadoPor = x.creadoPor;
-                  _habitos.creadoFecha = x.creadoFecha;
-                  _habitos.modificadoPor = _usuario.userName;
-                  _habitos.modificadoFecha = DateTime.now();
+        child: FirebaseMessageWrapper(
+          child: Scaffold(
+            appBar: AppBar(
+              title: Text('Consulta'),
+              actions: <Widget>[
+                IconButton(
+                    icon: Icon(
+                      Icons.arrow_back_ios,
+                      color: Colors.white,
+                    ),
+                    onPressed: () => Navigator.pushReplacementNamed(
+                        context, 'menu_consulta',
+                        arguments: _preclinica))
+              ],
+            ),
+            drawer: MenuWidget(),
+            body: FutureBuilder(
+              future: _habitosFuture,
+              builder: (BuildContext context, AsyncSnapshot<Habitos> snapshot) {
+                final x = snapshot.data;
+                if (snapshot.connectionState == ConnectionState.done) {
+                  if (x != null) {
+                    _habitosBloc.onChangeLabelBoton('Editar');
+                    _habitos.habitoId = x.habitoId;
+                    _habitos.activo = x.activo;
+                    _habitos.creadoPor = x.creadoPor;
+                    _habitos.creadoFecha = x.creadoFecha;
+                    _habitos.modificadoPor = _usuario.userName;
+                    _habitos.modificadoFecha = DateTime.now();
 
-                  _habitos.cafe = x.cafe;
-                  _habitos.cigarrillo = x.cigarrillo;
-                  _habitos.tazasCafe = x.tazasCafe;
-                  _habitos.cantidadCigarrillo = x.cantidadCigarrillo;
-                  _habitosBloc.onChangeConsumeCafe(_habitos.cafe);
-                  _habitosBloc.onChangeConsumeCigarrillo(_habitos.cigarrillo);
+                    _habitos.cafe = x.cafe;
+                    _habitos.cigarrillo = x.cigarrillo;
+                    _habitos.tazasCafe = x.tazasCafe;
+                    _habitos.cantidadCigarrillo = x.cantidadCigarrillo;
+                    _habitosBloc.onChangeConsumeCafe(_habitos.cafe);
+                    _habitosBloc.onChangeConsumeCigarrillo(_habitos.cigarrillo);
 
-                  _tazasCafeController.text = x.tazasCafe.toString();
-                  _cantidadCigarrosController.text =
-                      x.cantidadCigarrillo.toString();
-                  _notasController.text = x.notas;
-                  return _habitosForm(context);
+                    _tazasCafeController.text = x.tazasCafe.toString();
+                    _cantidadCigarrosController.text =
+                        x.cantidadCigarrillo.toString();
+                    _notasController.text = x.notas;
+                    return _habitosForm(context);
+                  } else {
+                    _habitosBloc.onChangeConsumeCafe(false);
+                    _habitosBloc.onChangeConsumeCigarrillo(false);
+                    _habitosBloc.onChangeLabelBoton('Guardar');
+                    _habitos.habitoId = 0;
+                    _habitos.activo = true;
+                    _habitos.creadoPor = _usuario.userName;
+                    _habitos.creadoFecha = DateTime.now();
+                    _habitos.modificadoPor = _usuario.userName;
+                    _habitos.modificadoFecha = DateTime.now();
+
+                    _habitos.cafe = _habitosBloc.consumeCafe;
+                    _habitos.cigarrillo = _habitosBloc.consumeCigarrillo;
+                    _habitos.tazasCafe = 0;
+                    _habitos.cantidadCigarrillo = 0;
+                    _tazasCafeController.text = '0';
+                    _cantidadCigarrosController.text = '0';
+                    _notasController.text = '';
+                    return _habitosForm(context);
+                  }
                 } else {
-                  _habitosBloc.onChangeConsumeCafe(false);
-                  _habitosBloc.onChangeConsumeCigarrillo(false);
-                  _habitosBloc.onChangeLabelBoton('Guardar');
-                  _habitos.habitoId = 0;
-                  _habitos.activo = true;
-                  _habitos.creadoPor = _usuario.userName;
-                  _habitos.creadoFecha = DateTime.now();
-                  _habitos.modificadoPor = _usuario.userName;
-                  _habitos.modificadoFecha = DateTime.now();
-
-                  _habitos.cafe = _habitosBloc.consumeCafe;
-                  _habitos.cigarrillo = _habitosBloc.consumeCigarrillo;
-                  _habitos.tazasCafe = 0;
-                  _habitos.cantidadCigarrillo = 0;
-                  _tazasCafeController.text = '0';
-                  _cantidadCigarrosController.text = '0';
-                  _notasController.text = '';
-                  return _habitosForm(context);
+                  return loadingIndicator(context);
                 }
-              } else {
-                return loadingIndicator(context);
-              }
-            },
+              },
+            ),
           ),
         ),
         onWillPop: () async => false);

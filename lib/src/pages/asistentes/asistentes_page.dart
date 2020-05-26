@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:appsam/src/widgets/firebaseMessageWrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:progress_dialog/progress_dialog.dart';
@@ -55,28 +56,30 @@ class _AsistentesPageState extends State<AsistentesPage> {
     });
 
     return WillPopScope(
-        child: Scaffold(
-          key: _scaffoldKey,
-          drawer: MenuWidget(),
-          appBar: AppBar(
-            actions: <Widget>[
-              IconButton(
-                  icon: Icon(Icons.search),
-                  onPressed: () {
-                    showSearch(context: context, delegate: DataSearch());
-                  }),
-            ],
-            title: Text('Asistentes'),
-          ),
-          body: Stack(
-            children: <Widget>[
-              _crearListaAsistentes(context),
-            ],
-          ),
-          floatingActionButton: FloatingActionButton(
-            backgroundColor: Theme.of(context).primaryColor,
-            child: Icon(Icons.add),
-            onPressed: () => _goToCrearAsistente(),
+        child: FirebaseMessageWrapper(
+          child: Scaffold(
+            key: _scaffoldKey,
+            drawer: MenuWidget(),
+            appBar: AppBar(
+              actions: <Widget>[
+                IconButton(
+                    icon: Icon(Icons.search),
+                    onPressed: () {
+                      showSearch(context: context, delegate: DataSearch());
+                    }),
+              ],
+              title: Text('Asistentes'),
+            ),
+            body: Stack(
+              children: <Widget>[
+                _crearListaAsistentes(context),
+              ],
+            ),
+            floatingActionButton: FloatingActionButton(
+              backgroundColor: Theme.of(context).primaryColor,
+              child: Icon(Icons.add),
+              onPressed: () => _goToCrearAsistente(),
+            ),
           ),
         ),
         onWillPop: () async => false);

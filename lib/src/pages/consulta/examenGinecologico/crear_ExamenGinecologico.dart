@@ -5,6 +5,7 @@ import 'package:appsam/src/models/usuario_model.dart';
 import 'package:appsam/src/utils/storage_util.dart';
 import 'package:appsam/src/utils/utils.dart';
 import 'package:appsam/src/widgets/drawer.dart';
+import 'package:appsam/src/widgets/firebaseMessageWrapper.dart';
 
 import 'package:flutter/material.dart';
 import 'package:getflutter/getflutter.dart';
@@ -67,63 +68,65 @@ class _CrearExamenGinecologicoPageState
             _preclinica.preclinicaId);
 
     return WillPopScope(
-        child: Scaffold(
-          appBar: AppBar(
-            title: Text('Consulta'),
-            actions: <Widget>[
-              IconButton(
-                  icon: Icon(
-                    Icons.arrow_back_ios,
-                    color: Colors.white,
-                  ),
-                  onPressed: () => Navigator.pushReplacementNamed(
-                      context, 'menu_consulta',
-                      arguments: _preclinica))
-            ],
-          ),
-          drawer: MenuWidget(),
-          body: FutureBuilder(
-            future: _examenGinecologicoFuture,
-            builder: (BuildContext context,
-                AsyncSnapshot<ExamenFisicoGinecologico> snapshot) {
-              final x = snapshot.data;
-              if (snapshot.connectionState == ConnectionState.done) {
-                if (x != null) {
-                  _examenGinecologico.examenId = x.examenId;
-                  _examenGinecologico.pacienteId = x.pacienteId;
-                  _examenGinecologico.doctorId = x.doctorId;
-                  _examenGinecologico.preclinicaId = x.preclinicaId;
-                  _examenGinecologico.activo = x.activo;
-                  _examenGinecologico.creadoPor = x.creadoPor;
-                  _examenGinecologico.creadoFecha = x.creadoFecha;
-                  _examenGinecologico.modificadoPor = _usuario.userName;
-                  _examenGinecologico.modificadoFecha = DateTime.now();
+        child: FirebaseMessageWrapper(
+          child: Scaffold(
+            appBar: AppBar(
+              title: Text('Consulta'),
+              actions: <Widget>[
+                IconButton(
+                    icon: Icon(
+                      Icons.arrow_back_ios,
+                      color: Colors.white,
+                    ),
+                    onPressed: () => Navigator.pushReplacementNamed(
+                        context, 'menu_consulta',
+                        arguments: _preclinica))
+              ],
+            ),
+            drawer: MenuWidget(),
+            body: FutureBuilder(
+              future: _examenGinecologicoFuture,
+              builder: (BuildContext context,
+                  AsyncSnapshot<ExamenFisicoGinecologico> snapshot) {
+                final x = snapshot.data;
+                if (snapshot.connectionState == ConnectionState.done) {
+                  if (x != null) {
+                    _examenGinecologico.examenId = x.examenId;
+                    _examenGinecologico.pacienteId = x.pacienteId;
+                    _examenGinecologico.doctorId = x.doctorId;
+                    _examenGinecologico.preclinicaId = x.preclinicaId;
+                    _examenGinecologico.activo = x.activo;
+                    _examenGinecologico.creadoPor = x.creadoPor;
+                    _examenGinecologico.creadoFecha = x.creadoFecha;
+                    _examenGinecologico.modificadoPor = _usuario.userName;
+                    _examenGinecologico.modificadoFecha = DateTime.now();
 
-                  _afuController.text = x.afu;
-                  _pelvisController.text = x.pelvis;
-                  _dorsoController.text = x.dorso;
-                  _fcfController.text = x.fcf;
-                  _apController.text = x.ap;
-                  _notasController.text = x.notas;
+                    _afuController.text = x.afu;
+                    _pelvisController.text = x.pelvis;
+                    _dorsoController.text = x.dorso;
+                    _fcfController.text = x.fcf;
+                    _apController.text = x.ap;
+                    _notasController.text = x.notas;
 
-                  return _formExamenGinecologico(context);
+                    return _formExamenGinecologico(context);
+                  } else {
+                    _examenGinecologico.examenId = 0;
+                    _examenGinecologico.pacienteId = _preclinica.pacienteId;
+                    _examenGinecologico.doctorId = _preclinica.doctorId;
+                    _examenGinecologico.preclinicaId = _preclinica.preclinicaId;
+                    _examenGinecologico.activo = true;
+                    _examenGinecologico.creadoPor = _usuario.userName;
+                    _examenGinecologico.creadoFecha = new DateTime.now();
+                    _examenGinecologico.modificadoPor = _usuario.userName;
+                    _examenGinecologico.modificadoFecha = new DateTime.now();
+
+                    return _formExamenGinecologico(context);
+                  }
                 } else {
-                  _examenGinecologico.examenId = 0;
-                  _examenGinecologico.pacienteId = _preclinica.pacienteId;
-                  _examenGinecologico.doctorId = _preclinica.doctorId;
-                  _examenGinecologico.preclinicaId = _preclinica.preclinicaId;
-                  _examenGinecologico.activo = true;
-                  _examenGinecologico.creadoPor = _usuario.userName;
-                  _examenGinecologico.creadoFecha = new DateTime.now();
-                  _examenGinecologico.modificadoPor = _usuario.userName;
-                  _examenGinecologico.modificadoFecha = new DateTime.now();
-
-                  return _formExamenGinecologico(context);
+                  return loadingIndicator(context);
                 }
-              } else {
-                return loadingIndicator(context);
-              }
-            },
+              },
+            ),
           ),
         ),
         onWillPop: () async => false);

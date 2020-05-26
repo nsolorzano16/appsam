@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:appsam/src/utils/utils.dart';
 import 'package:appsam/src/widgets/drawer.dart';
+import 'package:appsam/src/widgets/firebaseMessageWrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -34,75 +35,77 @@ class _MyProfilePageState extends State<MyProfilePage> {
         usuarioModelFromJson(StorageUtil.getString('usuarioGlobal'));
     if (_usuario != null) {
       return WillPopScope(
-          child: Scaffold(
-              appBar: AppBar(
-                title: Text('Mi Perfil'),
-                actions: <Widget>[
-                  IconButton(
-                      icon: Icon(Icons.add_photo_alternate),
-                      onPressed: () =>
-                          _procesarImagen(ImageSource.gallery, _usuario, bloc)),
-                  IconButton(
-                      icon: Icon(Icons.add_a_photo),
-                      onPressed: () =>
-                          _procesarImagen(ImageSource.camera, _usuario, bloc)),
-                  IconButton(
-                      icon: Icon(Icons.arrow_back_ios),
-                      onPressed: () =>
-                          Navigator.popAndPushNamed(context, 'settings')),
-                ],
-              ),
-              drawer: MenuWidget(),
-              body: SingleChildScrollView(
-                // physics: BouncingScrollPhysics(),
-                child: Container(
-                  margin: EdgeInsets.only(top: 5.0),
-                  width: _screenSize.width,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Container(
-                        padding: EdgeInsets.only(
-                            left: _screenSize.width * 0.2,
-                            right: _screenSize.width * 0.2,
-                            top: 1.0,
-                            bottom: 3.0),
-                        child: Card(
-                          elevation: 10,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30.0)),
-                          child: Container(
-                            padding: EdgeInsets.only(
-                                left: 40.0,
-                                right: 40.0,
-                                top: 10.0,
-                                bottom: 10.0),
-                            child: Padding(
-                                padding: EdgeInsets.only(left: 2.0, top: 2.0),
-                                child: Padding(
-                                    padding: EdgeInsets.only(top: 5.0),
-                                    child: Stack(
-                                        fit: StackFit.loose,
-                                        children: <Widget>[
-                                          Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: <Widget>[
-                                              _imageStorage(_usuario),
-                                            ],
-                                          ),
-                                        ]))),
+          child: FirebaseMessageWrapper(
+            child: Scaffold(
+                appBar: AppBar(
+                  title: Text('Mi Perfil'),
+                  actions: <Widget>[
+                    IconButton(
+                        icon: Icon(Icons.add_photo_alternate),
+                        onPressed: () => _procesarImagen(
+                            ImageSource.gallery, _usuario, bloc)),
+                    IconButton(
+                        icon: Icon(Icons.add_a_photo),
+                        onPressed: () => _procesarImagen(
+                            ImageSource.camera, _usuario, bloc)),
+                    IconButton(
+                        icon: Icon(Icons.arrow_back_ios),
+                        onPressed: () =>
+                            Navigator.popAndPushNamed(context, 'settings')),
+                  ],
+                ),
+                drawer: MenuWidget(),
+                body: SingleChildScrollView(
+                  // physics: BouncingScrollPhysics(),
+                  child: Container(
+                    margin: EdgeInsets.only(top: 5.0),
+                    width: _screenSize.width,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Container(
+                          padding: EdgeInsets.only(
+                              left: _screenSize.width * 0.2,
+                              right: _screenSize.width * 0.2,
+                              top: 1.0,
+                              bottom: 3.0),
+                          child: Card(
+                            elevation: 10,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30.0)),
+                            child: Container(
+                              padding: EdgeInsets.only(
+                                  left: 40.0,
+                                  right: 40.0,
+                                  top: 10.0,
+                                  bottom: 10.0),
+                              child: Padding(
+                                  padding: EdgeInsets.only(left: 2.0, top: 2.0),
+                                  child: Padding(
+                                      padding: EdgeInsets.only(top: 5.0),
+                                      child: Stack(
+                                          fit: StackFit.loose,
+                                          children: <Widget>[
+                                            Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: <Widget>[
+                                                _imageStorage(_usuario),
+                                              ],
+                                            ),
+                                          ]))),
+                            ),
                           ),
                         ),
-                      ),
-                      _campoTexto(_usuario, Icons.email, context)
-                    ],
+                        _campoTexto(_usuario, Icons.email, context)
+                      ],
+                    ),
                   ),
-                ),
-              )),
+                )),
+          ),
           onWillPop: () async => false);
     } else {
       return loadingIndicator(context);
