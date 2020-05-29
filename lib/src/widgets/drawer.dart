@@ -3,6 +3,7 @@ import 'package:appsam/src/models/usuario_model.dart';
 import 'package:appsam/src/providers/menu_provider.dart';
 import 'package:appsam/src/utils/storage_util.dart';
 import 'package:flutter/material.dart';
+import 'package:icons_helper/icons_helper.dart';
 
 class MenuWidget extends StatelessWidget {
   @override
@@ -115,7 +116,10 @@ class MenuWidget extends StatelessWidget {
           widgetTemp = ListTile(
             title: Row(
               children: <Widget>[
-                Icon(Icons.gesture),
+                Icon(
+                  getIconUsingPrefix(name: opt.icon),
+                  color: Theme.of(context).primaryColor,
+                ),
                 Padding(
                   padding: EdgeInsets.only(left: 8.0),
                   child: Text(opt.texto),

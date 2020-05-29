@@ -40,7 +40,7 @@
 		{
 			"ruta": "preclinica",
 			"icon": "assignment_ind",
-			"texto": "Preclinica",
+			"texto": "Consulta",
 			"roles": [
 				{
 					"autorizados": 2
@@ -48,9 +48,9 @@
 			]
 		},
 		{
-			"ruta": "home",
+			"ruta": "agenda",
 			"icon": "supervised_user_circle",
-			"texto": "Consultas",
+			"texto": "agenda",
 			"roles": [
 				{
 					"autorizados": 2

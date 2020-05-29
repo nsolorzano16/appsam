@@ -222,16 +222,33 @@ class _PacientesPageState extends State<PacientesPage> {
             ),
           ),
           subtitle: Text('Identificación: ${paciente.identificacion}'),
-          trailing: IconButton(
-              icon: FaIcon(
-                FontAwesomeIcons.fileMedical,
-                size: 20.0,
-                color: Theme.of(context).primaryColor,
-              ),
-              onPressed: () {
-                Navigator.pushReplacementNamed(context, 'crear_preclinica',
-                    arguments: paciente);
-              })),
+          trailing: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              IconButton(
+                  tooltip: 'Expediente',
+                  icon: FaIcon(
+                    FontAwesomeIcons.solidFolderOpen,
+                    size: 20.0,
+                    color: Theme.of(context).accentColor,
+                  ),
+                  onPressed: () {
+                    Navigator.pushReplacementNamed(context, 'crear_preclinica',
+                        arguments: paciente);
+                  }),
+              IconButton(
+                  tooltip: 'Preclinica',
+                  icon: FaIcon(
+                    FontAwesomeIcons.fileMedical,
+                    size: 20.0,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                  onPressed: () {
+                    Navigator.pushReplacementNamed(context, 'crear_preclinica',
+                        arguments: paciente);
+                  })
+            ],
+          )),
     );
   }
 

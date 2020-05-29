@@ -1,3 +1,4 @@
+import 'package:appsam/src/pages/agenda/agenda_page.dart';
 import 'package:appsam/src/pages/consulta/consultaGeneral/crear_consultaGeneral_page.dart';
 import 'package:appsam/src/pages/consulta/consulta_detalle_page.dart';
 import 'package:appsam/src/pages/consulta/diagnosticos/crear_diagnosticos_page.dart';
@@ -88,6 +89,7 @@ Map<String, WidgetBuilder> getApplicationRoutes(ThemeBloc bloc) {
     PlanesTerapeuticosPage.routeName: (BuildContext context) =>
         PlanesTerapeuticosPage(),
     CrearPlanTerapeuticoPage.routeName: (BuildContext context) =>
-        CrearPlanTerapeuticoPage()
+        CrearPlanTerapeuticoPage(),
+    AgendaPage.routeName: (BuildContext context) => AgendaPage()
   };
 }

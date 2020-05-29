@@ -63,7 +63,7 @@ class _PreclinicaPageState extends State<PreclinicaPage> {
           child: Scaffold(
             drawer: MenuWidget(),
             appBar: AppBar(
-              title: Text('Preclinica'),
+              title: Text('Consulta'),
             ),
             body: Stack(
               children: <Widget>[
