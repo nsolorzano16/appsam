@@ -29,8 +29,10 @@ class _PacientesPageState extends State<PacientesPage> {
 
   @override
   void dispose() {
-    super.dispose();
+    _pacientesBloc.dispose();
+
     _scrollController.dispose();
+    super.dispose();
   }
 
   @override

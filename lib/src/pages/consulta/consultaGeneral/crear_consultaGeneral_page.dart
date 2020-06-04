@@ -42,11 +42,11 @@ class _CrearConsultaGeneralPageState extends State<CrearConsultaGeneralPage> {
 
   @override
   void dispose() {
-    super.dispose();
     _motivoConsultaController.dispose();
     _fogController.dispose();
     _heaController.dispose();
     _notasController.dispose();
+    super.dispose();
   }
 
   @override

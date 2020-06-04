@@ -43,6 +43,12 @@ class _ConsultaDetallePageState extends State<ConsultaDetallePage> {
   }
 
   @override
+  void dispose() {
+    _consultaBloc.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final PreclinicaViewModel _preclinicaDetalle =
         ModalRoute.of(context).settings.arguments;

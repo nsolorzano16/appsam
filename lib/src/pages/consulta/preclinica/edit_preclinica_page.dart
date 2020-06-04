@@ -34,6 +34,13 @@ class _EditarPreclinicaPageState extends State<EditarPreclinicaPage> {
   }
 
   @override
+  void dispose() {
+    bloc.dispose();
+    blocConsulta.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final PreclinicaViewModel _preclinica =
         ModalRoute.of(context).settings.arguments;

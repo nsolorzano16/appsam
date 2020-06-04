@@ -26,6 +26,13 @@ class _FormEditarPageState extends State<FormEditarPage> {
   TextEditingController _txtControllerNombres = new TextEditingController();
   TextEditingController _txtControllerPrimerApellido =
       new TextEditingController();
+  final bloc = new CrearEditarAsistentesBloc();
+
+  @override
+  void dispose() {
+    bloc.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +46,6 @@ class _FormEditarPageState extends State<FormEditarPage> {
         mask: '#######', filter: {"#": RegExp(r'[0-9]')});
     MaskTextInputFormatter maskIdentificacion = new MaskTextInputFormatter(
         mask: '#############', filter: {"#": RegExp(r'[0-9]')});
-    final bloc = new CrearEditarAsistentesBloc();
     _txtControllerIdentificacion.text = _asistente.identificacion;
     _txtControllerNombres.text = _asistente.nombres;
     _txtControllerPrimerApellido.text = _asistente.primerApellido;

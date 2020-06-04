@@ -59,6 +59,11 @@ class _EditPlanTerapeuticoPageState extends State<EditPlanTerapeuticoPage> {
 
   @override
   void dispose() {
+    _nombreMedicamentoController.dispose();
+    _dosisController.dispose();
+    _horarioController.dispose();
+    _diasRequeridosController.dispose();
+    _notasController.dispose();
     super.dispose();
   }
 

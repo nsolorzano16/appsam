@@ -33,7 +33,6 @@ class _CrearFarmacosUsoActualPageState
   final _dosisController = new TextEditingController();
   final _tiempoController = new TextEditingController();
   final _notasController = new TextEditingController();
-
   final _editarnombreController = new TextEditingController();
   final _editarconcentracionController = new TextEditingController();
   final _editardosisController = new TextEditingController();
@@ -50,13 +49,28 @@ class _CrearFarmacosUsoActualPageState
   }
 
   @override
+  void dispose() {
+    _nombreController.dispose();
+    _concentracionController.dispose();
+    _dosisController.dispose();
+    _tiempoController.dispose();
+    _notasController.dispose();
+    _editarnombreController.dispose();
+    _editarconcentracionController.dispose();
+    _editardosisController.dispose();
+    _editartiempoController.dispose();
+    _editarnotasController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final PreclinicaViewModel _preclinica =
         ModalRoute.of(context).settings.arguments;
 
     _farmacosFuture =
         _farmacosBloc.getFarmacos(_preclinica.pacienteId, _preclinica.doctorId);
-//as
+
     return WillPopScope(
         child: FirebaseMessageWrapper(
           child: Scaffold(

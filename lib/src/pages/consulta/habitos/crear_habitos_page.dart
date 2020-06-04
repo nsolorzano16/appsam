@@ -38,8 +38,9 @@ class _CrearHabitosPageState extends State<CrearHabitosPage> {
 
   @override
   void dispose() {
-    super.dispose();
     _habitosBloc.dispose();
+    _notasController.dispose();
+    super.dispose();
   }
 
   @override

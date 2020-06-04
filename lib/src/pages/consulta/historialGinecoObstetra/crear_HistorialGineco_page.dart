@@ -92,7 +92,6 @@ class _CrearHistorialGinecoObstetraPageState
 
   @override
   void dispose() {
-    super.dispose();
     _menarquiaController.dispose();
     _furController.dispose();
     _sgController.dispose();
@@ -106,6 +105,7 @@ class _CrearHistorialGinecoObstetraPageState
     _anticonceptivoController.dispose();
     _vacunacionController.dispose();
     _notasController.dispose();
+    super.dispose();
   }
 
   @override

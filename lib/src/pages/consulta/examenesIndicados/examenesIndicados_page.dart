@@ -22,6 +22,12 @@ class _ExamenesIndicadosPageState extends State<ExamenesIndicadosPage> {
   final List<ExamenesIndicadosViewModel> _lista = new List();
 
   @override
+  void dispose() {
+    _examenesBloc.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     StorageUtil.putString('ultimaPagina', ExamenesIndicadosPage.routeName);
     final PreclinicaViewModel _preclinica =

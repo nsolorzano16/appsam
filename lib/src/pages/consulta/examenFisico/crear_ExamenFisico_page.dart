@@ -83,8 +83,6 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
 
   @override
   void dispose() {
-    super.dispose();
-
     _aspectoGeneralController.dispose();
 
     _cabezaController.dispose();
@@ -96,6 +94,7 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
     _pielFanerasController.dispose();
     _genitalesController.dispose();
     _neuroligicoController.dispose();
+    super.dispose();
   }
 
   @override

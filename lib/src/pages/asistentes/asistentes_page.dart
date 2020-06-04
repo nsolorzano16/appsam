@@ -29,9 +29,9 @@ class _AsistentesPageState extends State<AsistentesPage> {
 
   @override
   void dispose() {
-    super.dispose();
     _scrollController.dispose();
-    // asistentesBloc.dispose();
+    asistentesBloc.dispose();
+    super.dispose();
   }
 
   @override

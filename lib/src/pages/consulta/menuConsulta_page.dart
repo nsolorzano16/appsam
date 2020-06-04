@@ -39,8 +39,8 @@ class _MenuConsultaPageState extends State<MenuConsultaPage> {
 
   @override
   void dispose() {
-    super.dispose();
     _consultaBloc.dispose();
+    super.dispose();
   }
 
   @override

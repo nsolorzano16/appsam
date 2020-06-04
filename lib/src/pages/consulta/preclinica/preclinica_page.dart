@@ -36,8 +36,9 @@ class _PreclinicaPageState extends State<PreclinicaPage> {
 
   @override
   void dispose() {
-    super.dispose();
+    _preclinicaBloc.dispose();
     _scrollController.dispose();
+    super.dispose();
   }
 
   @override

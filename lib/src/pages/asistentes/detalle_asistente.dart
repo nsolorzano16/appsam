@@ -17,6 +17,7 @@ class AsistenteDetalle extends StatefulWidget {
 }
 
 class _AsistenteDetalleState extends State<AsistenteDetalle> {
+  final bloc = new CrearEditarAsistentesBloc();
   @override
   void initState() {
     super.initState();
@@ -24,10 +25,15 @@ class _AsistenteDetalleState extends State<AsistenteDetalle> {
   }
 
   @override
+  void dispose() {
+    bloc.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final UsuarioModel _usuario = ModalRoute.of(context).settings.arguments;
     final _screenSize = MediaQuery.of(context).size;
-    final bloc = new CrearEditarAsistentesBloc();
 
     return WillPopScope(
         child: FirebaseMessageWrapper(

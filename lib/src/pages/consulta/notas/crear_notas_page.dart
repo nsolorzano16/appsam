@@ -41,6 +41,13 @@ class _CrearNotasPageState extends State<CrearNotasPage> {
   }
 
   @override
+  void dispose() {
+    _notasController.dispose();
+    _editarNotasController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final PreclinicaViewModel _preclinica =
         ModalRoute.of(context).settings.arguments;

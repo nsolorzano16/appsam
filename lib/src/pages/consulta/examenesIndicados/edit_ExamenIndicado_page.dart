@@ -68,8 +68,10 @@ class _EditarExamenIndicadoPageState extends State<EditarExamenIndicadoPage> {
 
   @override
   void dispose() {
-    super.dispose();
+    _nombreController.dispose();
+    _notasController.dispose();
     _examenesBloc.dispose();
+    super.dispose();
   }
 
   @override

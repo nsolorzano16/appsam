@@ -42,6 +42,13 @@ class _CrearDiagnosticosPageState extends State<CrearDiagnosticosPage> {
   }
 
   @override
+  void dispose() {
+    _problemasClinicosController.dispose();
+    _editarproblemasClinicosController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final PreclinicaViewModel _preclinica =
         ModalRoute.of(context).settings.arguments;

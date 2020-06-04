@@ -47,13 +47,13 @@ class _CrearExamenGinecologicoPageState
 
   @override
   void dispose() {
-    super.dispose();
     _afuController.dispose();
     _pelvisController.dispose();
     _dorsoController.dispose();
     _fcfController.dispose();
     _apController.dispose();
     _notasController.dispose();
+    super.dispose();
   }
 
   @override

@@ -44,12 +44,12 @@ class _CrearAntecedentesPageState extends State<CrearAntecedentesPage> {
 
   @override
   void dispose() {
-    super.dispose();
     _antPatologicosFamiCtrl.dispose();
     _antPatologicosPersCtrl.dispose();
     _antNoPatologicosFamiCtrl.dispose();
     _antNoPatologicosPersCtrl.dispose();
     _antInmunoAlergicosCtrl.dispose();
+    super.dispose();
   }
 
   @override
