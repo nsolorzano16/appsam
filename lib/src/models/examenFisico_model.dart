@@ -10,6 +10,31 @@ ExamenFisico examenFisicoFromJson(String str) =>
 String examenFisicoToJson(ExamenFisico data) => json.encode(data.toJson());
 
 class ExamenFisico {
+  int examenFisicoId;
+  int pacienteId;
+  int doctorId;
+  String aspectoGeneral;
+  String pielFaneras;
+  String cabeza;
+  String oidos;
+  String ojos;
+  String nariz;
+  String boca;
+  String cuello;
+  String torax;
+  String abdomen;
+  String columnaVertebralRegionLumbar;
+  String miembrosInferioresSuperiores;
+  String genitales;
+  String neurologico;
+  int preclinicaId;
+  bool activo;
+  String creadoPor;
+  DateTime creadoFecha;
+  String modificadoPor;
+  DateTime modificadoFecha;
+  String notas;
+
   ExamenFisico({
     this.examenFisicoId,
     this.pacienteId,
@@ -19,6 +44,7 @@ class ExamenFisico {
     this.cabeza,
     this.oidos,
     this.ojos,
+    this.nariz,
     this.boca,
     this.cuello,
     this.torax,
@@ -36,30 +62,6 @@ class ExamenFisico {
     this.notas,
   });
 
-  int examenFisicoId;
-  int pacienteId;
-  int doctorId;
-  String aspectoGeneral;
-  String pielFaneras;
-  String cabeza;
-  String oidos;
-  String ojos;
-  String boca;
-  String cuello;
-  String torax;
-  String abdomen;
-  String columnaVertebralRegionLumbar;
-  String miembrosInferioresSuperiores;
-  String genitales;
-  String neurologico;
-  int preclinicaId;
-  bool activo;
-  String creadoPor;
-  DateTime creadoFecha;
-  String modificadoPor;
-  DateTime modificadoFecha;
-  String notas;
-
   factory ExamenFisico.fromJson(Map<String, dynamic> json) => ExamenFisico(
         examenFisicoId: json["examenFisicoId"],
         pacienteId: json["pacienteId"],
@@ -69,6 +71,7 @@ class ExamenFisico {
         cabeza: json["cabeza"],
         oidos: json["oidos"],
         ojos: json["ojos"],
+        nariz: json["nariz"],
         boca: json["boca"],
         cuello: json["cuello"],
         torax: json["torax"],
@@ -95,6 +98,7 @@ class ExamenFisico {
         "cabeza": cabeza,
         "oidos": oidos,
         "ojos": ojos,
+        "nariz": nariz,
         "boca": boca,
         "cuello": cuello,
         "torax": torax,

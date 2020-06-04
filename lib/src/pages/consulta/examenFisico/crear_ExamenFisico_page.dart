@@ -45,6 +45,14 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
       new TextEditingController();
   final TextEditingController _neuroligicoController =
       new TextEditingController();
+  final TextEditingController _bocaController = new TextEditingController();
+  final TextEditingController _columnaVertebralController =
+      new TextEditingController();
+
+  final TextEditingController _miembrosInferioresSuperioresController =
+      new TextEditingController();
+
+  final TextEditingController _narizController = new TextEditingController();
 
   String labelBoton = 'Guardar';
 
@@ -56,29 +64,54 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
 
     _aspectoGeneralController.text = (widget.examen.aspectoGeneral != null)
         ? widget.examen.aspectoGeneral
-        : '';
+        : 'Sin alteraciones';
 
-    _cabezaController.text =
-        (widget.examen.cabeza != null) ? widget.examen.cabeza : '';
-    _oidosController.text =
-        (widget.examen.oidos != null) ? widget.examen.oidos : '';
+    _cabezaController.text = (widget.examen.cabeza != null)
+        ? widget.examen.cabeza
+        : 'Sin alteraciones';
+    _oidosController.text = (widget.examen.oidos != null)
+        ? widget.examen.oidos
+        : 'Sin alteraciones';
     _ojosController.text =
-        (widget.examen.ojos != null) ? widget.examen.ojos : '';
+        (widget.examen.ojos != null) ? widget.examen.ojos : 'Sin alteraciones';
 
-    _cuelloController.text =
-        (widget.examen.cuello != null) ? widget.examen.cuello : '';
-    _toraxController.text =
-        (widget.examen.torax != null) ? widget.examen.torax : '';
+    _cuelloController.text = (widget.examen.cuello != null)
+        ? widget.examen.cuello
+        : 'Sin alteraciones';
+    _toraxController.text = (widget.examen.torax != null)
+        ? widget.examen.torax
+        : 'Sin alteraciones';
 
-    _abdomenController.text =
-        (widget.examen.abdomen != null) ? widget.examen.abdomen : '';
-    _pielFanerasController.text =
-        (widget.examen.pielFaneras != null) ? widget.examen.pielFaneras : '';
-    _genitalesController.text =
-        (widget.examen.genitales != null) ? widget.examen.genitales : '';
+    _abdomenController.text = (widget.examen.abdomen != null)
+        ? widget.examen.abdomen
+        : 'Sin alteraciones';
+    _pielFanerasController.text = (widget.examen.pielFaneras != null)
+        ? widget.examen.pielFaneras
+        : 'Sin alteraciones';
+    _genitalesController.text = (widget.examen.genitales != null)
+        ? widget.examen.genitales
+        : 'Sin alteraciones';
 
-    _neuroligicoController.text =
-        (widget.examen.neurologico != null) ? widget.examen.neurologico : '';
+    _neuroligicoController.text = (widget.examen.neurologico != null)
+        ? widget.examen.neurologico
+        : 'Sin alteraciones';
+
+    _bocaController.text =
+        (widget.examen.boca != null) ? widget.examen.boca : 'Sin alteraciones';
+
+    _columnaVertebralController.text =
+        (widget.examen.columnaVertebralRegionLumbar != null)
+            ? widget.examen.columnaVertebralRegionLumbar
+            : 'Sin alteraciones';
+
+    _miembrosInferioresSuperioresController.text =
+        (widget.examen.miembrosInferioresSuperiores != null)
+            ? widget.examen.miembrosInferioresSuperiores
+            : 'Sin alteraciones';
+
+    _narizController.text = (widget.examen.nariz != null)
+        ? widget.examen.nariz
+        : 'Sin alteraciones';
   }
 
   @override
@@ -94,6 +127,10 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
     _pielFanerasController.dispose();
     _genitalesController.dispose();
     _neuroligicoController.dispose();
+    _bocaController.dispose();
+    _columnaVertebralController.dispose();
+    _miembrosInferioresSuperioresController.dispose();
+    _narizController.dispose();
     super.dispose();
   }
 
@@ -135,7 +172,6 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
                     items: [
                       _formParte1(context),
                       _formParte2(context),
-                      _formParte3(context),
                     ])),
             floatingActionButton: UnicornDialer(
                 backgroundColor: Color.fromRGBO(255, 255, 255, 0.6),
@@ -158,7 +194,9 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
       backgroundColor: Colors.redAccent,
       mini: true,
       child: Icon(Icons.delete),
-      onPressed: () => _confirmDesactivar(context),
+      onPressed: () => (widget.examen.examenFisicoId != 0)
+          ? _confirmDesactivar(context)
+          : null,
     )));
 
     childButtons.add(UnicornButton(
@@ -187,10 +225,19 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
         content: Column(
           children: <Widget>[
             _campoAspectoGeneral(),
+            _campoPielFaneras(),
             _campoCabeza(),
-            _campoCuello(),
             _campoOidos(),
             _campoOjos(),
+            _campoNariz(),
+            _campoBoca(),
+            _campoCuello(),
+            _campoTorax(),
+            _campoAbdomen(),
+            _campoColumnaVertebral(),
+            _campoMiembrosInferioresSuperiores(),
+            _campoGenitales(),
+            _campoNeurologico(),
           ],
         ),
       ),
@@ -211,32 +258,12 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
             icon: FaIcon(FontAwesomeIcons.user, color: Colors.white)),
         content: Column(
           children: <Widget>[
-            // 2
+            _campoCuello(),
             _campoTorax(),
             _campoAbdomen(),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _formParte3(BuildContext context) {
-    return SingleChildScrollView(
-      child: GFCard(
-        elevation: 6.0,
-        title: GFListTile(
-            color: Colors.red,
-            title: Text('Examen físico - página 3',
-                style: TextStyle(
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white)),
-            icon: FaIcon(FontAwesomeIcons.user, color: Colors.white)),
-        content: Column(
-          children: <Widget>[
-            // 3
+            _campoColumnaVertebral(),
+            _campoMiembrosInferioresSuperiores(),
             _campoGenitales(),
-            _campoPielFaneras(),
             _campoNeurologico(),
           ],
         ),
@@ -254,6 +281,7 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
     return Padding(
       padding: EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
+        maxLines: 2,
         controller: _aspectoGeneralController,
         onSaved: (value) => widget.examen.aspectoGeneral = value,
         keyboardType: TextInputType.text,
@@ -262,10 +290,24 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
     );
   }
 
+  Widget _campoNariz() {
+    return Padding(
+      padding: EdgeInsets.only(left: 8.0, right: 8.0),
+      child: TextFormField(
+        maxLines: 2,
+        controller: _narizController,
+        onSaved: (value) => widget.examen.nariz = value,
+        keyboardType: TextInputType.text,
+        decoration: inputsDecorations('Nariz', Icons.person_outline),
+      ),
+    );
+  }
+
   Widget _campoCabeza() {
     return Padding(
       padding: EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
+        maxLines: 2,
         controller: _cabezaController,
         onSaved: (value) => widget.examen.cabeza = value,
         keyboardType: TextInputType.text,
@@ -278,6 +320,7 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
     return Padding(
       padding: EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
+        maxLines: 2,
         controller: _oidosController,
         onSaved: (value) => widget.examen.oidos = value,
         keyboardType: TextInputType.text,
@@ -290,6 +333,7 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
     return Padding(
       padding: EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
+        maxLines: 2,
         controller: _ojosController,
         onSaved: (value) => widget.examen.ojos = value,
         keyboardType: TextInputType.text,
@@ -298,10 +342,38 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
     );
   }
 
+  Widget _campoMiembrosInferioresSuperiores() {
+    return Padding(
+      padding: EdgeInsets.only(left: 8.0, right: 8.0),
+      child: TextFormField(
+        maxLines: 2,
+        controller: _miembrosInferioresSuperioresController,
+        onSaved: (value) => widget.examen.miembrosInferioresSuperiores = value,
+        keyboardType: TextInputType.text,
+        decoration: inputsDecorations(
+            'Miembros inferiores y superiores', Icons.person_outline),
+      ),
+    );
+  }
+
+  Widget _campoBoca() {
+    return Padding(
+      padding: EdgeInsets.only(left: 8.0, right: 8.0),
+      child: TextFormField(
+        maxLines: 2,
+        controller: _bocaController,
+        onSaved: (value) => widget.examen.boca = value,
+        keyboardType: TextInputType.text,
+        decoration: inputsDecorations('Boca', Icons.person_outline),
+      ),
+    );
+  }
+
   Widget _campoCuello() {
     return Padding(
       padding: EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
+        maxLines: 2,
         controller: _cuelloController,
         onSaved: (value) => widget.examen.cuello = value,
         keyboardType: TextInputType.text,
@@ -314,6 +386,7 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
     return Padding(
       padding: EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
+        maxLines: 2,
         controller: _toraxController,
         onSaved: (value) => widget.examen.torax = value,
         keyboardType: TextInputType.text,
@@ -326,6 +399,7 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
     return Padding(
       padding: EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
+        maxLines: 2,
         controller: _abdomenController,
         onSaved: (value) => widget.examen.abdomen = value,
         keyboardType: TextInputType.text,
@@ -334,14 +408,29 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
     );
   }
 
+  Widget _campoColumnaVertebral() {
+    return Padding(
+      padding: EdgeInsets.only(left: 8.0, right: 8.0),
+      child: TextFormField(
+        maxLines: 2,
+        controller: _columnaVertebralController,
+        onSaved: (value) => widget.examen.columnaVertebralRegionLumbar = value,
+        keyboardType: TextInputType.text,
+        decoration: inputsDecorations(
+            'Columna vertebral region lumbar', Icons.person_outline),
+      ),
+    );
+  }
+
   Widget _campoPielFaneras() {
     return Padding(
       padding: EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
+        maxLines: 2,
         controller: _pielFanerasController,
         onSaved: (value) => widget.examen.pielFaneras = value,
         keyboardType: TextInputType.text,
-        decoration: inputsDecorations('Piel foneras', Icons.person_outline),
+        decoration: inputsDecorations('Piel faneras', Icons.person_outline),
       ),
     );
   }
@@ -350,6 +439,7 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
     return Padding(
       padding: EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
+        maxLines: 2,
         controller: _genitalesController,
         onSaved: (value) => widget.examen.genitales = value,
         keyboardType: TextInputType.text,
@@ -362,6 +452,7 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
     return Padding(
       padding: EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
+        maxLines: 2,
         controller: _neuroligicoController,
         onSaved: (value) => widget.examen.neurologico = value,
         keyboardType: TextInputType.text,
@@ -397,7 +488,11 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
         _abdomenController.text.isEmpty &&
         _pielFanerasController.text.isEmpty &&
         _genitalesController.text.isEmpty &&
-        _neuroligicoController.text.isEmpty) {
+        _neuroligicoController.text.isEmpty &&
+        _bocaController.text.isEmpty &&
+        _columnaVertebralController.text.isEmpty &&
+        _miembrosInferioresSuperioresController.text.isEmpty &&
+        _narizController.text.isEmpty) {
       mostrarFlushBar(context, Colors.black, 'Info',
           'El formulario no puede estar vacio', 3, Icons.info, Colors.white);
     } else {
@@ -443,6 +538,12 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
     widget.examen.pielFaneras = _pielFanerasController.text;
     widget.examen.genitales = _genitalesController.text;
     widget.examen.neurologico = _neuroligicoController.text;
+    widget.examen.boca = _bocaController.text;
+    widget.examen.columnaVertebralRegionLumbar =
+        _columnaVertebralController.text;
+    widget.examen.miembrosInferioresSuperiores =
+        _miembrosInferioresSuperioresController.text;
+    widget.examen.nariz = _narizController.text;
   }
 
   void limpiar() {
@@ -457,6 +558,10 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
     _pielFanerasController.text = '';
     _genitalesController.text = '';
     _neuroligicoController.text = '';
+    _bocaController.text = '';
+    _columnaVertebralController.text = '';
+    _miembrosInferioresSuperioresController.text = '';
+    _narizController.text = '';
   }
 
   void _confirmDesactivar(BuildContext context) {
