@@ -36,6 +36,7 @@ class FormPacientesBloc with Validators {
   final _identificacionPadreController = BehaviorSubject<String>();
   final _carneVacunaController = BehaviorSubject<String>();
   final _notasController = BehaviorSubject<String>();
+  final _emailController = BehaviorSubject<String>();
 
   final _formController = BehaviorSubject<FormState>();
 
@@ -80,6 +81,7 @@ class FormPacientesBloc with Validators {
       _identificacionPadreController.stream;
   Stream<String> get carneVacunaStream => _carneVacunaController.stream;
   Stream<String> get notasStream => _notasController.stream;
+  Stream<String> get emailStream => _emailController.stream;
 
   Stream<FormState> get formStream => _formController.stream;
 
@@ -128,6 +130,7 @@ class FormPacientesBloc with Validators {
       _identificacionPadreController.sink.add;
   Function(String) get onChangeCarneVacuna => _carneVacunaController.sink.add;
   Function(String) get onChangeNotas => _notasController.sink.add;
+  Function(String) get onChangeEmail => _emailController.sink.add;
 
   Function(FormState) get onChangeForm => _formController.sink.add;
 
@@ -165,6 +168,7 @@ class FormPacientesBloc with Validators {
     _carneVacunaController?.close();
     _notasController?.close();
     _formController?.close();
+    _emailController?.close();
   }
 
   int get paisId => _paisIdController.value;
@@ -197,4 +201,5 @@ class FormPacientesBloc with Validators {
   String get identificacionPadre => _identificacionPadreController.value;
   String get carneVacuna => _carneVacunaController.value;
   String get notas => _notasController.value;
+  String get email => _emailController.value;
 }

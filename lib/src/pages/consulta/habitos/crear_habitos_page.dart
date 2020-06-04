@@ -25,10 +25,6 @@ class _CrearHabitosPageState extends State<CrearHabitosPage> {
       usuarioModelFromJson(StorageUtil.getString('usuarioGlobal'));
   final _habitosBloc = new HabitosBloc();
 
-  final TextEditingController _tazasCafeController =
-      new TextEditingController();
-  final TextEditingController _cantidadCigarrosController =
-      new TextEditingController();
   final TextEditingController _notasController = new TextEditingController();
 
   Future<Habitos> _habitosFuture;
@@ -91,19 +87,21 @@ class _CrearHabitosPageState extends State<CrearHabitosPage> {
 
                     _habitos.cafe = x.cafe;
                     _habitos.cigarrillo = x.cigarrillo;
-                    _habitos.tazasCafe = x.tazasCafe;
-                    _habitos.cantidadCigarrillo = x.cantidadCigarrillo;
+                    _habitos.alcohol = x.alcohol;
+                    _habitos.drogasEstupefaciente = x.drogasEstupefaciente;
                     _habitosBloc.onChangeConsumeCafe(_habitos.cafe);
                     _habitosBloc.onChangeConsumeCigarrillo(_habitos.cigarrillo);
+                    _habitosBloc.onChangeConsumeAlcohol(_habitos.alcohol);
+                    _habitosBloc
+                        .onChangeConsumeDrogas(_habitos.drogasEstupefaciente);
 
-                    _tazasCafeController.text = x.tazasCafe.toString();
-                    _cantidadCigarrosController.text =
-                        x.cantidadCigarrillo.toString();
                     _notasController.text = x.notas;
                     return _habitosForm(context);
                   } else {
                     _habitosBloc.onChangeConsumeCafe(false);
                     _habitosBloc.onChangeConsumeCigarrillo(false);
+                    _habitosBloc.onChangeConsumeAlcohol(false);
+                    _habitosBloc.onChangeConsumeDrogas(false);
                     _habitosBloc.onChangeLabelBoton('Guardar');
                     _habitos.habitoId = 0;
                     _habitos.activo = true;
@@ -114,10 +112,9 @@ class _CrearHabitosPageState extends State<CrearHabitosPage> {
 
                     _habitos.cafe = _habitosBloc.consumeCafe;
                     _habitos.cigarrillo = _habitosBloc.consumeCigarrillo;
-                    _habitos.tazasCafe = 0;
-                    _habitos.cantidadCigarrillo = 0;
-                    _tazasCafeController.text = '0';
-                    _cantidadCigarrosController.text = '0';
+                    _habitos.alcohol = _habitosBloc.consumeAlcohol;
+                    _habitos.drogasEstupefaciente =
+                        _habitos.drogasEstupefaciente;
                     _notasController.text = '';
                     return _habitosForm(context);
                   }
@@ -150,9 +147,9 @@ class _CrearHabitosPageState extends State<CrearHabitosPage> {
                 child: Column(
                   children: <Widget>[
                     _campoConsumeCafe(),
-                    _campoTazasCafe(),
+                    _campoConsumeAlcohol(),
                     _campoConsumeCigarrillos(),
-                    _campoCantidadCigarros(),
+                    _campoConsumeDroga(),
                     _campoNotas(),
                     _crearBotones(context)
                   ],
@@ -168,15 +165,11 @@ class _CrearHabitosPageState extends State<CrearHabitosPage> {
       stream: _habitosBloc.consumeCafeStream,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         return SwitchListTile(
-            title: Text('Consume usted café'),
+            title: Text('Café'),
             value: _habitosBloc.consumeCafe,
             onChanged: (value) {
               _habitosBloc.onChangeConsumeCafe(value);
               _habitos.cafe = value;
-              if (!value) {
-                _tazasCafeController.text = '0';
-                _habitos.tazasCafe = 0;
-              }
             });
       },
     );
@@ -187,54 +180,42 @@ class _CrearHabitosPageState extends State<CrearHabitosPage> {
       stream: _habitosBloc.consumeCigarrilloStream,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         return SwitchListTile(
-            title: Text('Consume usted cigarrillos'),
+            title: Text('Cigarrillos'),
             value: _habitosBloc.consumeCigarrillo,
             onChanged: (value) {
               _habitosBloc.onChangeConsumeCigarrillo(value);
               _habitos.cigarrillo = value;
-              if (!value) {
-                _cantidadCigarrosController.text = '0';
-                _habitos.cantidadCigarrillo = 0;
-              }
             });
       },
     );
   }
 
-  Widget _campoTazasCafe() {
+  Widget _campoConsumeAlcohol() {
     return StreamBuilder(
-      stream: _habitosBloc.consumeCafeStream,
+      stream: _habitosBloc.consumeAlcoholStream,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
-        return Padding(
-          padding: EdgeInsets.only(left: 8.0, right: 8.0),
-          child: TextFormField(
-            controller: _tazasCafeController,
-            onSaved: (value) => _habitos.tazasCafe = int.parse(value),
-            keyboardType: TextInputType.number,
-            decoration: inputsDecorations(
-                'Numero de tazas de café', Icons.free_breakfast),
-            enabled: _habitosBloc.consumeCafe,
-          ),
-        );
+        return SwitchListTile(
+            title: Text('Consume Alcohol'),
+            value: _habitosBloc.consumeAlcohol,
+            onChanged: (value) {
+              _habitosBloc.onChangeConsumeAlcohol(value);
+              _habitos.alcohol = value;
+            });
       },
     );
   }
 
-  Widget _campoCantidadCigarros() {
+  Widget _campoConsumeDroga() {
     return StreamBuilder(
-      stream: _habitosBloc.consumeCigarrilloStream,
+      stream: _habitosBloc.consumeDrograsStream,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
-        return Padding(
-          padding: EdgeInsets.only(left: 8.0, right: 8.0),
-          child: TextFormField(
-            controller: _cantidadCigarrosController,
-            onSaved: (value) => _habitos.cantidadCigarrillo = int.parse(value),
-            keyboardType: TextInputType.number,
-            decoration: inputsDecorations(
-                'Cantidad de cigarrillos', Icons.smoking_rooms),
-            enabled: _habitosBloc.consumeCigarrillo,
-          ),
-        );
+        return SwitchListTile(
+            title: Text('Consume Drogas'),
+            value: _habitosBloc.consumeDrogas,
+            onChanged: (value) {
+              _habitosBloc.onChangeConsumeDrogas(value);
+              _habitos.drogasEstupefaciente = value;
+            });
       },
     );
   }
@@ -315,10 +296,9 @@ class _CrearHabitosPageState extends State<CrearHabitosPage> {
       _habitos.modificadoFecha = _habitosGuardado.modificadoFecha;
       _habitosBloc.onChangeConsumeCafe(_habitosGuardado.cafe);
       _habitosBloc.onChangeConsumeCigarrillo(_habitosGuardado.cigarrillo);
+      _habitosBloc.onChangeConsumeAlcohol(_habitosGuardado.alcohol);
+      _habitosBloc.onChangeConsumeDrogas(_habitosGuardado.drogasEstupefaciente);
 
-      _tazasCafeController.text = _habitosGuardado.tazasCafe.toString();
-      _cantidadCigarrosController.text =
-          _habitosGuardado.cantidadCigarrillo.toString();
       _habitos.notas = _habitosGuardado.notas;
       _habitosBloc.onChangeLabelBoton('Editar');
     } else {

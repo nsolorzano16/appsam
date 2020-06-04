@@ -60,8 +60,6 @@ class PacientesService {
 
     final resp = await http.put(url,
         headers: headers, body: pacientesViewModelToJson(paciente));
-    print(pacientesViewModelToJson(paciente));
-    print('asdasd');
 
     if (resp.statusCode == 200 && resp.body.isNotEmpty) {
       final decodedData = json.decode(resp.body);

@@ -27,8 +27,8 @@ class _CrearAsistentesPageState extends State<CrearAsistentesPage> {
   String _sexo = 'M';
   DateTime picked;
   TextEditingController _inputFieldDateController = new TextEditingController();
-  TextEditingController _controllerUsuario = new TextEditingController();
   TextEditingController _txtControllerPass = new TextEditingController();
+  TextEditingController _controllerUsuario = new TextEditingController();
   TextEditingController _txtControllerNombres = new TextEditingController();
   TextEditingController _txtControllerPrimerApellido =
       new TextEditingController();
@@ -264,10 +264,13 @@ class _CrearAsistentesPageState extends State<CrearAsistentesPage> {
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
+        autovalidate: true,
+        validator: validaTexto,
         inputFormatters: [mask],
         keyboardType: TextInputType.number,
+        maxLength: 7,
         decoration:
-            inputsDecorations('Numero Colegiado', Icons.confirmation_number),
+            inputsDecorations('Numero Colegiado', FontAwesomeIcons.hashtag),
         onSaved: (value) => _asistente.colegioNumero = value,
       ),
     );
@@ -277,6 +280,7 @@ class _CrearAsistentesPageState extends State<CrearAsistentesPage> {
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
+        autovalidate: true,
         validator: validateEmail,
         keyboardType: TextInputType.emailAddress,
         decoration: inputsDecorations('Email', Icons.email),
@@ -291,7 +295,6 @@ class _CrearAsistentesPageState extends State<CrearAsistentesPage> {
       child: TextFormField(
         autovalidate: true,
         validator: validaTexto,
-        readOnly: true,
         controller: _controllerUsuario,
         keyboardType: TextInputType.text,
         decoration: InputDecoration(
@@ -445,73 +448,63 @@ class _CrearAsistentesPageState extends State<CrearAsistentesPage> {
                       borderRadius: BorderRadius.circular(20.0)),
                   icon: Icon(Icons.save),
                   label: Text('Guardar'),
-                  onPressed: () async {
-                    if (!_formKey.currentState.validate()) {
-                      mostrarFlushBar(
-                          context,
-                          Colors.redAccent,
-                          'Información',
-                          'Rellene todos los campos',
-                          2,
-                          Icons.info,
-                          Colors.black);
-                    } else {
-                      _formKey.currentState.save();
-                      final ProgressDialog _pr = new ProgressDialog(
-                        context,
-                        type: ProgressDialogType.Normal,
-                        isDismissible: false,
-                        showLogs: false,
-                      );
-                      _pr.update(
-                        progress: 50.0,
-                        message: "Espere...",
-                        progressWidget: Container(
-                            padding: EdgeInsets.all(8.0),
-                            child: CircularProgressIndicator()),
-                        maxProgress: 100.0,
-                        progressTextStyle: TextStyle(
-                            color: Colors.black,
-                            fontSize: 13.0,
-                            fontWeight: FontWeight.w400),
-                        messageTextStyle: TextStyle(
-                            color: Colors.black,
-                            fontSize: 19.0,
-                            fontWeight: FontWeight.w600),
-                      );
-                      await _pr.show();
-                      _asistente.fechaNacimiento = picked;
-                      _asistente.identificacion =
-                          maskIdentificacion.getMaskedText();
-                      print(usuarioModelToJson(_asistente));
-                      final resp = await bloc.addUser(_asistente);
-                      await _pr.hide();
-                      if (resp) {
-                        _formKey.currentState.reset();
-                        _txtControllerIdentificacion.text = '';
-
-                        _txtControllerNombres.text = '';
-                        _txtControllerPass.text = '';
-                        _txtControllerPrimerApellido.text = '';
-                        _controllerUsuario.text = '';
-                        _inputFieldDateController.text = '';
-                        Navigator.pushReplacementNamed(context, 'asistentes');
-                      } else {
-                        mostrarFlushBar(
-                            context,
-                            Colors.red,
-                            'Info',
-                            'Ha ocurrido un error o el usuario ya existe, revise el correo,identificación, nombre de usuario, ó email.',
-                            4,
-                            Icons.info,
-                            Colors.white);
-                      }
-                    }
-                  }))
+                  onPressed: () => _guardar(_asistente, bloc)))
         ],
       );
     } else {
       return Container();
+    }
+  }
+
+  void _guardar(UsuarioModel _asistente, CrearEditarAsistentesBloc bloc) async {
+    if (!_formKey.currentState.validate()) {
+      mostrarFlushBar(context, Colors.redAccent, 'Información',
+          'Rellene todos los campos', 2, Icons.info, Colors.black);
+    } else {
+      _formKey.currentState.save();
+      final ProgressDialog _pr = new ProgressDialog(
+        context,
+        type: ProgressDialogType.Normal,
+        isDismissible: false,
+        showLogs: false,
+      );
+      _pr.update(
+        progress: 50.0,
+        message: "Espere...",
+        progressWidget: Container(
+            padding: EdgeInsets.all(8.0), child: CircularProgressIndicator()),
+        maxProgress: 100.0,
+        progressTextStyle: TextStyle(
+            color: Colors.black, fontSize: 13.0, fontWeight: FontWeight.w400),
+        messageTextStyle: TextStyle(
+            color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600),
+      );
+      await _pr.show();
+      _asistente.fechaNacimiento = picked;
+      _asistente.identificacion = maskIdentificacion.getMaskedText();
+      print(usuarioModelToJson(_asistente));
+      final resp = await bloc.addUser(_asistente);
+      await _pr.hide();
+      if (resp) {
+        _formKey.currentState.reset();
+        _txtControllerIdentificacion.text = '';
+
+        _txtControllerNombres.text = '';
+        _txtControllerPass.text = '';
+        _txtControllerPrimerApellido.text = '';
+        _controllerUsuario.text = '';
+        _inputFieldDateController.text = '';
+        Navigator.pushReplacementNamed(context, 'asistentes');
+      } else {
+        mostrarFlushBar(
+            context,
+            Colors.red,
+            'Info',
+            'Ha ocurrido un error o el usuario ya existe, revise el correo,identificación, usuario, colegio numero, ó email.',
+            5,
+            Icons.info,
+            Colors.white);
+      }
     }
   }
 }

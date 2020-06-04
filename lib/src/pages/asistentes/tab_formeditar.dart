@@ -1,4 +1,3 @@
-import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:getflutter/getflutter.dart';
@@ -23,6 +22,11 @@ class _FormEditarPageState extends State<FormEditarPage> {
   TextEditingController _txtControllerIdentificacion =
       new TextEditingController();
 
+  TextEditingController _controllerUsuario = new TextEditingController();
+  TextEditingController _txtControllerNombres = new TextEditingController();
+  TextEditingController _txtControllerPrimerApellido =
+      new TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     final UsuarioModel _asistente = ModalRoute.of(context).settings.arguments;
@@ -33,7 +37,13 @@ class _FormEditarPageState extends State<FormEditarPage> {
         mask: '####-####', filter: {"#": RegExp(r'[0-9]')});
     MaskTextInputFormatter maskNumeroColegiado = new MaskTextInputFormatter(
         mask: '#######', filter: {"#": RegExp(r'[0-9]')});
+    MaskTextInputFormatter maskIdentificacion = new MaskTextInputFormatter(
+        mask: '#############', filter: {"#": RegExp(r'[0-9]')});
     final bloc = new CrearEditarAsistentesBloc();
+    _txtControllerIdentificacion.text = _asistente.identificacion;
+    _txtControllerNombres.text = _asistente.nombres;
+    _txtControllerPrimerApellido.text = _asistente.primerApellido;
+    _controllerUsuario.text = _asistente.userName;
 
     return SingleChildScrollView(
       child: Form(
@@ -56,7 +66,7 @@ class _FormEditarPageState extends State<FormEditarPage> {
                 _espacio(),
                 _crearCampoSegundoAppellido(_asistente),
                 _espacio(),
-                _crearCampoIdentificacion(_asistente),
+                _crearCampoIdentificacion(_asistente, maskIdentificacion),
                 _espacio(),
                 _crearFecha(context, _asistente),
                 _espacio(),
@@ -80,6 +90,7 @@ class _FormEditarPageState extends State<FormEditarPage> {
                 _crearCampoColegioNumero(_asistente, maskNumeroColegiado),
                 _espacio(),
                 _crearCampoEmail(_asistente),
+                _crearCampoUsuario(_asistente),
                 _espacio(),
                 _crearCampoNotas(_asistente),
                 _espacio(),
@@ -111,62 +122,58 @@ class _FormEditarPageState extends State<FormEditarPage> {
                                 borderRadius: BorderRadius.circular(20.0)),
                             icon: Icon(Icons.save),
                             label: Text('Guardar'),
-                            onPressed: () async {
-                              if (!_formKey.currentState.validate()) {
-                                Flushbar(
-                                  title: 'Información',
-                                  message: 'Rellene todos los campos',
-                                  duration: Duration(seconds: 2),
-                                  icon: Icon(
-                                    Icons.info,
-                                  ),
-                                )..show(context);
-                              } else {
-                                _formKey.currentState.save();
-                                _asistente.identificacion =
-                                    _txtControllerIdentificacion.text;
-                                final ProgressDialog _pr = new ProgressDialog(
-                                  context,
-                                  type: ProgressDialogType.Normal,
-                                  isDismissible: false,
-                                  showLogs: false,
-                                );
-                                _pr.update(
-                                  progress: 50.0,
-                                  message: "Espere...",
-                                  progressWidget: Container(
-                                      padding: EdgeInsets.all(8.0),
-                                      child: CircularProgressIndicator()),
-                                  maxProgress: 100.0,
-                                  progressTextStyle: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 13.0,
-                                      fontWeight: FontWeight.w400),
-                                  messageTextStyle: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 19.0,
-                                      fontWeight: FontWeight.w600),
-                                );
-                                await _pr.show();
-                                bloc.updateUser(_asistente).then((user) async {
-                                  await _pr.hide();
-                                  Navigator.pushReplacementNamed(
-                                      context, 'asistente_detalle',
-                                      arguments: user);
-                                });
-                                // Timer(Duration(seconds: 2), () {
-
-                                //   // Navigator.pushReplacementNamed(
-                                //   //     context, 'asistente_detalle');
-                                // });
-                              }
-                            }))
+                            onPressed: () => _guardar(_asistente, bloc)))
                   ],
                 )
               ],
             ),
           )),
     );
+  }
+
+  void _guardar(UsuarioModel _asistente, CrearEditarAsistentesBloc bloc) async {
+    if (!_formKey.currentState.validate()) {
+      mostrarFlushBar(context, Colors.black, 'Info',
+          'El formulario no puede estar vacio', 3, Icons.info, Colors.white);
+    } else {
+      _formKey.currentState.save();
+      _asistente.identificacion = _txtControllerIdentificacion.text;
+      final ProgressDialog _pr = new ProgressDialog(
+        context,
+        type: ProgressDialogType.Normal,
+        isDismissible: false,
+        showLogs: false,
+      );
+      _pr.update(
+        progress: 50.0,
+        message: "Espere...",
+        progressWidget: Container(
+            padding: EdgeInsets.all(8.0), child: CircularProgressIndicator()),
+        maxProgress: 100.0,
+        progressTextStyle: TextStyle(
+            color: Colors.black, fontSize: 13.0, fontWeight: FontWeight.w400),
+        messageTextStyle: TextStyle(
+            color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600),
+      );
+      await _pr.show();
+      final user = await bloc.updateUser(_asistente);
+
+      if (user != null) {
+        await _pr.hide();
+        Navigator.pushReplacementNamed(context, 'asistente_detalle',
+            arguments: user);
+      } else {
+        await _pr.hide();
+        mostrarFlushBar(
+            context,
+            Colors.red,
+            'Info',
+            'Ha ocurrido un error o el usuario ya existe, revise el correo,identificación, usuario, colegio numero, ó email.',
+            4,
+            Icons.info,
+            Colors.white);
+      }
+    }
   }
 
   String validateEmail(String value) {
@@ -181,7 +188,7 @@ class _FormEditarPageState extends State<FormEditarPage> {
 
   String validaTexto(String value) {
     if (value.length < 3) {
-      return 'mas de 3 caracteres';
+      return 'Campo obligatorio';
     } else {
       return null;
     }
@@ -192,8 +199,8 @@ class _FormEditarPageState extends State<FormEditarPage> {
       padding: const EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
         autovalidate: true,
+        controller: _txtControllerNombres,
         validator: validaTexto,
-        initialValue: _asistente.nombres,
         decoration: inputsDecorations('Nombres', Icons.person),
         onSaved: (value) => _asistente.nombres = value,
       ),
@@ -205,8 +212,8 @@ class _FormEditarPageState extends State<FormEditarPage> {
       padding: const EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
         autovalidate: true,
+        controller: _txtControllerPrimerApellido,
         validator: validaTexto,
-        initialValue: _asistente.primerApellido,
         decoration: inputsDecorations('Primer Apellido', Icons.person),
         onSaved: (value) => _asistente.primerApellido = value,
       ),
@@ -232,14 +239,22 @@ class _FormEditarPageState extends State<FormEditarPage> {
     );
   }
 
-  _crearCampoIdentificacion(UsuarioModel _asistente) {
-    _txtControllerIdentificacion.text = _asistente.identificacion;
+  _crearCampoIdentificacion(
+      UsuarioModel _asistente, MaskTextInputFormatter mask) {
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
         controller: _txtControllerIdentificacion,
         autovalidate: true,
-        readOnly: true,
+        maxLength: 13,
+        inputFormatters: [mask],
+        validator: (value) {
+          if (value.length < 13) {
+            return 'Campo obligatorio';
+          } else {
+            return null;
+          }
+        },
         keyboardType: TextInputType.number,
         decoration: inputsDecorations('Identificación', Icons.credit_card),
         onSaved: (value) => _asistente.identificacion = value,
@@ -288,12 +303,49 @@ class _FormEditarPageState extends State<FormEditarPage> {
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
+        autovalidate: true,
+        validator: validaTexto,
+        maxLength: 7,
         inputFormatters: [mask],
         decoration:
-            inputsDecorations('Numero Colegiado', Icons.confirmation_number),
+            inputsDecorations('Numero Colegiado', FontAwesomeIcons.hashtag),
         initialValue:
             (_asistente.colegioNumero != null) ? _asistente.colegioNumero : '',
         onSaved: (value) => _asistente.colegioNumero = value,
+      ),
+    );
+  }
+
+  Widget _crearCampoUsuario(UsuarioModel _asistente) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+      child: TextFormField(
+        autovalidate: true,
+        validator: validaTexto,
+        controller: _controllerUsuario,
+        keyboardType: TextInputType.text,
+        decoration: InputDecoration(
+          suffixIcon: IconButton(
+              icon: Icon(
+                Icons.replay,
+                color: Colors.blue,
+              ),
+              onPressed: () {
+                final String val = generateUser(
+                    _txtControllerNombres.text,
+                    _txtControllerPrimerApellido.text,
+                    _txtControllerIdentificacion.text);
+                _controllerUsuario.text = val.toLowerCase();
+              }),
+          prefixIcon: Icon(
+            Icons.person,
+            color: Colors.red,
+          ),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
+          labelText: 'Usuario',
+          isDense: true,
+        ),
+        onSaved: (value) => _asistente.userName = value,
       ),
     );
   }

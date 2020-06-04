@@ -1,3 +1,7 @@
+// To parse this JSON data, do
+//
+//     final examenFisico = examenFisicoFromJson(jsonString);
+
 import 'dart:convert';
 
 ExamenFisico examenFisicoFromJson(String str) =>
@@ -6,94 +10,24 @@ ExamenFisico examenFisicoFromJson(String str) =>
 String examenFisicoToJson(ExamenFisico data) => json.encode(data.toJson());
 
 class ExamenFisico {
-  int examenFisicoId;
-  int pacienteId;
-  int doctorId;
-  int preclinicaId;
-  String aspectoGeneral;
-  int edadAparente;
-  String marcha;
-  String orientaciones;
-  String pulso;
-  String pabd;
-  String ptorax;
-  String observaciones;
-  bool dolorAusente;
-  bool dolorPresente;
-  bool dolorPresenteLeve;
-  bool dolorPresenteModerado;
-  bool dolorPresenteSevero;
-  double imc;
-  int pesoIdeal;
-  String interpretacion;
-  bool excesoDePeso;
-  int librasABajar;
-  String cabeza;
-  String oidos;
-  String ojos;
-  String fo;
-  String nariz;
-  String oroFaringe;
-  String cuello;
-  String torax;
-  String mamas;
-  String pulmones;
-  String corazon;
-  String rot;
-  String abdomen;
-  String pielfoneras;
-  String genitales;
-  String rectoProstatico;
-  String miembros;
-  String neurologico;
-  bool activo;
-  String creadoPor;
-  DateTime creadoFecha;
-  String modificadoPor;
-  DateTime modificadoFecha;
-  String notas;
-
   ExamenFisico({
     this.examenFisicoId,
     this.pacienteId,
     this.doctorId,
-    this.preclinicaId,
     this.aspectoGeneral,
-    this.edadAparente,
-    this.marcha,
-    this.orientaciones,
-    this.pulso,
-    this.pabd,
-    this.ptorax,
-    this.observaciones,
-    this.dolorAusente,
-    this.dolorPresente,
-    this.dolorPresenteLeve,
-    this.dolorPresenteModerado,
-    this.dolorPresenteSevero,
-    this.imc,
-    this.pesoIdeal,
-    this.interpretacion,
-    this.excesoDePeso,
-    this.librasABajar,
+    this.pielFaneras,
     this.cabeza,
     this.oidos,
     this.ojos,
-    this.fo,
-    this.nariz,
-    this.oroFaringe,
+    this.boca,
     this.cuello,
     this.torax,
-    this.mamas,
-    this.pulmones,
-    this.corazon,
-    this.rot,
     this.abdomen,
-    this.pielfoneras,
+    this.columnaVertebralRegionLumbar,
+    this.miembrosInferioresSuperiores,
     this.genitales,
-    this.rectoProstatico,
-    this.miembros,
     this.neurologico,
+    this.preclinicaId,
     this.activo,
     this.creadoPor,
     this.creadoFecha,
@@ -102,103 +36,74 @@ class ExamenFisico {
     this.notas,
   });
 
+  int examenFisicoId;
+  int pacienteId;
+  int doctorId;
+  String aspectoGeneral;
+  String pielFaneras;
+  String cabeza;
+  String oidos;
+  String ojos;
+  String boca;
+  String cuello;
+  String torax;
+  String abdomen;
+  String columnaVertebralRegionLumbar;
+  String miembrosInferioresSuperiores;
+  String genitales;
+  String neurologico;
+  int preclinicaId;
+  bool activo;
+  String creadoPor;
+  DateTime creadoFecha;
+  String modificadoPor;
+  DateTime modificadoFecha;
+  String notas;
+
   factory ExamenFisico.fromJson(Map<String, dynamic> json) => ExamenFisico(
         examenFisicoId: json["examenFisicoId"],
         pacienteId: json["pacienteId"],
         doctorId: json["doctorId"],
+        aspectoGeneral: json["aspectoGeneral"],
+        pielFaneras: json["pielFaneras"],
+        cabeza: json["cabeza"],
+        oidos: json["oidos"],
+        ojos: json["ojos"],
+        boca: json["boca"],
+        cuello: json["cuello"],
+        torax: json["torax"],
+        abdomen: json["abdomen"],
+        columnaVertebralRegionLumbar: json["columnaVertebralRegionLumbar"],
+        miembrosInferioresSuperiores: json["miembrosInferioresSuperiores"],
+        genitales: json["genitales"],
+        neurologico: json["neurologico"],
         preclinicaId: json["preclinicaId"],
-        aspectoGeneral:
-            json["aspectoGeneral"] == null ? null : json["aspectoGeneral"],
-        edadAparente:
-            json["edadAparente"] == null ? null : json["edadAparente"],
-        marcha: json["marcha"] == null ? null : json["marcha"],
-        orientaciones:
-            json["orientaciones"] == null ? null : json["orientaciones"],
-        pulso: json["pulso"] == null ? null : json["pulso"],
-        pabd: json["pabd"] == null ? null : json["pabd"],
-        ptorax: json["ptorax"] == null ? null : json["ptorax"],
-        observaciones:
-            json["observaciones"] == null ? null : json["observaciones"],
-        dolorAusente: json["dolorAusente"],
-        dolorPresente: json["dolorPresente"],
-        dolorPresenteLeve: json["dolorPresenteLeve"],
-        dolorPresenteModerado: json["dolorPresenteModerado"],
-        dolorPresenteSevero: json["dolorPresenteSevero"],
-        imc: json["imc"] == null ? null : json["imc"].toDouble(),
-        pesoIdeal: json["pesoIdeal"] == null ? 0 : json["pesoIdeal"],
-        interpretacion:
-            json["interpretacion"] == null ? null : json["interpretacion"],
-        excesoDePeso:
-            json["excesoDePeso"] == null ? null : json["excesoDePeso"],
-        librasABajar: json["librasABajar"] == null ? 0 : json["librasABajar"],
-        cabeza: json["cabeza"] == null ? null : json["cabeza"],
-        oidos: json["oidos"] == null ? null : json["oidos"],
-        ojos: json["ojos"] == null ? null : json["ojos"],
-        fo: json["fo"] == null ? null : json["fo"],
-        nariz: json["nariz"] == null ? null : json["nariz"],
-        oroFaringe: json["oroFaringe"] == null ? null : json["oroFaringe"],
-        cuello: json["cuello"] == null ? null : json["cuello"],
-        torax: json["torax"] == null ? null : json["torax"],
-        mamas: json["mamas"] == null ? null : json["mamas"],
-        pulmones: json["pulmones"] == null ? null : json["pulmones"],
-        corazon: json["corazon"] == null ? null : json["corazon"],
-        rot: json["rot"] == null ? null : json["rot"],
-        abdomen: json["abdomen"] == null ? null : json["abdomen"],
-        pielfoneras: json["pielfoneras"] == null ? null : json["pielfoneras"],
-        genitales: json["genitales"] == null ? null : json["genitales"],
-        rectoProstatico:
-            json["rectoProstatico"] == null ? null : json["rectoProstatico"],
-        miembros: json["miembros"] == null ? null : json["miembros"],
-        neurologico: json["neurologico"] == null ? null : json["neurologico"],
         activo: json["activo"],
         creadoPor: json["creadoPor"],
         creadoFecha: DateTime.parse(json["creadoFecha"]),
         modificadoPor: json["modificadoPor"],
         modificadoFecha: DateTime.parse(json["modificadoFecha"]),
-        notas: json["notas"] == null ? null : json["notas"],
+        notas: json["notas"],
       );
 
   Map<String, dynamic> toJson() => {
         "examenFisicoId": examenFisicoId,
         "pacienteId": pacienteId,
         "doctorId": doctorId,
-        "preclinicaId": preclinicaId,
         "aspectoGeneral": aspectoGeneral,
-        "edadAparente": edadAparente,
-        "marcha": marcha,
-        "orientaciones": orientaciones,
-        "pulso": pulso,
-        "pabd": pabd,
-        "ptorax": ptorax,
-        "observaciones": observaciones,
-        "dolorAusente": dolorAusente,
-        "dolorPresente": dolorPresente,
-        "dolorPresenteLeve": dolorPresenteLeve,
-        "dolorPresenteModerado": dolorPresenteModerado,
-        "dolorPresenteSevero": dolorPresenteSevero,
-        "imc": imc,
-        "pesoIdeal": pesoIdeal,
-        "interpretacion": interpretacion,
-        "excesoDePeso": excesoDePeso,
-        "librasABajar": librasABajar,
+        "pielFaneras": pielFaneras,
         "cabeza": cabeza,
         "oidos": oidos,
         "ojos": ojos,
-        "fo": fo,
-        "nariz": nariz,
-        "oroFaringe": oroFaringe,
+        "boca": boca,
         "cuello": cuello,
         "torax": torax,
-        "mamas": mamas,
-        "pulmones": pulmones,
-        "corazon": corazon,
-        "rot": rot,
         "abdomen": abdomen,
-        "pielfoneras": pielfoneras,
+        "columnaVertebralRegionLumbar": columnaVertebralRegionLumbar,
+        "miembrosInferioresSuperiores": miembrosInferioresSuperiores,
         "genitales": genitales,
-        "rectoProstatico": rectoProstatico,
-        "miembros": miembros,
         "neurologico": neurologico,
+        "preclinicaId": preclinicaId,
         "activo": activo,
         "creadoPor": creadoPor,
         "creadoFecha": creadoFecha.toIso8601String(),

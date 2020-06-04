@@ -704,18 +704,6 @@ class _AccordionHabitos extends StatelessWidget {
                       color: Colors.red,
                       size: 16,
                     ),
-              SizedBox(
-                width: 8.0,
-              ),
-              (_habitos.cafe)
-                  ? Flexible(
-                      child: Text(
-                        'Tazas: ${_habitos.tazasCafe}',
-                        overflow: TextOverflow.ellipsis,
-                        style: estiloDatos,
-                      ),
-                    )
-                  : Text('')
             ],
           ),
           SizedBox(
@@ -725,7 +713,7 @@ class _AccordionHabitos extends StatelessWidget {
           Row(
             children: <Widget>[
               Text(
-                'El paciente fuma:',
+                'El paciente consume cigarrillos:',
               ),
               SizedBox(
                 width: 8.0,
@@ -741,18 +729,50 @@ class _AccordionHabitos extends StatelessWidget {
                       color: Colors.red,
                       size: 16,
                     ),
+            ],
+          ),
+          Divider(),
+          Row(
+            children: <Widget>[
+              Text(
+                'El paciente consume drogas:',
+              ),
               SizedBox(
                 width: 8.0,
               ),
-              (_habitos.cigarrillo)
-                  ? Flexible(
-                      child: Text(
-                        'Cigarrillos: ${_habitos.cantidadCigarrillo}',
-                        overflow: TextOverflow.ellipsis,
-                        style: estiloDatos,
-                      ),
+              (_habitos.drogasEstupefaciente
+                  ? Icon(
+                      Icons.check_circle_outline,
+                      color: Colors.green,
+                      size: 16,
                     )
-                  : Text('')
+                  : Icon(
+                      Icons.close,
+                      color: Colors.red,
+                      size: 16,
+                    )),
+            ],
+          ),
+          Divider(),
+          Row(
+            children: <Widget>[
+              Text(
+                'El paciente consume alcohol:',
+              ),
+              SizedBox(
+                width: 8.0,
+              ),
+              (_habitos.alcohol
+                  ? Icon(
+                      Icons.check_circle_outline,
+                      color: Colors.green,
+                      size: 16,
+                    )
+                  : Icon(
+                      Icons.close,
+                      color: Colors.red,
+                      size: 16,
+                    )),
             ],
           ),
           Divider(),
@@ -1119,180 +1139,6 @@ class _AccordionExamenFisico extends StatelessWidget {
           ),
           Divider(),
           Text(
-            'Edad Aparente:',
-            style: _estiloSubt,
-          ),
-          Text(
-            (_examenFisico.edadAparente != null)
-                ? _examenFisico.edadAparente.toString()
-                : '',
-            textAlign: TextAlign.justify,
-            style: estiloDatos,
-          ),
-          Divider(),
-          Text(
-            'Marcha:',
-            style: _estiloSubt,
-          ),
-          Text(
-            validaNulo(_examenFisico.marcha),
-            textAlign: TextAlign.justify,
-            style: estiloDatos,
-          ),
-          Divider(),
-          Text(
-            'Orientaciones:',
-            style: _estiloSubt,
-          ),
-          Text(
-            validaNulo(_examenFisico.orientaciones),
-            textAlign: TextAlign.justify,
-            style: estiloDatos,
-          ),
-          Divider(),
-          Text(
-            'Pabd:',
-            style: _estiloSubt,
-          ),
-          Text(
-            validaNulo(_examenFisico.pabd),
-            textAlign: TextAlign.justify,
-            style: estiloDatos,
-          ),
-          Divider(),
-          Text(
-            'Ptorax:',
-            style: _estiloSubt,
-          ),
-          Text(
-            validaNulo(_examenFisico.ptorax),
-            textAlign: TextAlign.justify,
-            style: estiloDatos,
-          ),
-          Divider(),
-          Text(
-            'Observaciones:',
-            style: _estiloSubt,
-          ),
-          Text(
-            validaNulo(_examenFisico.observaciones),
-            textAlign: TextAlign.justify,
-            style: estiloDatos,
-          ),
-          Divider(),
-          Table(
-            children: [
-              TableRow(children: [
-                Column(
-                  children: <Widget>[
-                    (_examenFisico.dolorAusente)
-                        ? Icon(Icons.check, color: Colors.green)
-                        : Icon(Icons.close, color: Colors.red),
-                    Text(
-                      'Dolor Ausente',
-                      style: _estiloSubt,
-                    ),
-                    Divider()
-                  ],
-                ),
-                Column(
-                  children: <Widget>[
-                    (_examenFisico.dolorPresente)
-                        ? Icon(Icons.check, color: Colors.green)
-                        : Icon(Icons.close, color: Colors.red),
-                    Text(
-                      'Dolor Presente',
-                      style: _estiloSubt,
-                    ),
-                    Divider()
-                  ],
-                ),
-              ]),
-              TableRow(children: [
-                Column(
-                  children: <Widget>[
-                    (_examenFisico.dolorPresenteLeve)
-                        ? Icon(Icons.check, color: Colors.green)
-                        : Icon(Icons.close, color: Colors.red),
-                    Text(
-                      'Dolor Presente Leve',
-                      style: _estiloSubt,
-                    ),
-                    Divider()
-                  ],
-                ),
-                Column(
-                  children: <Widget>[
-                    (_examenFisico.dolorPresenteModerado)
-                        ? Icon(Icons.check, color: Colors.green)
-                        : Icon(Icons.close, color: Colors.red),
-                    Text(
-                      'Dolor Presente Moderado',
-                      style: _estiloSubt,
-                    ),
-                    Divider()
-                  ],
-                ),
-              ]),
-              TableRow(children: [
-                Column(
-                  children: <Widget>[
-                    (_examenFisico.dolorPresenteSevero)
-                        ? Icon(Icons.check, color: Colors.green)
-                        : Icon(Icons.close, color: Colors.red),
-                    Text(
-                      'Dolor Presente Severo',
-                      style: _estiloSubt,
-                    ),
-                    Divider()
-                  ],
-                ),
-                Column(
-                  children: <Widget>[
-                    (_examenFisico.excesoDePeso)
-                        ? Icon(Icons.check, color: Colors.green)
-                        : Icon(Icons.close, color: Colors.red),
-                    Text(
-                      'Exceso de Peso',
-                      style: _estiloSubt,
-                    ),
-                    Divider()
-                  ],
-                ),
-              ]),
-            ],
-          ),
-          Text(
-            'Peso Ideal:',
-            style: _estiloSubt,
-          ),
-          Text(
-            validaNulo(_examenFisico.pesoIdeal.toString()),
-            textAlign: TextAlign.justify,
-            style: estiloDatos,
-          ),
-          Divider(),
-          Text(
-            'Libras a bajar:',
-            style: _estiloSubt,
-          ),
-          Text(
-            validaNulo(_examenFisico.librasABajar.toString()),
-            textAlign: TextAlign.justify,
-            style: estiloDatos,
-          ),
-          Divider(),
-          Text(
-            'Interpretación:',
-            style: _estiloSubt,
-          ),
-          Text(
-            validaNulo(_examenFisico.interpretacion),
-            textAlign: TextAlign.justify,
-            style: estiloDatos,
-          ),
-          Divider(),
-          Text(
             'Cabeza:',
             style: _estiloSubt,
           ),
@@ -1323,36 +1169,6 @@ class _AccordionExamenFisico extends StatelessWidget {
           ),
           Divider(),
           Text(
-            'Fo:',
-            style: _estiloSubt,
-          ),
-          Text(
-            validaNulo(_examenFisico.fo),
-            textAlign: TextAlign.justify,
-            style: estiloDatos,
-          ),
-          Divider(),
-          Text(
-            'Nariz:',
-            style: _estiloSubt,
-          ),
-          Text(
-            validaNulo(_examenFisico.nariz),
-            textAlign: TextAlign.justify,
-            style: estiloDatos,
-          ),
-          Divider(),
-          Text(
-            'Orofaringe:',
-            style: _estiloSubt,
-          ),
-          Text(
-            validaNulo(_examenFisico.oroFaringe),
-            textAlign: TextAlign.justify,
-            style: estiloDatos,
-          ),
-          Divider(),
-          Text(
             'Cuello:',
             style: _estiloSubt,
           ),
@@ -1373,46 +1189,6 @@ class _AccordionExamenFisico extends StatelessWidget {
           ),
           Divider(),
           Text(
-            'Mamas:',
-            style: _estiloSubt,
-          ),
-          Text(
-            validaNulo(_examenFisico.mamas),
-            textAlign: TextAlign.justify,
-            style: estiloDatos,
-          ),
-          Divider(),
-          Text(
-            'Pulmones:',
-            style: _estiloSubt,
-          ),
-          Text(
-            validaNulo(_examenFisico.pulmones),
-            textAlign: TextAlign.justify,
-            style: estiloDatos,
-          ),
-          Divider(),
-          Text(
-            'Corazón:',
-            style: _estiloSubt,
-          ),
-          Text(
-            validaNulo(_examenFisico.corazon),
-            textAlign: TextAlign.justify,
-            style: estiloDatos,
-          ),
-          Divider(),
-          Text(
-            'Rot:',
-            style: _estiloSubt,
-          ),
-          Text(
-            validaNulo(_examenFisico.rot),
-            textAlign: TextAlign.justify,
-            style: estiloDatos,
-          ),
-          Divider(),
-          Text(
             'Abdomen:',
             style: _estiloSubt,
           ),
@@ -1423,11 +1199,11 @@ class _AccordionExamenFisico extends StatelessWidget {
           ),
           Divider(),
           Text(
-            'Piel Foneras:',
+            'Piel Faneras:',
             style: _estiloSubt,
           ),
           Text(
-            validaNulo(_examenFisico.pielfoneras),
+            validaNulo(_examenFisico.pielFaneras),
             textAlign: TextAlign.justify,
             style: estiloDatos,
           ),
@@ -1438,26 +1214,6 @@ class _AccordionExamenFisico extends StatelessWidget {
           ),
           Text(
             validaNulo(_examenFisico.genitales),
-            textAlign: TextAlign.justify,
-            style: estiloDatos,
-          ),
-          Divider(),
-          Text(
-            'Recto Prostatico:',
-            style: _estiloSubt,
-          ),
-          Text(
-            validaNulo(_examenFisico.rectoProstatico),
-            textAlign: TextAlign.justify,
-            style: estiloDatos,
-          ),
-          Divider(),
-          Text(
-            'Miembros:',
-            style: _estiloSubt,
-          ),
-          Text(
-            validaNulo(_examenFisico.miembros),
             textAlign: TextAlign.justify,
             style: estiloDatos,
           ),

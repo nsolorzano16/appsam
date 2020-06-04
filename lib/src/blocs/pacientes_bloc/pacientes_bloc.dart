@@ -21,6 +21,9 @@ class PacientesBloc with Validators {
   final _cargandoMunicipiosController = BehaviorSubject<bool>();
   final _cargandoMunicipiosResiController = BehaviorSubject<bool>();
 
+  final _primerMunicipioController = BehaviorSubject<int>();
+  final _primerMunicipioResidenciaController = BehaviorSubject<int>();
+
   Stream<List<PacientesViewModel>> get pacientesListStream =>
       _pacientesController.stream;
 
@@ -49,6 +52,7 @@ class PacientesBloc with Validators {
     _cargandoMunicipiosController.sink.add(true);
     final municipios = await _comboService.getMunicipiosXDepartamento(deptoId);
     onChangeListMunicipios(municipios);
+    _primerMunicipioController.sink.add(municipios[0].municipioId);
     _cargandoMunicipiosController.sink.add(false);
   }
 
@@ -56,6 +60,7 @@ class PacientesBloc with Validators {
     _cargandoMunicipiosResiController.sink.add(true);
     final municipios = await _comboService.getMunicipiosXDepartamento(deptoId);
     onChangeListMunicipiosResi(municipios);
+    _primerMunicipioResidenciaController.sink.add(municipios[0].municipioId);
     _cargandoMunicipiosResiController.sink.add(false);
   }
 
@@ -100,9 +105,14 @@ class PacientesBloc with Validators {
     _cargandoMunicipiosController?.close();
     _municipiosResidenciaController?.close();
     _cargandoMunicipiosResiController?.close();
+    _primerMunicipioController?.close();
+    _primerMunicipioResidenciaController?.close();
   }
 
   int get ultimaPagina => _ultimaPaginaController.value;
   bool get cargando => _cargandoMunicipiosController.value;
   bool get cargandoMunicipiosResi => _cargandoMunicipiosResiController.value;
+  int get primerMunicipio => _primerMunicipioController.value;
+  int get primerMunicipioResidencia =>
+      _primerMunicipioResidenciaController.value;
 }

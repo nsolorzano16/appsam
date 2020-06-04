@@ -429,12 +429,6 @@ class _MenuConsultaPageState extends State<MenuConsultaPage> {
     _examenEmpty.creadoFecha = DateTime.now();
     _examenEmpty.modificadoPor = usuario.userName;
     _examenEmpty.modificadoFecha = DateTime.now();
-    _examenEmpty.dolorAusente = false;
-    _examenEmpty.dolorPresente = false;
-    _examenEmpty.dolorPresenteLeve = false;
-    _examenEmpty.dolorPresenteModerado = false;
-    _examenEmpty.dolorPresenteSevero = false;
-    _examenEmpty.excesoDePeso = false;
 
     return GestureDetector(
       onTap: () async {

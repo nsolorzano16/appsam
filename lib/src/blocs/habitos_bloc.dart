@@ -18,6 +18,17 @@ class HabitosBloc with Validators {
       _consumeCigarrilloContoller.sink.add;
   bool get consumeCigarrillo => _consumeCigarrilloContoller.value;
 
+  final _consumeAlcoholController = BehaviorSubject<bool>();
+  Stream<bool> get consumeAlcoholStream => _consumeAlcoholController.stream;
+  Function(bool) get onChangeConsumeAlcohol =>
+      _consumeAlcoholController.sink.add;
+  bool get consumeAlcohol => _consumeAlcoholController.value;
+
+  final _consumeDrogasController = BehaviorSubject<bool>();
+  Stream<bool> get consumeDrograsStream => _consumeDrogasController.stream;
+  Function(bool) get onChangeConsumeDrogas => _consumeDrogasController.sink.add;
+  bool get consumeDrogas => _consumeDrogasController.value;
+
   final _labelBotonGuardarController = BehaviorSubject<String>();
   Stream<String> get labelBotonStream => _labelBotonGuardarController.stream;
   Function(String) get onChangeLabelBoton =>
@@ -40,5 +51,7 @@ class HabitosBloc with Validators {
     _consumeCafeController?.close();
     _consumeCigarrilloContoller?.close();
     _labelBotonGuardarController?.close();
+    _consumeAlcoholController?.close();
+    _consumeDrogasController?.close();
   }
 }
