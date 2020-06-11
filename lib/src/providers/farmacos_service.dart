@@ -78,16 +78,14 @@ class FarmacosUsoActualService {
     return false;
   }
 
-  Future<List<FarmacosUsoActual>> getFarmacos(
-      int pacienteId, int doctorId) async {
+  Future<List<FarmacosUsoActual>> getFarmacos(int pacienteId) async {
     final String token = StorageUtil.getString('token');
     final headers = {
       "content-type": "application/json",
       "accept": "application/json",
       'authorization': 'Bearer $token',
     };
-    final url =
-        '$_apiURL/api/FarmacosUsoActual/pacienteId/$pacienteId/doctorId/$doctorId';
+    final url = '$_apiURL/api/FarmacosUsoActual/pacienteId/$pacienteId';
     final List<FarmacosUsoActual> lista = new List();
 
     final resp = await http.get(url, headers: headers);

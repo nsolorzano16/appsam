@@ -10,15 +10,14 @@ class PacientesService {
   final _apiURL = EnviromentVariables().getApiURL();
 
   Future<PacientesPaginadoModel> getPacientesPaginado(
-      int page, String filter, int doctorId) async {
+      int page, String filter) async {
     final String token = StorageUtil.getString('token');
     final headers = {
       "content-type": "application/json",
       "accept": "application/json",
       'authorization': 'Bearer $token',
     };
-    final url =
-        '$_apiURL/api/Pacientes/page/$page/limit/50/doctor/$doctorId?filter=$filter';
+    final url = '$_apiURL/api/Pacientes/page/$page/limit/50?filter=$filter';
     final resp = await http.get(url, headers: headers);
     if (resp.statusCode == 200 && resp.body.isNotEmpty) {
       Map<String, dynamic> decodeResp = json.decode(resp.body);

@@ -814,26 +814,13 @@ class _AccordionHistorialGinecoObstetra extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final format = DateFormat.yMMMEd('es_Es');
-    String menarquia;
-    String fur;
-    String fechaMenopausia;
 
-    if (_historial.menarquia != null) {
-      menarquia = format.format(_historial.menarquia);
-    } else {
-      menarquia = '';
-    }
+    String fum;
 
-    if (_historial.fur != null) {
-      fur = format.format(_historial.fur);
+    if (_historial.fum != null) {
+      fum = format.format(_historial.fum);
     } else {
-      fur = '';
-    }
-
-    if (_historial.fechaMenopausia != null) {
-      fechaMenopausia = format.format(_historial.fechaMenopausia);
-    } else {
-      fechaMenopausia = '';
+      fum = '';
     }
 
     return GFAccordion(
@@ -864,45 +851,21 @@ class _AccordionHistorialGinecoObstetra extends StatelessWidget {
                   Column(
                     children: <Widget>[
                       Text(
-                        menarquia,
+                        fum,
                         textAlign: TextAlign.justify,
                         style: estiloDatos,
                       ),
                       Text(
-                        'Menarquia:',
+                        'Fecha ultima mestruación:',
                         style: _estiloSubt,
                       ),
                       Divider(),
                     ],
                   ),
-                  Column(
-                    children: <Widget>[
-                      Text(
-                        fur,
-                        textAlign: TextAlign.justify,
-                        style: estiloDatos,
-                      ),
-                      Text(
-                        'Fur:',
-                        style: _estiloSubt,
-                      ),
-                      Divider(),
-                    ],
-                  )
                 ],
               )
             ],
           ),
-          Text(
-            'Sg:',
-            style: _estiloSubt,
-          ),
-          Text(
-            validaNulo(_historial.sg),
-            textAlign: TextAlign.justify,
-            style: estiloDatos,
-          ),
-          Divider(),
           Text(
             'G:',
             style: _estiloSubt,
@@ -954,41 +917,11 @@ class _AccordionHistorialGinecoObstetra extends StatelessWidget {
           ),
           Divider(),
           Text(
-            'UC:',
+            'Anticonceptivos:',
             style: _estiloSubt,
           ),
           Text(
-            validaNulo(_historial.uc),
-            textAlign: TextAlign.justify,
-            style: estiloDatos,
-          ),
-          Divider(),
-          Text(
-            'Fecha menopausia:',
-            style: _estiloSubt,
-          ),
-          Text(
-            fechaMenopausia,
-            textAlign: TextAlign.justify,
-            style: estiloDatos,
-          ),
-          Divider(),
-          Text(
-            'Anticonceptivo:',
-            style: _estiloSubt,
-          ),
-          Text(
-            validaNulo(_historial.anticonceptivo),
-            textAlign: TextAlign.justify,
-            style: estiloDatos,
-          ),
-          Divider(),
-          Text(
-            'Vacunación:',
-            style: _estiloSubt,
-          ),
-          Text(
-            validaNulo(_historial.vacunacion),
+            validaNulo(_historial.anticonceptivos),
             textAlign: TextAlign.justify,
             style: estiloDatos,
           ),

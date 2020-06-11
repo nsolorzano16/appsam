@@ -44,7 +44,7 @@ class HabitosBloc with Validators {
   }
 
   Future<Habitos> getHabito(int pacienteId, int doctorId) async {
-    return await _habitosService.getHabito(pacienteId, doctorId);
+    return await _habitosService.getHabito(pacienteId);
   }
 
   dispose() {

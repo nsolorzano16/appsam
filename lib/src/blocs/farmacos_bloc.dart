@@ -21,7 +21,7 @@ class FarmacosUsoActualBloc with Validators {
 
   Future<List<FarmacosUsoActual>> getFarmacos(
       int pacienteId, int doctorId) async {
-    return await _farmacosService.getFarmacos(pacienteId, doctorId);
+    return await _farmacosService.getFarmacos(pacienteId);
   }
 
   dispose() {}

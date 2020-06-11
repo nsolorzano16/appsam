@@ -57,8 +57,8 @@ class _CrearAntecedentesPageState extends State<CrearAntecedentesPage> {
     final PreclinicaViewModel _preclinica =
         ModalRoute.of(context).settings.arguments;
 
-    _antecedentesFuture = _antecedentesBloc.getAntecedente(
-        _preclinica.pacienteId, _preclinica.doctorId);
+    _antecedentesFuture =
+        _antecedentesBloc.getAntecedente(_preclinica.pacienteId);
 
     return WillPopScope(
         child: FirebaseMessageWrapper(
@@ -85,7 +85,6 @@ class _CrearAntecedentesPageState extends State<CrearAntecedentesPage> {
                 if (snapshot.connectionState == ConnectionState.done) {
                   if (x != null) {
                     _antecedentes.pacienteId = x.pacienteId;
-                    _antecedentes.doctorId = x.doctorId;
                     _antecedentes.preclinicaId = x.preclinicaId;
                     _antecedentes.antecedentesFamiliaresPersonalesId =
                         x.antecedentesFamiliaresPersonalesId;
@@ -108,7 +107,6 @@ class _CrearAntecedentesPageState extends State<CrearAntecedentesPage> {
                     return _antecedentesForm(context);
                   } else {
                     _antecedentes.pacienteId = _preclinica.pacienteId;
-                    _antecedentes.doctorId = _preclinica.doctorId;
                     _antecedentes.preclinicaId = _preclinica.preclinicaId;
                     _antecedentes.antecedentesFamiliaresPersonalesId = 0;
                     _antecedentes.activo = true;
@@ -116,6 +114,7 @@ class _CrearAntecedentesPageState extends State<CrearAntecedentesPage> {
                     _antecedentes.creadoFecha = DateTime.now();
                     _antecedentes.modificadoPor = _usuario.userName;
                     _antecedentes.modificadoFecha = DateTime.now();
+
                     return _antecedentesForm(context);
                   }
                 } else {

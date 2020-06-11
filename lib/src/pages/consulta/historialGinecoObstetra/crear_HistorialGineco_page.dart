@@ -32,11 +32,9 @@ class _CrearHistorialGinecoObstetraPageState
   final _historialBloc = new HistorialGinecoObstetraBloc();
 
   String labelBoton = 'Guardar';
-  DateTime pickedMenarquia;
-  DateTime pickedFur;
-  DateTime pickedMenopausia;
+  DateTime pickedFum;
 
-  TextEditingController _menarquiaController = new TextEditingController();
+  TextEditingController _fumController = new TextEditingController();
   TextEditingController _furController = new TextEditingController();
   TextEditingController _sgController = new TextEditingController();
   TextEditingController _gController = new TextEditingController();
@@ -59,18 +57,10 @@ class _CrearHistorialGinecoObstetraPageState
 
     var format = DateFormat('dd/MM/yyyy');
 
-    _menarquiaController.text = (widget.historial.menarquia != null)
-        ? format.format(widget.historial.menarquia)
-        : '';
-    _furController.text = (widget.historial.fur != null)
-        ? format.format(widget.historial.fur)
-        : '';
-    _menopausiaController.text = (widget.historial.fechaMenopausia != null)
-        ? format.format(widget.historial.fechaMenopausia)
+    _fumController.text = (widget.historial.fum != null)
+        ? format.format(widget.historial.fum)
         : '';
 
-    _sgController.text =
-        (widget.historial.sg != null) ? widget.historial.sg : '';
     _gController.text = (widget.historial.g != null) ? widget.historial.g : '';
     _pController.text = (widget.historial.p != null) ? widget.historial.p : '';
     _cController.text = (widget.historial.c != null) ? widget.historial.c : '';
@@ -78,21 +68,18 @@ class _CrearHistorialGinecoObstetraPageState
         (widget.historial.hv != null) ? widget.historial.hv : '';
     _fppController.text =
         (widget.historial.fpp != null) ? widget.historial.fpp : '';
-    _ucController.text =
-        (widget.historial.uc != null) ? widget.historial.uc : '';
-    _anticonceptivoController.text = (widget.historial.anticonceptivo != null)
-        ? widget.historial.anticonceptivo
+
+    _anticonceptivoController.text = (widget.historial.anticonceptivos != null)
+        ? widget.historial.anticonceptivos
         : '';
-    _vacunacionController.text = (widget.historial.vacunacion != null)
-        ? widget.historial.vacunacion
-        : '';
+
     _notasController.text =
         (widget.historial.notas != null) ? widget.historial.notas : '';
   }
 
   @override
   void dispose() {
-    _menarquiaController.dispose();
+    _fumController.dispose();
     _furController.dispose();
     _sgController.dispose();
     _gController.dispose();
@@ -156,7 +143,7 @@ class _CrearHistorialGinecoObstetraPageState
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        Expanded(child: _campoMenarquia(context)),
+                        Expanded(child: _campoFum(context)),
                         Container(
                             margin: EdgeInsets.only(bottom: 25.0),
                             child: IconButton(
@@ -165,55 +152,18 @@ class _CrearHistorialGinecoObstetraPageState
                                   color: Theme.of(context).primaryColor,
                                 ),
                                 onPressed: () {
-                                  _menarquiaController.text = '';
-                                  pickedMenarquia = null;
-                                  widget.historial.menarquia = null;
+                                  _fumController.text = '';
+                                  pickedFum = null;
+                                  widget.historial.fum = null;
                                 }))
                       ],
                     ),
-                    Row(
-                      children: <Widget>[
-                        Expanded(child: _campoFur(context)),
-                        Container(
-                            margin: EdgeInsets.only(bottom: 25.0),
-                            child: IconButton(
-                                icon: Icon(
-                                  Icons.delete,
-                                  color: Theme.of(context).primaryColor,
-                                ),
-                                onPressed: () {
-                                  _furController.text = '';
-                                  pickedFur = null;
-                                  widget.historial.fur = null;
-                                }))
-                      ],
-                    ),
-                    _campoSG(),
                     _campoG(),
                     _campoP(),
                     _campoC(),
                     _campoHV(),
                     _campoFPP(),
-                    _campoUC(),
-                    Row(
-                      children: <Widget>[
-                        Expanded(child: _campoFechaMenopausia()),
-                        Container(
-                            margin: EdgeInsets.only(bottom: 25.0),
-                            child: IconButton(
-                                icon: Icon(
-                                  Icons.delete,
-                                  color: Theme.of(context).primaryColor,
-                                ),
-                                onPressed: () {
-                                  _menopausiaController.text = '';
-                                  pickedMenopausia = null;
-                                  widget.historial.fechaMenopausia = null;
-                                }))
-                      ],
-                    ),
                     _campoAnticonceptivo(),
-                    _campoVacunacion(),
                     _campoNotas(),
                     _crearBotones(context)
                   ],
@@ -224,12 +174,12 @@ class _CrearHistorialGinecoObstetraPageState
     );
   }
 
-  Widget _campoMenarquia(BuildContext context) {
+  Widget _campoFum(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
         enableInteractiveSelection: false,
-        controller: _menarquiaController,
+        controller: _fumController,
         decoration: InputDecoration(
             filled: true,
             fillColor: Colors.white,
@@ -252,7 +202,7 @@ class _CrearHistorialGinecoObstetraPageState
   }
 
   void selectDateMenarquia(BuildContext context) async {
-    pickedMenarquia = await showDatePicker(
+    pickedFum = await showDatePicker(
         helpText: 'Seleccione fecha.',
         errorFormatText: 'Fecha invalida',
         fieldLabelText: 'Ingrese fecha',
@@ -263,57 +213,11 @@ class _CrearHistorialGinecoObstetraPageState
         lastDate: new DateTime.now(),
         locale: Locale('es', 'ES'));
 
-    if (pickedMenarquia != null) {
+    if (pickedFum != null) {
       var format = DateFormat('dd/MM/yyyy');
-      widget.historial.menarquia = pickedMenarquia;
-      _menarquiaController.text = format.format(pickedMenarquia);
+      widget.historial.fum = pickedFum;
+      _fumController.text = format.format(pickedFum);
     }
-  }
-
-  Widget _campoFur(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(left: 8.0, right: 8.0),
-      child: TextFormField(
-        enableInteractiveSelection: false,
-        controller: _furController,
-        decoration: inputsDecorations('Fum  ', Icons.calendar_today),
-        onTap: () {
-          FocusScope.of(context).requestFocus(new FocusNode());
-          selectDateFur(context);
-        },
-      ),
-    );
-  }
-
-  void selectDateFur(BuildContext context) async {
-    pickedFur = await showDatePicker(
-        helpText: 'Seleccione fecha.',
-        errorFormatText: 'Fecha invalida',
-        fieldLabelText: 'Ingrese fecha',
-        initialDatePickerMode: DatePickerMode.year,
-        context: context,
-        initialDate: new DateTime.now(),
-        firstDate: new DateTime(1930),
-        lastDate: new DateTime.now(),
-        locale: Locale('es', 'ES'));
-
-    if (pickedFur != null) {
-      var format = DateFormat('dd/MM/yyyy');
-      widget.historial.fur = pickedFur;
-      _furController.text = format.format(pickedFur);
-    }
-  }
-
-  Widget _campoSG() {
-    return Padding(
-      padding: EdgeInsets.only(left: 8.0, right: 8.0),
-      child: TextFormField(
-        controller: _sgController,
-        onSaved: (value) => widget.historial.sg = value,
-        keyboardType: TextInputType.text,
-        decoration: inputsDecorations('SG', Icons.insert_drive_file),
-      ),
-    );
   }
 
   Widget _campoG() {
@@ -376,73 +280,15 @@ class _CrearHistorialGinecoObstetraPageState
     );
   }
 
-  Widget _campoUC() {
-    return Padding(
-      padding: EdgeInsets.only(left: 8.0, right: 8.0),
-      child: TextFormField(
-        controller: _ucController,
-        onSaved: (value) => widget.historial.uc = value,
-        keyboardType: TextInputType.text,
-        decoration: inputsDecorations('UC', Icons.insert_drive_file),
-      ),
-    );
-  }
-
-  Widget _campoFechaMenopausia() {
-    return Padding(
-      padding: EdgeInsets.only(left: 8.0, right: 8.0),
-      child: TextFormField(
-        enableInteractiveSelection: false,
-        controller: _menopausiaController,
-        decoration: inputsDecorations('Fecha Menopausia', Icons.calendar_today),
-        onTap: () {
-          FocusScope.of(context).requestFocus(new FocusNode());
-          selectDateMenopausia(context);
-        },
-      ),
-    );
-  }
-
-  void selectDateMenopausia(BuildContext context) async {
-    pickedMenopausia = await showDatePicker(
-        helpText: 'Seleccione fecha.',
-        errorFormatText: 'Fecha invalida',
-        fieldLabelText: 'Ingrese fecha',
-        initialDatePickerMode: DatePickerMode.year,
-        context: context,
-        initialDate: new DateTime.now(),
-        firstDate: new DateTime(1930),
-        lastDate: new DateTime.now(),
-        locale: Locale('es', 'ES'));
-
-    if (pickedMenopausia != null) {
-      var format = DateFormat('dd/MM/yyyy');
-      widget.historial.fechaMenopausia = pickedMenopausia;
-      _menopausiaController.text = format.format(pickedMenopausia);
-    }
-  }
-
   Widget _campoAnticonceptivo() {
     return Padding(
       padding: EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
         controller: _anticonceptivoController,
-        onSaved: (value) => widget.historial.anticonceptivo = value,
+        onSaved: (value) => widget.historial.anticonceptivos = value,
         keyboardType: TextInputType.text,
         decoration:
-            inputsDecorations('Anticonceptivo', Icons.insert_drive_file),
-      ),
-    );
-  }
-
-  Widget _campoVacunacion() {
-    return Padding(
-      padding: EdgeInsets.only(left: 8.0, right: 8.0),
-      child: TextFormField(
-        controller: _vacunacionController,
-        onSaved: (value) => widget.historial.vacunacion = value,
-        keyboardType: TextInputType.text,
-        decoration: inputsDecorations('Vacunacion', Icons.insert_drive_file),
+            inputsDecorations('Anticonceptivos', Icons.insert_drive_file),
       ),
     );
   }
@@ -497,7 +343,7 @@ class _CrearHistorialGinecoObstetraPageState
       messageTextStyle: TextStyle(
           color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600),
     );
-    if (_menarquiaController.text.isEmpty &&
+    if (_fumController.text.isEmpty &&
         _furController.text.isEmpty &&
         _sgController.text.isEmpty &&
         _gController.text.isEmpty &&

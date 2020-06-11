@@ -10,50 +10,8 @@ PacienteModel pacienteModelFromJson(String str) =>
 String pacienteModelToJson(PacienteModel data) => json.encode(data.toJson());
 
 class PacienteModel {
-  int pacienteId;
-  int doctorId;
-  int paisId;
-  int profesionId;
-  int escolaridadId;
-  int religionId;
-  int grupoSanguineoId;
-  int grupoEtnicoId;
-  int departamentoId;
-  int municipioId;
-  int departamentoResidenciaId;
-  int municipioResidenciaId;
-  String nombres;
-  String primerApellido;
-  String segundoApellido;
-  String identificacion;
-  String email;
-  String sexo;
-  DateTime fechaNacimiento;
-  String estadoCivil;
-  int edad;
-  String direccion;
-  String telefono1;
-  String telefono2;
-  String nombreEmergencia;
-  String telefonoEmergencia;
-  String parentesco;
-  bool menorDeEdad;
-  String nombreMadre;
-  String identificacionMadre;
-  String nombrePadre;
-  String identificacionPadre;
-  String carneVacuna;
-  String fotoUrl;
-  bool activo;
-  String creadoPor;
-  DateTime creadoFecha;
-  String modificadoPor;
-  DateTime modificadoFecha;
-  String notas;
-
   PacienteModel({
     this.pacienteId,
-    this.doctorId,
     this.paisId,
     this.profesionId,
     this.escolaridadId,
@@ -94,9 +52,48 @@ class PacienteModel {
     this.notas,
   });
 
+  int pacienteId;
+  int paisId;
+  int profesionId;
+  int escolaridadId;
+  int religionId;
+  int grupoSanguineoId;
+  int grupoEtnicoId;
+  int departamentoId;
+  int municipioId;
+  int departamentoResidenciaId;
+  int municipioResidenciaId;
+  String nombres;
+  String primerApellido;
+  String segundoApellido;
+  String identificacion;
+  String email;
+  String sexo;
+  DateTime fechaNacimiento;
+  String estadoCivil;
+  int edad;
+  String direccion;
+  String telefono1;
+  String telefono2;
+  String nombreEmergencia;
+  String telefonoEmergencia;
+  String parentesco;
+  bool menorDeEdad;
+  String nombreMadre;
+  String identificacionMadre;
+  String nombrePadre;
+  String identificacionPadre;
+  String carneVacuna;
+  String fotoUrl;
+  bool activo;
+  String creadoPor;
+  DateTime creadoFecha;
+  String modificadoPor;
+  DateTime modificadoFecha;
+  String notas;
+
   factory PacienteModel.fromJson(Map<String, dynamic> json) => PacienteModel(
         pacienteId: json["pacienteId"],
-        doctorId: json["doctorId"],
         paisId: json["paisId"],
         profesionId: json["profesionId"],
         escolaridadId: json["escolaridadId"],
@@ -139,7 +136,6 @@ class PacienteModel {
 
   Map<String, dynamic> toJson() => {
         "pacienteId": pacienteId,
-        "doctorId": doctorId,
         "paisId": paisId,
         "profesionId": profesionId,
         "escolaridadId": escolaridadId,

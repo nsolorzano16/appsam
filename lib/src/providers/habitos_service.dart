@@ -50,15 +50,14 @@ class HabitosService {
     return null;
   }
 
-  Future<Habitos> getHabito(int pacienteId, int doctorId) async {
+  Future<Habitos> getHabito(int pacienteId) async {
     final String token = StorageUtil.getString('token');
     final headers = {
       "content-type": "application/json",
       "accept": "application/json",
       'authorization': 'Bearer $token',
     };
-    final url =
-        '$_apiURL/api/Habitos/pacienteId/$pacienteId/doctorId/$doctorId';
+    final url = '$_apiURL/api/Habitos/pacienteId/$pacienteId';
 
     //print(usuarioModelToJson(usuario));
     final resp = await http.get(

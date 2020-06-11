@@ -52,7 +52,7 @@ class _CrearHabitosPageState extends State<CrearHabitosPage> {
         _habitosBloc.getHabito(_preclinica.pacienteId, _preclinica.doctorId);
 
     _habitos.pacienteId = _preclinica.pacienteId;
-    _habitos.doctorId = _preclinica.doctorId;
+
     _habitos.preclinicaId = _preclinica.preclinicaId;
 
     return WillPopScope(

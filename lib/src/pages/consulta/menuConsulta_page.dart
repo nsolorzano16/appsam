@@ -325,7 +325,6 @@ class _MenuConsultaPageState extends State<MenuConsultaPage> {
 
     _historialEmpty.historialId = 0;
     _historialEmpty.pacienteId = preclinica.pacienteId;
-    _historialEmpty.doctorId = preclinica.doctorId;
     _historialEmpty.preclinicaId = preclinica.preclinicaId;
     _historialEmpty.activo = true;
     _historialEmpty.creadoPor = usuario.userName;

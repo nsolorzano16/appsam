@@ -1,3 +1,7 @@
+// To parse this JSON data, do
+//
+//     final antecedentesFamiliaresPersonales = antecedentesFamiliaresPersonalesFromJson(jsonString);
+
 import 'dart:convert';
 
 AntecedentesFamiliaresPersonales antecedentesFamiliaresPersonalesFromJson(
@@ -9,26 +13,9 @@ String antecedentesFamiliaresPersonalesToJson(
     json.encode(data.toJson());
 
 class AntecedentesFamiliaresPersonales {
-  int antecedentesFamiliaresPersonalesId;
-  int pacienteId;
-  int doctorId;
-  int preclinicaId;
-  String antecedentesPatologicosFamiliares;
-  String antecedentesPatologicosPersonales;
-  String antecedentesNoPatologicosFamiliares;
-  String antecedentesNoPatologicosPersonales;
-  String antecedentesInmunoAlergicosPersonales;
-  bool activo;
-  String creadoPor;
-  DateTime creadoFecha;
-  String modificadoPor;
-  DateTime modificadoFecha;
-  String notas;
-
   AntecedentesFamiliaresPersonales({
     this.antecedentesFamiliaresPersonalesId,
     this.pacienteId,
-    this.doctorId,
     this.preclinicaId,
     this.antecedentesPatologicosFamiliares,
     this.antecedentesPatologicosPersonales,
@@ -43,13 +30,27 @@ class AntecedentesFamiliaresPersonales {
     this.notas,
   });
 
+  int antecedentesFamiliaresPersonalesId;
+  int pacienteId;
+  int preclinicaId;
+  String antecedentesPatologicosFamiliares;
+  String antecedentesPatologicosPersonales;
+  String antecedentesNoPatologicosFamiliares;
+  String antecedentesNoPatologicosPersonales;
+  String antecedentesInmunoAlergicosPersonales;
+  bool activo;
+  String creadoPor;
+  DateTime creadoFecha;
+  String modificadoPor;
+  DateTime modificadoFecha;
+  String notas;
+
   factory AntecedentesFamiliaresPersonales.fromJson(
           Map<String, dynamic> json) =>
       AntecedentesFamiliaresPersonales(
         antecedentesFamiliaresPersonalesId:
             json["antecedentesFamiliaresPersonalesId"],
         pacienteId: json["pacienteId"],
-        doctorId: json["doctorId"],
         preclinicaId: json["preclinicaId"],
         antecedentesPatologicosFamiliares:
             json["antecedentesPatologicosFamiliares"],
@@ -73,7 +74,6 @@ class AntecedentesFamiliaresPersonales {
         "antecedentesFamiliaresPersonalesId":
             antecedentesFamiliaresPersonalesId,
         "pacienteId": pacienteId,
-        "doctorId": doctorId,
         "preclinicaId": preclinicaId,
         "antecedentesPatologicosFamiliares": antecedentesPatologicosFamiliares,
         "antecedentesPatologicosPersonales": antecedentesPatologicosPersonales,

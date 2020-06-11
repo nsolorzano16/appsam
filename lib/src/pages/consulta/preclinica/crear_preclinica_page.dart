@@ -325,7 +325,8 @@ class _CrearPreclinicaPageState extends State<CrearPreclinicaPage> {
     await _pr.show();
     _preclinica.preclinicaId = 0;
     _preclinica.pacienteId = paciente.pacienteId;
-    _preclinica.doctorId = paciente.doctorId;
+    //TODO: revisar esta parte
+    _preclinica.doctorId = _usuario.usuarioId;
     _preclinica.atendida = false;
     _preclinica.activo = true;
     _preclinica.creadoPor = _usuario.userName;

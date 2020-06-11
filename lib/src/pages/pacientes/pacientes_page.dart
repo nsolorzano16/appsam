@@ -21,8 +21,6 @@ class PacientesPage extends StatefulWidget {
 class _PacientesPageState extends State<PacientesPage> {
   PacientesBloc _pacientesBloc = new PacientesBloc();
   ScrollController _scrollController = new ScrollController();
-  final UsuarioModel _usuario =
-      usuarioModelFromJson(StorageUtil.getString('usuarioGlobal'));
 
   int totalPages = 0;
   int page = 1;
@@ -39,11 +37,7 @@ class _PacientesPageState extends State<PacientesPage> {
   void initState() {
     super.initState();
     StorageUtil.putString('ultimaPagina', PacientesPage.routeName);
-    if (_usuario.rolId == 3) {
-      _pacientesBloc.cargarPacientesPaginado(1, '', _usuario.asistenteId);
-    } else {
-      _pacientesBloc.cargarPacientesPaginado(1, '', _usuario.usuarioId);
-    }
+    _pacientesBloc.cargarPacientesPaginado(1, '');
   }
 
   @override
@@ -96,11 +90,7 @@ class _PacientesPageState extends State<PacientesPage> {
   }
 
   Future<Null> fetchData(int page) async {
-    if (_usuario.rolId == 3) {
-      _pacientesBloc.cargarPacientesPaginado(page, '', _usuario.asistenteId);
-    } else {
-      _pacientesBloc.cargarPacientesPaginado(page, '', _usuario.usuarioId);
-    }
+    _pacientesBloc.cargarPacientesPaginado(page, '');
 
     final ProgressDialog pd = new ProgressDialog(
       context,
@@ -125,13 +115,7 @@ class _PacientesPageState extends State<PacientesPage> {
   }
 
   Future<Null> fetchDataRefresh(int page) async {
-    if (_usuario.rolId == 3) {
-      _pacientesBloc.cargarPacientesPaginadoRefresh(
-          page, '', _usuario.asistenteId);
-    } else {
-      _pacientesBloc.cargarPacientesPaginadoRefresh(
-          page, '', _usuario.usuarioId);
-    }
+    _pacientesBloc.cargarPacientesPaginadoRefresh(page, '');
 
     final ProgressDialog pd = new ProgressDialog(
       context,

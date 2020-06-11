@@ -12,23 +12,19 @@ class PacientesBloc with Validators {
   final _pacientesController = BehaviorSubject<List<PacientesViewModel>>();
   final _pacientesBusquedaController =
       BehaviorSubject<List<PacientesViewModel>>();
+
   final _municipiosController = BehaviorSubject<List<MunicipioModel>>();
   final _municipiosResidenciaController =
       BehaviorSubject<List<MunicipioModel>>();
+
   final _ultimaPaginaController = BehaviorSubject<int>();
   final listPacientes = new List<PacientesViewModel>();
 
   final _cargandoMunicipiosController = BehaviorSubject<bool>();
   final _cargandoMunicipiosResiController = BehaviorSubject<bool>();
 
-  final _primerMunicipioController = BehaviorSubject<int>();
-  final _primerMunicipioResidenciaController = BehaviorSubject<int>();
-
   Stream<List<PacientesViewModel>> get pacientesListStream =>
       _pacientesController.stream;
-
-  Stream<List<PacientesViewModel>> get pacientesBusquedaStream =>
-      _pacientesBusquedaController.stream;
 
   Stream<List<MunicipioModel>> get municipiosListStream =>
       _municipiosController.stream;
@@ -36,55 +32,69 @@ class PacientesBloc with Validators {
   Stream<List<MunicipioModel>> get municipiosResiListStream =>
       _municipiosResidenciaController.stream;
 
+  Stream<List<PacientesViewModel>> get pacientesBusquedaStream =>
+      _pacientesBusquedaController.stream;
+
+  Stream<bool> get cargandoMunicipiosStream =>
+      _cargandoMunicipiosController.stream;
+
+  Stream<bool> get cargandoMunicipiosResiStream =>
+      _cargandoMunicipiosResiController.stream;
+
+  //********FUNCTIONS */
+
   Function(List<PacientesViewModel>) get onChangePacientesLista =>
-      _pacientesController.add;
+      _pacientesController.sink.add;
   Function(List<PacientesViewModel>) get onChangePacientesBusqueda =>
-      _pacientesBusquedaController.add;
+      _pacientesBusquedaController.sink.add;
 
   Function(List<MunicipioModel>) get onChangeListMunicipios =>
-      _municipiosController.add;
+      _municipiosController.sink.add;
 
   Function(List<MunicipioModel>) get onChangeListMunicipiosResi =>
-      _municipiosResidenciaController.add;
+      _municipiosResidenciaController.sink.add;
+
+  Function(bool) get onChangeCargandoMunicipios =>
+      _cargandoMunicipiosResiController.sink.add;
+
+  Function(bool) get onChangeCargandoMunicipiosResi =>
+      _cargandoMunicipiosResiController.sink.add;
 
 // ************* METODOS *********************
+
   cargarMunicipios(int deptoId) async {
     _cargandoMunicipiosController.sink.add(true);
     final municipios = await _comboService.getMunicipiosXDepartamento(deptoId);
-    onChangeListMunicipios(municipios);
-    _primerMunicipioController.sink.add(municipios[0].municipioId);
+    _municipiosController.sink.add(municipios);
     _cargandoMunicipiosController.sink.add(false);
   }
 
   cargarMunicipiosResi(int deptoId) async {
     _cargandoMunicipiosResiController.sink.add(true);
     final municipios = await _comboService.getMunicipiosXDepartamento(deptoId);
-    onChangeListMunicipiosResi(municipios);
-    _primerMunicipioResidenciaController.sink.add(municipios[0].municipioId);
+    _municipiosResidenciaController.sink.add(municipios);
+
     _cargandoMunicipiosResiController.sink.add(false);
   }
 
-  cargarPacientesPaginado(int page, String filter, int doctorId) async {
-    final pacientes =
-        await _pacienteService.getPacientesPaginado(page, filter, doctorId);
+  cargarPacientesPaginado(int page, String filter) async {
+    final pacientes = await _pacienteService.getPacientesPaginado(page, filter);
     _ultimaPaginaController.add(pacientes.totalPages);
     listPacientes.addAll(pacientes.items);
 
     onChangePacientesLista(listPacientes);
   }
 
-  cargarPacientesPaginadoRefresh(int page, String filter, int doctorId) async {
-    final pacientes =
-        await _pacienteService.getPacientesPaginado(page, filter, doctorId);
+  cargarPacientesPaginadoRefresh(int page, String filter) async {
+    final pacientes = await _pacienteService.getPacientesPaginado(page, filter);
     _ultimaPaginaController.add(pacientes.totalPages);
     listPacientes.clear();
     listPacientes.addAll(pacientes.items);
     onChangePacientesLista(listPacientes);
   }
 
-  cargarPacientesPaginadoBusqueda(int page, String filter, int doctorId) async {
-    final pacientes =
-        await _pacienteService.getPacientesPaginado(page, filter, doctorId);
+  cargarPacientesPaginadoBusqueda(int page, String filter) async {
+    final pacientes = await _pacienteService.getPacientesPaginado(page, filter);
     onChangePacientesBusqueda(pacientes.items);
   }
 
@@ -105,14 +115,9 @@ class PacientesBloc with Validators {
     _cargandoMunicipiosController?.close();
     _municipiosResidenciaController?.close();
     _cargandoMunicipiosResiController?.close();
-    _primerMunicipioController?.close();
-    _primerMunicipioResidenciaController?.close();
   }
 
   int get ultimaPagina => _ultimaPaginaController.value;
   bool get cargando => _cargandoMunicipiosController.value;
   bool get cargandoMunicipiosResi => _cargandoMunicipiosResiController.value;
-  int get primerMunicipio => _primerMunicipioController.value;
-  int get primerMunicipioResidencia =>
-      _primerMunicipioResidenciaController.value;
 }

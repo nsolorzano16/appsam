@@ -16,8 +16,8 @@ class AntecedentesFamiliaresBloc with Validators {
   }
 
   Future<AntecedentesFamiliaresPersonales> getAntecedente(
-      int pacienteId, int doctorId) async {
-    return await _antecedentesService.getAntecedente(pacienteId, doctorId);
+      int pacienteId) async {
+    return await _antecedentesService.getAntecedente(pacienteId);
   }
 
   dispose() {}

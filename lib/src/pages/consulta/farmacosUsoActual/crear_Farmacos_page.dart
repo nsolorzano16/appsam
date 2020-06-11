@@ -211,7 +211,7 @@ class _CrearFarmacosUsoActualPageState
   void _dialogAdd(BuildContext context, PreclinicaViewModel preclinica) {
     final _farmaco = new FarmacosUsoActual();
     _farmaco.farmacoId = 0;
-    _farmaco.doctorId = preclinica.doctorId;
+
     _farmaco.pacienteId = preclinica.pacienteId;
     _farmaco.preclinicaId = preclinica.preclinicaId;
     _farmaco.activo = true;

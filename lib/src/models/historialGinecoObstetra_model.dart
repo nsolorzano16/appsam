@@ -1,3 +1,7 @@
+// To parse this JSON data, do
+//
+//     final historialGinecoObstetra = historialGinecoObstetraFromJson(jsonString);
+
 import 'dart:convert';
 
 HistorialGinecoObstetra historialGinecoObstetraFromJson(String str) =>
@@ -7,46 +11,24 @@ String historialGinecoObstetraToJson(HistorialGinecoObstetra data) =>
     json.encode(data.toJson());
 
 class HistorialGinecoObstetra {
-  int historialId;
-  int pacienteId;
-  int doctorId;
-  int preclinicaId;
-  DateTime menarquia;
-  DateTime fur;
-  String sg;
-  String g;
-  String p;
-  String c;
-  String hv;
-  String fpp;
-  String uc;
-  DateTime fechaMenopausia;
-  String anticonceptivo;
-  String vacunacion;
-  bool activo;
-  String creadoPor;
-  DateTime creadoFecha;
-  String modificadoPor;
-  DateTime modificadoFecha;
-  String notas;
-
   HistorialGinecoObstetra({
     this.historialId,
     this.pacienteId,
-    this.doctorId,
-    this.preclinicaId,
-    this.menarquia,
-    this.fur,
-    this.sg,
+    this.fum,
     this.g,
     this.p,
     this.c,
     this.hv,
+    this.hm,
+    this.anticonceptivos,
+    this.vacunaVph,
+    this.embarazo,
     this.fpp,
-    this.uc,
-    this.fechaMenopausia,
-    this.anticonceptivo,
-    this.vacunacion,
+    this.afu,
+    this.presentacion,
+    this.movimientosFetales,
+    this.fcf,
+    this.preclinicaId,
     this.activo,
     this.creadoPor,
     this.creadoFecha,
@@ -55,28 +37,49 @@ class HistorialGinecoObstetra {
     this.notas,
   });
 
+  int historialId;
+  int pacienteId;
+  DateTime fum;
+  String g;
+  String p;
+  String c;
+  String hv;
+  String hm;
+  String anticonceptivos;
+  bool vacunaVph;
+  bool embarazo;
+  String fpp;
+  String afu;
+  DateTime presentacion;
+  String movimientosFetales;
+  String fcf;
+  int preclinicaId;
+  bool activo;
+  String creadoPor;
+  DateTime creadoFecha;
+  String modificadoPor;
+  DateTime modificadoFecha;
+  String notas;
+
   factory HistorialGinecoObstetra.fromJson(Map<String, dynamic> json) =>
       HistorialGinecoObstetra(
         historialId: json["historialId"],
         pacienteId: json["pacienteId"],
-        doctorId: json["doctorId"],
-        preclinicaId: json["preclinicaId"],
-        menarquia: json["menarquia"] == null
-            ? null
-            : DateTime.parse(json["menarquia"]),
-        fur: json["fur"] == null ? null : DateTime.parse(json["fur"]),
-        sg: json["sg"],
+        fum: DateTime.parse(json["fum"]),
         g: json["g"],
         p: json["p"],
         c: json["c"],
         hv: json["hv"],
+        hm: json["hm"],
+        anticonceptivos: json["anticonceptivos"],
+        vacunaVph: json["vacunaVph"],
+        embarazo: json["embarazo"],
         fpp: json["fpp"],
-        uc: json["uc"],
-        fechaMenopausia: json["fechaMenopausia"] == null
-            ? null
-            : DateTime.parse(json["fechaMenopausia"]),
-        anticonceptivo: json["anticonceptivo"],
-        vacunacion: json["vacunacion"],
+        afu: json["afu"],
+        presentacion: DateTime.parse(json["presentacion"]),
+        movimientosFetales: json["movimientosFetales"],
+        fcf: json["fcf"],
+        preclinicaId: json["preclinicaId"],
         activo: json["activo"],
         creadoPor: json["creadoPor"],
         creadoFecha: DateTime.parse(json["creadoFecha"]),
@@ -88,21 +91,21 @@ class HistorialGinecoObstetra {
   Map<String, dynamic> toJson() => {
         "historialId": historialId,
         "pacienteId": pacienteId,
-        "doctorId": doctorId,
-        "preclinicaId": preclinicaId,
-        "menarquia": menarquia == null ? null : menarquia.toIso8601String(),
-        "fur": fur == null ? null : fur.toIso8601String(),
-        "sg": sg,
+        "fum": fum.toIso8601String(),
         "g": g,
         "p": p,
         "c": c,
         "hv": hv,
+        "hm": hm,
+        "anticonceptivos": anticonceptivos,
+        "vacunaVph": vacunaVph,
+        "embarazo": embarazo,
         "fpp": fpp,
-        "uc": uc,
-        "fechaMenopausia":
-            fechaMenopausia == null ? null : fechaMenopausia.toIso8601String(),
-        "anticonceptivo": anticonceptivo,
-        "vacunacion": vacunacion,
+        "afu": afu,
+        "presentacion": presentacion.toIso8601String(),
+        "movimientosFetales": movimientosFetales,
+        "fcf": fcf,
+        "preclinicaId": preclinicaId,
         "activo": activo,
         "creadoPor": creadoPor,
         "creadoFecha": creadoFecha.toIso8601String(),

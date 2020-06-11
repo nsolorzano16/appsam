@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import 'package:appsam/src/utils/utils.dart';
 import 'package:appsam/src/blocs/provider.dart';
 import 'package:appsam/src/models/paginados/pacientesPaginado_model.dart';
-import 'package:appsam/src/models/usuario_model.dart';
-import 'package:appsam/src/utils/storage_util.dart';
 
 class DataSearchPacientes extends SearchDelegate {
   @override
@@ -13,7 +11,10 @@ class DataSearchPacientes extends SearchDelegate {
     // acciones de nuestro app bar
     return [
       IconButton(
-          icon: Icon(Icons.clear),
+          icon: Icon(
+            Icons.delete,
+            color: Colors.red,
+          ),
           onPressed: () {
             query = '';
           }),
@@ -41,14 +42,9 @@ class DataSearchPacientes extends SearchDelegate {
   Widget buildSuggestions(BuildContext context) {
     // son las sugerencias que aparecen cuando la persona escribe
     final bloc = Provider.pacientesBloc(context);
-    final UsuarioModel _usuario =
-        usuarioModelFromJson(StorageUtil.getString('usuarioGlobal'));
+
     if (query.isEmpty) return Container();
-    if (_usuario.rolId == 3) {
-      bloc.cargarPacientesPaginadoBusqueda(1, query, _usuario.asistenteId);
-    } else {
-      bloc.cargarPacientesPaginadoBusqueda(1, query, _usuario.usuarioId);
-    }
+    bloc.cargarPacientesPaginadoBusqueda(1, query);
 
     return StreamBuilder(
       stream: bloc.pacientesBusquedaStream,
@@ -61,11 +57,7 @@ class DataSearchPacientes extends SearchDelegate {
             return _item(context, asistente);
           }).toList());
         } else {
-          return Center(
-            child: SpinKitWave(
-              color: Theme.of(context).primaryColor,
-            ),
-          );
+          return loadingIndicator(context);
         }
       },
     );

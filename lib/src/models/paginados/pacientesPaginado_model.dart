@@ -52,7 +52,7 @@ class PacientesPaginadoModel {
 
 class PacientesViewModel {
   int pacienteId;
-  int doctorId;
+
   int paisId;
   int profesionId;
   int escolaridadId;
@@ -104,7 +104,6 @@ class PacientesViewModel {
 
   PacientesViewModel({
     this.pacienteId,
-    this.doctorId,
     this.paisId,
     this.profesionId,
     this.escolaridadId,
@@ -158,7 +157,6 @@ class PacientesViewModel {
   factory PacientesViewModel.fromJson(Map<String, dynamic> json) =>
       PacientesViewModel(
         pacienteId: json["pacienteId"],
-        doctorId: json["doctorId"],
         paisId: json["paisId"],
         profesionId: json["profesionId"],
         escolaridadId: json["escolaridadId"],
@@ -211,7 +209,6 @@ class PacientesViewModel {
 
   Map<String, dynamic> toJson() => {
         "pacienteId": pacienteId,
-        "doctorId": doctorId,
         "paisId": paisId,
         "profesionId": profesionId,
         "escolaridadId": escolaridadId,

@@ -87,5 +87,5 @@ class CustomLocalization extends DefaultMaterialLocalizations {
   const CustomLocalization();
 
   @override
-  String get searchFieldLabel => "My hint text";
+  String get searchFieldLabel => 'Buscar';
 }

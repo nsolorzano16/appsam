@@ -1,3 +1,7 @@
+// To parse this JSON data, do
+//
+//     final farmacosUsoActual = farmacosUsoActualFromJson(jsonString);
+
 import 'dart:convert';
 
 FarmacosUsoActual farmacosUsoActualFromJson(String str) =>
@@ -10,25 +14,9 @@ String farmacosUsoActualToJsonList(List<FarmacosUsoActual> data) =>
     json.encode(data);
 
 class FarmacosUsoActual {
-  int farmacoId;
-  int pacienteId;
-  int doctorId;
-  int preclinicaId;
-  String nombre;
-  String concentracion;
-  String dosis;
-  String tiempo;
-  bool activo;
-  String creadoPor;
-  DateTime creadoFecha;
-  String modificadoPor;
-  DateTime modificadoFecha;
-  String notas;
-
   FarmacosUsoActual({
     this.farmacoId,
     this.pacienteId,
-    this.doctorId,
     this.preclinicaId,
     this.nombre,
     this.concentracion,
@@ -42,11 +30,24 @@ class FarmacosUsoActual {
     this.notas,
   });
 
+  int farmacoId;
+  int pacienteId;
+  int preclinicaId;
+  String nombre;
+  String concentracion;
+  String dosis;
+  String tiempo;
+  bool activo;
+  String creadoPor;
+  DateTime creadoFecha;
+  String modificadoPor;
+  DateTime modificadoFecha;
+  String notas;
+
   factory FarmacosUsoActual.fromJson(Map<String, dynamic> json) =>
       FarmacosUsoActual(
         farmacoId: json["farmacoId"],
         pacienteId: json["pacienteId"],
-        doctorId: json["doctorId"],
         preclinicaId: json["preclinicaId"],
         nombre: json["nombre"],
         concentracion: json["concentracion"],
@@ -63,7 +64,6 @@ class FarmacosUsoActual {
   Map<String, dynamic> toJson() => {
         "farmacoId": farmacoId,
         "pacienteId": pacienteId,
-        "doctorId": doctorId,
         "preclinicaId": preclinicaId,
         "nombre": nombre,
         "concentracion": concentracion,

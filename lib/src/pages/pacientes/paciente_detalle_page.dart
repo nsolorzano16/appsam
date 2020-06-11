@@ -142,6 +142,14 @@ class _PacienteDetalleState extends State<PacienteDetalle> {
                 Text('${paciente.nombreEmergencia}'),
               ]),
               TableRow(children: [
+                Text('Tel. contacto de emergencia:'),
+                Text('${paciente.telefonoEmergencia}'),
+              ]),
+              TableRow(children: [
+                Text('Parentesco'),
+                Text('${paciente.parentesco}'),
+              ]),
+              TableRow(children: [
                 Text('Pais'),
                 (paciente.pais != null)
                     ? Text('${paciente.pais}')

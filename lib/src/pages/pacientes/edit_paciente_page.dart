@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:appsam/src/models/municipio_model.dart';
 import 'package:appsam/src/widgets/firebaseMessageWrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -15,7 +16,7 @@ import 'package:appsam/src/models/escolaridad_model.dart';
 import 'package:appsam/src/models/estadocivil_model.dart';
 import 'package:appsam/src/models/grupoEtnico_model.dart';
 import 'package:appsam/src/models/grupoSanguineo_model.dart';
-import 'package:appsam/src/models/municipio_model.dart';
+
 import 'package:appsam/src/models/paginados/pacientesPaginado_model.dart';
 import 'package:appsam/src/models/pais_model.dart';
 import 'package:appsam/src/models/parentesco_model.dart';
@@ -59,6 +60,12 @@ class _EditarPacientePageState extends State<EditarPacientePage> {
   MaskTextInputFormatter maskIdentificacion = new MaskTextInputFormatter(
       mask: '#############', filter: {"#": RegExp(r'[0-9]')});
 
+  MaskTextInputFormatter maskIdentificacionMadre = new MaskTextInputFormatter(
+      mask: '#############', filter: {"#": RegExp(r'[0-9]')});
+
+  MaskTextInputFormatter maskIdentificacionPadre = new MaskTextInputFormatter(
+      mask: '#############', filter: {"#": RegExp(r'[0-9]')});
+
   @override
   void dispose() {
     pacientesBloc.dispose();
@@ -84,14 +91,8 @@ class _EditarPacientePageState extends State<EditarPacientePage> {
     _formBloc.onChangeGrupoSanguineoId(widget.paciente.grupoSanguineoId);
     _formBloc.onChangeGrupoEtnicoId(widget.paciente.grupoEtnicoId);
     _formBloc.onChangePaisId(widget.paciente.paisId);
-
-    if (widget.paciente.paisId == 83) {
-      _formBloc.onChangeDepartamentoId(widget.paciente.departamentoId);
-      _formBloc.onChangeMunicipioId(widget.paciente.municipioId);
-    } else {
-      _formBloc.onChangeDepartamentoId(8);
-      _formBloc.onChangeMunicipioId(110);
-    }
+    _formBloc.onChangeDepartamentoId(widget.paciente.departamentoId);
+    _formBloc.onChangeMunicipioId(widget.paciente.municipioId);
 
     _formBloc.onChangeDepartamentoResidenciaId(
         widget.paciente.departamentoResidenciaId);
@@ -108,10 +109,11 @@ class _EditarPacientePageState extends State<EditarPacientePage> {
     _formBloc.onChangeIdentificacionPadre(widget.paciente.identificacionPadre);
     _formBloc.onChangeCarneVacuna(widget.paciente.carneVacuna);
     _formBloc.onChangeNotas(widget.paciente.notas);
-    pacientesBloc.cargarMunicipios(_formBloc.departamentoId);
-    pacientesBloc.cargarMunicipiosResi(_formBloc.departamentoResidenciaId);
 
     _formBloc.onChangeEmail(widget.paciente.email);
+    pacientesBloc.cargarMunicipios(widget.paciente.departamentoId);
+    pacientesBloc
+        .cargarMunicipiosResi(widget.paciente.departamentoResidenciaId);
 
     var formato = DateFormat('dd/MM/yyyy');
     final _fechaNaci = formato.format(widget.paciente.fechaNacimiento);
@@ -130,7 +132,7 @@ class _EditarPacientePageState extends State<EditarPacientePage> {
                     icon: Icon(Icons.arrow_back_ios),
                     onPressed: () => (pacientesBloc.cargando ||
                             pacientesBloc.cargandoMunicipiosResi)
-                        ? null
+                        ? {}
                         : Navigator.pushReplacementNamed(context, 'pacientes'))
               ],
             ),
@@ -167,6 +169,20 @@ class _EditarPacientePageState extends State<EditarPacientePage> {
                           icon: FaIcon(FontAwesomeIcons.user,
                               color: Colors.white)),
                       content: _formParteDos(),
+                    ),
+                    GFCard(
+                      elevation: 6.0,
+                      boxFit: BoxFit.cover,
+                      title: GFListTile(
+                          color: Colors.red,
+                          title: Text('Ubicación ',
+                              style: TextStyle(
+                                  fontSize: 18.0,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white)),
+                          icon: FaIcon(FontAwesomeIcons.user,
+                              color: Colors.white)),
+                      content: _formParteCinco(),
                     ),
                     GFCard(
                       elevation: 6.0,
@@ -272,7 +288,6 @@ class _EditarPacientePageState extends State<EditarPacientePage> {
   Widget _formParteTres() {
     return Column(
       children: <Widget>[
-        _siElPais(),
         _crearCampoDireccion(),
         _espacio(),
         _crearCampoNombreEmergencia(),
@@ -287,32 +302,31 @@ class _EditarPacientePageState extends State<EditarPacientePage> {
     );
   }
 
-  Widget _siElPais() {
-    if (_formBloc.paisId == 83) {
-      return Column(
-        children: <Widget>[
-          _espacio(),
-          _crearDropDownDepartamento(),
-          _espacio(),
-          _crearDropDownMunicipio(),
-          _espacio(),
-          _crearDropDownDepartamentoResidencia(),
-          _espacio(),
-          _crearDropDownMunicipioResidencia(),
-          _espacio()
-        ],
-      );
-    } else {
-      return Column(
-        children: <Widget>[
-          _espacio(),
-          _crearDropDownDepartamentoResidencia(),
-          _espacio(),
-          _crearDropDownMunicipioResidencia(),
-          _espacio(),
-        ],
-      );
-    }
+  Widget _formParteCinco() {
+    return StreamBuilder(
+      stream: _formBloc.paisIdStream,
+      builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
+        if (snapshot.hasData) {
+          return Column(
+            children: <Widget>[
+              _espacio(),
+              (snapshot.data == 83)
+                  ? _crearDropDownDepartamento()
+                  : Container(),
+              _espacio(),
+              (snapshot.data == 83) ? _crearDropDownMunicipio() : Container(),
+              _espacio(),
+              _crearDropDownDepartamentoResidencia(),
+              _espacio(),
+              _crearDropDownMunicipioResidencia(),
+              _espacio()
+            ],
+          );
+        } else {
+          return CircularProgressIndicator();
+        }
+      },
+    );
   }
 
   Widget _formParteCuatro(PacientesViewModel _paciente) {
@@ -323,11 +337,11 @@ class _EditarPacientePageState extends State<EditarPacientePage> {
         _espacio(),
         _crearCampoNombreMadre(),
         _espacio(),
-        _crearCampoIdentificacionMadre(),
+        _crearCampoIdentificacionMadre(maskIdentificacionMadre),
         _espacio(),
         _crearCampoNombrePadre(),
         _espacio(),
-        _crearCampoIdentificacionPadre(),
+        _crearCampoIdentificacionPadre(maskIdentificacionPadre),
         _espacio(),
         _crearCampoCarneVacuna(),
         _espacio(),
@@ -413,11 +427,12 @@ class _EditarPacientePageState extends State<EditarPacientePage> {
           child: TextFormField(
             initialValue: _formBloc.identificacion,
             inputFormatters: [mask],
+            autovalidate: true,
+            validator: validaTexto,
             onSaved: _formBloc.onChangeIdentificacion,
             maxLength: 13,
             keyboardType: TextInputType.number,
             decoration: inputsDecorations('Identificación', Icons.credit_card),
-            onChanged: _formBloc.onChangeIdentificacion,
           ),
         );
       },
@@ -678,19 +693,19 @@ class _EditarPacientePageState extends State<EditarPacientePage> {
     );
   }
 
-  Widget _crearCampoIdentificacionMadre() {
+  Widget _crearCampoIdentificacionMadre(MaskTextInputFormatter mask) {
     return StreamBuilder(
       stream: _formBloc.identificacionStream,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         return Padding(
           padding: EdgeInsets.only(left: 8.0, right: 8.0),
           child: TextFormField(
+            inputFormatters: [mask],
             initialValue: _formBloc.identificacionMadre,
             onSaved: _formBloc.onChangeIdentificacionMadre,
             maxLength: 13,
             keyboardType: TextInputType.number,
             decoration: inputsDecorations('Identificación Madre', Icons.person),
-            onChanged: _formBloc.onChangeIdentificacionMadre,
           ),
         );
       },
@@ -715,19 +730,19 @@ class _EditarPacientePageState extends State<EditarPacientePage> {
     );
   }
 
-  Widget _crearCampoIdentificacionPadre() {
+  Widget _crearCampoIdentificacionPadre(MaskTextInputFormatter mask) {
     return StreamBuilder(
       stream: _formBloc.identificacionPadreStream,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         return Padding(
           padding: EdgeInsets.only(left: 8.0, right: 8.0),
           child: TextFormField(
+            inputFormatters: [mask],
             initialValue: _formBloc.identificacionPadre,
             onSaved: _formBloc.onChangeIdentificacionPadre,
             maxLength: 13,
             keyboardType: TextInputType.number,
             decoration: inputsDecorations('Identificación Padre', Icons.person),
-            onChanged: _formBloc.onChangeIdentificacionPadre,
           ),
         );
       },
@@ -857,29 +872,25 @@ class _EditarPacientePageState extends State<EditarPacientePage> {
               child: StreamBuilder(
                 stream: _formBloc.paisIdStream,
                 builder: (BuildContext context, AsyncSnapshot snapshot) {
-                  if (snapshot.hasData) {
-                    return DropdownButtonHideUnderline(
-                        child: DropdownButton(
-                      value: _formBloc.paisId,
-                      isDense: true,
-                      onChanged: (value) {
-                        setState(() {
-                          _formBloc.onChangePaisId(value);
-                        });
-                      },
-                      items: lista.map((x) {
-                        return DropdownMenuItem(
-                          value: x.paisId,
-                          child: Text(
-                            x.nombre,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        );
-                      }).toList(),
-                    ));
-                  } else {
-                    return CircularProgressIndicator();
-                  }
+                  if (!snapshot.hasData) return CircularProgressIndicator();
+                  return DropdownButtonHideUnderline(
+                      child: DropdownButton(
+                    value: snapshot.data,
+                    isDense: true,
+                    onChanged: (value) {
+                      _formBloc.onChangePaisId(value);
+                      FocusScope.of(context).requestFocus(FocusNode());
+                    },
+                    items: lista.map((x) {
+                      return DropdownMenuItem(
+                        value: x.paisId,
+                        child: Text(
+                          x.nombre,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      );
+                    }).toList(),
+                  ));
                 },
               ),
             ),
@@ -1075,35 +1086,27 @@ class _EditarPacientePageState extends State<EditarPacientePage> {
             child: InputDecorator(
               decoration:
                   inputsDecorations('Departamento de Nacimiento', Icons.map),
-              child: StreamBuilder(
-                stream: _formBloc.departamentoIdStream,
-                builder: (BuildContext context, AsyncSnapshot snapshot) {
-                  if (snapshot.hasData) {
-                    return DropdownButtonHideUnderline(
-                        child: DropdownButton(
-                      value: snapshot.data,
-                      isDense: true,
-                      onChanged: (value) {
-                        _formBloc.onChangeDepartamentoId(value);
-                        pacientesBloc.cargarMunicipios(value);
-                        _formBloc.onChangeMunicipioId(null);
-                        FocusScope.of(context).requestFocus(FocusNode());
-                      },
-                      items: lista.map((x) {
-                        return DropdownMenuItem(
-                          value: x.departamentoId,
-                          child: Text(
-                            x.nombre,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        );
-                      }).toList(),
-                    ));
-                  } else {
-                    return CircularProgressIndicator();
-                  }
+              child: DropdownButtonHideUnderline(
+                  child: DropdownButton(
+                value: _formBloc.departamentoId,
+                isDense: true,
+                onChanged: (value) {
+                  _formBloc.onChangeDepartamentoId(value);
+                  _formBloc.onChangeMunicipioId(null);
+                  pacientesBloc.cargarMunicipios(value);
+                  FocusScope.of(context).requestFocus(FocusNode());
+                  setState(() {});
                 },
-              ),
+                items: lista.map((x) {
+                  return DropdownMenuItem(
+                    value: x.departamentoId,
+                    child: Text(
+                      x.nombre,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  );
+                }).toList(),
+              )),
             ),
           );
         } else {
@@ -1116,48 +1119,36 @@ class _EditarPacientePageState extends State<EditarPacientePage> {
   Widget _crearDropDownMunicipio() {
     return StreamBuilder(
       stream: pacientesBloc.municipiosListStream,
-      builder:
-          (BuildContext context, AsyncSnapshot<List<MunicipioModel>> snapshot) {
-        if (snapshot.hasData) {
-          final lista = snapshot.data;
-          _formBloc.onChangeMunicipioId(pacientesBloc.primerMunicipio);
-          return Padding(
-              padding: EdgeInsets.only(left: 8.0, right: 8.0),
-              child: InputDecorator(
-                decoration:
-                    inputsDecorations('Municipio de Nacimiento', Icons.map),
-                child: StreamBuilder(
-                  stream: _formBloc.municipioIdStream,
-                  builder: (BuildContext context, AsyncSnapshot snapshot) {
-                    if (snapshot.hasData) {
-                      return DropdownButtonHideUnderline(
-                          child: DropdownButton(
-                        icon: Icon(Icons.arrow_drop_down),
-                        isDense: true,
-                        value: snapshot.data,
-                        onChanged: (value) {
-                          _formBloc.onChangeMunicipioId(value);
-                          FocusScope.of(context).requestFocus(FocusNode());
-                        },
-                        items: lista.map((x) {
-                          return DropdownMenuItem(
-                            value: x.municipioId,
-                            child: Text(
-                              x.nombre,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          );
-                        }).toList(),
-                      ));
-                    } else {
-                      return Center(child: CircularProgressIndicator());
-                    }
-                  },
-                ),
-              ));
-        } else {
-          return CircularProgressIndicator();
-        }
+      builder: (BuildContext context,
+          AsyncSnapshot<List<MunicipioModel>> snapshotMuni) {
+        if (!snapshotMuni.hasData) return CircularProgressIndicator();
+        return (pacientesBloc.cargando)
+            ? CircularProgressIndicator()
+            : Padding(
+                padding: EdgeInsets.only(left: 8.0, right: 8.0),
+                child: InputDecorator(
+                    decoration:
+                        inputsDecorations('Municipio de Nacimiento', Icons.map),
+                    child: DropdownButtonHideUnderline(
+                        child: DropdownButton(
+                      icon: Icon(Icons.arrow_drop_down),
+                      isDense: true,
+                      value: _formBloc.municipioId,
+                      onChanged: (value) {
+                        _formBloc.onChangeMunicipioId(value);
+                        FocusScope.of(context).requestFocus(FocusNode());
+                      },
+                      items: snapshotMuni.data.map((x) {
+                        return DropdownMenuItem(
+                          value: x.municipioId,
+                          child: Text(
+                            x.nombre,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        );
+                      }).toList(),
+                    ))),
+              );
       },
     );
   }
@@ -1174,35 +1165,27 @@ class _EditarPacientePageState extends State<EditarPacientePage> {
             child: InputDecorator(
               decoration:
                   inputsDecorations('Departamento de Residencia', Icons.map),
-              child: StreamBuilder(
-                stream: _formBloc.departamendoResidenciaIdStream,
-                builder: (BuildContext context, AsyncSnapshot snapshot) {
-                  if (snapshot.hasData) {
-                    return DropdownButtonHideUnderline(
-                        child: DropdownButton(
-                      value: snapshot.data,
-                      isDense: true,
-                      onChanged: (value) {
-                        _formBloc.onChangeDepartamentoResidenciaId(value);
-                        pacientesBloc.cargarMunicipiosResi(value);
-                        _formBloc.onChangeMunicipioResidenciaId(null);
-                        FocusScope.of(context).requestFocus(FocusNode());
-                      },
-                      items: lista.map((x) {
-                        return DropdownMenuItem(
-                          value: x.departamentoId,
-                          child: Text(
-                            x.nombre,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        );
-                      }).toList(),
-                    ));
-                  } else {
-                    return CircularProgressIndicator();
-                  }
+              child: DropdownButtonHideUnderline(
+                  child: DropdownButton(
+                value: _formBloc.departamentoResidenciaId,
+                isDense: true,
+                onChanged: (value) {
+                  _formBloc.onChangeDepartamentoResidenciaId(value);
+                  _formBloc.onChangeMunicipioResidenciaId(null);
+                  pacientesBloc.cargarMunicipiosResi(value);
+                  FocusScope.of(context).requestFocus(FocusNode());
+                  setState(() {});
                 },
-              ),
+                items: lista.map((x) {
+                  return DropdownMenuItem(
+                    value: x.departamentoId,
+                    child: Text(
+                      x.nombre,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  );
+                }).toList(),
+              )),
             ),
           );
         } else {
@@ -1215,49 +1198,36 @@ class _EditarPacientePageState extends State<EditarPacientePage> {
   Widget _crearDropDownMunicipioResidencia() {
     return StreamBuilder(
       stream: pacientesBloc.municipiosResiListStream,
-      builder:
-          (BuildContext context, AsyncSnapshot<List<MunicipioModel>> snapshot) {
-        if (snapshot.hasData) {
-          final lista = snapshot.data;
-          _formBloc.onChangeMunicipioResidenciaId(
-              pacientesBloc.primerMunicipioResidencia);
-          return Padding(
-              padding: EdgeInsets.only(left: 8.0, right: 8.0),
-              child: InputDecorator(
-                decoration:
-                    inputsDecorations('Municipio de Residencia', Icons.map),
-                child: StreamBuilder(
-                  stream: _formBloc.municipioResidenciaIdStream,
-                  builder: (BuildContext context, AsyncSnapshot snapshot) {
-                    if (snapshot.hasData) {
-                      return DropdownButtonHideUnderline(
-                          child: DropdownButton(
-                        icon: Icon(Icons.arrow_drop_down),
-                        isDense: true,
-                        value: snapshot.data,
-                        onChanged: (value) {
-                          _formBloc.onChangeMunicipioResidenciaId(value);
-                          FocusScope.of(context).requestFocus(FocusNode());
-                        },
-                        items: lista.map((x) {
-                          return DropdownMenuItem(
-                            value: x.municipioId,
-                            child: Text(
-                              x.nombre,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          );
-                        }).toList(),
-                      ));
-                    } else {
-                      return Center(child: CircularProgressIndicator());
-                    }
-                  },
-                ),
-              ));
-        } else {
-          return CircularProgressIndicator();
-        }
+      builder: (BuildContext context,
+          AsyncSnapshot<List<MunicipioModel>> snapshotResi) {
+        if (!snapshotResi.hasData) return CircularProgressIndicator();
+        return (pacientesBloc.cargandoMunicipiosResi)
+            ? CircularProgressIndicator()
+            : Padding(
+                padding: EdgeInsets.only(left: 8.0, right: 8.0),
+                child: InputDecorator(
+                  decoration:
+                      inputsDecorations('Municipio de Residencia', Icons.map),
+                  child: DropdownButtonHideUnderline(
+                      child: DropdownButton(
+                    icon: Icon(Icons.arrow_drop_down),
+                    isDense: true,
+                    value: _formBloc.municipioResidenciaId,
+                    onChanged: (value) {
+                      _formBloc.onChangeMunicipioResidenciaId(value);
+                      FocusScope.of(context).requestFocus(FocusNode());
+                    },
+                    items: snapshotResi.data.map((x) {
+                      return DropdownMenuItem(
+                        value: x.municipioId,
+                        child: Text(
+                          x.nombre,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      );
+                    }).toList(),
+                  )),
+                ));
       },
     );
   }
@@ -1294,7 +1264,7 @@ class _EditarPacientePageState extends State<EditarPacientePage> {
     } else {
       _formKey.currentState.save();
       _pacienteGuardar.pacienteId = _paciente.pacienteId;
-      _pacienteGuardar.doctorId = _paciente.doctorId;
+
       _pacienteGuardar.paisId = _formBloc.paisId;
       _pacienteGuardar.profesionId = _formBloc.profesionId;
       _pacienteGuardar.escolaridadId = _formBloc.escolaridadId;

@@ -9,25 +9,9 @@ Habitos habitosFromJson(String str) => Habitos.fromJson(json.decode(str));
 String habitosToJson(Habitos data) => json.encode(data.toJson());
 
 class Habitos {
-  int habitoId;
-  int pacienteId;
-  int doctorId;
-  bool cafe;
-  bool cigarrillo;
-  bool alcohol;
-  bool drogasEstupefaciente;
-  int preclinicaId;
-  bool activo;
-  String creadoPor;
-  DateTime creadoFecha;
-  String modificadoPor;
-  DateTime modificadoFecha;
-  String notas;
-
   Habitos({
     this.habitoId,
     this.pacienteId,
-    this.doctorId,
     this.cafe,
     this.cigarrillo,
     this.alcohol,
@@ -41,10 +25,23 @@ class Habitos {
     this.notas,
   });
 
+  int habitoId;
+  int pacienteId;
+  bool cafe;
+  bool cigarrillo;
+  bool alcohol;
+  bool drogasEstupefaciente;
+  int preclinicaId;
+  bool activo;
+  String creadoPor;
+  DateTime creadoFecha;
+  String modificadoPor;
+  DateTime modificadoFecha;
+  String notas;
+
   factory Habitos.fromJson(Map<String, dynamic> json) => Habitos(
         habitoId: json["habitoId"],
         pacienteId: json["pacienteId"],
-        doctorId: json["doctorId"],
         cafe: json["cafe"],
         cigarrillo: json["cigarrillo"],
         alcohol: json["alcohol"],
@@ -61,7 +58,6 @@ class Habitos {
   Map<String, dynamic> toJson() => {
         "habitoId": habitoId,
         "pacienteId": pacienteId,
-        "doctorId": doctorId,
         "cafe": cafe,
         "cigarrillo": cigarrillo,
         "alcohol": alcohol,

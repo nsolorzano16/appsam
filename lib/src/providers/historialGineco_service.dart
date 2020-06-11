@@ -53,15 +53,14 @@ class HistorialGinecoObstetraService {
   }
 
   Future<HistorialGinecoObstetra> getHistorialGinecoObstetra(
-      int pacienteId, int doctorId) async {
+      int pacienteId) async {
     final String token = StorageUtil.getString('token');
     final headers = {
       "content-type": "application/json",
       "accept": "application/json",
       'authorization': 'Bearer $token',
     };
-    final url =
-        '$_apiURL/api/HistorialGinecoObstetra/pacienteId/$pacienteId/doctorId/$doctorId';
+    final url = '$_apiURL/api/HistorialGinecoObstetra/pacienteId/$pacienteId';
 
     //print(usuarioModelToJson(usuario));
     final resp = await http.get(url, headers: headers);
