@@ -1,5 +1,8 @@
+import 'package:appsam/src/models/anticonceptivos_model.dart';
+import 'package:appsam/src/providers/combos_service.dart';
 import 'package:appsam/src/widgets/firebaseMessageWrapper.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:getflutter/getflutter.dart';
 import 'package:intl/intl.dart';
@@ -30,23 +33,28 @@ class _CrearHistorialGinecoObstetraPageState
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
 
   final _historialBloc = new HistorialGinecoObstetraBloc();
+  final _combosService = new CombosService();
 
   String labelBoton = 'Guardar';
   DateTime pickedFum;
+  DateTime pickedMenarquia;
+  DateTime pickedMenopausia;
 
   TextEditingController _fumController = new TextEditingController();
-  TextEditingController _furController = new TextEditingController();
-  TextEditingController _sgController = new TextEditingController();
+  TextEditingController _menarquiaController = new TextEditingController();
+
   TextEditingController _gController = new TextEditingController();
   TextEditingController _pController = new TextEditingController();
   TextEditingController _cController = new TextEditingController();
   TextEditingController _hvController = new TextEditingController();
-  TextEditingController _fppController = new TextEditingController();
-  TextEditingController _ucController = new TextEditingController();
+  TextEditingController _hmController = new TextEditingController();
+  TextEditingController _descripcionAnticonceptivoController =
+      new TextEditingController();
+  bool vacunaVph;
   TextEditingController _menopausiaController = new TextEditingController();
-  TextEditingController _anticonceptivoController = new TextEditingController();
-  TextEditingController _vacunacionController = new TextEditingController();
   TextEditingController _notasController = new TextEditingController();
+
+  int _currentAnticonceptivo;
 
   @override
   void initState() {
@@ -60,37 +68,46 @@ class _CrearHistorialGinecoObstetraPageState
     _fumController.text = (widget.historial.fum != null)
         ? format.format(widget.historial.fum)
         : '';
-
-    _gController.text = (widget.historial.g != null) ? widget.historial.g : '';
-    _pController.text = (widget.historial.p != null) ? widget.historial.p : '';
-    _cController.text = (widget.historial.c != null) ? widget.historial.c : '';
-    _hvController.text =
-        (widget.historial.hv != null) ? widget.historial.hv : '';
-    _fppController.text =
-        (widget.historial.fpp != null) ? widget.historial.fpp : '';
-
-    _anticonceptivoController.text = (widget.historial.anticonceptivos != null)
-        ? widget.historial.anticonceptivos
+    _menarquiaController.text = (widget.historial.fechaMenarquia != null)
+        ? format.format(widget.historial.fechaMenarquia)
         : '';
 
+    _menopausiaController.text = (widget.historial.fechaMenopausia != null)
+        ? format.format(widget.historial.fechaMenopausia)
+        : '';
+    _gController.text =
+        (widget.historial.g != null) ? widget.historial.g.toString() : '';
+    _pController.text =
+        (widget.historial.p != null) ? widget.historial.p.toString() : '';
+    _cController.text =
+        (widget.historial.c != null) ? widget.historial.c.toString() : '';
+    _hvController.text =
+        (widget.historial.hv != null) ? widget.historial.hv.toString() : '';
+    _hmController.text =
+        (widget.historial.hm != null) ? widget.historial.hm.toString() : '';
+
+    _descripcionAnticonceptivoController.text =
+        (widget.historial.descripcionAnticonceptivos != null)
+            ? widget.historial.descripcionAnticonceptivos
+            : '';
+    vacunaVph = widget.historial.vacunaVph;
     _notasController.text =
         (widget.historial.notas != null) ? widget.historial.notas : '';
+
+    _currentAnticonceptivo = widget.historial.anticonceptivoId;
   }
 
   @override
   void dispose() {
     _fumController.dispose();
-    _furController.dispose();
-    _sgController.dispose();
+    _menarquiaController.dispose();
+    _menopausiaController.dispose();
     _gController.dispose();
     _pController.dispose();
     _cController.dispose();
     _hvController.dispose();
-    _fppController.dispose();
-    _ucController.dispose();
-    _menopausiaController.dispose();
-    _anticonceptivoController.dispose();
-    _vacunacionController.dispose();
+    _hmController.dispose();
+    _descripcionAnticonceptivoController.dispose();
     _notasController.dispose();
     super.dispose();
   }
@@ -158,12 +175,52 @@ class _CrearHistorialGinecoObstetraPageState
                                 }))
                       ],
                     ),
+                    Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Expanded(child: _campoMenarquia(context)),
+                        Container(
+                            margin: EdgeInsets.only(bottom: 25.0),
+                            child: IconButton(
+                                icon: Icon(
+                                  Icons.delete,
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                                onPressed: () {
+                                  _menarquiaController.text = '';
+                                  pickedMenarquia = null;
+                                  widget.historial.fechaMenarquia = null;
+                                }))
+                      ],
+                    ),
+                    Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Expanded(child: _campoFechaMenopausia(context)),
+                        Container(
+                            margin: EdgeInsets.only(bottom: 25.0),
+                            child: IconButton(
+                                icon: Icon(
+                                  Icons.delete,
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                                onPressed: () {
+                                  _menopausiaController.text = '';
+                                  pickedMenopausia = null;
+                                  widget.historial.fechaMenopausia = null;
+                                }))
+                      ],
+                    ),
+                    _campoDropdownAnticonceptivos(),
+                    _campoAnticonceptivoDescripcion(),
+                    _campoVacunaVPH(),
                     _campoG(),
                     _campoP(),
                     _campoC(),
                     _campoHV(),
-                    _campoFPP(),
-                    _campoAnticonceptivo(),
+                    _campoHM(),
                     _campoNotas(),
                     _crearBotones(context)
                   ],
@@ -189,19 +246,19 @@ class _CrearHistorialGinecoObstetraPageState
             ),
             border:
                 OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
-            labelText: 'Menarquia',
+            labelText: 'Ultima menstruación',
             helperText: '',
             hintText: '',
             isDense: true),
         onTap: () {
           FocusScope.of(context).requestFocus(new FocusNode());
-          selectDateMenarquia(context);
+          selectDateFum(context);
         },
       ),
     );
   }
 
-  void selectDateMenarquia(BuildContext context) async {
+  void selectDateFum(BuildContext context) async {
     pickedFum = await showDatePicker(
         helpText: 'Seleccione fecha.',
         errorFormatText: 'Fecha invalida',
@@ -220,76 +277,224 @@ class _CrearHistorialGinecoObstetraPageState
     }
   }
 
-  Widget _campoG() {
+  Widget _campoMenarquia(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
+        enableInteractiveSelection: false,
+        controller: _menarquiaController,
+        decoration: InputDecoration(
+            filled: true,
+            fillColor: Colors.white,
+            prefixIcon: Icon(
+              Icons.calendar_today,
+              color: Colors.redAccent,
+            ),
+            border:
+                OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
+            labelText: 'Menarquia',
+            helperText: '',
+            hintText: '',
+            isDense: true),
+        onTap: () {
+          FocusScope.of(context).requestFocus(new FocusNode());
+          selectDateMenarquia(context);
+        },
+      ),
+    );
+  }
+
+  void selectDateMenarquia(BuildContext context) async {
+    pickedMenarquia = await showDatePicker(
+        helpText: 'Seleccione fecha.',
+        errorFormatText: 'Fecha invalida',
+        fieldLabelText: 'Ingrese fecha',
+        initialDatePickerMode: DatePickerMode.year,
+        context: context,
+        initialDate: new DateTime.now(),
+        firstDate: new DateTime(1930),
+        lastDate: new DateTime.now(),
+        locale: Locale('es', 'ES'));
+
+    if (pickedMenarquia != null) {
+      var format = DateFormat('dd/MM/yyyy');
+      widget.historial.fechaMenarquia = pickedMenarquia;
+      _menarquiaController.text = format.format(pickedMenarquia);
+    }
+  }
+
+  Widget _campoFechaMenopausia(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(left: 8.0, right: 8.0),
+      child: TextFormField(
+        enableInteractiveSelection: false,
+        controller: _menopausiaController,
+        decoration: InputDecoration(
+            filled: true,
+            fillColor: Colors.white,
+            prefixIcon: Icon(
+              Icons.calendar_today,
+              color: Colors.redAccent,
+            ),
+            border:
+                OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
+            labelText: 'Fecha menopausia',
+            helperText: '',
+            hintText: '',
+            isDense: true),
+        onTap: () {
+          FocusScope.of(context).requestFocus(new FocusNode());
+          selectDateMenopausia(context);
+        },
+      ),
+    );
+  }
+
+  void selectDateMenopausia(BuildContext context) async {
+    pickedMenopausia = await showDatePicker(
+        helpText: 'Seleccione fecha.',
+        errorFormatText: 'Fecha invalida',
+        fieldLabelText: 'Ingrese fecha',
+        initialDatePickerMode: DatePickerMode.year,
+        context: context,
+        initialDate: new DateTime.now(),
+        firstDate: new DateTime(1930),
+        lastDate: new DateTime.now(),
+        locale: Locale('es', 'ES'));
+
+    if (pickedMenopausia != null) {
+      var format = DateFormat('dd/MM/yyyy');
+      widget.historial.fechaMenopausia = pickedMenopausia;
+      _menopausiaController.text = format.format(pickedMenopausia);
+    }
+  }
+
+  Widget _campoVacunaVPH() {
+    return SwitchListTile(
+        title: Text('Vacuna VPH:'),
+        value: vacunaVph,
+        onChanged: (value) {
+          vacunaVph = value;
+          widget.historial.vacunaVph = value;
+          setState(() {});
+        });
+  }
+
+  Widget _campoG() {
+    return Padding(
+      padding: EdgeInsets.only(left: 8.0, right: 8.0, bottom: 8.0),
+      child: TextFormField(
+        inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
         controller: _gController,
-        onSaved: (value) => widget.historial.g = value,
-        keyboardType: TextInputType.text,
-        decoration: inputsDecorations('G', Icons.insert_drive_file),
+        onSaved: (value) => widget.historial.g =
+            (value.isNotEmpty) ? int.parse(value) : int.parse('0'),
+        keyboardType: TextInputType.number,
+        decoration: inputsDecorations(
+          'Num. de Gesta',
+          Icons.insert_drive_file,
+        ),
       ),
     );
   }
 
   Widget _campoP() {
     return Padding(
-      padding: EdgeInsets.only(left: 8.0, right: 8.0),
+      padding: EdgeInsets.only(left: 8.0, right: 8.0, bottom: 8.0),
       child: TextFormField(
+        inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
         controller: _pController,
-        onSaved: (value) => widget.historial.p = value,
-        keyboardType: TextInputType.text,
-        decoration: inputsDecorations('P', Icons.insert_drive_file),
+        onSaved: (value) => widget.historial.p =
+            (value.isNotEmpty) ? int.parse(value) : int.parse('0'),
+        keyboardType: TextInputType.number,
+        decoration: inputsDecorations('Partos', Icons.insert_drive_file),
       ),
     );
   }
 
   Widget _campoC() {
     return Padding(
-      padding: EdgeInsets.only(left: 8.0, right: 8.0),
+      padding: EdgeInsets.only(left: 8.0, right: 8.0, bottom: 8.0),
       child: TextFormField(
+        autovalidate: true,
+        inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
         controller: _cController,
-        onSaved: (value) => widget.historial.c = value,
-        keyboardType: TextInputType.text,
-        decoration: inputsDecorations('C', Icons.insert_drive_file),
+        onSaved: (value) => widget.historial.c =
+            (value.isNotEmpty) ? int.parse(value) : int.parse('0'),
+        keyboardType: TextInputType.number,
+        decoration: inputsDecorations('Cesáreas', Icons.insert_drive_file),
       ),
     );
   }
 
   Widget _campoHV() {
     return Padding(
-      padding: EdgeInsets.only(left: 8.0, right: 8.0),
+      padding: EdgeInsets.only(left: 8.0, right: 8.0, bottom: 8.0),
       child: TextFormField(
+        inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
         controller: _hvController,
-        onSaved: (value) => widget.historial.hv = value,
-        keyboardType: TextInputType.text,
-        decoration: inputsDecorations('HV', Icons.insert_drive_file),
+        onSaved: (value) => widget.historial.hv =
+            (value.isNotEmpty) ? int.parse(value) : int.parse('0'),
+        keyboardType: TextInputType.number,
+        decoration: inputsDecorations('Hijos vivos', Icons.insert_drive_file),
       ),
     );
   }
 
-  Widget _campoFPP() {
+  Widget _campoHM() {
     return Padding(
-      padding: EdgeInsets.only(left: 8.0, right: 8.0),
+      padding: EdgeInsets.only(left: 8.0, right: 8.0, bottom: 8.0),
       child: TextFormField(
-        controller: _fppController,
-        onSaved: (value) => widget.historial.fpp = value,
-        keyboardType: TextInputType.text,
-        decoration: inputsDecorations('FPP', Icons.insert_drive_file),
+        controller: _hmController,
+        inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
+        onSaved: (value) => widget.historial.hm =
+            (value.isNotEmpty) ? int.parse(value) : int.parse('0'),
+        keyboardType: TextInputType.number,
+        decoration: inputsDecorations('Hijos muertos', Icons.insert_drive_file),
       ),
     );
   }
 
-  Widget _campoAnticonceptivo() {
-    return Padding(
-      padding: EdgeInsets.only(left: 8.0, right: 8.0),
-      child: TextFormField(
-        controller: _anticonceptivoController,
-        onSaved: (value) => widget.historial.anticonceptivos = value,
-        keyboardType: TextInputType.text,
-        decoration:
-            inputsDecorations('Anticonceptivos', Icons.insert_drive_file),
-      ),
+  Widget _campoDropdownAnticonceptivos() {
+    return FutureBuilder(
+      future: _combosService.getAnticonceptivos(),
+      builder: (BuildContext context,
+          AsyncSnapshot<List<AnticonceptivosModel>> snapshot) {
+        if (snapshot.hasData) {
+          final lista = snapshot.data;
+          return Padding(
+            padding: EdgeInsets.only(
+              left: 8.0,
+              right: 8.0,
+            ),
+            child: InputDecorator(
+              decoration: inputsDecorations('Anticonceptivos', Icons.map),
+              child: DropdownButtonHideUnderline(
+                  child: DropdownButton(
+                value: _currentAnticonceptivo,
+                isDense: true,
+                onChanged: (value) {
+                  _currentAnticonceptivo = value;
+                  widget.historial.anticonceptivoId = value;
+                  FocusScope.of(context).requestFocus(FocusNode());
+
+                  setState(() {});
+                },
+                items: lista.map((x) {
+                  return DropdownMenuItem(
+                    value: x.anticonceptivoId,
+                    child: Text(
+                      x.nombre,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  );
+                }).toList(),
+              )),
+            ),
+          );
+        } else {
+          return CircularProgressIndicator();
+        }
+      },
     );
   }
 
@@ -302,6 +507,19 @@ class _CrearHistorialGinecoObstetraPageState
         onSaved: (value) => widget.historial.notas = value,
         keyboardType: TextInputType.text,
         decoration: inputsDecorations('Notas Adicionales', Icons.note),
+      ),
+    );
+  }
+
+  Widget _campoAnticonceptivoDescripcion() {
+    return Padding(
+      padding: EdgeInsets.only(left: 8.0, right: 8.0),
+      child: TextFormField(
+        controller: _descripcionAnticonceptivoController,
+        maxLines: 2,
+        onSaved: (value) => widget.historial.descripcionAnticonceptivos = value,
+        keyboardType: TextInputType.text,
+        decoration: inputsDecorations('Descripción anticonceptivo', Icons.note),
       ),
     );
   }
@@ -344,17 +562,14 @@ class _CrearHistorialGinecoObstetraPageState
           color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600),
     );
     if (_fumController.text.isEmpty &&
-        _furController.text.isEmpty &&
-        _sgController.text.isEmpty &&
+        _menarquiaController.text.isEmpty &&
+        _descripcionAnticonceptivoController.text.isEmpty &&
         _gController.text.isEmpty &&
         _pController.text.isEmpty &&
         _cController.text.isEmpty &&
         _hvController.text.isEmpty &&
-        _fppController.text.isEmpty &&
-        _ucController.text.isEmpty &&
+        _hmController.text.isEmpty &&
         _menopausiaController.text.isEmpty &&
-        _anticonceptivoController.text.isEmpty &&
-        _vacunacionController.text.isEmpty &&
         _notasController.text.isEmpty) {
       mostrarFlushBar(context, Colors.black, 'Info',
           'El formulario no puede estar vacio', 3, Icons.info, Colors.white);

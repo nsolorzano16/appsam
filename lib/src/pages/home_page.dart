@@ -51,7 +51,7 @@ class _HomePageState extends State<HomePage> {
           child: Scaffold(
             drawer: MenuWidget(),
             appBar: AppBar(
-              title: Text('Inicio'),
+              title: Text('Inicios'),
             ),
             body: Container(),
           ),

@@ -171,40 +171,52 @@ class PacientesViewModel {
         primerApellido: json["primerApellido"],
         segundoApellido: json["segundoApellido"],
         identificacion: json["identificacion"],
-        email: json["email"],
+        email: json["email"] == null ? "" : json["email"],
         sexo: json["sexo"],
         fechaNacimiento: DateTime.parse(json["fechaNacimiento"]),
         estadoCivil: json["estadoCivil"],
         edad: json["edad"],
-        direccion: json["direccion"],
-        telefono1: json["telefono1"],
-        telefono2: json["telefono2"],
-        nombreEmergencia: json["nombreEmergencia"],
-        telefonoEmergencia: json["telefonoEmergencia"],
-        parentesco: json["parentesco"],
+        direccion: json["direccion"] == null ? "" : json["direccion"],
+        telefono1: json["telefono1"] == null ? "" : json["telefono1"],
+        telefono2: json["telefono2"] == null ? "" : json["telefono2"],
+        nombreEmergencia:
+            json["nombreEmergencia"] == null ? "" : json["nombreEmergencia"],
+        telefonoEmergencia: json["telefonoEmergencia"] == null
+            ? ""
+            : json["telefonoEmergencia"],
+        parentesco: json["parentesco"] == null ? "" : json["parentesco"],
         menorDeEdad: json["menorDeEdad"],
-        nombreMadre: json["nombreMadre"],
-        identificacionMadre: json["identificacionMadre"],
-        nombrePadre: json["nombrePadre"],
-        identificacionPadre: json["identificacionPadre"],
-        carneVacuna: json["carneVacuna"],
+        nombreMadre: json["nombreMadre"] == null ? "" : json["nombreMadre"],
+        identificacionMadre: json["identificacionMadre"] == null
+            ? ""
+            : json["identificacionMadre"],
+        nombrePadre: json["nombrePadre"] == null ? "" : json["nombrePadre"],
+        identificacionPadre: json["identificacionPadre"] == null
+            ? ""
+            : json["identificacionPadre"],
+        carneVacuna: json["carneVacuna"] == null ? "" : json["carneVacuna"],
         fotoUrl: json["fotoUrl"],
-        pais: json["pais"],
-        profesion: json["profesion"],
-        escolaridad: json["escolaridad"],
-        religion: json["religion"],
-        grupoSanguineo: json["grupoSanguineo"],
-        grupoEtnico: json["grupoEtnico"],
-        departamento: json["departamento"],
-        municipio: json["municipio"],
-        departamentoResidencia: json["departamentoResidencia"],
-        municipioResidencia: json["municipioResidencia"],
+        pais: json["pais"] == null ? "" : json["pais"],
+        profesion: json["profesion"] == null ? "" : json["profesion"],
+        escolaridad: json["escolaridad"] == null ? "" : json["escolaridad"],
+        religion: json["religion"] == null ? "" : json["religion"],
+        grupoSanguineo:
+            json["grupoSanguineo"] == null ? "" : json["grupoSanguineo"],
+        grupoEtnico: json["grupoEtnico"] == null ? "" : json["grupoEtnico"],
+        departamento: json["departamento"] == null ? "" : json["departamento"],
+        municipio: json["municipio"] == null ? "" : json["municipio"],
+        departamentoResidencia: json["departamentoResidencia"] == null
+            ? ""
+            : json["departamentoResidencia"],
+        municipioResidencia: json["municipioResidencia"] == null
+            ? ""
+            : json["municipioResidencia"],
         activo: json["activo"],
         creadoPor: json["creadoPor"],
         creadoFecha: DateTime.parse(json["creadoFecha"]),
         modificadoPor: json["modificadoPor"],
         modificadoFecha: DateTime.parse(json["modificadoFecha"]),
-        notas: json["notas"],
+        notas: json["notas"] == null ? "" : json["notas"],
       );
 
   Map<String, dynamic> toJson() => {

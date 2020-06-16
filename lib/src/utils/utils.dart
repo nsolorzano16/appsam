@@ -29,14 +29,6 @@ void mostrarAlerta(BuildContext context, String mensaje) {
       });
 }
 
-String validaNulo(String valor) {
-  if (valor != null) {
-    return valor;
-  } else {
-    return '';
-  }
-}
-
 Widget loadingIndicator(BuildContext context) {
   return Center(
     child: SpinKitWave(

@@ -115,7 +115,7 @@ class _PacienteDetalleState extends State<PacienteDetalle> {
               ]),
               TableRow(children: [
                 Text('Email:'),
-                (paciente.identificacion != null)
+                (paciente.email!= null)
                     ? Text('${paciente.email}')
                     : Text('*****'),
               ]),
@@ -139,6 +139,7 @@ class _PacienteDetalleState extends State<PacienteDetalle> {
               ]),
               TableRow(children: [
                 Text('Contacto de Emergencia:'),
+                
                 Text('${paciente.nombreEmergencia}'),
               ]),
               TableRow(children: [

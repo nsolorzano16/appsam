@@ -48,14 +48,16 @@ class CalendarioFechaModel {
         inicio: DateTime.parse(json["inicio"]),
         fin: DateTime.parse(json["fin"]),
         todoElDia: json["todoElDia"],
-        colorPrimario: json["colorPrimario"],
-        colorSecundario: json["colorSecundario"],
+        colorPrimario:
+            json["colorPrimario"] == null ? "" : json["colorPrimario"],
+        colorSecundario:
+            json["colorSecundario"] == null ? "" : json["colorSecundario"],
         activo: json["activo"],
         creadoPor: json["creadoPor"],
         creadoFecha: DateTime.parse(json["creadoFecha"]),
         modificadoPor: json["modificadoPor"],
         modificadoFecha: DateTime.parse(json["modificadoFecha"]),
-        notas: json["notas"],
+        notas: json["notas"] == null ? "" : json["notas"],
       );
 
   Map<String, dynamic> toJson() => {

@@ -61,13 +61,14 @@ class Preclinica {
         presionDiastolica: json["presionDiastolica"],
         iMc: json["imc"].toDouble(),
         atendida: json["atendida"],
-        pesoDescripcion: json["pesoDescripcion"],
+        pesoDescripcion:
+            json["pesoDescripcion"] == null ? "" : json["pesoDescripcion"],
         activo: json["activo"],
         creadoPor: json["creadoPor"],
         creadoFecha: DateTime.parse(json["creadoFecha"]),
         modificadoPor: json["modificadoPor"],
         modificadoFecha: DateTime.parse(json["modificadoFecha"]),
-        notas: json["notas"],
+        notas: json["notas"] == null ? "" : json["notas"],
       );
 
   Map<String, dynamic> toJson() => {

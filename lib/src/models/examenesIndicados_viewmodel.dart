@@ -58,16 +58,18 @@ class ExamenesIndicadosViewModel {
         examenCategoriaId: json["examenCategoriaId"],
         examenTipoId: json["examenTipoId"],
         examenDetalleId: json["examenDetalleId"],
-        nombre: json["nombre"],
+        nombre: json["nombre"] == null ? "" : json["nombre"],
         activo: json["activo"],
         creadoPor: json["creadoPor"],
         creadoFecha: DateTime.parse(json["creadoFecha"]),
         modificadoPor: json["modificadoPor"],
         modificadoFecha: DateTime.parse(json["modificadoFecha"]),
-        notas: json["notas"],
-        examenCategoria: json["examenCategoria"],
-        examenTipo: json["examenTipo"],
-        examenDetalle: json["examenDetalle"],
+        notas: json["notas"] == null ? "" : json["notas"],
+        examenCategoria:
+            json["examenCategoria"] == null ? "" : json["examenCategoria"],
+        examenTipo: json["examenTipo"] == null ? "" : json["examenTipo"],
+        examenDetalle:
+            json["examenDetalle"] == null ? "" : json["examenDetalle"],
       );
 
   Map<String, dynamic> toJson() => {

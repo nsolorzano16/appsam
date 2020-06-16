@@ -104,34 +104,44 @@ class PacienteModel {
         municipioId: json["municipioId"],
         departamentoResidenciaId: json["departamentoResidenciaId"],
         municipioResidenciaId: json["municipioResidenciaId"],
-        nombres: json["nombres"],
-        primerApellido: json["primerApellido"],
-        segundoApellido: json["segundoApellido"],
-        identificacion: json["identificacion"],
-        email: json["email"],
+        nombres: json["nombres"] == null ? "" : json["nombres"],
+        primerApellido:
+            json["primerApellido"] == null ? "" : json["primerApellido"],
+        segundoApellido:
+            json["segundoApellido"] == null ? "" : json["segundoApellido"],
+        identificacion:
+            json["identificacion"] == null ? "" : json["identificacion"],
+        email: json["email"] == null ? "" : json["email"],
         sexo: json["sexo"],
         fechaNacimiento: DateTime.parse(json["fechaNacimiento"]),
         estadoCivil: json["estadoCivil"],
         edad: json["edad"],
-        direccion: json["direccion"],
-        telefono1: json["telefono1"],
-        telefono2: json["telefono2"],
-        nombreEmergencia: json["nombreEmergencia"],
-        telefonoEmergencia: json["telefonoEmergencia"],
-        parentesco: json["parentesco"],
+        direccion: json["direccion"] == null ? "" : json["direccion"],
+        telefono1: json["telefono1"] == null ? "" : json["telefono1"],
+        telefono2: json["telefono2"] == null ? "" : json["telefono2"],
+        nombreEmergencia:
+            json["nombreEmergencia"] == null ? "" : json["nombreEmergencia"],
+        telefonoEmergencia: json["telefonoEmergencia"] == null
+            ? ""
+            : json["telefonoEmergencia"],
+        parentesco: json["parentesco"] == null ? "" : json["parentesco"],
         menorDeEdad: json["menorDeEdad"],
-        nombreMadre: json["nombreMadre"],
-        identificacionMadre: json["identificacionMadre"],
-        nombrePadre: json["nombrePadre"],
-        identificacionPadre: json["identificacionPadre"],
-        carneVacuna: json["carneVacuna"],
+        nombreMadre: json["nombreMadre"] == null ? "" : json["nombreMadre"],
+        identificacionMadre: json["identificacionMadre"] == null
+            ? ""
+            : json["identificacionMadre"],
+        nombrePadre: json["nombrePadre"] == null ? "" : json["nombrePadre"],
+        identificacionPadre: json["identificacionPadre"] == null
+            ? ""
+            : json["identificacionPadre"],
+        carneVacuna: json["carneVacuna"] == null ? "" : json["carneVacuna"],
         fotoUrl: json["fotoUrl"],
         activo: json["activo"],
         creadoPor: json["creadoPor"],
         creadoFecha: DateTime.parse(json["creadoFecha"]),
         modificadoPor: json["modificadoPor"],
         modificadoFecha: DateTime.parse(json["modificadoFecha"]),
-        notas: json["notas"],
+        notas: json["notas"] == null ? "" : json["notas"],
       );
 
   Map<String, dynamic> toJson() => {

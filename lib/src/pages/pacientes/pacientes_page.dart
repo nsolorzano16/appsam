@@ -218,10 +218,7 @@ class _PacientesPageState extends State<PacientesPage> {
                     size: 20.0,
                     color: Theme.of(context).accentColor,
                   ),
-                  onPressed: () {
-                    Navigator.pushReplacementNamed(context, 'crear_preclinica',
-                        arguments: paciente);
-                  }),
+                  onPressed: () {}),
               IconButton(
                   tooltip: 'Preclinica',
                   icon: FaIcon(

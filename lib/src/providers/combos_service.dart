@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:appsam/src/models/anticonceptivos_model.dart';
 import 'package:appsam/src/models/examenCategoria_model.dart';
 import 'package:appsam/src/models/examenDetalle_model.dart';
 import 'package:appsam/src/models/examenTipo_model.dart';
@@ -240,6 +241,28 @@ class CombosService {
       final decodeResp = json.decode(resp.body);
       decodeResp.forEach((detalle) {
         final detalleTemp = ViaAdministracionModel.fromJson(detalle);
+        lista.add(detalleTemp);
+      });
+
+      return lista;
+    }
+    return [];
+  }
+
+  Future<List<AnticonceptivosModel>> getAnticonceptivos() async {
+    final headers = {
+      "content-type": "application/json",
+      "accept": "application/json",
+    };
+
+    final url = '$_apiURL/api/Anticonceptivos';
+    final List<AnticonceptivosModel> lista = new List();
+    final resp = await http.get(url, headers: headers);
+
+    if (resp.statusCode == 200 && resp.body.isNotEmpty) {
+      final decodeResp = json.decode(resp.body);
+      decodeResp.forEach((detalle) {
+        final detalleTemp = AnticonceptivosModel.fromJson(detalle);
         lista.add(detalleTemp);
       });
 

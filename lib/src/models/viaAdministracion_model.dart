@@ -22,7 +22,7 @@ class ViaAdministracionModel {
   factory ViaAdministracionModel.fromJson(Map<String, dynamic> json) =>
       ViaAdministracionModel(
         viaAdministracionId: json["viaAdministracionId"],
-        nombre: json["nombre"],
+        nombre: json["nombre"] == null ? "" : json["nombre"],
       );
 
   Map<String, dynamic> toJson() => {

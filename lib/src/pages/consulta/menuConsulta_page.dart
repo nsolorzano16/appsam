@@ -30,7 +30,8 @@ class MenuConsultaPage extends StatefulWidget {
   _MenuConsultaPageState createState() => _MenuConsultaPageState();
 }
 
-class _MenuConsultaPageState extends State<MenuConsultaPage> {
+class _MenuConsultaPageState extends State<MenuConsultaPage>
+    with SingleTickerProviderStateMixin {
   final _consultaBloc = new ConsultaBloc();
 
   Future<ConsultaModel> _consultaFuture;
@@ -40,6 +41,7 @@ class _MenuConsultaPageState extends State<MenuConsultaPage> {
   @override
   void dispose() {
     _consultaBloc.dispose();
+
     super.dispose();
   }
 
@@ -208,10 +210,10 @@ class _MenuConsultaPageState extends State<MenuConsultaPage> {
                       FadeInRight(
                         child: _cardItem(
                             _preclinica,
-                            FontAwesomeIcons.female,
-                            'Examen Físico Ginecológico',
-                            'crear_examen_ginecologico',
-                            Colors.purple,
+                            FontAwesomeIcons.flask,
+                            'Examenes',
+                            'examenes_indicados',
+                            Colors.cyan,
                             context),
                       ),
                     ]),
@@ -240,15 +242,7 @@ class _MenuConsultaPageState extends State<MenuConsultaPage> {
                             Colors.lightGreen,
                             context),
                       ),
-                      FadeInRight(
-                        child: _cardItem(
-                            _preclinica,
-                            FontAwesomeIcons.flask,
-                            'Examenes',
-                            'examenes_indicados',
-                            Colors.cyan,
-                            context),
-                      ),
+                      Container()
                     ]),
                   ],
                 )
@@ -273,7 +267,12 @@ class _MenuConsultaPageState extends State<MenuConsultaPage> {
             ruta == 'examenes_indicados' ||
             ruta == 'planes_terapeuticos') {
           StorageUtil.putInt('indexTabMenuConsulta', 1);
-        } else {
+        } else if (ruta == 'consulta_detalle' ||
+            ruta == 'crear_consulta_general' ||
+            ruta == 'crear_antecedentes' ||
+            ruta == 'crear_habitos' ||
+            ruta == 'crear_historial_gineco' ||
+            ruta == 'crear_farmacos_uso_actual') {
           StorageUtil.putInt('indexTabMenuConsulta', 0);
         }
         Navigator.pushReplacementNamed(context, ruta, arguments: preclinica);
@@ -327,6 +326,13 @@ class _MenuConsultaPageState extends State<MenuConsultaPage> {
     _historialEmpty.pacienteId = preclinica.pacienteId;
     _historialEmpty.preclinicaId = preclinica.preclinicaId;
     _historialEmpty.activo = true;
+    _historialEmpty.vacunaVph = false;
+    _historialEmpty.anticonceptivoId = 19;
+    _historialEmpty.g = 0;
+    _historialEmpty.p = 0;
+    _historialEmpty.c = 0;
+    _historialEmpty.hv = 0;
+    _historialEmpty.hm = 0;
     _historialEmpty.creadoPor = usuario.userName;
     _historialEmpty.creadoFecha = DateTime.now();
     _historialEmpty.modificadoPor = usuario.userName;

@@ -447,8 +447,6 @@ class _EditarPacientePageState extends State<EditarPacientePage> {
           padding: const EdgeInsets.only(left: 8.0, right: 8.0),
           child: TextFormField(
             initialValue: _formBloc.email,
-            autovalidate: true,
-            validator: validateEmail,
             keyboardType: TextInputType.emailAddress,
             decoration: inputsDecorations('Email', Icons.email),
             onSaved: _formBloc.onChangeEmail,
@@ -554,8 +552,6 @@ class _EditarPacientePageState extends State<EditarPacientePage> {
             padding: EdgeInsets.only(left: 8.0, right: 8.0),
             child: TextFormField(
               initialValue: _formBloc.nombreEmergencia,
-              autovalidate: true,
-              validator: validaTexto,
               onSaved: _formBloc.onChangeNombreEmergencia,
               keyboardType: TextInputType.text,
               decoration:
@@ -574,8 +570,6 @@ class _EditarPacientePageState extends State<EditarPacientePage> {
           padding: EdgeInsets.only(left: 8.0, right: 8.0),
           child: TextFormField(
             initialValue: _formBloc.telefonoEmergencia,
-            autovalidate: true,
-            validator: validaTexto,
             onSaved: _formBloc.onChangeTelefonoEmergencia,
             keyboardType: TextInputType.number,
             inputFormatters: [mask],
@@ -609,7 +603,9 @@ class _EditarPacientePageState extends State<EditarPacientePage> {
               decoration: inputsDecorations('Parentesco', Icons.people),
               child: DropdownButtonHideUnderline(
                   child: DropdownButton(
-                value: _formBloc.parentesco,
+                value: (_formBloc.parentesco.isEmpty)
+                    ? 'otro'
+                    : _formBloc.parentesco,
                 isDense: true,
                 onChanged: (value) {
                   _formBloc.onChangeParentesco(value);

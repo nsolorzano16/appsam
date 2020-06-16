@@ -47,15 +47,15 @@ class ConsultaGeneralModel {
         pacienteId: json["pacienteId"],
         doctorId: json["doctorId"],
         preclinicaId: json["preclinicaId"],
-        motivoConsulta: json["motivoConsulta"],
-        fog: json["fog"],
-        hea: json["hea"],
+        motivoConsulta: json["motivoConsulta"] == null ? "" : json["motivoConsulta"],
+        fog: json["fog"] == null ? "" : json["fog"],
+        hea: json["hea"] ==null ?"":json["hea"],
         activo: json["activo"],
         creadoPor: json["creadoPor"],
         creadoFecha: DateTime.parse(json["creadoFecha"]),
         modificadoPor: json["modificadoPor"],
         modificadoFecha: DateTime.parse(json["modificadoFecha"]),
-        notas: json["notas"],
+        notas: json["notas"] == null ? "": json["notas"],
       );
 
   Map<String, dynamic> toJson() => {

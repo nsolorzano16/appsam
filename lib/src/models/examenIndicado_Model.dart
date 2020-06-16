@@ -49,16 +49,17 @@ class ExamenIndicadoModel {
         pacienteId: json["pacienteId"],
         doctorId: json["doctorId"],
         preclinicaId: json["preclinicaId"],
-        examenCategoriaId: json["examenCategoriaId"],
+        examenCategoriaId:
+            json["examenCategoriaId"] == null ? "" : json["examenCategoriaId"],
         examenTipoId: json["examenTipoId"],
         examenDetalleId: json["examenDetalleId"],
-        nombre: json["nombre"],
+        nombre: json["nombre"] == null ? "" : json["nombre"],
         activo: json["activo"],
         creadoPor: json["creadoPor"],
         creadoFecha: DateTime.parse(json["creadoFecha"]),
         modificadoPor: json["modificadoPor"],
         modificadoFecha: DateTime.parse(json["modificadoFecha"]),
-        notas: json["notas"],
+        notas: json["notas"] == null ? "" : json["notas"],
       );
 
   Map<String, dynamic> toJson() => {

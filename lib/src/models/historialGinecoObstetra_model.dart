@@ -14,20 +14,17 @@ class HistorialGinecoObstetra {
   HistorialGinecoObstetra({
     this.historialId,
     this.pacienteId,
+    this.anticonceptivoId,
+    this.fechaMenarquia,
     this.fum,
     this.g,
     this.p,
     this.c,
     this.hv,
     this.hm,
-    this.anticonceptivos,
+    this.descripcionAnticonceptivos,
     this.vacunaVph,
-    this.embarazo,
-    this.fpp,
-    this.afu,
-    this.presentacion,
-    this.movimientosFetales,
-    this.fcf,
+    this.fechaMenopausia,
     this.preclinicaId,
     this.activo,
     this.creadoPor,
@@ -39,20 +36,17 @@ class HistorialGinecoObstetra {
 
   int historialId;
   int pacienteId;
+  int anticonceptivoId;
+  DateTime fechaMenarquia;
   DateTime fum;
-  String g;
-  String p;
-  String c;
-  String hv;
-  String hm;
-  String anticonceptivos;
+  int g;
+  int p;
+  int c;
+  int hv;
+  int hm;
+  String descripcionAnticonceptivos;
   bool vacunaVph;
-  bool embarazo;
-  String fpp;
-  String afu;
-  DateTime presentacion;
-  String movimientosFetales;
-  String fcf;
+  DateTime fechaMenopausia;
   int preclinicaId;
   bool activo;
   String creadoPor;
@@ -65,20 +59,21 @@ class HistorialGinecoObstetra {
       HistorialGinecoObstetra(
         historialId: json["historialId"],
         pacienteId: json["pacienteId"],
-        fum: DateTime.parse(json["fum"]),
+        anticonceptivoId: json["anticonceptivoId"],
+        fechaMenarquia: json["fechaMenarquia"] == null
+            ? null
+            : DateTime.parse(json["fechaMenarquia"]),
+        fum: json["fum"] == null ? null : DateTime.parse(json["fum"]),
         g: json["g"],
         p: json["p"],
         c: json["c"],
         hv: json["hv"],
         hm: json["hm"],
-        anticonceptivos: json["anticonceptivos"],
+        descripcionAnticonceptivos: json["descripcionAnticonceptivos"],
         vacunaVph: json["vacunaVph"],
-        embarazo: json["embarazo"],
-        fpp: json["fpp"],
-        afu: json["afu"],
-        presentacion: DateTime.parse(json["presentacion"]),
-        movimientosFetales: json["movimientosFetales"],
-        fcf: json["fcf"],
+        fechaMenopausia: json["fechaMenopausia"] == null
+            ? null
+            : DateTime.parse(json["fechaMenopausia"]),
         preclinicaId: json["preclinicaId"],
         activo: json["activo"],
         creadoPor: json["creadoPor"],
@@ -91,20 +86,19 @@ class HistorialGinecoObstetra {
   Map<String, dynamic> toJson() => {
         "historialId": historialId,
         "pacienteId": pacienteId,
-        "fum": fum.toIso8601String(),
+        "anticonceptivoId": anticonceptivoId,
+        "fechaMenarquia":
+            fechaMenarquia == null ? null : fechaMenarquia.toIso8601String(),
+        "fum": fum == null ? null : fum.toIso8601String(),
         "g": g,
         "p": p,
         "c": c,
         "hv": hv,
         "hm": hm,
-        "anticonceptivos": anticonceptivos,
+        "descripcionAnticonceptivos": descripcionAnticonceptivos,
         "vacunaVph": vacunaVph,
-        "embarazo": embarazo,
-        "fpp": fpp,
-        "afu": afu,
-        "presentacion": presentacion.toIso8601String(),
-        "movimientosFetales": movimientosFetales,
-        "fcf": fcf,
+        "fechaMenopausia":
+            fechaMenopausia == null ? null : fechaMenopausia.toIso8601String(),
         "preclinicaId": preclinicaId,
         "activo": activo,
         "creadoPor": creadoPor,

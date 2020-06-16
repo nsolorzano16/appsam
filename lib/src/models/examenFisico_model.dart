@@ -66,27 +66,34 @@ class ExamenFisico {
         examenFisicoId: json["examenFisicoId"],
         pacienteId: json["pacienteId"],
         doctorId: json["doctorId"],
-        aspectoGeneral: json["aspectoGeneral"],
-        pielFaneras: json["pielFaneras"],
-        cabeza: json["cabeza"],
-        oidos: json["oidos"],
-        ojos: json["ojos"],
-        nariz: json["nariz"],
-        boca: json["boca"],
-        cuello: json["cuello"],
-        torax: json["torax"],
-        abdomen: json["abdomen"],
-        columnaVertebralRegionLumbar: json["columnaVertebralRegionLumbar"],
-        miembrosInferioresSuperiores: json["miembrosInferioresSuperiores"],
-        genitales: json["genitales"],
-        neurologico: json["neurologico"],
+        aspectoGeneral:
+            json["aspectoGeneral"] == null ? "" : json["aspectoGeneral"],
+        pielFaneras: json["pielFaneras"] == null ? "" : json["pielFaneras"],
+        cabeza: json["cabeza"] == null ? "" : json["cabeza"],
+        oidos: json["oidos"] == null ? "" : json["oidos"],
+        ojos: json["ojos"] == null ? "" : json["ojos"],
+        nariz: json["nariz"] == null ? "" : json["nariz"],
+        boca: json["boca"] == null ? "" : json["boca"],
+        cuello: json["cuello"] == null ? "" : json["cuello"],
+        torax: json["torax"] == null ? "" : json["torax"],
+        abdomen: json["abdomen"] == null ? "" : json["abdomen"],
+        columnaVertebralRegionLumbar:
+            json["columnaVertebralRegionLumbar"] == null
+                ? ""
+                : json["columnaVertebralRegionLumbar"],
+        miembrosInferioresSuperiores:
+            json["miembrosInferioresSuperiores"] == null
+                ? ""
+                : json["miembrosInferioresSuperiores"],
+        genitales: json["genitales"] == null ? "" : json["genitales"],
+        neurologico: json["neurologico"] == null ? "" : json["neurologico"],
         preclinicaId: json["preclinicaId"],
         activo: json["activo"],
         creadoPor: json["creadoPor"],
         creadoFecha: DateTime.parse(json["creadoFecha"]),
         modificadoPor: json["modificadoPor"],
         modificadoFecha: DateTime.parse(json["modificadoFecha"]),
-        notas: json["notas"],
+        notas: json["notas"] == null ? "" : json["notas"],
       );
 
   Map<String, dynamic> toJson() => {

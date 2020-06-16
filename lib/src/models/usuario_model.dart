@@ -66,18 +66,21 @@ class UsuarioModel {
       usuarioId: json["usuarioId"],
       rolId: json["rolId"],
       asistenteId: json["asistenteId"],
-      nombres: json["nombres"],
-      primerApellido: json["primerApellido"],
-      segundoApellido: json["segundoApellido"],
-      identificacion: json["identificacion"],
+      nombres: json["nombres"] == null ? "" : json["nombres"],
+      primerApellido:
+          json["primerApellido"] == null ? "" : json["primerApellido"],
+      segundoApellido:
+          json["segundoApellido"] == null ? "" : json["segundoApellido"],
+      identificacion:
+          json["identificacion"] == null ? "" : json["identificacion"],
       fechaNacimiento: DateTime.parse(json["fechaNacimiento"]),
       edad: json["edad"],
       sexo: json["sexo"],
-      telefono1: json["telefono1"],
-      telefono2: json["telefono2"],
-      colegioNumero: json["colegioNumero"],
-      email: json["email"],
-      userName: json["userName"],
+      telefono1: json["telefono1"] == null ? "" : json["telefono1"],
+      telefono2: json["telefono2"] == null ? "" : json["telefono2"],
+      colegioNumero: json["colegioNumero"] == null ? "" : json["colegioNumero"],
+      email: json["email"] == null ? "" : json["email"],
+      userName: json["userName"] == null ? "" : json["userName"],
       password: json["password"] == null ? null : json["password"],
       passwordSalt: json["passwordSalt"] == null ? null : json["passwordSalt"],
       passwordHash: json["passwordHash"] == null ? null : json["passwordHash"],
@@ -86,9 +89,9 @@ class UsuarioModel {
       creadoFecha: DateTime.parse(json["creadoFecha"]),
       modificadoPor: json["modificadoPor"],
       modificadoFecha: DateTime.parse(json["modificadoFecha"]),
-      notas: json["notas"],
+      notas: json["notas"] == null ? "" : json["notas"],
       fotoUrl: json["fotoUrl"],
-      tokenDevice: json["tokenDevice"]);
+      tokenDevice: json["tokenDevice"] == null ? "" : json["tokenDevice"]);
 
   Map<String, dynamic> toJson() => {
         "usuarioId": usuarioId,

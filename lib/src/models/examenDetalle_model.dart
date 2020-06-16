@@ -28,7 +28,7 @@ class ExamenDetalleModel {
         examenDetalleId: json["examenDetalleId"],
         examenTipoId: json["examenTipoId"],
         examenCategoriaId: json["examenCategoriaId"],
-        nombre: json["nombre"],
+        nombre: json["nombre"] == null ? "" : json["nombre"],
       );
 
   Map<String, dynamic> toJson() => {

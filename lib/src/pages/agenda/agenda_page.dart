@@ -301,11 +301,11 @@ class _AgendaPageState extends State<AgendaPage> with TickerProviderStateMixin {
   }
 }
 
-// Example holidays
-final Map<DateTime, List> _holidays = {
-  DateTime(2019, 1, 1): ['New Year\'s Day'],
-  DateTime(2019, 1, 6): ['Epiphany'],
-  DateTime(2019, 2, 14): ['Valentine\'s Day'],
-  DateTime(2019, 4, 21): ['Easter Sunday'],
-  DateTime(2019, 4, 22): ['Easter Monday'],
-};
+// // Example holidays
+// final Map<DateTime, List> _holidays = {
+//   DateTime(2019, 1, 1): ['New Year\'s Day'],
+//   DateTime(2019, 1, 6): ['Epiphany'],
+//   DateTime(2019, 2, 14): ['Valentine\'s Day'],
+//   DateTime(2019, 4, 21): ['Easter Sunday'],
+//   DateTime(2019, 4, 22): ['Easter Monday'],
+// };

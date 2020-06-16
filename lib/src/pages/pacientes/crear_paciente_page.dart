@@ -520,8 +520,6 @@ class _CrearPacientePageState extends State<CrearPacientePage> {
             padding: EdgeInsets.only(left: 8.0, right: 8.0),
             child: TextFormField(
               initialValue: _formBloc.nombreEmergencia,
-              autovalidate: true,
-              validator: validaTexto,
               onSaved: _formBloc.onChangeNombreEmergencia,
               keyboardType: TextInputType.text,
               decoration:
@@ -540,8 +538,6 @@ class _CrearPacientePageState extends State<CrearPacientePage> {
           padding: EdgeInsets.only(left: 8.0, right: 8.0),
           child: TextFormField(
             initialValue: _formBloc.telefonoEmergencia,
-            autovalidate: true,
-            validator: validaTexto,
             onSaved: _formBloc.onChangeTelefonoEmergencia,
             keyboardType: TextInputType.number,
             inputFormatters: [mask],

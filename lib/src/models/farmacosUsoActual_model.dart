@@ -49,16 +49,17 @@ class FarmacosUsoActual {
         farmacoId: json["farmacoId"],
         pacienteId: json["pacienteId"],
         preclinicaId: json["preclinicaId"],
-        nombre: json["nombre"],
-        concentracion: json["concentracion"],
-        dosis: json["dosis"],
-        tiempo: json["tiempo"],
+        nombre: json["nombre"] == null ? "" : json["nombre"],
+        concentracion:
+            json["concentracion"] == null ? "" : json["concentracion"],
+        dosis: json["dosis"] == null ? "" : json["dosis"],
+        tiempo: json["tiempo"] == null ? "" : json["tiempo"],
         activo: json["activo"],
         creadoPor: json["creadoPor"],
         creadoFecha: DateTime.parse(json["creadoFecha"]),
         modificadoPor: json["modificadoPor"],
         modificadoFecha: DateTime.parse(json["modificadoFecha"]),
-        notas: json["notas"],
+        notas: json["notas"] == null ? "" : json["notas"],
       );
 
   Map<String, dynamic> toJson() => {

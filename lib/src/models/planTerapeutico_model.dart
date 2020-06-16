@@ -54,17 +54,19 @@ class PlanTerapeuticoModel {
         doctorId: json["doctorId"],
         viaAdministracionId: json["viaAdministracionId"],
         preclinicaId: json["preclinicaId"],
-        nombreMedicamento: json["nombreMedicamento"],
-        dosis: json["dosis"],
-        horario: json["horario"],
+        nombreMedicamento:
+            json["nombreMedicamento"] == null ? "" : json["nombreMedicamento"],
+        dosis: json["dosis"] == null ? "" : json["dosis"],
+        horario: json["horario"] == null ? "" : json["horario"],
         permanente: json["permanente"],
-        diasRequeridos: json["diasRequeridos"],
+        diasRequeridos:
+            json["diasRequeridos"] == null ? "" : json["diasRequeridos"],
         activo: json["activo"],
         creadoPor: json["creadoPor"],
         creadoFecha: DateTime.parse(json["creadoFecha"]),
         modificadoPor: json["modificadoPor"],
         modificadoFecha: DateTime.parse(json["modificadoFecha"]),
-        notas: json["notas"],
+        notas: json["notas"] == null ? "" : json["notas"],
       );
 
   Map<String, dynamic> toJson() => {

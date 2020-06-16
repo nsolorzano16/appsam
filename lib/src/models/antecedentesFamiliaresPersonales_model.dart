@@ -53,21 +53,31 @@ class AntecedentesFamiliaresPersonales {
         pacienteId: json["pacienteId"],
         preclinicaId: json["preclinicaId"],
         antecedentesPatologicosFamiliares:
-            json["antecedentesPatologicosFamiliares"],
+            json["antecedentesPatologicosFamiliares"] == null
+                ? ""
+                : json["antecedentesPatologicosFamiliares"],
         antecedentesPatologicosPersonales:
-            json["antecedentesPatologicosPersonales"],
+            json["antecedentesPatologicosPersonales"] == null
+                ? ""
+                : json["antecedentesPatologicosPersonales"],
         antecedentesNoPatologicosFamiliares:
-            json["antecedentesNoPatologicosFamiliares"],
+            json["antecedentesNoPatologicosFamiliares"] == null
+                ? ""
+                : json["antecedentesNoPatologicosFamiliares"],
         antecedentesNoPatologicosPersonales:
-            json["antecedentesNoPatologicosPersonales"],
+            json["antecedentesNoPatologicosPersonales"] == null
+                ? ""
+                : json["antecedentesNoPatologicosPersonales"],
         antecedentesInmunoAlergicosPersonales:
-            json["antecedentesInmunoAlergicosPersonales"],
+            json["antecedentesInmunoAlergicosPersonales"] == null
+                ? ""
+                : json["antecedentesInmunoAlergicosPersonales"],
         activo: json["activo"],
         creadoPor: json["creadoPor"],
         creadoFecha: DateTime.parse(json["creadoFecha"]),
         modificadoPor: json["modificadoPor"],
         modificadoFecha: DateTime.parse(json["modificadoFecha"]),
-        notas: json["notas"],
+        notas: json["notas"] == null ? "" : json["notas"],
       );
 
   Map<String, dynamic> toJson() => {

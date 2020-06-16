@@ -3,7 +3,7 @@ import 'package:appsam/src/models/antecedentesFamiliaresPersonales_model.dart';
 import 'package:appsam/src/models/consultaGeneral_model.dart';
 import 'package:appsam/src/models/consulta_model.dart';
 import 'package:appsam/src/models/diagnosticos_model.dart';
-import 'package:appsam/src/models/examenFisicoGinecologico_model.dart';
+
 import 'package:appsam/src/models/examenFisico_model.dart';
 import 'package:appsam/src/models/examenesIndicados_viewmodel.dart';
 import 'package:appsam/src/models/farmacosUsoActual_model.dart';
@@ -151,13 +151,6 @@ class _ConsultaDetallePageState extends State<ConsultaDetallePage> {
                         (_consultaDetalle.examenFisico != null)
                             ? _AccordionExamenFisico(
                                 examenFisico: _consultaDetalle.examenFisico,
-                                estiloDatos: estiloDatos,
-                                estiloSubt: _estiloSubt)
-                            : Container(),
-                        (_consultaDetalle.examenFisicoGinecologico != null)
-                            ? _AccordionExamenGinecologico(
-                                examenGinecologico:
-                                    _consultaDetalle.examenFisicoGinecologico,
                                 estiloDatos: estiloDatos,
                                 estiloSubt: _estiloSubt)
                             : Container(),
@@ -603,7 +596,7 @@ class _AccordionAntecedentes extends StatelessWidget {
             style: _estiloSubt,
           ),
           Text(
-            validaNulo(_antecedentes.antecedentesPatologicosFamiliares),
+            _antecedentes.antecedentesPatologicosFamiliares,
             textAlign: TextAlign.justify,
             style: estiloDatos,
           ),
@@ -613,7 +606,7 @@ class _AccordionAntecedentes extends StatelessWidget {
             style: _estiloSubt,
           ),
           Text(
-            validaNulo(_antecedentes.antecedentesPatologicosPersonales),
+            _antecedentes.antecedentesPatologicosPersonales,
             textAlign: TextAlign.justify,
             style: estiloDatos,
           ),
@@ -623,7 +616,7 @@ class _AccordionAntecedentes extends StatelessWidget {
             style: _estiloSubt,
           ),
           Text(
-            validaNulo(_antecedentes.antecedentesNoPatologicosFamiliares),
+            _antecedentes.antecedentesNoPatologicosFamiliares,
             textAlign: TextAlign.justify,
             style: estiloDatos,
           ),
@@ -633,7 +626,7 @@ class _AccordionAntecedentes extends StatelessWidget {
             style: _estiloSubt,
           ),
           Text(
-            validaNulo(_antecedentes.antecedentesNoPatologicosPersonales),
+            _antecedentes.antecedentesNoPatologicosPersonales,
             textAlign: TextAlign.justify,
             style: estiloDatos,
           ),
@@ -643,7 +636,7 @@ class _AccordionAntecedentes extends StatelessWidget {
             style: _estiloSubt,
           ),
           Text(
-            validaNulo(_antecedentes.antecedentesInmunoAlergicosPersonales),
+            _antecedentes.antecedentesInmunoAlergicosPersonales,
             textAlign: TextAlign.justify,
             style: estiloDatos,
           ),
@@ -787,7 +780,7 @@ class _AccordionHabitos extends StatelessWidget {
             style: _estiloSubt,
           ),
           Text(
-            validaNulo(_habitos.notas),
+            _habitos.notas,
             textAlign: TextAlign.justify,
             style: estiloDatos,
           ),
@@ -871,7 +864,7 @@ class _AccordionHistorialGinecoObstetra extends StatelessWidget {
             style: _estiloSubt,
           ),
           Text(
-            validaNulo(_historial.g),
+            _historial.g.toString(),
             textAlign: TextAlign.justify,
             style: estiloDatos,
           ),
@@ -881,7 +874,7 @@ class _AccordionHistorialGinecoObstetra extends StatelessWidget {
             style: _estiloSubt,
           ),
           Text(
-            validaNulo(_historial.p),
+            _historial.p.toString(),
             textAlign: TextAlign.justify,
             style: estiloDatos,
           ),
@@ -891,7 +884,7 @@ class _AccordionHistorialGinecoObstetra extends StatelessWidget {
             style: _estiloSubt,
           ),
           Text(
-            validaNulo(_historial.c),
+            _historial.c.toString(),
             textAlign: TextAlign.justify,
             style: estiloDatos,
           ),
@@ -901,27 +894,7 @@ class _AccordionHistorialGinecoObstetra extends StatelessWidget {
             style: _estiloSubt,
           ),
           Text(
-            validaNulo(_historial.hv),
-            textAlign: TextAlign.justify,
-            style: estiloDatos,
-          ),
-          Divider(),
-          Text(
-            'FPP:',
-            style: _estiloSubt,
-          ),
-          Text(
-            validaNulo(_historial.fpp),
-            textAlign: TextAlign.justify,
-            style: estiloDatos,
-          ),
-          Divider(),
-          Text(
-            'Anticonceptivos:',
-            style: _estiloSubt,
-          ),
-          Text(
-            validaNulo(_historial.anticonceptivos),
+            _historial.hv.toString(),
             textAlign: TextAlign.justify,
             style: estiloDatos,
           ),
@@ -931,7 +904,7 @@ class _AccordionHistorialGinecoObstetra extends StatelessWidget {
             style: _estiloSubt,
           ),
           Text(
-            validaNulo(_historial.notas),
+            _historial.notas,
             textAlign: TextAlign.justify,
             style: estiloDatos,
           ),
@@ -1072,7 +1045,7 @@ class _AccordionExamenFisico extends StatelessWidget {
             style: _estiloSubt,
           ),
           Text(
-            validaNulo(_examenFisico.aspectoGeneral),
+            _examenFisico.aspectoGeneral,
             textAlign: TextAlign.justify,
             style: estiloDatos,
           ),
@@ -1082,7 +1055,7 @@ class _AccordionExamenFisico extends StatelessWidget {
             style: _estiloSubt,
           ),
           Text(
-            validaNulo(_examenFisico.cabeza),
+            _examenFisico.cabeza,
             textAlign: TextAlign.justify,
             style: estiloDatos,
           ),
@@ -1092,7 +1065,7 @@ class _AccordionExamenFisico extends StatelessWidget {
             style: _estiloSubt,
           ),
           Text(
-            validaNulo(_examenFisico.oidos),
+            _examenFisico.oidos,
             textAlign: TextAlign.justify,
             style: estiloDatos,
           ),
@@ -1102,7 +1075,7 @@ class _AccordionExamenFisico extends StatelessWidget {
             style: _estiloSubt,
           ),
           Text(
-            validaNulo(_examenFisico.ojos),
+            _examenFisico.ojos,
             textAlign: TextAlign.justify,
             style: estiloDatos,
           ),
@@ -1112,7 +1085,7 @@ class _AccordionExamenFisico extends StatelessWidget {
             style: _estiloSubt,
           ),
           Text(
-            validaNulo(_examenFisico.cuello),
+            _examenFisico.cuello,
             textAlign: TextAlign.justify,
             style: estiloDatos,
           ),
@@ -1122,7 +1095,7 @@ class _AccordionExamenFisico extends StatelessWidget {
             style: _estiloSubt,
           ),
           Text(
-            validaNulo(_examenFisico.torax),
+            _examenFisico.torax,
             textAlign: TextAlign.justify,
             style: estiloDatos,
           ),
@@ -1132,7 +1105,7 @@ class _AccordionExamenFisico extends StatelessWidget {
             style: _estiloSubt,
           ),
           Text(
-            validaNulo(_examenFisico.abdomen),
+            _examenFisico.abdomen,
             textAlign: TextAlign.justify,
             style: estiloDatos,
           ),
@@ -1142,7 +1115,7 @@ class _AccordionExamenFisico extends StatelessWidget {
             style: _estiloSubt,
           ),
           Text(
-            validaNulo(_examenFisico.pielFaneras),
+            _examenFisico.pielFaneras,
             textAlign: TextAlign.justify,
             style: estiloDatos,
           ),
@@ -1152,7 +1125,7 @@ class _AccordionExamenFisico extends StatelessWidget {
             style: _estiloSubt,
           ),
           Text(
-            validaNulo(_examenFisico.genitales),
+            _examenFisico.genitales,
             textAlign: TextAlign.justify,
             style: estiloDatos,
           ),
@@ -1162,114 +1135,11 @@ class _AccordionExamenFisico extends StatelessWidget {
             style: _estiloSubt,
           ),
           Text(
-            validaNulo(_examenFisico.neurologico),
+            _examenFisico.neurologico,
             textAlign: TextAlign.justify,
             style: estiloDatos,
           ),
           Divider(),
-        ],
-      )),
-    );
-  }
-}
-
-class _AccordionExamenGinecologico extends StatelessWidget {
-  const _AccordionExamenGinecologico({
-    Key key,
-    @required ExamenFisicoGinecologico examenGinecologico,
-    @required this.estiloDatos,
-    @required TextStyle estiloSubt,
-  })  : _examenGinecologico = examenGinecologico,
-        _estiloSubt = estiloSubt,
-        super(key: key);
-
-  final ExamenFisicoGinecologico _examenGinecologico;
-  final TextStyle estiloDatos;
-  final TextStyle _estiloSubt;
-
-  @override
-  Widget build(BuildContext context) {
-    return GFAccordion(
-      contentPadding: EdgeInsets.all(3.0),
-      collapsedTitlebackgroundColor: Theme.of(context).accentColor,
-      expandedTitlebackgroundColor: Colors.redAccent,
-      collapsedIcon: Icon(
-        Icons.keyboard_arrow_down,
-        color: Colors.white,
-      ),
-      expandedIcon: Icon(
-        Icons.keyboard_arrow_up,
-        color: Colors.white,
-      ),
-      titleChild: Text(
-        'Examen Físico Ginecológico',
-        style: TextStyle(color: Colors.white, fontSize: 16.0),
-      ),
-      contentChild: GFCard(
-          content: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(
-            'AFU:',
-            style: _estiloSubt,
-          ),
-          Text(
-            validaNulo(_examenGinecologico.afu),
-            textAlign: TextAlign.justify,
-            style: estiloDatos,
-          ),
-          Divider(),
-          Text(
-            'Pelvis:',
-            style: _estiloSubt,
-          ),
-          Text(
-            validaNulo(_examenGinecologico.pelvis),
-            textAlign: TextAlign.justify,
-            style: estiloDatos,
-          ),
-          Divider(),
-          Text(
-            'Dorso:',
-            style: _estiloSubt,
-          ),
-          Text(
-            validaNulo(_examenGinecologico.dorso),
-            textAlign: TextAlign.justify,
-            style: estiloDatos,
-          ),
-          Divider(),
-          Text(
-            'FCF:',
-            style: _estiloSubt,
-          ),
-          Text(
-            validaNulo(_examenGinecologico.fcf),
-            textAlign: TextAlign.justify,
-            style: estiloDatos,
-          ),
-          Divider(),
-          Text(
-            'AP:',
-            style: _estiloSubt,
-          ),
-          Text(
-            validaNulo(_examenGinecologico.ap),
-            textAlign: TextAlign.justify,
-            style: estiloDatos,
-          ),
-          Divider(),
-          Text(
-            'Notas:',
-            style: _estiloSubt,
-          ),
-          Text(
-            validaNulo(_examenGinecologico.notas),
-            textAlign: TextAlign.justify,
-            style: estiloDatos,
-          ),
-          Divider()
         ],
       )),
     );
@@ -1447,7 +1317,7 @@ class _AccordionDetalleConsulta extends StatelessWidget {
             style: _estiloSubt,
           ),
           Text(
-            validaNulo(_consultaGeneral.motivoConsulta),
+            _consultaGeneral.motivoConsulta,
             textAlign: TextAlign.justify,
             style: estiloDatos,
           ),
@@ -1457,7 +1327,7 @@ class _AccordionDetalleConsulta extends StatelessWidget {
             style: _estiloSubt,
           ),
           Text(
-            validaNulo(_consultaGeneral.fog),
+            _consultaGeneral.fog,
             textAlign: TextAlign.justify,
             style: estiloDatos,
           ),
@@ -1467,7 +1337,7 @@ class _AccordionDetalleConsulta extends StatelessWidget {
             style: _estiloSubt,
           ),
           Text(
-            validaNulo(_consultaGeneral.hea),
+            _consultaGeneral.hea,
             textAlign: TextAlign.justify,
             style: estiloDatos,
           ),
@@ -1477,7 +1347,7 @@ class _AccordionDetalleConsulta extends StatelessWidget {
             style: _estiloSubt,
           ),
           Text(
-            validaNulo(_consultaGeneral.notas),
+            _consultaGeneral.notas,
             textAlign: TextAlign.justify,
             style: estiloDatos,
           ),
