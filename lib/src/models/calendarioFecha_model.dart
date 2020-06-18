@@ -18,6 +18,7 @@ class CalendarioFechaModel {
   bool todoElDia;
   String colorPrimario;
   String colorSecundario;
+  DateTime fechaFiltro;
   bool activo;
   String creadoPor;
   DateTime creadoFecha;
@@ -33,6 +34,7 @@ class CalendarioFechaModel {
     this.todoElDia,
     this.colorPrimario,
     this.colorSecundario,
+    this.fechaFiltro,
     this.activo,
     this.creadoPor,
     this.creadoFecha,
@@ -52,6 +54,7 @@ class CalendarioFechaModel {
             json["colorPrimario"] == null ? "" : json["colorPrimario"],
         colorSecundario:
             json["colorSecundario"] == null ? "" : json["colorSecundario"],
+        fechaFiltro: DateTime.parse(json["fechaFiltro"]),
         activo: json["activo"],
         creadoPor: json["creadoPor"],
         creadoFecha: DateTime.parse(json["creadoFecha"]),
@@ -61,13 +64,14 @@ class CalendarioFechaModel {
       );
 
   Map<String, dynamic> toJson() => {
-        "calendarioFechaId": calendarioFechaId,
+        "calendarioFechaId": calendarioFechaId == null ? 0 : calendarioFechaId,
         "doctorId": doctorId,
         "inicio": inicio.toIso8601String(),
         "fin": fin.toIso8601String(),
         "todoElDia": todoElDia,
         "colorPrimario": colorPrimario,
         "colorSecundario": colorSecundario,
+        "fechaFiltro": fechaFiltro.toIso8601String(),
         "activo": activo,
         "creadoPor": creadoPor,
         "creadoFecha": creadoFecha.toIso8601String(),

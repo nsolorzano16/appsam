@@ -6,7 +6,7 @@ import 'package:appsam/src/models/calendarioFecha_model.dart';
 import 'package:appsam/src/utils/storage_util.dart';
 import 'package:appsam/src/utils/utils.dart';
 
-class AntecedentesService {
+class EventosService {
   final _apiURL = EnviromentVariables().getApiURL();
 
   Future<CalendarioFechaModel> addEvento(CalendarioFechaModel evento) async {
@@ -30,7 +30,7 @@ class AntecedentesService {
     return null;
   }
 
-  Future<CalendarioFechaModel> updateEvento(CalendarioFechaModel evento) async {
+  Future<Event> updateEvento(Event evento) async {
     final String token = StorageUtil.getString('token');
     final headers = {
       "content-type": "application/json",
@@ -40,19 +40,19 @@ class AntecedentesService {
     final url = '$_apiURL/api/Agenda';
 
     //print(usuarioModelToJson(usuario));
-    final resp = await http.put(url,
-        headers: headers, body: calendarioFechaModelToJson(evento));
+    final resp =
+        await http.put(url, headers: headers, body: eventModelToJson(evento));
 
     if (resp.statusCode == 200) {
       final decodedData = json.decode(resp.body);
-      final calendarioFecha = new CalendarioFechaModel.fromJson(decodedData);
+      final calendarioFecha = new Event.fromJson(decodedData);
       return calendarioFecha;
     }
 
     return null;
   }
 
-  Future<EventosModel> getEventos(int doctorId) async {
+  Future<List<EventosModel>> getEventos(int doctorId) async {
     final String token = StorageUtil.getString('token');
     final headers = {
       "content-type": "application/json",
@@ -60,15 +60,18 @@ class AntecedentesService {
       'authorization': 'Bearer $token',
     };
     final url = '$_apiURL/api/Agenda/movil/doctorid/$doctorId';
-
     final resp = await http.get(url, headers: headers);
+    final List<EventosModel> lista = new List();
 
     if (resp.statusCode == 200 && resp.body.isNotEmpty) {
-      final decodedData = json.decode(resp.body);
-      final eventos = new EventosModel.fromJson(decodedData);
-      return eventos;
+      final decodeResp = json.decode(resp.body);
+      decodeResp.forEach((evt) {
+        final evtTemp = EventosModel.fromJson(evt);
+        lista.add(evtTemp);
+      });
+      return lista;
     }
 
-    return null;
+    return [];
   }
 } // fin clase
