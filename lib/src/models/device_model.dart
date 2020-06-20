@@ -44,5 +44,3 @@ class DevicesModel {
         "usuario": usuario,
       };
 }
-
-//asp n
