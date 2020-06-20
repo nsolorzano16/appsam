@@ -31,9 +31,6 @@ class _AgendaDetallePageState extends State<AgendaDetallePage> {
       appBar: AppBar(),
       body: SingleChildScrollView(
         child: GFCard(
-
-            //TODO: poner el color aqui
-            // color: Colors.orange,
             title: GFListTile(
               color: Colors.red,
               title: Center(
@@ -207,7 +204,7 @@ class _AgendaDetallePageState extends State<AgendaDetallePage> {
     final eventoEdit = await agendaService.updateEvento(evento);
     if (eventoEdit != null) {
       await _pr.hide();
-      mostrarFlushBar(context, Colors.green, 'Info', 'Datos Guardados', 2,
+      mostrarFlushBar(context, Colors.red[400], 'Info', 'Datos eliminados', 2,
           Icons.info, Colors.black);
     } else {
       await _pr.hide();

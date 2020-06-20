@@ -39,6 +39,8 @@ class _HomePageState extends State<HomePage> {
     } else {
       device.usuarioId = 0;
     }
+    device.usuario = _usuario.userName;
+    device.creadoFecha = DateTime.now();
     device.tokenDevice = StorageUtil.getString('tokenDevice');
     device.platform = Platform.operatingSystem;
     _devicesService.addDevice(device);

@@ -14,12 +14,16 @@ class DevicesModel {
   int usuarioId;
   String tokenDevice;
   String platform;
+  DateTime creadoFecha;
+  String usuario;
 
   DevicesModel({
     this.deviceId,
     this.usuarioId,
     this.tokenDevice,
     this.platform,
+    this.creadoFecha,
+    this.usuario,
   });
 
   factory DevicesModel.fromJson(Map<String, dynamic> json) => DevicesModel(
@@ -27,6 +31,8 @@ class DevicesModel {
         usuarioId: json["usuarioId"],
         tokenDevice: json["tokenDevice"],
         platform: json["platform"],
+        creadoFecha: DateTime.parse(json["creadoFecha"]),
+        usuario: json["usuario"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -34,5 +40,7 @@ class DevicesModel {
         "usuarioId": usuarioId,
         "tokenDevice": tokenDevice,
         "platform": platform,
+        "creadoFecha": creadoFecha.toIso8601String(),
+        "usuario": usuario,
       };
 }
