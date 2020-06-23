@@ -91,6 +91,4 @@ class CustomLocalization extends DefaultMaterialLocalizations {
   String get searchFieldLabel => 'Buscar';
 }
 
-//Incididunt aliquip ad irure veniam commodo irure occaecat quis velit incididunt nisi aute reprehenderit. Sunt laborum nisi veniam cillum aliqua occaecat eiusmod cillum. Aute cupidatat labore ea aliqua sint occaecat ex pariatur eiusmod nisi. Commodo pariatur non proident sint consequat enim cupidatat proident officia adipisicing dolor et. Anim velit pariatur cillum sunt minim irure consequat anim. Laboris laboris exercitation consequat velit aute eiusmod exercitation mollit elit mollit anim do.
-
 // qp
