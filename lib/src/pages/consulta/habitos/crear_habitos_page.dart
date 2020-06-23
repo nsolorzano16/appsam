@@ -114,8 +114,7 @@ class _CrearHabitosPageState extends State<CrearHabitosPage> {
                     _habitos.cafe = _habitosBloc.consumeCafe;
                     _habitos.cigarrillo = _habitosBloc.consumeCigarrillo;
                     _habitos.alcohol = _habitosBloc.consumeAlcohol;
-                    _habitos.drogasEstupefaciente =
-                        _habitos.drogasEstupefaciente;
+                    _habitos.drogasEstupefaciente = _habitosBloc.consumeDrogas;
                     _notasController.text = '';
                     return _habitosForm(context);
                   }
@@ -277,6 +276,7 @@ class _CrearHabitosPageState extends State<CrearHabitosPage> {
           color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600),
     );
     _formkey.currentState.save();
+
     await _pr.show();
     Habitos _habitosGuardado;
     if (_habitos.habitoId == 0) {
