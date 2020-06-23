@@ -38,7 +38,6 @@ class PacientesService {
       'authorization': 'Bearer $token',
     };
     final url = '$_apiURL/api/Pacientes';
-    print(pacienteModelToJson(paciente));
 
     final resp = await http.post(url,
         headers: headers, body: pacienteModelToJson(paciente));

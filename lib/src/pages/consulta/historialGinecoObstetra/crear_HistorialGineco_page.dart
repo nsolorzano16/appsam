@@ -156,6 +156,7 @@ class _CrearHistorialGinecoObstetraPageState
                 key: _formkey,
                 child: Column(
                   children: <Widget>[
+                    _menarquia(context),
                     Row(
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -175,52 +176,15 @@ class _CrearHistorialGinecoObstetraPageState
                                 }))
                       ],
                     ),
-                    Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Expanded(child: _campoMenarquia(context)),
-                        Container(
-                            margin: EdgeInsets.only(bottom: 25.0),
-                            child: IconButton(
-                                icon: Icon(
-                                  Icons.delete,
-                                  color: Theme.of(context).primaryColor,
-                                ),
-                                onPressed: () {
-                                  _menarquiaController.text = '';
-                                  pickedMenarquia = null;
-                                  widget.historial.fechaMenarquia = null;
-                                }))
-                      ],
-                    ),
-                    Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Expanded(child: _campoFechaMenopausia(context)),
-                        Container(
-                            margin: EdgeInsets.only(bottom: 25.0),
-                            child: IconButton(
-                                icon: Icon(
-                                  Icons.delete,
-                                  color: Theme.of(context).primaryColor,
-                                ),
-                                onPressed: () {
-                                  _menopausiaController.text = '';
-                                  pickedMenopausia = null;
-                                  widget.historial.fechaMenopausia = null;
-                                }))
-                      ],
-                    ),
+                    _campoG(),
+                    _campoC(),
+                    _campoP(),
+                    _campoHV(),
+                    _campoHM(),
                     _campoDropdownAnticonceptivos(),
                     _campoAnticonceptivoDescripcion(),
                     _campoVacunaVPH(),
-                    _campoG(),
-                    _campoP(),
-                    _campoC(),
-                    _campoHV(),
-                    _campoHM(),
+                    _menopausia(context),
                     _campoNotas(),
                     _crearBotones(context)
                   ],
@@ -228,6 +192,50 @@ class _CrearHistorialGinecoObstetraPageState
           ),
         ],
       ),
+    );
+  }
+
+  Row _menopausia(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+        Expanded(child: _campoFechaMenopausia(context)),
+        Container(
+            margin: EdgeInsets.only(bottom: 25.0),
+            child: IconButton(
+                icon: Icon(
+                  Icons.delete,
+                  color: Theme.of(context).primaryColor,
+                ),
+                onPressed: () {
+                  _menopausiaController.text = '';
+                  pickedMenopausia = null;
+                  widget.historial.fechaMenopausia = null;
+                }))
+      ],
+    );
+  }
+
+  Row _menarquia(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+        Expanded(child: _campoMenarquia(context)),
+        Container(
+            margin: EdgeInsets.only(bottom: 25.0),
+            child: IconButton(
+                icon: Icon(
+                  Icons.delete,
+                  color: Theme.of(context).primaryColor,
+                ),
+                onPressed: () {
+                  _menarquiaController.text = '';
+                  pickedMenarquia = null;
+                  widget.historial.fechaMenarquia = null;
+                }))
+      ],
     );
   }
 

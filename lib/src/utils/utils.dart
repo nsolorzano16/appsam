@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
 import 'dart:math';
-
+import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
@@ -54,6 +54,12 @@ void mostrarFlushBar(BuildContext context, Color color, String title,
       color: iconColor,
     ),
   )..show(context);
+}
+
+void imprimirJSON(Object object) {
+  JsonEncoder encoder = new JsonEncoder.withIndent('  ');
+  String prettyString = encoder.convert(object);
+  prettyString.split('\n').forEach((element) => print(element));
 }
 
 InputDecoration inputsDecorations(String label, IconData icon,

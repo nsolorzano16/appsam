@@ -147,9 +147,9 @@ class _CrearHabitosPageState extends State<CrearHabitosPage> {
                 key: _formkey,
                 child: Column(
                   children: <Widget>[
+                    _campoConsumeCigarrillos(),
                     _campoConsumeCafe(),
                     _campoConsumeAlcohol(),
-                    _campoConsumeCigarrillos(),
                     _campoConsumeDroga(),
                     _campoNotas(),
                     _crearBotones(context)
@@ -196,7 +196,7 @@ class _CrearHabitosPageState extends State<CrearHabitosPage> {
       stream: _habitosBloc.consumeAlcoholStream,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         return SwitchListTile(
-            title: Text('Consume Alcohol'),
+            title: Text('Alcohol'),
             value: _habitosBloc.consumeAlcohol,
             onChanged: (value) {
               _habitosBloc.onChangeConsumeAlcohol(value);
@@ -211,7 +211,7 @@ class _CrearHabitosPageState extends State<CrearHabitosPage> {
       stream: _habitosBloc.consumeDrograsStream,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         return SwitchListTile(
-            title: Text('Consume Drogas'),
+            title: Text('Droga'),
             value: _habitosBloc.consumeDrogas,
             onChanged: (value) {
               _habitosBloc.onChangeConsumeDrogas(value);

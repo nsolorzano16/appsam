@@ -95,6 +95,7 @@ class PacientesViewModel {
   String municipio;
   String departamentoResidencia;
   String municipioResidencia;
+  int preclinicasPendientes;
   bool activo;
   String creadoPor;
   DateTime creadoFecha;
@@ -146,6 +147,7 @@ class PacientesViewModel {
     this.municipio,
     this.departamentoResidencia,
     this.municipioResidencia,
+    this.preclinicasPendientes,
     this.activo,
     this.creadoPor,
     this.creadoFecha,
@@ -170,7 +172,8 @@ class PacientesViewModel {
         nombres: json["nombres"],
         primerApellido: json["primerApellido"],
         segundoApellido: json["segundoApellido"],
-        identificacion: json["identificacion"],
+        identificacion:
+            json["identificacion"] == null ? "" : json["identificacion"],
         email: json["email"] == null ? "" : json["email"],
         sexo: json["sexo"],
         fechaNacimiento: DateTime.parse(json["fechaNacimiento"]),
@@ -211,6 +214,7 @@ class PacientesViewModel {
         municipioResidencia: json["municipioResidencia"] == null
             ? ""
             : json["municipioResidencia"],
+        preclinicasPendientes: json["preclinicasPendientes"],
         activo: json["activo"],
         creadoPor: json["creadoPor"],
         creadoFecha: DateTime.parse(json["creadoFecha"]),
@@ -263,6 +267,7 @@ class PacientesViewModel {
         "municipio": municipio,
         "departamentoResidencia": departamentoResidencia,
         "municipioResidencia": municipioResidencia,
+        "preclinicasPendientes": preclinicasPendientes,
         "activo": activo,
         "creadoPor": creadoPor,
         "creadoFecha": creadoFecha.toIso8601String(),

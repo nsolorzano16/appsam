@@ -70,7 +70,7 @@ class ExamenesService {
       final decodedData = json.decode(resp.body);
       decodedData.forEach((examen) {
         final examenTemp = ExamenesIndicadosViewModel.fromJson(examen);
-        if (examenTemp.examenDetalle != null) {
+        if (examenTemp.examenDetalle.isNotEmpty) {
           examenTemp.examenDetalle = examenTemp.examenDetalle[0].toUpperCase() +
               examenTemp.examenDetalle.substring(1).toLowerCase();
         }

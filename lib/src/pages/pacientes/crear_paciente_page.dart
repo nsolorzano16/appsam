@@ -1,15 +1,13 @@
-import 'dart:async';
 import 'package:appsam/src/widgets/firebaseMessageWrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:getflutter/getflutter.dart';
 import 'package:intl/intl.dart';
-import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
-import 'package:progress_dialog/progress_dialog.dart';
 
 import 'package:appsam/src/blocs/pacientes_bloc/pacientes_bloc.dart';
-import 'package:appsam/src/blocs/pacientes_bloc/formPacientes_bloc.dart';
+
 import 'package:appsam/src/models/departamento_model.dart';
 import 'package:appsam/src/models/escolaridad_model.dart';
 import 'package:appsam/src/models/estadocivil_model.dart';
@@ -26,6 +24,7 @@ import 'package:appsam/src/providers/combos_service.dart';
 import 'package:appsam/src/utils/storage_util.dart';
 import 'package:appsam/src/utils/utils.dart';
 import 'package:appsam/src/widgets/drawer.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 
 class CrearPacientePage extends StatefulWidget {
   static final String routeName = 'crear_paciente';
@@ -34,37 +33,24 @@ class CrearPacientePage extends StatefulWidget {
 }
 
 class _CrearPacientePageState extends State<CrearPacientePage> {
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  UsuarioModel _usuario =
+      usuarioModelFromJson(StorageUtil.getString('usuarioGlobal'));
+  PacienteModel _paciente = new PacienteModel();
 
   DateTime picked;
 
-  TextEditingController _inputFieldDateController = new TextEditingController();
+  final TextEditingController _fechaNacimientoController =
+      new TextEditingController();
+
   final PacientesBloc pacientesBloc = new PacientesBloc();
-  final FormPacientesBloc _formBloc = new FormPacientesBloc();
+
   final comboService = CombosService();
-  PacienteModel _paciente = new PacienteModel();
-  UsuarioModel _usuario =
-      usuarioModelFromJson(StorageUtil.getString('usuarioGlobal'));
-
-  MaskTextInputFormatter maskTelefono1 = new MaskTextInputFormatter(
-      mask: '####-####', filter: {"#": RegExp(r'[0-9]')});
-
-  MaskTextInputFormatter maskTelefono2 = new MaskTextInputFormatter(
-      mask: '####-####', filter: {"#": RegExp(r'[0-9]')});
-  MaskTextInputFormatter maskIdentificacion = new MaskTextInputFormatter(
-      mask: '#############', filter: {"#": RegExp(r'[0-9]')});
-
-  MaskTextInputFormatter maskIdentificacionMadre = new MaskTextInputFormatter(
-      mask: '#############', filter: {"#": RegExp(r'[0-9]')});
-
-  MaskTextInputFormatter maskIdentificacionPadre = new MaskTextInputFormatter(
-      mask: '#############', filter: {"#": RegExp(r'[0-9]')});
 
   @override
   void dispose() {
     pacientesBloc.dispose();
-    _formBloc.dispose();
+
     super.dispose();
   }
 
@@ -72,22 +58,22 @@ class _CrearPacientePageState extends State<CrearPacientePage> {
   void initState() {
     super.initState();
     StorageUtil.putString('ultimaPagina', CrearPacientePage.routeName);
-    _formBloc.onChangeEstadoCivil('S');
-    _formBloc.onChangeSexo('M');
-    _formBloc.onChangePaisId(83);
-    _formBloc.onChangeProfesionId(1);
-    _formBloc.onChangeEscolaridadId(11);
-    _formBloc.onChangeReligionId(5);
-    _formBloc.onChangeGrupoSanguineoId(9);
-    _formBloc.onChangeGrupoEtnicoId(11);
-    _formBloc.onChangeDepartamentoId(8);
-    _formBloc.onChangeDepartamentoResidenciaId(8);
-
-    _formBloc.onChangeParentesco('otro');
-    _formBloc.onChangeMenorDeEdad(false);
-    _formBloc.onChangeMunicipioId(110);
-    _formBloc.onChangeMunicipioResidenciaId(110);
-
+    _paciente.sexo = 'M';
+    _paciente.estadoCivil = 'S';
+    _paciente.paisId = 83;
+    _paciente.profesionId = 1;
+    _paciente.escolaridadId = 11;
+    _paciente.religionId = 5;
+    _paciente.grupoSanguineoId = 9;
+    _paciente.grupoEtnicoId = 11;
+    _paciente.departamentoId = 8;
+    _paciente.departamentoResidenciaId = 8;
+    _paciente.parentesco = 'otro';
+    _paciente.menorDeEdad = false;
+    _paciente.municipioId = 110;
+    _paciente.municipioResidenciaId = 110;
+    _paciente.edad = 0;
+    _paciente.telefono2 = '';
     pacientesBloc.cargarMunicipios(8);
     pacientesBloc.cargarMunicipiosResi(8);
   }
@@ -97,7 +83,6 @@ class _CrearPacientePageState extends State<CrearPacientePage> {
     return WillPopScope(
         child: FirebaseMessageWrapper(
           child: Scaffold(
-            key: _scaffoldKey,
             appBar: AppBar(
               title: Text('Nuevo Paciente'),
               actions: <Widget>[
@@ -221,13 +206,13 @@ class _CrearPacientePageState extends State<CrearPacientePage> {
         _espacio(),
         _crearCampoSegundoApellido(),
         _espacio(),
-        _crearCampoIdentificacion(maskIdentificacion),
+        _crearCampoIdentificacion(),
         _espacio(),
         _crearFecha(context),
         _espacio(),
         _crearCampoEstadoCivil(),
         _espacio(),
-        _crearCampoTelefono1(maskTelefono1),
+        _crearCampoTelefono1(),
         _espacio(),
         _crearCampoEmail(),
         _espacio(),
@@ -265,7 +250,7 @@ class _CrearPacientePageState extends State<CrearPacientePage> {
         _espacio(),
         _crearCampoNombreEmergencia(),
         _espacio(),
-        _crearCampoTelefonoEmergencia(maskTelefono2),
+        _crearCampoTelefonoEmergencia(),
         _espacio(),
         _crearCampoParentesco(),
         _espacio(),
@@ -274,29 +259,18 @@ class _CrearPacientePageState extends State<CrearPacientePage> {
   }
 
   Widget _formParteCinco() {
-    return StreamBuilder(
-      stream: _formBloc.paisIdStream,
-      builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
-        if (snapshot.hasData) {
-          return Column(
-            children: <Widget>[
-              _espacio(),
-              (snapshot.data == 83)
-                  ? _crearDropDownDepartamento()
-                  : Container(),
-              _espacio(),
-              (snapshot.data == 83) ? _crearDropDownMunicipio() : Container(),
-              _espacio(),
-              _crearDropDownDepartamentoResidencia(),
-              _espacio(),
-              _crearDropDownMunicipioResidencia(),
-              _espacio()
-            ],
-          );
-        } else {
-          return CircularProgressIndicator();
-        }
-      },
+    return Column(
+      children: <Widget>[
+        _espacio(),
+        (_paciente.paisId == 83) ? _crearDropDownDepartamento() : Container(),
+        _espacio(),
+        (_paciente.paisId == 83) ? _crearDropDownMunicipio() : Container(),
+        _espacio(),
+        _crearDropDownDepartamentoResidencia(),
+        _espacio(),
+        _crearDropDownMunicipioResidencia(),
+        _espacio()
+      ],
     );
   }
 
@@ -308,133 +282,77 @@ class _CrearPacientePageState extends State<CrearPacientePage> {
         _espacio(),
         _crearCampoNombreMadre(),
         _espacio(),
-        _crearCampoIdentificacionMadre(maskIdentificacionMadre),
+        _crearCampoIdentificacionMadre(),
         _espacio(),
         _crearCampoNombrePadre(),
         _espacio(),
-        _crearCampoIdentificacionPadre(maskIdentificacionPadre),
+        _crearCampoIdentificacionPadre(),
         _espacio(),
         _crearCampoCarneVacuna(),
         _espacio(),
         _crearCampoNotas(),
         _espacio(),
-        _crearBotones(_paciente, pacientesBloc, context, _usuario)
+        _crearBotones(context)
       ],
     );
   }
 
   Widget _crearCampoNombre() {
-    return StreamBuilder(
-      stream: _formBloc.nombresStream,
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        return Padding(
-          padding: EdgeInsets.only(left: 8.0, right: 8.0),
-          child: TextFormField(
-            initialValue: _formBloc.nombres,
-            autovalidate: true,
-            validator: validaTexto,
-            onSaved: _formBloc.onChangeNombres,
-            keyboardType: TextInputType.text,
-            decoration: inputsDecorations('Nombres', Icons.person),
-            onChanged: _formBloc.onChangeNombres,
-          ),
-        );
-      },
+    return Padding(
+      padding: EdgeInsets.only(left: 8.0, right: 8.0),
+      child: TextFormField(
+        autovalidate: true,
+        validator: validaTexto,
+        keyboardType: TextInputType.text,
+        decoration: inputsDecorations('Nombres', Icons.person),
+        onChanged: (value) => _paciente.nombres = value,
+        onSaved: (value) => _paciente.nombres = value,
+      ),
     );
-  }
-
-  _crearCampoEmail() {
-    return StreamBuilder(
-      stream: _formBloc.emailStream,
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        return Padding(
-          padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-          child: TextFormField(
-            initialValue: _formBloc.email,
-            keyboardType: TextInputType.emailAddress,
-            decoration: inputsDecorations('Email', Icons.email),
-            onSaved: _formBloc.onChangeEmail,
-            onChanged: _formBloc.onChangeEmail,
-          ),
-        );
-      },
-    );
-  }
-
-  String validateEmail(String value) {
-    Pattern pattern =
-        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-    RegExp regex = new RegExp(pattern);
-    if (!regex.hasMatch(value))
-      return 'Ingrese email valido';
-    else
-      return null;
   }
 
   Widget _crearCampoPrimerApellido() {
-    return StreamBuilder(
-      stream: _formBloc.primerApellidoStream,
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        return Padding(
-          padding: EdgeInsets.only(left: 8.0, right: 8.0),
-          child: TextFormField(
-            initialValue: _formBloc.primerApellido,
-            autovalidate: true,
-            validator: validaTexto,
-            onSaved: _formBloc.onChangePrimerApellido,
-            keyboardType: TextInputType.text,
-            decoration: inputsDecorations('Primer Apellido', Icons.person),
-            onChanged: _formBloc.onChangePrimerApellido,
-          ),
-        );
-      },
+    return Padding(
+      padding: EdgeInsets.only(left: 8.0, right: 8.0),
+      child: TextFormField(
+        autovalidate: true,
+        validator: validaTexto,
+        keyboardType: TextInputType.text,
+        decoration: inputsDecorations('Primer Apellido', Icons.person),
+        onChanged: (value) => _paciente.primerApellido = value,
+        onSaved: (value) => _paciente.primerApellido = value,
+      ),
     );
   }
 
   Widget _crearCampoSegundoApellido() {
-    return StreamBuilder(
-      stream: _formBloc.segundoApellidoStream,
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        return Padding(
-          padding: EdgeInsets.only(left: 8.0, right: 8.0),
-          child: TextFormField(
-            initialValue: _formBloc.segundoApellido,
-            autovalidate: true,
-            validator: validaTexto,
-            onSaved: _formBloc.onChangeSegundoApellido,
-            keyboardType: TextInputType.text,
-            decoration: inputsDecorations('Segundo Apellido', Icons.person),
-            onChanged: _formBloc.onChangeSegundoApellido,
-          ),
-        );
-      },
+    return Padding(
+      padding: EdgeInsets.only(left: 8.0, right: 8.0),
+      child: TextFormField(
+        autovalidate: true,
+        validator: validaTexto,
+        keyboardType: TextInputType.text,
+        decoration: inputsDecorations('Segundo Apellido', Icons.person),
+        onChanged: (value) => _paciente.segundoApellido = value,
+        onSaved: (value) => _paciente.segundoApellido = value,
+      ),
     );
   }
 
-  Widget _espacio() {
-    return SizedBox(
-      height: 10.0,
-    );
-  }
-
-  Widget _crearCampoIdentificacion(TextInputFormatter mask) {
-    return StreamBuilder(
-      stream: _formBloc.identificacionStream,
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        return Padding(
-          padding: EdgeInsets.only(left: 8.0, right: 8.0),
-          child: TextFormField(
-            initialValue: _formBloc.identificacion,
-            inputFormatters: [mask],
-            autovalidate: true,
-            validator: validaTexto,
-            onSaved: _formBloc.onChangeIdentificacion,
-            maxLength: 13,
-            keyboardType: TextInputType.number,
-            decoration: inputsDecorations('Identificación', Icons.credit_card),
-          ),
-        );
-      },
+  Widget _crearCampoIdentificacion() {
+    return Padding(
+      padding: EdgeInsets.only(left: 8.0, right: 8.0),
+      child: TextFormField(
+        inputFormatters: [
+          LengthLimitingTextInputFormatter(13),
+          WhitelistingTextInputFormatter.digitsOnly
+        ],
+        maxLength: 13,
+        keyboardType: TextInputType.number,
+        decoration: inputsDecorations('Identificación', Icons.credit_card),
+        onChanged: (value) => _paciente.identificacion = value,
+        onSaved: (value) => _paciente.identificacion = value,
+      ),
     );
   }
 
@@ -445,7 +363,7 @@ class _CrearPacientePageState extends State<CrearPacientePage> {
         autovalidate: true,
         validator: validaTexto,
         enableInteractiveSelection: false,
-        controller: _inputFieldDateController,
+        controller: _fechaNacimientoController,
         decoration:
             inputsDecorations('Fecha de Nacimiento', Icons.calendar_today),
         onTap: () {
@@ -470,123 +388,10 @@ class _CrearPacientePageState extends State<CrearPacientePage> {
 
     if (picked != null) {
       var format = DateFormat('dd/MM/yyyy');
-      _formBloc.onChangeFechaNacimiento(picked);
-      _inputFieldDateController.text = format.format(picked);
-      _formBloc.onChangeFechaNacimiento(picked);
+
+      _fechaNacimientoController.text = format.format(picked);
+      _paciente.fechaNacimiento = picked;
     }
-  }
-
-  _crearSexo(value, String title) {
-    return StreamBuilder(
-      stream: _formBloc.sexoStream,
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        return RadioListTile(
-            title: (Text(title)),
-            value: value,
-            groupValue: _formBloc.sexo,
-            onChanged: (value) {
-              _formBloc.onChangeSexo(value);
-            });
-      },
-    );
-  }
-
-  _crearCampoTelefono1(MaskTextInputFormatter mask) {
-    return StreamBuilder(
-      stream: _formBloc.telefono1Stream,
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        return Padding(
-          padding: EdgeInsets.only(left: 8.0, right: 8.0),
-          child: TextFormField(
-            initialValue: _formBloc.telefono1,
-            autovalidate: true,
-            validator: validaTexto,
-            onSaved: _formBloc.onChangeTelefono1,
-            keyboardType: TextInputType.number,
-            inputFormatters: [mask],
-            decoration: inputsDecorations('Teléfono', Icons.phone_android),
-            onChanged: _formBloc.onChangeTelefono1,
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _crearCampoNombreEmergencia() {
-    return StreamBuilder(
-        stream: _formBloc.nombreEmergenciaStream,
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
-          return Padding(
-            padding: EdgeInsets.only(left: 8.0, right: 8.0),
-            child: TextFormField(
-              initialValue: _formBloc.nombreEmergencia,
-              onSaved: _formBloc.onChangeNombreEmergencia,
-              keyboardType: TextInputType.text,
-              decoration:
-                  inputsDecorations('Contacto Emergencia', Icons.person),
-              onChanged: _formBloc.onChangeNombreEmergencia,
-            ),
-          );
-        });
-  }
-
-  _crearCampoTelefonoEmergencia(MaskTextInputFormatter mask) {
-    return StreamBuilder(
-      stream: _formBloc.telefonoEmergenciaStream,
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        return Padding(
-          padding: EdgeInsets.only(left: 8.0, right: 8.0),
-          child: TextFormField(
-            initialValue: _formBloc.telefonoEmergencia,
-            onSaved: _formBloc.onChangeTelefonoEmergencia,
-            keyboardType: TextInputType.number,
-            inputFormatters: [mask],
-            decoration:
-                inputsDecorations('Teléfono Contacto Emergencia', Icons.phone),
-            onChanged: _formBloc.onChangeTelefonoEmergencia,
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _crearCampoParentesco() {
-    final parentescoLista = new List<ParentescoModel>();
-    parentescoLista
-        .add(new ParentescoModel(texto: 'Familiar', valor: 'familiar'));
-    parentescoLista.add(new ParentescoModel(texto: 'Amigo', valor: 'amigo'));
-    parentescoLista
-        .add(new ParentescoModel(texto: 'Conyugue', valor: 'conyugue'));
-    parentescoLista
-        .add(new ParentescoModel(texto: 'Hijo(a)', valor: 'hijo(a)'));
-    parentescoLista.add(new ParentescoModel(texto: 'Otro', valor: 'otro'));
-
-    return StreamBuilder(
-      stream: _formBloc.parentescoStream,
-      initialData: 'otro',
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        return Padding(
-          padding: EdgeInsets.only(left: 8.0, right: 8.0),
-          child: InputDecorator(
-              decoration: inputsDecorations('Parentesco', Icons.people),
-              child: DropdownButtonHideUnderline(
-                  child: DropdownButton(
-                value: _formBloc.parentesco,
-                isDense: true,
-                onChanged: (value) {
-                  _formBloc.onChangeParentesco(value);
-                  FocusScope.of(context).requestFocus(FocusNode());
-                },
-                items: parentescoLista.map((p) {
-                  return DropdownMenuItem(
-                    value: p.valor,
-                    child: Text(p.texto),
-                  );
-                }).toList(),
-              ))),
-        );
-      },
-    );
   }
 
   Widget _crearCampoEstadoCivil() {
@@ -597,188 +402,86 @@ class _CrearPacientePageState extends State<CrearPacientePage> {
     estadoCivilLista
         .add(new EstadoCivilModel(texto: 'Union Libre', valor: 'UL'));
 
-    return StreamBuilder(
-      stream: _formBloc.estadoCivilStream,
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        return Padding(
-          padding: EdgeInsets.only(left: 8.0, right: 8.0),
-          child: InputDecorator(
-              decoration: inputsDecorations('Estado Civil', Icons.face),
-              child: DropdownButtonHideUnderline(
-                  child: DropdownButton(
-                value: _formBloc.estadoCivil,
-                isDense: true,
-                onChanged: (value) {
-                  _formBloc.onChangeEstadoCivil(value);
-                  FocusScope.of(context).requestFocus(FocusNode());
-                },
-                items: estadoCivilLista.map((p) {
-                  return DropdownMenuItem(
-                    value: p.valor,
-                    child: Text(p.texto),
-                  );
-                }).toList(),
-              ))),
-        );
-      },
+    return Padding(
+      padding: EdgeInsets.only(left: 8.0, right: 8.0),
+      child: InputDecorator(
+          decoration: inputsDecorations('Estado Civil', Icons.face),
+          child: DropdownButtonHideUnderline(
+              child: DropdownButton(
+            value: _paciente.estadoCivil,
+            isDense: true,
+            onChanged: (value) {
+              setState(() {
+                _paciente.estadoCivil = value;
+                FocusScope.of(context).requestFocus(FocusNode());
+              });
+            },
+            items: estadoCivilLista.map((p) {
+              return DropdownMenuItem(
+                value: p.valor,
+                child: Text(p.texto),
+              );
+            }).toList(),
+          ))),
     );
   }
 
-  Widget _crearCampoMenorDeEdad() {
-    return StreamBuilder(
-      stream: _formBloc.menorDeEdadStream,
-      initialData: false,
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        return SwitchListTile(
-            title: Text('Menor de Edad'),
-            value: _formBloc.menorDeEdad,
-            onChanged: _formBloc.onChangeMenorDeEdad);
-      },
+  _crearCampoTelefono1() {
+    return Padding(
+      padding: EdgeInsets.only(left: 8.0, right: 8.0),
+      child: TextFormField(
+        autovalidate: true,
+        validator: validaTexto,
+        keyboardType: TextInputType.number,
+        inputFormatters: [
+          LengthLimitingTextInputFormatter(8),
+          WhitelistingTextInputFormatter.digitsOnly
+        ],
+        decoration: inputsDecorations('Teléfono', Icons.phone_android),
+        onChanged: (value) => _paciente.telefono1 = value,
+        onSaved: (value) => _paciente.telefono1 = value,
+      ),
     );
   }
 
-  Widget _crearCampoNombreMadre() {
-    return StreamBuilder(
-      stream: _formBloc.nombreMadreStream,
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        return Padding(
-          padding: EdgeInsets.only(left: 8.0, right: 8.0),
-          child: TextFormField(
-            initialValue: _formBloc.nombreMadre,
-            onSaved: _formBloc.onChangeNombreMadre,
-            keyboardType: TextInputType.text,
-            decoration: inputsDecorations('Nombre Madre', Icons.person),
-            onChanged: _formBloc.onChangeNombreMadre,
-          ),
-        );
-      },
+  _crearCampoEmail() {
+    return Padding(
+      padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+      child: TextFormField(
+        keyboardType: TextInputType.emailAddress,
+        decoration: inputsDecorations('Email', Icons.email),
+        onChanged: (value) => _paciente.email = value,
+        onSaved: (value) => _paciente.email = value,
+      ),
     );
   }
 
-  Widget _crearCampoIdentificacionMadre(MaskTextInputFormatter mask) {
-    return StreamBuilder(
-      stream: _formBloc.identificacionStream,
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        return Padding(
-          padding: EdgeInsets.only(left: 8.0, right: 8.0),
-          child: TextFormField(
-            inputFormatters: [mask],
-            initialValue: _formBloc.identificacionMadre,
-            onSaved: _formBloc.onChangeIdentificacionMadre,
-            maxLength: 13,
-            keyboardType: TextInputType.number,
-            decoration: inputsDecorations('Identificación Madre', Icons.person),
-          ),
-        );
-      },
+  String validateEmail(String value) {
+    Pattern pattern =
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+    RegExp regex = new RegExp(pattern);
+    if (!regex.hasMatch(value))
+      return 'Ingrese email valido';
+    else
+      return null;
+  }
+
+  Widget _espacio() {
+    return SizedBox(
+      height: 10.0,
     );
   }
 
-  Widget _crearCampoNombrePadre() {
-    return StreamBuilder(
-      stream: _formBloc.nombrePadreStream,
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        return Padding(
-          padding: EdgeInsets.only(left: 8.0, right: 8.0),
-          child: TextFormField(
-            initialValue: _formBloc.nombrePadre,
-            onSaved: _formBloc.onChangeNombrePadre,
-            keyboardType: TextInputType.text,
-            decoration: inputsDecorations('Nombre Padre', Icons.person),
-            onChanged: _formBloc.onChangeNombrePadre,
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _crearCampoIdentificacionPadre(MaskTextInputFormatter mask) {
-    return StreamBuilder(
-      stream: _formBloc.identificacionPadreStream,
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        return Padding(
-          padding: EdgeInsets.only(left: 8.0, right: 8.0),
-          child: TextFormField(
-            inputFormatters: [mask],
-            initialValue: _formBloc.identificacionPadre,
-            onSaved: _formBloc.onChangeIdentificacionPadre,
-            maxLength: 13,
-            keyboardType: TextInputType.number,
-            decoration: inputsDecorations('Identificación Padre', Icons.person),
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _crearCampoNotas() {
-    return StreamBuilder(
-      stream: _formBloc.notasStream,
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        return Padding(
-          padding: EdgeInsets.only(left: 8.0, right: 8.0),
-          child: TextFormField(
-            initialValue: _formBloc.notas,
-            onSaved: _formBloc.onChangeNotas,
-            keyboardType: TextInputType.text,
-            maxLines: 2,
-            decoration: inputsDecorations('Notas', Icons.note),
-            onChanged: _formBloc.onChangeNotas,
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _crearCampoDireccion() {
-    return StreamBuilder(
-      stream: _formBloc.direccionStream,
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        return Padding(
-          padding: EdgeInsets.only(left: 8.0, right: 8.0),
-          child: TextFormField(
-            initialValue: _formBloc.direccion,
-            onSaved: _formBloc.onChangeDireccion,
-            keyboardType: TextInputType.text,
-            maxLines: 3,
-            decoration: inputsDecorations('Dirección', Icons.note),
-            onChanged: _formBloc.onChangeDireccion,
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _texto(String texto) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Container(
-            padding: EdgeInsets.only(left: 25),
-            child: Text(
-              texto,
-              style: TextStyle(fontSize: 16.0),
-            ))
-      ],
-    );
-  }
-
-  Widget _crearCampoCarneVacuna() {
-    return StreamBuilder(
-      stream: _formBloc.carneVacunaStream,
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        return Padding(
-          padding: EdgeInsets.only(left: 8.0, right: 8.0),
-          child: TextFormField(
-            initialValue: _formBloc.carneVacuna,
-            onSaved: _formBloc.onChangeCarneVacuna,
-            keyboardType: TextInputType.text,
-            decoration: inputsDecorations('Carné de Vacuna', Icons.person),
-            onChanged: _formBloc.onChangeCarneVacuna,
-          ),
-        );
-      },
-    );
+  _crearSexo(value, String title) {
+    return RadioListTile(
+        title: (Text(title)),
+        value: value,
+        groupValue: _paciente.sexo,
+        onChanged: (value) {
+          setState(() {
+            _paciente.sexo = value;
+          });
+        });
   }
 
   Widget _crearDropDownProfesion() {
@@ -791,71 +494,24 @@ class _CrearPacientePageState extends State<CrearPacientePage> {
           return Padding(
             padding: EdgeInsets.only(left: 8.0, right: 8.0),
             child: InputDecorator(
-              decoration: inputsDecorations('Profesión', Icons.people),
-              child: StreamBuilder(
-                stream: _formBloc.profesionIdStream,
-                builder: (BuildContext context, AsyncSnapshot snapshot) {
-                  return DropdownButtonHideUnderline(
-                      child: DropdownButton(
-                    value: _formBloc.profesionId,
-                    isDense: true,
-                    onChanged: (value) {
-                      _formBloc.onChangeProfesionId(value);
+                decoration: inputsDecorations('Profesión', Icons.people),
+                child: DropdownButtonHideUnderline(
+                    child: DropdownButton(
+                  value: _paciente.profesionId,
+                  isDense: true,
+                  onChanged: (value) {
+                    setState(() {
+                      _paciente.profesionId = value;
                       FocusScope.of(context).requestFocus(FocusNode());
-                    },
-                    items: lista.map((x) {
-                      return DropdownMenuItem(
-                        value: x.profesionId,
-                        child: Text(x.nombre),
-                      );
-                    }).toList(),
-                  ));
-                },
-              ),
-            ),
-          );
-        } else {
-          return CircularProgressIndicator();
-        }
-      },
-    );
-  }
-
-  Widget _crearDropDownPais() {
-    return FutureBuilder(
-      future: comboService.getPaises(),
-      builder: (BuildContext context, AsyncSnapshot<List<PaisModel>> snapshot) {
-        final lista = snapshot.data;
-        if (lista != null) {
-          return Padding(
-            padding: EdgeInsets.only(left: 8.0, right: 8.0),
-            child: InputDecorator(
-              decoration: inputsDecorations('Pais', Icons.people),
-              child: StreamBuilder(
-                stream: _formBloc.paisIdStream,
-                builder: (BuildContext context, AsyncSnapshot snapshot) {
-                  if (!snapshot.hasData) return CircularProgressIndicator();
-                  return DropdownButtonHideUnderline(
-                      child: DropdownButton(
-                    value: snapshot.data,
-                    isDense: true,
-                    onChanged: (value) {
-                      _formBloc.onChangePaisId(value);
-                      FocusScope.of(context).requestFocus(FocusNode());
-                    },
-                    items: lista.map((x) {
-                      return DropdownMenuItem(
-                        value: x.paisId,
-                        child: Text(
-                          x.nombre,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      );
-                    }).toList(),
-                  ));
-                },
-              ),
-            ),
+                    });
+                  },
+                  items: lista.map((x) {
+                    return DropdownMenuItem(
+                      value: x.profesionId,
+                      child: Text(x.nombre),
+                    );
+                  }).toList(),
+                ))),
           );
         } else {
           return CircularProgressIndicator();
@@ -875,29 +531,26 @@ class _CrearPacientePageState extends State<CrearPacientePage> {
             padding: EdgeInsets.only(left: 8.0, right: 8.0),
             child: InputDecorator(
               decoration: inputsDecorations('Escolaridad', Icons.people),
-              child: StreamBuilder(
-                stream: _formBloc.escolaridadIdStream,
-                builder: (BuildContext context, AsyncSnapshot snapshot) {
-                  return DropdownButtonHideUnderline(
-                      child: DropdownButton(
-                    value: _formBloc.escolaridadId,
-                    isDense: true,
-                    onChanged: (value) {
-                      _formBloc.onChangeEscolaridadId(value);
-                      FocusScope.of(context).requestFocus(FocusNode());
-                    },
-                    items: lista.map((x) {
-                      return DropdownMenuItem(
-                        value: x.escolaridadId,
-                        child: Text(
-                          x.nombre,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      );
-                    }).toList(),
-                  ));
+              child: DropdownButtonHideUnderline(
+                  child: DropdownButton(
+                value: _paciente.escolaridadId,
+                isDense: true,
+                onChanged: (value) {
+                  setState(() {
+                    _paciente.escolaridadId = value;
+                    FocusScope.of(context).requestFocus(FocusNode());
+                  });
                 },
-              ),
+                items: lista.map((x) {
+                  return DropdownMenuItem(
+                    value: x.escolaridadId,
+                    child: Text(
+                      x.nombre,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  );
+                }).toList(),
+              )),
             ),
           );
         } else {
@@ -918,29 +571,26 @@ class _CrearPacientePageState extends State<CrearPacientePage> {
             padding: EdgeInsets.only(left: 8.0, right: 8.0),
             child: InputDecorator(
               decoration: inputsDecorations('Religion', Icons.people),
-              child: StreamBuilder(
-                stream: _formBloc.religionIdStream,
-                builder: (BuildContext context, AsyncSnapshot snapshot) {
-                  return DropdownButtonHideUnderline(
-                      child: DropdownButton(
-                    value: _formBloc.religionId,
-                    isDense: true,
-                    onChanged: (value) {
-                      _formBloc.onChangeReligionId(value);
-                      FocusScope.of(context).requestFocus(FocusNode());
-                    },
-                    items: lista.map((x) {
-                      return DropdownMenuItem(
-                        value: x.religionId,
-                        child: Text(
-                          x.nombre,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      );
-                    }).toList(),
-                  ));
+              child: DropdownButtonHideUnderline(
+                  child: DropdownButton(
+                value: _paciente.religionId,
+                isDense: true,
+                onChanged: (value) {
+                  setState(() {
+                    _paciente.religionId = value;
+                    FocusScope.of(context).requestFocus(FocusNode());
+                  });
                 },
-              ),
+                items: lista.map((x) {
+                  return DropdownMenuItem(
+                    value: x.religionId,
+                    child: Text(
+                      x.nombre,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  );
+                }).toList(),
+              )),
             ),
           );
         } else {
@@ -961,29 +611,26 @@ class _CrearPacientePageState extends State<CrearPacientePage> {
             padding: EdgeInsets.only(left: 8.0, right: 8.0),
             child: InputDecorator(
               decoration: inputsDecorations('Tipo de Sangre', Icons.people),
-              child: StreamBuilder(
-                stream: _formBloc.grupoSanguineoIdStream,
-                builder: (BuildContext context, AsyncSnapshot snapshot) {
-                  return DropdownButtonHideUnderline(
-                      child: DropdownButton(
-                    value: _formBloc.grupoSanguineoId,
-                    isDense: true,
-                    onChanged: (value) {
-                      _formBloc.onChangeGrupoSanguineoId(value);
-                      FocusScope.of(context).requestFocus(FocusNode());
-                    },
-                    items: lista.map((x) {
-                      return DropdownMenuItem(
-                        value: x.grupoSanguineoId,
-                        child: Text(
-                          x.nombre,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      );
-                    }).toList(),
-                  ));
+              child: DropdownButtonHideUnderline(
+                  child: DropdownButton(
+                value: _paciente.grupoSanguineoId,
+                isDense: true,
+                onChanged: (value) {
+                  setState(() {
+                    _paciente.grupoSanguineoId = value;
+                    FocusScope.of(context).requestFocus(FocusNode());
+                  });
                 },
-              ),
+                items: lista.map((x) {
+                  return DropdownMenuItem(
+                    value: x.grupoSanguineoId,
+                    child: Text(
+                      x.nombre,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  );
+                }).toList(),
+              )),
             ),
           );
         } else {
@@ -1004,29 +651,26 @@ class _CrearPacientePageState extends State<CrearPacientePage> {
             padding: EdgeInsets.only(left: 8.0, right: 8.0),
             child: InputDecorator(
               decoration: inputsDecorations('Grupo Etnico', Icons.people),
-              child: StreamBuilder(
-                stream: _formBloc.grupoEtnicoIdStream,
-                builder: (BuildContext context, AsyncSnapshot snapshot) {
-                  return DropdownButtonHideUnderline(
-                      child: DropdownButton(
-                    value: _formBloc.grupoEtnicoId,
-                    isDense: true,
-                    onChanged: (value) {
-                      _formBloc.onChangeGrupoEtnicoId(value);
-                      FocusScope.of(context).requestFocus(FocusNode());
-                    },
-                    items: lista.map((x) {
-                      return DropdownMenuItem(
-                        value: x.grupoEtnicoId,
-                        child: Text(
-                          x.nombre,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      );
-                    }).toList(),
-                  ));
+              child: DropdownButtonHideUnderline(
+                  child: DropdownButton(
+                value: _paciente.grupoEtnicoId,
+                isDense: true,
+                onChanged: (value) {
+                  setState(() {
+                    _paciente.grupoEtnicoId = value;
+                    FocusScope.of(context).requestFocus(FocusNode());
+                  });
                 },
-              ),
+                items: lista.map((x) {
+                  return DropdownMenuItem(
+                    value: x.grupoEtnicoId,
+                    child: Text(
+                      x.nombre,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  );
+                }).toList(),
+              )),
             ),
           );
         } else {
@@ -1050,15 +694,15 @@ class _CrearPacientePageState extends State<CrearPacientePage> {
                   inputsDecorations('Departamento de Nacimiento', Icons.map),
               child: DropdownButtonHideUnderline(
                   child: DropdownButton(
-                value: _formBloc.departamentoId,
+                value: _paciente.departamentoId,
                 isDense: true,
                 onChanged: (value) {
-                  _formBloc.onChangeDepartamentoId(value);
-                  _formBloc.onChangeMunicipioId(null);
-                  pacientesBloc.cargarMunicipios(value);
-                  FocusScope.of(context).requestFocus(FocusNode());
-
-                  setState(() {});
+                  setState(() {
+                    _paciente.departamentoId = value;
+                    _paciente.municipioId = null;
+                    pacientesBloc.cargarMunicipios(value);
+                    FocusScope.of(context).requestFocus(FocusNode());
+                  });
                 },
                 items: lista.map((x) {
                   return DropdownMenuItem(
@@ -1097,9 +741,9 @@ class _CrearPacientePageState extends State<CrearPacientePage> {
                         child: DropdownButton(
                       icon: Icon(Icons.arrow_drop_down),
                       isDense: true,
-                      value: _formBloc.municipioId,
+                      value: _paciente.municipioId,
                       onChanged: (value) {
-                        _formBloc.onChangeMunicipioId(value);
+                        _paciente.municipioId = value;
                         FocusScope.of(context).requestFocus(FocusNode());
                       },
                       items: snapshotMuni.data.map((x) {
@@ -1117,6 +761,231 @@ class _CrearPacientePageState extends State<CrearPacientePage> {
     );
   }
 
+  Widget _crearDropDownPais() {
+    return FutureBuilder(
+      future: comboService.getPaises(),
+      builder: (BuildContext context, AsyncSnapshot<List<PaisModel>> snapshot) {
+        final lista = snapshot.data;
+        if (lista != null) {
+          return Padding(
+            padding: EdgeInsets.only(left: 8.0, right: 8.0),
+            child: InputDecorator(
+              decoration: inputsDecorations('Pais', Icons.people),
+              child: DropdownButtonHideUnderline(
+                  child: DropdownButton(
+                value: _paciente.paisId,
+                isDense: true,
+                onChanged: (value) {
+                  setState(() {
+                    _paciente.paisId = value;
+                    FocusScope.of(context).requestFocus(FocusNode());
+                    _paciente.paisId = value;
+                  });
+                },
+                items: lista.map((x) {
+                  return DropdownMenuItem(
+                    value: x.paisId,
+                    child: Text(
+                      x.nombre,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  );
+                }).toList(),
+              )),
+            ),
+          );
+        } else {
+          return CircularProgressIndicator();
+        }
+      },
+    );
+  }
+
+  Widget _crearCampoNombreEmergencia() {
+    return Padding(
+      padding: EdgeInsets.only(left: 8.0, right: 8.0),
+      child: TextFormField(
+        keyboardType: TextInputType.text,
+        decoration: inputsDecorations('Contacto Emergencia', Icons.person),
+        onChanged: (value) => _paciente.nombreEmergencia = value,
+        onSaved: (value) => _paciente.nombreEmergencia = value,
+      ),
+    );
+  }
+
+  _crearCampoTelefonoEmergencia() {
+    return Padding(
+      padding: EdgeInsets.only(left: 8.0, right: 8.0),
+      child: TextFormField(
+        keyboardType: TextInputType.number,
+        inputFormatters: [
+          LengthLimitingTextInputFormatter(8),
+          WhitelistingTextInputFormatter.digitsOnly
+        ],
+        decoration: inputsDecorations('Tel. Contacto Emergencia', Icons.phone),
+        onChanged: (value) => _paciente.telefonoEmergencia = value,
+        onSaved: (value) => _paciente.telefonoEmergencia = value,
+      ),
+    );
+  }
+
+  Widget _crearCampoParentesco() {
+    final parentescoLista = new List<ParentescoModel>();
+    parentescoLista
+        .add(new ParentescoModel(texto: 'Familiar', valor: 'familiar'));
+    parentescoLista.add(new ParentescoModel(texto: 'Amigo', valor: 'amigo'));
+    parentescoLista
+        .add(new ParentescoModel(texto: 'Conyugue', valor: 'conyugue'));
+    parentescoLista
+        .add(new ParentescoModel(texto: 'Hijo(a)', valor: 'hijo(a)'));
+    parentescoLista.add(new ParentescoModel(texto: 'Otro', valor: 'otro'));
+
+    return Padding(
+      padding: EdgeInsets.only(left: 8.0, right: 8.0),
+      child: InputDecorator(
+          decoration: inputsDecorations('Parentesco', Icons.people),
+          child: DropdownButtonHideUnderline(
+              child: DropdownButton(
+            value: _paciente.parentesco,
+            isDense: true,
+            onChanged: (value) {
+              setState(() {
+                _paciente.parentesco = value;
+                FocusScope.of(context).requestFocus(FocusNode());
+              });
+            },
+            items: parentescoLista.map((p) {
+              return DropdownMenuItem(
+                value: p.valor,
+                child: Text(p.texto),
+              );
+            }).toList(),
+          ))),
+    );
+  }
+
+  Widget _crearCampoMenorDeEdad() {
+    return SwitchListTile(
+        title: Text('Menor de Edad'),
+        value: _paciente.menorDeEdad,
+        onChanged: (value) {
+          setState(() {
+            _paciente.menorDeEdad = value;
+          });
+        });
+  }
+
+  Widget _crearCampoNombreMadre() {
+    return Padding(
+      padding: EdgeInsets.only(left: 8.0, right: 8.0),
+      child: TextFormField(
+        keyboardType: TextInputType.text,
+        decoration: inputsDecorations('Nombre Madre', Icons.person),
+        onChanged: (value) => _paciente.nombreMadre = value,
+        onSaved: (value) => _paciente.nombreMadre = value,
+      ),
+    );
+  }
+
+  Widget _crearCampoIdentificacionMadre() {
+    return Padding(
+      padding: EdgeInsets.only(left: 8.0, right: 8.0),
+      child: TextFormField(
+        inputFormatters: [
+          LengthLimitingTextInputFormatter(13),
+          WhitelistingTextInputFormatter.digitsOnly
+        ],
+        maxLength: 13,
+        keyboardType: TextInputType.number,
+        decoration: inputsDecorations('Identificación Madre', Icons.person),
+        onChanged: (value) => _paciente.identificacionMadre = value,
+        onSaved: (value) => _paciente.identificacionMadre = value,
+      ),
+    );
+  }
+
+  Widget _crearCampoNombrePadre() {
+    return Padding(
+      padding: EdgeInsets.only(left: 8.0, right: 8.0),
+      child: TextFormField(
+        keyboardType: TextInputType.text,
+        decoration: inputsDecorations('Nombre Padre', Icons.person),
+        onChanged: (value) => _paciente.nombrePadre = value,
+        onSaved: (value) => _paciente.nombrePadre = value,
+      ),
+    );
+  }
+
+  Widget _crearCampoIdentificacionPadre() {
+    return Padding(
+      padding: EdgeInsets.only(left: 8.0, right: 8.0),
+      child: TextFormField(
+        inputFormatters: [
+          LengthLimitingTextInputFormatter(13),
+          WhitelistingTextInputFormatter.digitsOnly
+        ],
+        maxLength: 13,
+        keyboardType: TextInputType.number,
+        decoration: inputsDecorations('Identificación Padre', Icons.person),
+        onChanged: (value) => _paciente.identificacionPadre = value,
+        onSaved: (value) => _paciente.identificacionPadre = value,
+      ),
+    );
+  }
+
+  Widget _crearCampoNotas() {
+    return Padding(
+      padding: EdgeInsets.only(left: 8.0, right: 8.0),
+      child: TextFormField(
+        // controller: _notasController,
+        keyboardType: TextInputType.text,
+        maxLines: 2,
+        decoration: inputsDecorations('Notas', Icons.note),
+        onChanged: (value) => _paciente.notas = value,
+        onSaved: (value) => _paciente.notas = value,
+      ),
+    );
+  }
+
+  Widget _crearCampoDireccion() {
+    return Padding(
+      padding: EdgeInsets.only(left: 8.0, right: 8.0),
+      child: TextFormField(
+        keyboardType: TextInputType.text,
+        maxLines: 3,
+        decoration: inputsDecorations('Dirección', Icons.note),
+        onChanged: (value) => _paciente.direccion = value,
+        onSaved: (value) => _paciente.direccion = value,
+      ),
+    );
+  }
+
+  Widget _texto(String texto) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Container(
+            padding: EdgeInsets.only(left: 25),
+            child: Text(
+              texto,
+              style: TextStyle(fontSize: 16.0),
+            ))
+      ],
+    );
+  }
+
+  Widget _crearCampoCarneVacuna() {
+    return Padding(
+      padding: EdgeInsets.only(left: 8.0, right: 8.0),
+      child: TextFormField(
+        keyboardType: TextInputType.text,
+        decoration: inputsDecorations('Carné de Vacuna', Icons.person),
+        onChanged: (value) => _paciente.carneVacuna = value,
+        onSaved: (value) => _paciente.carneVacuna = value,
+      ),
+    );
+  }
+
   Widget _crearDropDownDepartamentoResidencia() {
     return FutureBuilder(
       future: comboService.getDepartamentos(),
@@ -1131,14 +1000,15 @@ class _CrearPacientePageState extends State<CrearPacientePage> {
                   inputsDecorations('Departamento de Residencia', Icons.map),
               child: DropdownButtonHideUnderline(
                   child: DropdownButton(
-                value: _formBloc.departamentoResidenciaId,
+                value: _paciente.departamentoResidenciaId,
                 isDense: true,
                 onChanged: (value) {
-                  _formBloc.onChangeDepartamentoResidenciaId(value);
-                  _formBloc.onChangeMunicipioResidenciaId(null);
-                  pacientesBloc.cargarMunicipiosResi(value);
-                  FocusScope.of(context).requestFocus(FocusNode());
-                  setState(() {});
+                  setState(() {
+                    _paciente.departamentoResidenciaId = value;
+                    _paciente.municipioResidenciaId = null;
+                    pacientesBloc.cargarMunicipiosResi(value);
+                    FocusScope.of(context).requestFocus(FocusNode());
+                  });
                 },
                 items: lista.map((x) {
                   return DropdownMenuItem(
@@ -1176,10 +1046,12 @@ class _CrearPacientePageState extends State<CrearPacientePage> {
                       child: DropdownButton(
                     icon: Icon(Icons.arrow_drop_down),
                     isDense: true,
-                    value: _formBloc.municipioResidenciaId,
+                    value: _paciente.municipioResidenciaId,
                     onChanged: (value) {
-                      _formBloc.onChangeMunicipioResidenciaId(value);
-                      FocusScope.of(context).requestFocus(FocusNode());
+                      setState(() {
+                        _paciente.municipioResidenciaId = value;
+                        FocusScope.of(context).requestFocus(FocusNode());
+                      });
                     },
                     items: snapshotResi.data.map((x) {
                       return DropdownMenuItem(
@@ -1197,10 +1069,7 @@ class _CrearPacientePageState extends State<CrearPacientePage> {
   }
 
   Widget _crearBotones(
-    PacienteModel _paciente,
-    PacientesBloc blocPaciente,
     BuildContext context,
-    UsuarioModel _usuario,
   ) {
     return Padding(
         padding: EdgeInsets.only(right: 25.0, bottom: 10.0),
@@ -1212,15 +1081,11 @@ class _CrearPacientePageState extends State<CrearPacientePage> {
                 borderRadius: BorderRadius.circular(20.0)),
             icon: Icon(Icons.save),
             label: Text('Guardar'),
-            onPressed: () =>
-                _guardaPaciente(blocPaciente, context, _paciente, _usuario)));
+            onPressed: () => _guardaPaciente(context)));
   }
 
   void _guardaPaciente(
-    PacientesBloc blocPaciente,
     BuildContext context,
-    PacienteModel _paciente,
-    UsuarioModel _usuario,
   ) async {
     if (!_formKey.currentState.validate()) {
       mostrarFlushBar(context, Colors.black, 'Información',
@@ -1233,42 +1098,13 @@ class _CrearPacientePageState extends State<CrearPacientePage> {
       _paciente.modificadoPor = _usuario.userName;
       _paciente.modificadoFecha = DateTime.now();
       _paciente.pacienteId = 0;
-      _paciente.fechaNacimiento = _formBloc.fechaNacimiento;
-      _paciente.nombres = _formBloc.nombres;
-      _paciente.primerApellido = _formBloc.primerApellido;
-      _paciente.segundoApellido = _formBloc.segundoApellido;
-      _paciente.identificacion = _formBloc.identificacion;
-      _paciente.estadoCivil = _formBloc.estadoCivil;
-      _paciente.telefono1 = _formBloc.telefono1;
-      _paciente.sexo = _formBloc.sexo;
-      _paciente.profesionId = _formBloc.profesionId;
-      _paciente.escolaridadId = _formBloc.escolaridadId;
-      _paciente.religionId = _formBloc.religionId;
-      _paciente.grupoSanguineoId = _formBloc.grupoSanguineoId;
-      _paciente.grupoEtnicoId = _formBloc.grupoEtnicoId;
-      _paciente.paisId = _formBloc.paisId;
-      _paciente.departamentoId = _formBloc.departamentoId;
-      _paciente.municipioId = _formBloc.municipioId;
-      _paciente.departamentoResidenciaId = _formBloc.departamentoResidenciaId;
-      _paciente.municipioResidenciaId = _formBloc.municipioResidenciaId;
-      _paciente.direccion = _formBloc.direccion;
-      _paciente.nombreEmergencia = _formBloc.nombreEmergencia;
-      _paciente.telefonoEmergencia = _formBloc.telefonoEmergencia;
-      _paciente.parentesco = _formBloc.parentesco;
-      _paciente.menorDeEdad = _formBloc.menorDeEdad;
-      _paciente.nombreMadre = _formBloc.nombreMadre;
-      _paciente.identificacionMadre = _formBloc.identificacionMadre;
-      _paciente.nombrePadre = _formBloc.nombrePadre;
-      _paciente.identificacionPadre = _formBloc.identificacionPadre;
-      _paciente.notas = _formBloc.notas;
-      _paciente.carneVacuna = _formBloc.carneVacuna;
-      _paciente.email = _formBloc.email;
 
       if (_paciente.paisId != 83) {
         _paciente.departamentoId = null;
         _paciente.municipioId = null;
       }
 
+      // imprimirJSON(_paciente);
       final ProgressDialog _pr = new ProgressDialog(
         context,
         type: ProgressDialogType.Normal,
@@ -1287,18 +1123,17 @@ class _CrearPacientePageState extends State<CrearPacientePage> {
             color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600),
       );
       await _pr.show();
-      _inputFieldDateController.text = "";
+
       _formKey.currentState.reset();
-      final bool resp = await blocPaciente.addPaciente(_paciente);
+      final bool resp = await pacientesBloc.addPaciente(_paciente);
 
       if (resp) {
         await _pr.hide();
 
         mostrarFlushBar(context, Colors.green, 'Info',
             'Paciente creado correctamente', 3, Icons.info, Colors.black);
-        Timer(Duration(seconds: 3), () {
-          Navigator.pushReplacementNamed(context, 'pacientes');
-        });
+        Future.delayed(Duration(seconds: 3))
+            .then((_) => Navigator.pushReplacementNamed(context, 'pacientes'));
       } else {
         await _pr.hide();
 
@@ -1314,5 +1149,3 @@ class _CrearPacientePageState extends State<CrearPacientePage> {
     }
   }
 }
-
-//TODO: busqueda solo  por la identidad usuario

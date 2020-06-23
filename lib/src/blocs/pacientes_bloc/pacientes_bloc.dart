@@ -9,7 +9,7 @@ import 'package:appsam/src/providers/pacientes_service.dart';
 class PacientesBloc with Validators {
   final _pacienteService = new PacientesService();
   final _comboService = new CombosService();
-  final _pacientesController = BehaviorSubject<List<PacientesViewModel>>();
+
   final _pacientesBusquedaController =
       BehaviorSubject<List<PacientesViewModel>>();
 
@@ -22,9 +22,6 @@ class PacientesBloc with Validators {
 
   final _cargandoMunicipiosController = BehaviorSubject<bool>();
   final _cargandoMunicipiosResiController = BehaviorSubject<bool>();
-
-  Stream<List<PacientesViewModel>> get pacientesListStream =>
-      _pacientesController.stream;
 
   Stream<List<MunicipioModel>> get municipiosListStream =>
       _municipiosController.stream;
@@ -43,8 +40,6 @@ class PacientesBloc with Validators {
 
   //********FUNCTIONS */
 
-  Function(List<PacientesViewModel>) get onChangePacientesLista =>
-      _pacientesController.sink.add;
   Function(List<PacientesViewModel>) get onChangePacientesBusqueda =>
       _pacientesBusquedaController.sink.add;
 
@@ -77,21 +72,21 @@ class PacientesBloc with Validators {
     _cargandoMunicipiosResiController.sink.add(false);
   }
 
-  cargarPacientesPaginado(int page, String filter) async {
-    final pacientes = await _pacienteService.getPacientesPaginado(page, filter);
-    _ultimaPaginaController.add(pacientes.totalPages);
-    listPacientes.addAll(pacientes.items);
+  // cargarPacientesPaginado(int page, String filter) async {
+  //   final pacientes = await _pacienteService.getPacientesPaginado(page, filter);
+  //   _ultimaPaginaController.add(pacientes.totalPages);
+  //   listPacientes.addAll(pacientes.items);
 
-    onChangePacientesLista(listPacientes);
-  }
+  //   onChangePacientesLista(listPacientes);
+  // }
 
-  cargarPacientesPaginadoRefresh(int page, String filter) async {
-    final pacientes = await _pacienteService.getPacientesPaginado(page, filter);
-    _ultimaPaginaController.add(pacientes.totalPages);
-    listPacientes.clear();
-    listPacientes.addAll(pacientes.items);
-    onChangePacientesLista(listPacientes);
-  }
+  // cargarPacientesPaginadoRefresh(int page, String filter) async {
+  //   final pacientes = await _pacienteService.getPacientesPaginado(page, filter);
+  //   _ultimaPaginaController.add(pacientes.totalPages);
+  //   listPacientes.clear();
+  //   listPacientes.addAll(pacientes.items);
+  //   onChangePacientesLista(listPacientes);
+  // }
 
   cargarPacientesPaginadoBusqueda(int page, String filter) async {
     final pacientes = await _pacienteService.getPacientesPaginado(page, filter);
@@ -107,9 +102,7 @@ class PacientesBloc with Validators {
   }
 
   dispose() {
-    _pacientesController?.close();
     _ultimaPaginaController?.close();
-    _pacientesController?.close();
     _pacientesBusquedaController?.close();
     _municipiosController?.close();
     _cargandoMunicipiosController?.close();

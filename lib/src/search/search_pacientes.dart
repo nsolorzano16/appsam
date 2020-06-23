@@ -5,7 +5,11 @@ import 'package:appsam/src/utils/utils.dart';
 import 'package:appsam/src/blocs/provider.dart';
 import 'package:appsam/src/models/paginados/pacientesPaginado_model.dart';
 
+import '../providers/pacientes_service.dart';
+
 class DataSearchPacientes extends SearchDelegate {
+  Future<PacientesPaginadoModel> pacientesFuture;
+  PacientesService pacientesService = new PacientesService();
   @override
   List<Widget> buildActions(BuildContext context) {
     // acciones de nuestro app bar
@@ -51,11 +55,14 @@ class DataSearchPacientes extends SearchDelegate {
       builder: (BuildContext context,
           AsyncSnapshot<List<PacientesViewModel>> snapshot) {
         if (snapshot.hasData) {
-          final pacientes = snapshot.data;
-          return ListView(
-              children: pacientes.map((asistente) {
-            return _item(context, asistente);
-          }).toList());
+          if (!snapshot.hasData) return loadingIndicator(context);
+
+          return ListView.builder(
+            itemCount: snapshot.data.length,
+            itemBuilder: (BuildContext context, int index) {
+              return _item(context, snapshot.data[index]);
+            },
+          );
         } else {
           return loadingIndicator(context);
         }
@@ -105,10 +112,17 @@ class DataSearchPacientes extends SearchDelegate {
                 size: 20.0,
                 color: Theme.of(context).primaryColor,
               ),
-              onPressed: () {
-                Navigator.pushReplacementNamed(context, 'crear_preclinica',
-                    arguments: paciente);
-              })),
+              onPressed: () => (paciente.preclinicasPendientes == 0)
+                  ? Navigator.pushReplacementNamed(context, 'crear_preclinica',
+                      arguments: paciente)
+                  : mostrarFlushBar(
+                      context,
+                      Colors.lightGreen[700],
+                      'Info',
+                      'Paciente con preclinicas pendientes',
+                      2,
+                      Icons.info,
+                      Colors.white))),
     );
   }
 }

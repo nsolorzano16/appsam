@@ -53,6 +53,7 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
       new TextEditingController();
 
   final TextEditingController _narizController = new TextEditingController();
+  final TextEditingController _notasController = new TextEditingController();
 
   String labelBoton = 'Guardar';
 
@@ -112,6 +113,10 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
     _narizController.text = (widget.examen.nariz != null)
         ? widget.examen.nariz
         : 'Sin alteraciones';
+
+    _notasController.text = (widget.examen.notas != null)
+        ? widget.examen.notas
+        : 'Sin alteraciones';
   }
 
   @override
@@ -131,6 +136,7 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
     _columnaVertebralController.dispose();
     _miembrosInferioresSuperioresController.dispose();
     _narizController.dispose();
+    _notasController.dispose();
     super.dispose();
   }
 
@@ -231,13 +237,6 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
             _campoOjos(),
             _campoNariz(),
             _campoBoca(),
-            _campoCuello(),
-            _campoTorax(),
-            _campoAbdomen(),
-            _campoColumnaVertebral(),
-            _campoMiembrosInferioresSuperiores(),
-            _campoGenitales(),
-            _campoNeurologico(),
           ],
         ),
       ),
@@ -265,6 +264,7 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
             _campoMiembrosInferioresSuperiores(),
             _campoGenitales(),
             _campoNeurologico(),
+            _campoNotas(),
           ],
         ),
       ),
@@ -461,6 +461,20 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
     );
   }
 
+  Widget _campoNotas() {
+    return Padding(
+      padding: EdgeInsets.only(left: 8.0, right: 8.0),
+      child: TextFormField(
+        maxLines: 2,
+        controller: _notasController,
+        onSaved: (value) => widget.examen.notas = value,
+        keyboardType: TextInputType.text,
+        decoration:
+            inputsDecorations('Notas adicionales', Icons.person_outline),
+      ),
+    );
+  }
+
   void _guardar(BuildContext context, PreclinicaViewModel preclinica) async {
     final ProgressDialog _pr = new ProgressDialog(
       context,
@@ -492,7 +506,8 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
         _bocaController.text.isEmpty &&
         _columnaVertebralController.text.isEmpty &&
         _miembrosInferioresSuperioresController.text.isEmpty &&
-        _narizController.text.isEmpty) {
+        _narizController.text.isEmpty &&
+        _notasController.text.isEmpty) {
       mostrarFlushBar(context, Colors.black, 'Info',
           'El formulario no puede estar vacio', 3, Icons.info, Colors.white);
     } else {
@@ -544,6 +559,7 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
     widget.examen.miembrosInferioresSuperiores =
         _miembrosInferioresSuperioresController.text;
     widget.examen.nariz = _narizController.text;
+    widget.examen.notas = _notasController.text;
   }
 
   void limpiar() {
@@ -562,6 +578,7 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
     _columnaVertebralController.text = '';
     _miembrosInferioresSuperioresController.text = '';
     _narizController.text = '';
+    _notasController.text = '';
   }
 
   void _confirmDesactivar(BuildContext context) {

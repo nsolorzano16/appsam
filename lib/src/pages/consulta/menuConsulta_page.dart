@@ -128,10 +128,10 @@ class _MenuConsultaPageState extends State<MenuConsultaPage>
                       FadeInRight(
                         child: _cardItem(
                             _preclinica,
-                            FontAwesomeIcons.briefcaseMedical,
-                            'Consulta General',
-                            'crear_consulta_general',
-                            Colors.red,
+                            FontAwesomeIcons.capsules,
+                            'Farmacos',
+                            'crear_farmacos_uso_actual',
+                            Colors.orange,
                             context),
                       ),
                     ]),
@@ -140,7 +140,7 @@ class _MenuConsultaPageState extends State<MenuConsultaPage>
                         child: _cardItem(
                             _preclinica,
                             FontAwesomeIcons.heartbeat,
-                            'Antecedentes Personales',
+                            'Antecedentes Familiares',
                             'crear_antecedentes',
                             Colors.blue,
                             context),
@@ -155,21 +155,13 @@ class _MenuConsultaPageState extends State<MenuConsultaPage>
                         child: _cardItemHistorialGineco(
                             _preclinica,
                             FontAwesomeIcons.baby,
-                            'Historial Gineco Obstetra',
+                            'Antecedentes Ginecológicos',
                             'crear_historial_gineco',
                             Colors.blueGrey,
                             context,
                             _usuario),
                       ),
-                      FadeInRight(
-                        child: _cardItem(
-                            _preclinica,
-                            FontAwesomeIcons.capsules,
-                            'Farmacos de Uso Actual',
-                            'crear_farmacos_uso_actual',
-                            Colors.orange,
-                            context),
-                      )
+                      Container()
                     ]),
                   ],
                 )
@@ -198,6 +190,15 @@ class _MenuConsultaPageState extends State<MenuConsultaPage>
                   children: [
                     TableRow(children: [
                       FadeInLeft(
+                        child: _cardItem(
+                            _preclinica,
+                            FontAwesomeIcons.briefcaseMedical,
+                            'Consulta General',
+                            'crear_consulta_general',
+                            Colors.red,
+                            context),
+                      ),
+                      FadeInRight(
                         child: _cardItemExamenFisico(
                             _preclinica,
                             FontAwesomeIcons.diagnoses,
@@ -206,15 +207,6 @@ class _MenuConsultaPageState extends State<MenuConsultaPage>
                             Colors.brown,
                             context,
                             _usuario),
-                      ),
-                      FadeInRight(
-                        child: _cardItem(
-                            _preclinica,
-                            FontAwesomeIcons.flask,
-                            'Examenes',
-                            'examenes_indicados',
-                            Colors.cyan,
-                            context),
                       ),
                     ]),
                     TableRow(children: [
@@ -242,7 +234,15 @@ class _MenuConsultaPageState extends State<MenuConsultaPage>
                             Colors.lightGreen,
                             context),
                       ),
-                      Container()
+                      FadeInRight(
+                        child: _cardItem(
+                            _preclinica,
+                            FontAwesomeIcons.flask,
+                            'Examenes',
+                            'examenes_indicados',
+                            Colors.cyan,
+                            context),
+                      ),
                     ]),
                   ],
                 )

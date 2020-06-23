@@ -7,6 +7,7 @@ import 'package:appsam/src/models/paginados/pacientesPaginado_model.dart';
 import 'package:appsam/src/pages/pacientes/edit_paciente_page.dart';
 import 'package:appsam/src/utils/storage_util.dart';
 import 'package:appsam/src/widgets/drawer.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class PacienteDetalle extends StatefulWidget {
   static final String routeName = 'paciente_detalle';
@@ -15,6 +16,9 @@ class PacienteDetalle extends StatefulWidget {
 }
 
 class _PacienteDetalleState extends State<PacienteDetalle> {
+  MaskTextInputFormatter maskIdentificacion = new MaskTextInputFormatter(
+      mask: '#############', filter: {"#": RegExp(r'[0-9]')});
+
   @override
   void initState() {
     super.initState();
@@ -115,7 +119,7 @@ class _PacienteDetalleState extends State<PacienteDetalle> {
               ]),
               TableRow(children: [
                 Text('Email:'),
-                (paciente.email!= null)
+                (paciente.email != null)
                     ? Text('${paciente.email}')
                     : Text('*****'),
               ]),
@@ -139,7 +143,6 @@ class _PacienteDetalleState extends State<PacienteDetalle> {
               ]),
               TableRow(children: [
                 Text('Contacto de Emergencia:'),
-                
                 Text('${paciente.nombreEmergencia}'),
               ]),
               TableRow(children: [
