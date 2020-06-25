@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:appsam/src/blocs/consulta_bloc.dart';
 import 'package:appsam/src/models/antecedentesFamiliaresPersonales_model.dart';
 import 'package:appsam/src/models/consultaGeneral_model.dart';
@@ -8,16 +10,30 @@ import 'package:appsam/src/models/examenFisico_model.dart';
 import 'package:appsam/src/models/examenesIndicados_viewmodel.dart';
 import 'package:appsam/src/models/farmacosUsoActual_model.dart';
 import 'package:appsam/src/models/habitos_model.dart';
-import 'package:appsam/src/models/historialGinecoObstetra_model.dart';
+
+import 'package:appsam/src/models/historialGineco_viewmodel.dart';
 import 'package:appsam/src/models/notas_model.dart';
 import 'package:appsam/src/models/paginados/preclinica_paginadoVM.dart';
 import 'package:appsam/src/models/planTerapeutico_viewmodel.dart';
+
+import 'package:appsam/src/pages/consulta/consultaDetalle/d_antecedentes_consulta_page.dart';
+import 'package:appsam/src/pages/consulta/consultaDetalle/d_consultaGeneral_page.dart';
+import 'package:appsam/src/pages/consulta/consultaDetalle/d_diagnosticos_page.dart';
+import 'package:appsam/src/pages/consulta/consultaDetalle/d_examenFisico_page.dart';
+import 'package:appsam/src/pages/consulta/consultaDetalle/d_examenes_page.dart';
+import 'package:appsam/src/pages/consulta/consultaDetalle/d_farmacos_page.dart';
+import 'package:appsam/src/pages/consulta/consultaDetalle/d_habitos_page.dart';
+import 'package:appsam/src/pages/consulta/consultaDetalle/d_historialGinecologico_page.dart';
+import 'package:appsam/src/pages/consulta/consultaDetalle/d_notas_page.dart';
+import 'package:appsam/src/pages/consulta/consultaDetalle/d_planTerapeutico_page.dart';
+import 'package:appsam/src/pages/consulta/consultaDetalle/d_preclinica_consulta_page.dart';
 
 import 'package:appsam/src/utils/utils.dart';
 import 'package:appsam/src/widgets/drawer.dart';
 import 'package:appsam/src/widgets/firebaseMessageWrapper.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+
 import 'package:getflutter/getflutter.dart';
 import 'package:intl/intl.dart';
 
@@ -29,11 +45,10 @@ class ConsultaDetallePage extends StatefulWidget {
 }
 
 class _ConsultaDetallePageState extends State<ConsultaDetallePage> {
-  final TextStyle _estiloSubt =
-      new TextStyle(fontSize: 12.0, color: Colors.grey);
   final TextStyle estiloDatos = new TextStyle(
     fontSize: 14.0,
   );
+  final _pageController = PageController(viewportFraction: 0.9);
 
   final ConsultaBloc _consultaBloc = new ConsultaBloc();
   Future<ConsultaModel> _consultaFuture;
@@ -56,6 +71,7 @@ class _ConsultaDetallePageState extends State<ConsultaDetallePage> {
         _preclinicaDetalle.pacienteId,
         _preclinicaDetalle.doctorId,
         _preclinicaDetalle.preclinicaId);
+    final size = MediaQuery.of(context).size;
 
     return WillPopScope(
         child: FirebaseMessageWrapper(
@@ -80,107 +96,103 @@ class _ConsultaDetallePageState extends State<ConsultaDetallePage> {
                   AsyncSnapshot<ConsultaModel> snapshot) {
                 final _consultaDetalle = snapshot.data;
                 if (snapshot.hasData) {
-                  return SingleChildScrollView(
-                    child: Column(
-                      children: <Widget>[
-                        GFCard(
-                          elevation: 5.0,
-                          title: GFListTile(
-                            avatar: ClipRRect(
-                              borderRadius: BorderRadius.circular(100.0),
-                              child: FadeInImage(
-                                  width: 100,
-                                  height: 100,
-                                  placeholder:
-                                      AssetImage('assets/jar-loading.gif'),
-                                  image:
-                                      NetworkImage(_preclinicaDetalle.fotoUrl)),
+                  return Column(
+                    children: <Widget>[
+                      Expanded(
+                        child: Stack(
+                          children: <Widget>[
+                            Positioned(
+                              child: GFCard(
+                                height: size.height * 0.5,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20.0)),
+                                elevation: 5.0,
+                                title: GFListTile(
+                                  title: Text(
+                                      '${_preclinicaDetalle.nombres} ${_preclinicaDetalle.primerApellido} ${_preclinicaDetalle.segundoApellido}'),
+                                  subTitle: Text(
+                                      '${_preclinicaDetalle.identificacion}'),
+                                  avatar: ClipOval(
+                                    child: FadeInImage(
+                                        fit: BoxFit.cover,
+                                        width: 40.0,
+                                        height: 40.0,
+                                        placeholder: AssetImage(
+                                            'assets/jar-loading.gif'),
+                                        image: NetworkImage(
+                                            _preclinicaDetalle.fotoUrl)),
+                                  ),
+                                ),
+                                content: Table(
+                                    children:
+                                        _camposPaciente(_preclinicaDetalle)),
+                              ),
                             ),
-                            title: Text(
-                                '${_preclinicaDetalle.nombres} ${_preclinicaDetalle.primerApellido} ${_preclinicaDetalle.segundoApellido}'),
-                            subTitle: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Text(
-                                    'Identificación: ${_preclinicaDetalle.identificacion}'),
-                              ],
-                            ),
-                          ),
-                          content: Table(
-                              children: _camposPaciente(_preclinicaDetalle)),
+                            Positioned(
+                              top: size.height * 0.55,
+                              bottom: size.height * 0.05,
+                              right: 0,
+                              left: 0,
+                              child: PageView(
+                                controller: _pageController,
+                                children: <Widget>[
+                                  _cardPreclinica(
+                                      context, size, _preclinicaDetalle),
+                                  _cardAntecedentes(
+                                      context,
+                                      size,
+                                      _preclinicaDetalle,
+                                      _consultaDetalle
+                                          .antecedentesFamiliaresPersonales),
+                                  _cardConsultaGeneral(
+                                      context,
+                                      size,
+                                      _preclinicaDetalle,
+                                      _consultaDetalle.consultaGeneral),
+                                  _cardDiagnosticos(
+                                      context,
+                                      size,
+                                      _preclinicaDetalle,
+                                      _consultaDetalle.diagnosticos),
+                                  _cardExamenes(
+                                      context,
+                                      size,
+                                      _preclinicaDetalle,
+                                      _consultaDetalle.examenesIndicados),
+                                  _cardExamenFisico(
+                                      context,
+                                      size,
+                                      _preclinicaDetalle,
+                                      _consultaDetalle.examenFisico),
+                                  _cardFarmacos(
+                                      context,
+                                      size,
+                                      _preclinicaDetalle,
+                                      _consultaDetalle.farmacosUsoActual),
+                                  _cardHabitos(
+                                      context,
+                                      size,
+                                      _preclinicaDetalle,
+                                      _consultaDetalle.habitos),
+                                  _cardHistorialGineco(
+                                      context,
+                                      size,
+                                      _preclinicaDetalle,
+                                      _consultaDetalle.historialGinecoObstetra),
+                                  _cardNotas(context, size, _preclinicaDetalle,
+                                      _consultaDetalle.notas),
+                                  _cardPlanTerapeutico(
+                                      context,
+                                      size,
+                                      _preclinicaDetalle,
+                                      _consultaDetalle.planesTerapeuticos),
+                                ],
+                              ),
+                            )
+                          ],
                         ),
-                        _AccordionPreclinica(
-                            preclinica: _preclinicaDetalle,
-                            estiloDatos: estiloDatos,
-                            estiloSubt: _estiloSubt),
-                        (_consultaDetalle.antecedentesFamiliaresPersonales !=
-                                null)
-                            ? _AccordionAntecedentes(
-                                antecedentes: _consultaDetalle
-                                    .antecedentesFamiliaresPersonales,
-                                estiloDatos: estiloDatos,
-                                estiloSubt: _estiloSubt)
-                            : Container(),
-                        (_consultaDetalle.habitos != null)
-                            ? _AccordionHabitos(
-                                habitos: _consultaDetalle.habitos,
-                                estiloDatos: estiloDatos,
-                                estiloSubt: _estiloSubt,
-                              )
-                            : Container(),
-                        (_consultaDetalle.historialGinecoObstetra != null)
-                            ? _AccordionHistorialGinecoObstetra(
-                                historial:
-                                    _consultaDetalle.historialGinecoObstetra,
-                                estiloDatos: estiloDatos,
-                                estiloSubt: _estiloSubt)
-                            : Container(),
-                        (_consultaDetalle.farmacosUsoActual.length != 0)
-                            ? _AccordionFarmacos(
-                                farmacos: _consultaDetalle.farmacosUsoActual,
-                                estiloDatos: estiloDatos,
-                                estiloSubt: _estiloSubt)
-                            : Container(),
-                        (_consultaDetalle.consultaGeneral != null)
-                            ? _AccordionDetalleConsulta(
-                                consultaGeneral:
-                                    _consultaDetalle.consultaGeneral,
-                                estiloDatos: estiloDatos,
-                                estiloSubt: _estiloSubt)
-                            : Container(),
-                        (_consultaDetalle.examenFisico != null)
-                            ? _AccordionExamenFisico(
-                                examenFisico: _consultaDetalle.examenFisico,
-                                estiloDatos: estiloDatos,
-                                estiloSubt: _estiloSubt)
-                            : Container(),
-                        (_consultaDetalle.diagnosticos.length != 0)
-                            ? _AccordionDiagnosticos(
-                                diagnosticos: _consultaDetalle.diagnosticos,
-                                estiloDatos: estiloDatos,
-                                estiloSubt: _estiloSubt)
-                            : Container(),
-                        (_consultaDetalle.notas.length != 0)
-                            ? _AccordionNotas(
-                                notas: _consultaDetalle.notas,
-                                estiloDatos: estiloDatos)
-                            : Container(),
-                        (_consultaDetalle.examenesIndicados.length != 0)
-                            ? _AccordionExamenesIndicados(
-                                examenes: _consultaDetalle.examenesIndicados,
-                                estiloDatos: estiloDatos,
-                                estiloSubt: _estiloSubt,
-                              )
-                            : Container(),
-                        (_consultaDetalle.planesTerapeuticos.length != 0)
-                            ? _AccordionPlanTerapeutico(
-                                planes: _consultaDetalle.planesTerapeuticos,
-                                estiloDatos: estiloDatos,
-                                estiloSubt: _estiloSubt,
-                              )
-                            : Container(),
-                      ],
-                    ),
+                      ),
+                    ],
                   );
                 } else {
                   return loadingIndicator(context);
@@ -190,6 +202,542 @@ class _ConsultaDetallePageState extends State<ConsultaDetallePage> {
           ),
         ),
         onWillPop: () async => false);
+  }
+
+  GestureDetector _cardAntecedentes(
+      BuildContext context,
+      Size size,
+      PreclinicaViewModel preclinica,
+      AntecedentesFamiliaresPersonales antecedentes) {
+    return GestureDetector(
+      onTap: (antecedentes == null)
+          ? () {
+              mostrarFlushBar(context, Colors.black, 'Info',
+                  'No hay información.', 2, Icons.info, Colors.white);
+            }
+          : () {
+              Navigator.of(context).push(PageRouteBuilder(
+                  transitionDuration: const Duration(milliseconds: 800),
+                  pageBuilder: (_, animation, __) => FadeTransition(
+                        opacity: animation,
+                        child: DetalleAntecedentesConsultaPage(
+                          preclinica: preclinica,
+                          antecedentes: antecedentes,
+                        ),
+                      )));
+            },
+      child: Card(
+        color: Color.fromRGBO(255, 218, 198, 1),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+        margin: EdgeInsets.all(10),
+        elevation: 4,
+        child: Column(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(top: 10, bottom: 20),
+              child: Text(
+                'Antecedentes Personales',
+                style: TextStyle(
+                    fontSize: 16, color: Color.fromRGBO(124, 106, 10, 1)),
+              ),
+            ),
+            Container(
+              height: size.height * 0.15,
+              child: Hero(
+                tag: 'antecedentesPortada',
+                child: SvgPicture.asset(
+                  'assets/svg/antecedentes.svg',
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  GestureDetector _cardConsultaGeneral(BuildContext context, Size size,
+      PreclinicaViewModel preclinica, ConsultaGeneralModel consulta) {
+    return GestureDetector(
+      onTap: (consulta == null)
+          ? () {
+              mostrarFlushBar(context, Colors.black, 'Info',
+                  'No hay información.', 2, Icons.info, Colors.white);
+            }
+          : () {
+              Navigator.of(context).push(PageRouteBuilder(
+                  transitionDuration: const Duration(milliseconds: 800),
+                  pageBuilder: (_, animation, __) => FadeTransition(
+                        opacity: animation,
+                        child: DetConsultaGeneralPage(
+                          preclinica: preclinica,
+                          consulta: consulta,
+                        ),
+                      )));
+            },
+      child: Card(
+        color: Color.fromRGBO(242, 232, 109, 1),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+        margin: EdgeInsets.all(10),
+        elevation: 4,
+        child: Column(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(top: 10, bottom: 20),
+              child: Text(
+                'Consulta General',
+                style: TextStyle(
+                    fontSize: 16, color: Color.fromRGBO(163, 133, 96, 1)),
+              ),
+            ),
+            Container(
+              height: size.height * 0.15,
+              child: Hero(
+                tag: 'consultageneralportada',
+                child: SvgPicture.asset(
+                  'assets/svg/consultageneral.svg',
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  GestureDetector _cardDiagnosticos(BuildContext context, Size size,
+      PreclinicaViewModel preclinica, List<Diagnosticos> diagnosticos) {
+    return GestureDetector(
+      onTap: (diagnosticos.length == 0)
+          ? () {
+              mostrarFlushBar(context, Colors.black, 'Info',
+                  'No hay información.', 2, Icons.info, Colors.white);
+            }
+          : () {
+              Navigator.of(context).push(PageRouteBuilder(
+                  transitionDuration: const Duration(milliseconds: 800),
+                  pageBuilder: (_, animation, __) => FadeTransition(
+                        opacity: animation,
+                        child: DetalleDiagnosticosPage(
+                          preclinica: preclinica,
+                          diagnosticos: diagnosticos,
+                        ),
+                      )));
+            },
+      child: Card(
+        color: Color.fromRGBO(250, 179, 169, 1),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+        margin: EdgeInsets.all(10),
+        elevation: 4,
+        child: Column(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(top: 10, bottom: 20),
+              child: Text(
+                'Diagnosticos',
+                style: TextStyle(
+                    fontSize: 16, color: Color.fromRGBO(70, 50, 57, 1)),
+              ),
+            ),
+            Container(
+              height: size.height * 0.15,
+              child: Hero(
+                tag: 'diagnosticosportada',
+                child: SvgPicture.asset(
+                  'assets/svg/diagnosticos.svg',
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  GestureDetector _cardExamenes(
+      BuildContext context,
+      Size size,
+      PreclinicaViewModel preclinica,
+      List<ExamenesIndicadosViewModel> examenes) {
+    return GestureDetector(
+      onTap: (examenes.length == 0)
+          ? () {
+              mostrarFlushBar(context, Colors.black, 'Info',
+                  'No hay información.', 2, Icons.info, Colors.white);
+            }
+          : () {
+              Navigator.of(context).push(PageRouteBuilder(
+                  transitionDuration: const Duration(milliseconds: 800),
+                  pageBuilder: (_, animation, __) => FadeTransition(
+                        opacity: animation,
+                        child: DetExamenesPage(
+                          preclinica: preclinica,
+                          examenes: examenes,
+                        ),
+                      )));
+            },
+      child: Card(
+        color: Color.fromRGBO(0, 148, 198, 1),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+        margin: EdgeInsets.all(10),
+        elevation: 4,
+        child: Column(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(top: 10, bottom: 20),
+              child: Text(
+                'Examenes',
+                style: TextStyle(
+                    fontSize: 16, color: Color.fromRGBO(4, 15, 22, 1)),
+              ),
+            ),
+            Container(
+              height: size.height * 0.15,
+              child: Hero(
+                tag: 'examenesportada',
+                child: SvgPicture.asset(
+                  'assets/svg/examenes.svg',
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  GestureDetector _cardExamenFisico(BuildContext context, Size size,
+      PreclinicaViewModel preclinica, ExamenFisico examen) {
+    return GestureDetector(
+      onTap: (examen == null)
+          ? () {
+              mostrarFlushBar(context, Colors.black, 'Info',
+                  'No hay información.', 2, Icons.info, Colors.white);
+            }
+          : () {
+              Navigator.of(context).push(PageRouteBuilder(
+                  transitionDuration: const Duration(milliseconds: 800),
+                  pageBuilder: (_, animation, __) => FadeTransition(
+                        opacity: animation,
+                        child: DetExamenFisicoPage(
+                          preclinica: preclinica,
+                          examenFisico: examen,
+                        ),
+                      )));
+            },
+      child: Card(
+        color: Color.fromRGBO(153, 225, 217, 1),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+        margin: EdgeInsets.all(10),
+        elevation: 4,
+        child: Column(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(top: 10, bottom: 20),
+              child: Text(
+                'Examen Fisico',
+                style: TextStyle(
+                    fontSize: 16, color: Color.fromRGBO(50, 41, 47, 1)),
+              ),
+            ),
+            Container(
+              height: size.height * 0.15,
+              child: Hero(
+                tag: 'examenfisicoportada',
+                child: SvgPicture.asset(
+                  'assets/svg/examenfisico.svg',
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  GestureDetector _cardFarmacos(BuildContext context, Size size,
+      PreclinicaViewModel preclinica, List<FarmacosUsoActual> farmacos) {
+    return GestureDetector(
+      onTap: (farmacos.length == 0)
+          ? () {
+              mostrarFlushBar(context, Colors.black, 'Info',
+                  'No hay información.', 2, Icons.info, Colors.white);
+            }
+          : () {
+              Navigator.of(context).push(PageRouteBuilder(
+                  transitionDuration: const Duration(milliseconds: 800),
+                  pageBuilder: (_, animation, __) => FadeTransition(
+                        opacity: animation,
+                        child: DetFarmacosPage(
+                          preclinica: preclinica,
+                          farmacos: farmacos,
+                        ),
+                      )));
+            },
+      child: Card(
+        color: Color.fromRGBO(183, 182, 193, 1),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+        margin: EdgeInsets.all(10),
+        elevation: 4,
+        child: Column(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(top: 10, bottom: 20),
+              child: Text(
+                'Farmacos',
+                style: TextStyle(fontSize: 16, color: Colors.white),
+              ),
+            ),
+            Container(
+              height: size.height * 0.15,
+              child: Hero(
+                tag: 'farmacosportada',
+                child: SvgPicture.asset(
+                  'assets/svg/farmacos.svg',
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  GestureDetector _cardHabitos(BuildContext context, Size size,
+      PreclinicaViewModel preclinica, Habitos habitos) {
+    return GestureDetector(
+      onTap: (habitos == null)
+          ? () {
+              mostrarFlushBar(context, Colors.black, 'Info',
+                  'No hay información.', 2, Icons.info, Colors.white);
+            }
+          : () {
+              Navigator.of(context).push(PageRouteBuilder(
+                  transitionDuration: const Duration(milliseconds: 800),
+                  pageBuilder: (_, animation, __) => FadeTransition(
+                        opacity: animation,
+                        child: DetHabitosPage(
+                          preclinica: preclinica,
+                          habitos: habitos,
+                        ),
+                      )));
+            },
+      child: Card(
+        color: Color.fromRGBO(225, 242, 254, 1),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+        margin: EdgeInsets.all(10),
+        elevation: 4,
+        child: Column(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(top: 10, bottom: 20),
+              child: Text(
+                'Habitos',
+                style: TextStyle(
+                    fontSize: 16, color: Color.fromRGBO(35, 2, 46, 1)),
+              ),
+            ),
+            Container(
+              height: size.height * 0.15,
+              child: Hero(
+                tag: 'habitosPortada',
+                child: SvgPicture.asset(
+                  'assets/svg/habitos.svg',
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  GestureDetector _cardHistorialGineco(BuildContext context, Size size,
+      PreclinicaViewModel preclinica, HistorialGinecoViewModel historial) {
+    return GestureDetector(
+      onTap: (historial == null)
+          ? () {
+              mostrarFlushBar(context, Colors.black, 'Info',
+                  'No hay información.', 2, Icons.info, Colors.white);
+            }
+          : () {
+              Navigator.of(context).push(PageRouteBuilder(
+                  transitionDuration: const Duration(milliseconds: 800),
+                  pageBuilder: (_, animation, __) => FadeTransition(
+                        opacity: animation,
+                        child: DetHistorialGinecologico(
+                          preclinica: preclinica,
+                          historial: historial,
+                        ),
+                      )));
+            },
+      child: Card(
+        color: Color.fromRGBO(171, 255, 79, 1),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+        margin: EdgeInsets.all(10),
+        elevation: 4,
+        child: Column(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(top: 10, bottom: 20),
+              child: Text(
+                'Historial Ginecológico',
+                style: TextStyle(
+                    fontSize: 16, color: Color.fromRGBO(41, 191, 18, 1)),
+              ),
+            ),
+            Container(
+              height: size.height * 0.15,
+              child: Hero(
+                tag: 'historialginecologicoportada',
+                child: SvgPicture.asset(
+                  'assets/svg/historialginecologico.svg',
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  GestureDetector _cardNotas(BuildContext context, Size size,
+      PreclinicaViewModel preclinica, List<Notas> notas) {
+    return GestureDetector(
+      onTap: (notas.length == 0)
+          ? () {
+              mostrarFlushBar(context, Colors.black, 'Info',
+                  'No hay información.', 2, Icons.info, Colors.white);
+            }
+          : () {
+              Navigator.of(context).push(PageRouteBuilder(
+                  transitionDuration: const Duration(milliseconds: 800),
+                  pageBuilder: (_, animation, __) => FadeTransition(
+                        opacity: animation,
+                        child: DetNotasPage(
+                          preclinica: preclinica,
+                          notas: notas,
+                        ),
+                      )));
+            },
+      child: Card(
+        color: Color.fromRGBO(219, 84, 97, 1),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+        margin: EdgeInsets.all(10),
+        elevation: 4,
+        child: Column(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(top: 10, bottom: 20),
+              child: Text(
+                'Notas',
+                style: TextStyle(fontSize: 16, color: Colors.white),
+              ),
+            ),
+            Container(
+              height: size.height * 0.15,
+              child: Hero(
+                tag: 'notasportada',
+                child: SvgPicture.asset(
+                  'assets/svg/notas.svg',
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  GestureDetector _cardPlanTerapeutico(BuildContext context, Size size,
+      PreclinicaViewModel preclinica, List<PlanTerapeuticoViewModel> planes) {
+    return GestureDetector(
+      onTap: (planes.length == 0)
+          ? () {
+              mostrarFlushBar(context, Colors.black, 'Info',
+                  'No hay información.', 2, Icons.info, Colors.white);
+            }
+          : () {
+              Navigator.of(context).push(PageRouteBuilder(
+                  transitionDuration: const Duration(milliseconds: 800),
+                  pageBuilder: (_, animation, __) => FadeTransition(
+                        opacity: animation,
+                        child: DetPlanTerapeutico(
+                          preclinica: preclinica,
+                          plan: planes,
+                        ),
+                      )));
+            },
+      child: Card(
+        color: Color.fromRGBO(140, 173, 167, 1),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+        margin: EdgeInsets.all(10),
+        elevation: 4,
+        child: Column(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(top: 10, bottom: 20),
+              child: Text(
+                'Plan Terapeutico',
+                style: TextStyle(fontSize: 16, color: Colors.white),
+              ),
+            ),
+            Container(
+              height: size.height * 0.15,
+              child: Hero(
+                tag: 'planterapeuticoportada',
+                child: SvgPicture.asset(
+                  'assets/svg/planterapeutico.svg',
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  GestureDetector _cardPreclinica(
+      BuildContext context, Size size, PreclinicaViewModel preclinica) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.of(context).push(PageRouteBuilder(
+            transitionDuration: const Duration(milliseconds: 800),
+            pageBuilder: (_, animation, __) => FadeTransition(
+                  opacity: animation,
+                  child: DetallePreclinicaConsultaPage(
+                    preclinica: preclinica,
+                  ),
+                )));
+      },
+      child: Card(
+        color: Color.fromRGBO(180, 212, 238, 1),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+        margin: EdgeInsets.all(10),
+        elevation: 4,
+        child: Column(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(top: 10, bottom: 20),
+              child: Text(
+                'Preclinica',
+                style: TextStyle(
+                    fontSize: 16, color: Color.fromRGBO(129, 113, 122, 1)),
+              ),
+            ),
+            Container(
+              height: size.height * 0.15,
+              child: Hero(
+                tag: 'preclinicaPortada',
+                child: SvgPicture.asset(
+                  'assets/svg/preclinica.svg',
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
   }
 
   List<TableRow> _camposPaciente(PreclinicaViewModel preclinica) {
@@ -388,1184 +936,5 @@ class _ConsultaDetallePageState extends State<ConsultaDetallePage> {
       return 'Union Libre';
     }
     return '';
-  }
-}
-
-class _AccordionPreclinica extends StatelessWidget {
-  const _AccordionPreclinica({
-    Key key,
-    @required PreclinicaViewModel preclinica,
-    @required this.estiloDatos,
-    @required TextStyle estiloSubt,
-  })  : _preclinica = preclinica,
-        _estiloSubt = estiloSubt,
-        super(key: key);
-
-  final PreclinicaViewModel _preclinica;
-  final TextStyle estiloDatos;
-  final TextStyle _estiloSubt;
-
-  @override
-  Widget build(BuildContext context) {
-    return GFAccordion(
-      contentPadding: EdgeInsets.all(3.0),
-      collapsedTitlebackgroundColor: Theme.of(context).accentColor,
-      expandedTitlebackgroundColor: Colors.redAccent,
-      collapsedIcon: Icon(
-        Icons.keyboard_arrow_down,
-        color: Colors.white,
-      ),
-      expandedIcon: Icon(
-        Icons.keyboard_arrow_up,
-        color: Colors.white,
-      ),
-      titleChild: Text(
-        'Preclinica',
-        style: TextStyle(color: Colors.white, fontSize: 16.0),
-      ),
-      contentChild: GFCard(
-          content: Table(
-        children: [
-          TableRow(
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    '${_preclinica.peso}',
-                    textAlign: TextAlign.justify,
-                    style: estiloDatos,
-                  ),
-                  Text(
-                    'Peso lb.',
-                    textAlign: TextAlign.left,
-                    style: _estiloSubt,
-                  ),
-                  Divider()
-                ],
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    '${_preclinica.altura}',
-                    textAlign: TextAlign.justify,
-                    style: estiloDatos,
-                  ),
-                  Text(
-                    'Altura cm.',
-                    textAlign: TextAlign.left,
-                    style: _estiloSubt,
-                  ),
-                  Divider()
-                ],
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    '${_preclinica.frecuenciaRespiratoria}',
-                    textAlign: TextAlign.justify,
-                    style: estiloDatos,
-                  ),
-                  Text(
-                    'Frec. Respiratoria/min',
-                    textAlign: TextAlign.left,
-                    style: _estiloSubt,
-                  ),
-                  Divider()
-                ],
-              ),
-            ],
-          ),
-          TableRow(children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  '${_preclinica.imc}',
-                  textAlign: TextAlign.justify,
-                  style: estiloDatos,
-                ),
-                Text(
-                  'IMC',
-                  textAlign: TextAlign.left,
-                  style: _estiloSubt,
-                ),
-                Divider()
-              ],
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  '${_preclinica.presionSistolica} / ${_preclinica.presionDiastolica}',
-                  textAlign: TextAlign.justify,
-                  style: estiloDatos,
-                ),
-                Text(
-                  'Presion/mmHg',
-                  textAlign: TextAlign.left,
-                  style: _estiloSubt,
-                ),
-                Divider()
-              ],
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  '${_preclinica.ritmoCardiaco}',
-                  textAlign: TextAlign.justify,
-                  style: estiloDatos,
-                ),
-                Text(
-                  'Ritmo Cardiaco',
-                  textAlign: TextAlign.left,
-                  style: _estiloSubt,
-                ),
-                Divider()
-              ],
-            ),
-          ]),
-          TableRow(children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  '${_preclinica.temperatura}',
-                  textAlign: TextAlign.justify,
-                  style: estiloDatos,
-                ),
-                Text(
-                  'Temperatura Cº',
-                  textAlign: TextAlign.left,
-                  style: _estiloSubt,
-                ),
-                Divider()
-              ],
-            ),
-            Column(),
-            Column()
-          ]),
-        ],
-      )),
-    );
-  }
-}
-
-class _AccordionAntecedentes extends StatelessWidget {
-  const _AccordionAntecedentes({
-    Key key,
-    @required AntecedentesFamiliaresPersonales antecedentes,
-    @required this.estiloDatos,
-    @required TextStyle estiloSubt,
-  })  : _antecedentes = antecedentes,
-        _estiloSubt = estiloSubt,
-        super(key: key);
-
-  final AntecedentesFamiliaresPersonales _antecedentes;
-  final TextStyle estiloDatos;
-  final TextStyle _estiloSubt;
-
-  @override
-  Widget build(BuildContext context) {
-    return GFAccordion(
-      contentPadding: EdgeInsets.all(3.0),
-      collapsedTitlebackgroundColor: Theme.of(context).accentColor,
-      expandedTitlebackgroundColor: Colors.redAccent,
-      collapsedIcon: Icon(
-        Icons.keyboard_arrow_down,
-        color: Colors.white,
-      ),
-      expandedIcon: Icon(
-        Icons.keyboard_arrow_up,
-        color: Colors.white,
-      ),
-      titleChild: Text(
-        'Antecedentes',
-        style: TextStyle(color: Colors.white, fontSize: 16.0),
-      ),
-      contentChild: GFCard(
-          content: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(
-            'Antecedentes Patológicos Familiares:',
-            style: _estiloSubt,
-          ),
-          Text(
-            _antecedentes.antecedentesPatologicosFamiliares,
-            textAlign: TextAlign.justify,
-            style: estiloDatos,
-          ),
-          Divider(),
-          Text(
-            'Antecedentes Patológicos Personales:',
-            style: _estiloSubt,
-          ),
-          Text(
-            _antecedentes.antecedentesPatologicosPersonales,
-            textAlign: TextAlign.justify,
-            style: estiloDatos,
-          ),
-          Divider(),
-          Text(
-            'Antecedentes No Patológicos Familiares:',
-            style: _estiloSubt,
-          ),
-          Text(
-            _antecedentes.antecedentesNoPatologicosFamiliares,
-            textAlign: TextAlign.justify,
-            style: estiloDatos,
-          ),
-          Divider(),
-          Text(
-            'Antecedentes No Patológicos Personales:',
-            style: _estiloSubt,
-          ),
-          Text(
-            _antecedentes.antecedentesNoPatologicosPersonales,
-            textAlign: TextAlign.justify,
-            style: estiloDatos,
-          ),
-          Divider(),
-          Text(
-            'Antecedentes Inmuno Alergicos Personales:',
-            style: _estiloSubt,
-          ),
-          Text(
-            _antecedentes.antecedentesInmunoAlergicosPersonales,
-            textAlign: TextAlign.justify,
-            style: estiloDatos,
-          ),
-          Divider()
-        ],
-      )),
-    );
-  }
-}
-
-class _AccordionHabitos extends StatelessWidget {
-  const _AccordionHabitos({
-    Key key,
-    @required Habitos habitos,
-    @required this.estiloDatos,
-    @required TextStyle estiloSubt,
-  })  : _habitos = habitos,
-        _estiloSubt = estiloSubt,
-        super(key: key);
-
-  final Habitos _habitos;
-  final TextStyle estiloDatos;
-  final TextStyle _estiloSubt;
-
-  @override
-  Widget build(BuildContext context) {
-    return GFAccordion(
-      contentPadding: EdgeInsets.all(3.0),
-      collapsedTitlebackgroundColor: Theme.of(context).accentColor,
-      expandedTitlebackgroundColor: Colors.redAccent,
-      collapsedIcon: Icon(
-        Icons.keyboard_arrow_down,
-        color: Colors.white,
-      ),
-      expandedIcon: Icon(
-        Icons.keyboard_arrow_up,
-        color: Colors.white,
-      ),
-      titleChild: Text(
-        'Habitos',
-        style: TextStyle(color: Colors.white, fontSize: 16.0),
-      ),
-      contentChild: GFCard(
-          content: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Row(
-            children: <Widget>[
-              Text(
-                'El paciente consume café:',
-              ),
-              SizedBox(
-                width: 8.0,
-              ),
-              (_habitos.cafe)
-                  ? Icon(
-                      Icons.check_circle_outline,
-                      color: Colors.green,
-                      size: 16,
-                    )
-                  : Icon(
-                      Icons.close,
-                      color: Colors.red,
-                      size: 16,
-                    ),
-            ],
-          ),
-          SizedBox(
-            height: 8.0,
-          ),
-          Divider(),
-          Row(
-            children: <Widget>[
-              Text(
-                'El paciente consume cigarrillos:',
-              ),
-              SizedBox(
-                width: 8.0,
-              ),
-              (_habitos.cigarrillo)
-                  ? Icon(
-                      Icons.check_circle_outline,
-                      color: Colors.green,
-                      size: 16,
-                    )
-                  : Icon(
-                      Icons.close,
-                      color: Colors.red,
-                      size: 16,
-                    ),
-            ],
-          ),
-          Divider(),
-          Row(
-            children: <Widget>[
-              Text(
-                'El paciente consume drogas:',
-              ),
-              SizedBox(
-                width: 8.0,
-              ),
-              (_habitos.drogasEstupefaciente
-                  ? Icon(
-                      Icons.check_circle_outline,
-                      color: Colors.green,
-                      size: 16,
-                    )
-                  : Icon(
-                      Icons.close,
-                      color: Colors.red,
-                      size: 16,
-                    )),
-            ],
-          ),
-          Divider(),
-          Row(
-            children: <Widget>[
-              Text(
-                'El paciente consume alcohol:',
-              ),
-              SizedBox(
-                width: 8.0,
-              ),
-              (_habitos.alcohol
-                  ? Icon(
-                      Icons.check_circle_outline,
-                      color: Colors.green,
-                      size: 16,
-                    )
-                  : Icon(
-                      Icons.close,
-                      color: Colors.red,
-                      size: 16,
-                    )),
-            ],
-          ),
-          Divider(),
-          Text(
-            'Notas:',
-            style: _estiloSubt,
-          ),
-          Text(
-            _habitos.notas,
-            textAlign: TextAlign.justify,
-            style: estiloDatos,
-          ),
-        ],
-      )),
-    );
-  }
-}
-
-class _AccordionHistorialGinecoObstetra extends StatelessWidget {
-  const _AccordionHistorialGinecoObstetra({
-    Key key,
-    @required HistorialGinecoObstetra historial,
-    @required this.estiloDatos,
-    @required TextStyle estiloSubt,
-  })  : _historial = historial,
-        _estiloSubt = estiloSubt,
-        super(key: key);
-
-  final HistorialGinecoObstetra _historial;
-  final TextStyle estiloDatos;
-  final TextStyle _estiloSubt;
-
-  @override
-  Widget build(BuildContext context) {
-    final format = DateFormat.yMMMEd('es_Es');
-
-    String fum;
-
-    if (_historial.fum != null) {
-      fum = format.format(_historial.fum);
-    } else {
-      fum = '';
-    }
-
-    return GFAccordion(
-      contentPadding: EdgeInsets.all(3.0),
-      collapsedTitlebackgroundColor: Theme.of(context).accentColor,
-      expandedTitlebackgroundColor: Colors.redAccent,
-      collapsedIcon: Icon(
-        Icons.keyboard_arrow_down,
-        color: Colors.white,
-      ),
-      expandedIcon: Icon(
-        Icons.keyboard_arrow_up,
-        color: Colors.white,
-      ),
-      titleChild: Text(
-        'Historial Gineco Obstetra',
-        style: TextStyle(color: Colors.white, fontSize: 16.0),
-      ),
-      contentChild: GFCard(
-          content: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Table(
-            children: [
-              TableRow(
-                children: [
-                  Column(
-                    children: <Widget>[
-                      Text(
-                        fum,
-                        textAlign: TextAlign.justify,
-                        style: estiloDatos,
-                      ),
-                      Text(
-                        'Fecha ultima mestruación:',
-                        style: _estiloSubt,
-                      ),
-                      Divider(),
-                    ],
-                  ),
-                ],
-              )
-            ],
-          ),
-          Text(
-            'G:',
-            style: _estiloSubt,
-          ),
-          Text(
-            _historial.g.toString(),
-            textAlign: TextAlign.justify,
-            style: estiloDatos,
-          ),
-          Divider(),
-          Text(
-            'P:',
-            style: _estiloSubt,
-          ),
-          Text(
-            _historial.p.toString(),
-            textAlign: TextAlign.justify,
-            style: estiloDatos,
-          ),
-          Divider(),
-          Text(
-            'C:',
-            style: _estiloSubt,
-          ),
-          Text(
-            _historial.c.toString(),
-            textAlign: TextAlign.justify,
-            style: estiloDatos,
-          ),
-          Divider(),
-          Text(
-            'HV:',
-            style: _estiloSubt,
-          ),
-          Text(
-            _historial.hv.toString(),
-            textAlign: TextAlign.justify,
-            style: estiloDatos,
-          ),
-          Divider(),
-          Text(
-            'Notas:',
-            style: _estiloSubt,
-          ),
-          Text(
-            _historial.notas,
-            textAlign: TextAlign.justify,
-            style: estiloDatos,
-          ),
-          Divider(),
-        ],
-      )),
-    );
-  }
-}
-
-class _AccordionFarmacos extends StatelessWidget {
-  const _AccordionFarmacos({
-    Key key,
-    @required List<FarmacosUsoActual> farmacos,
-    @required this.estiloDatos,
-    @required TextStyle estiloSubt,
-  })  : _farmacos = farmacos,
-        super(key: key);
-
-  final List<FarmacosUsoActual> _farmacos;
-  final TextStyle estiloDatos;
-
-  @override
-  Widget build(BuildContext context) {
-    return GFAccordion(
-      contentPadding: EdgeInsets.all(3.0),
-      collapsedTitlebackgroundColor: Theme.of(context).accentColor,
-      expandedTitlebackgroundColor: Colors.redAccent,
-      collapsedIcon: Icon(
-        Icons.keyboard_arrow_down,
-        color: Colors.white,
-      ),
-      expandedIcon: Icon(
-        Icons.keyboard_arrow_up,
-        color: Colors.white,
-      ),
-      titleChild: Text(
-        'Farmacos de Uso Actual',
-        style: TextStyle(color: Colors.white, fontSize: 16.0),
-      ),
-      contentChild: GFCard(
-          content: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: _crearItems(_farmacos))),
-    );
-  }
-
-  List<Widget> _crearItems(List<FarmacosUsoActual> lista) {
-    return lista.map((f) {
-      return Column(
-        children: <Widget>[
-          ExpansionTile(
-            title: Text('Nombre: ${f.nombre}'),
-            children: <Widget>[
-              Container(
-                  alignment: Alignment.centerLeft,
-                  padding: EdgeInsets.all(10.0),
-                  child: Table(
-                    children: [
-                      TableRow(children: [
-                        Text('Concentracion'),
-                        Text(
-                          f.concentracion,
-                          textAlign: TextAlign.justify,
-                        )
-                      ]),
-                      TableRow(children: [
-                        Text('Dosis'),
-                        Text(
-                          f.dosis,
-                          textAlign: TextAlign.justify,
-                        )
-                      ]),
-                      TableRow(children: [
-                        Text('Tiempo'),
-                        Text(
-                          f.tiempo,
-                          textAlign: TextAlign.justify,
-                        )
-                      ]),
-                      TableRow(children: [
-                        Text('Notas'),
-                        Text(
-                          f.notas,
-                          textAlign: TextAlign.justify,
-                        )
-                      ])
-                    ],
-                  ))
-            ],
-          ),
-        ],
-      );
-    }).toList();
-  }
-}
-
-class _AccordionExamenFisico extends StatelessWidget {
-  const _AccordionExamenFisico({
-    Key key,
-    @required ExamenFisico examenFisico,
-    @required this.estiloDatos,
-    @required TextStyle estiloSubt,
-  })  : _examenFisico = examenFisico,
-        _estiloSubt = estiloSubt,
-        super(key: key);
-
-  final ExamenFisico _examenFisico;
-  final TextStyle estiloDatos;
-  final TextStyle _estiloSubt;
-
-  @override
-  Widget build(BuildContext context) {
-    return GFAccordion(
-      contentPadding: EdgeInsets.all(3.0),
-      collapsedTitlebackgroundColor: Theme.of(context).accentColor,
-      expandedTitlebackgroundColor: Colors.redAccent,
-      collapsedIcon: Icon(
-        Icons.keyboard_arrow_down,
-        color: Colors.white,
-      ),
-      expandedIcon: Icon(
-        Icons.keyboard_arrow_up,
-        color: Colors.white,
-      ),
-      titleChild: Text(
-        'Examen Físico',
-        style: TextStyle(color: Colors.white, fontSize: 16.0),
-      ),
-      contentChild: GFCard(
-          content: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(
-            'Aspecto General:',
-            style: _estiloSubt,
-          ),
-          Text(
-            _examenFisico.aspectoGeneral,
-            textAlign: TextAlign.justify,
-            style: estiloDatos,
-          ),
-          Divider(),
-          Text(
-            'Cabeza:',
-            style: _estiloSubt,
-          ),
-          Text(
-            _examenFisico.cabeza,
-            textAlign: TextAlign.justify,
-            style: estiloDatos,
-          ),
-          Divider(),
-          Text(
-            'Oidos:',
-            style: _estiloSubt,
-          ),
-          Text(
-            _examenFisico.oidos,
-            textAlign: TextAlign.justify,
-            style: estiloDatos,
-          ),
-          Divider(),
-          Text(
-            'Ojos:',
-            style: _estiloSubt,
-          ),
-          Text(
-            _examenFisico.ojos,
-            textAlign: TextAlign.justify,
-            style: estiloDatos,
-          ),
-          Divider(),
-          Text(
-            'Cuello:',
-            style: _estiloSubt,
-          ),
-          Text(
-            _examenFisico.cuello,
-            textAlign: TextAlign.justify,
-            style: estiloDatos,
-          ),
-          Divider(),
-          Text(
-            'Torax:',
-            style: _estiloSubt,
-          ),
-          Text(
-            _examenFisico.torax,
-            textAlign: TextAlign.justify,
-            style: estiloDatos,
-          ),
-          Divider(),
-          Text(
-            'Abdomen:',
-            style: _estiloSubt,
-          ),
-          Text(
-            _examenFisico.abdomen,
-            textAlign: TextAlign.justify,
-            style: estiloDatos,
-          ),
-          Divider(),
-          Text(
-            'Piel Faneras:',
-            style: _estiloSubt,
-          ),
-          Text(
-            _examenFisico.pielFaneras,
-            textAlign: TextAlign.justify,
-            style: estiloDatos,
-          ),
-          Divider(),
-          Text(
-            'Genitales:',
-            style: _estiloSubt,
-          ),
-          Text(
-            _examenFisico.genitales,
-            textAlign: TextAlign.justify,
-            style: estiloDatos,
-          ),
-          Divider(),
-          Text(
-            'Neurólogico:',
-            style: _estiloSubt,
-          ),
-          Text(
-            _examenFisico.neurologico,
-            textAlign: TextAlign.justify,
-            style: estiloDatos,
-          ),
-          Divider(),
-        ],
-      )),
-    );
-  }
-}
-
-class _AccordionDiagnosticos extends StatelessWidget {
-  const _AccordionDiagnosticos({
-    Key key,
-    @required List<Diagnosticos> diagnosticos,
-    @required this.estiloDatos,
-    @required TextStyle estiloSubt,
-  })  : _diagnosticos = diagnosticos,
-        super(key: key);
-
-  final List<Diagnosticos> _diagnosticos;
-  final TextStyle estiloDatos;
-
-  @override
-  Widget build(BuildContext context) {
-    return GFAccordion(
-      contentPadding: EdgeInsets.all(3.0),
-      collapsedTitlebackgroundColor: Theme.of(context).accentColor,
-      expandedTitlebackgroundColor: Colors.redAccent,
-      collapsedIcon: Icon(
-        Icons.keyboard_arrow_down,
-        color: Colors.white,
-      ),
-      expandedIcon: Icon(
-        Icons.keyboard_arrow_up,
-        color: Colors.white,
-      ),
-      titleChild: Text(
-        'Diagnosticos',
-        style: TextStyle(color: Colors.white, fontSize: 16.0),
-      ),
-      contentChild: GFCard(
-          content: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: items(_diagnosticos))),
-    );
-  }
-
-  List<Widget> items(List<Diagnosticos> lista) {
-    return lista.map((f) {
-      return Column(
-        children: <Widget>[
-          ExpansionTile(
-            title: Text(
-              'Problema Clinico: ${f.problemasClinicos}',
-              overflow: TextOverflow.ellipsis,
-            ),
-            children: <Widget>[
-              Container(
-                  padding: EdgeInsets.all(10.0),
-                  child: GFCard(
-                    elevation: 3.0,
-                    content: Text(
-                      f.problemasClinicos,
-                      textAlign: TextAlign.justify,
-                    ),
-                  ))
-            ],
-          ),
-        ],
-      );
-    }).toList();
-  }
-}
-
-class _AccordionNotas extends StatelessWidget {
-  const _AccordionNotas({
-    Key key,
-    @required List<Notas> notas,
-    @required this.estiloDatos,
-  })  : _notas = notas,
-        super(key: key);
-
-  final List<Notas> _notas;
-  final TextStyle estiloDatos;
-
-  @override
-  Widget build(BuildContext context) {
-    return GFAccordion(
-      contentPadding: EdgeInsets.all(3.0),
-      collapsedTitlebackgroundColor: Theme.of(context).accentColor,
-      expandedTitlebackgroundColor: Colors.redAccent,
-      collapsedIcon: Icon(
-        Icons.keyboard_arrow_down,
-        color: Colors.white,
-      ),
-      expandedIcon: Icon(
-        Icons.keyboard_arrow_up,
-        color: Colors.white,
-      ),
-      titleChild: Text(
-        'Notas',
-        style: TextStyle(color: Colors.white, fontSize: 16.0),
-      ),
-      contentChild: GFCard(
-          content: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: items(_notas))),
-    );
-  }
-
-  List<Widget> items(List<Notas> lista) {
-    return lista.map((f) {
-      return Column(
-        children: <Widget>[
-          ExpansionTile(
-            title: Text(
-              'Nota: ${f.notas}',
-              overflow: TextOverflow.ellipsis,
-            ),
-            children: <Widget>[
-              Container(
-                  padding: EdgeInsets.all(10.0),
-                  child: GFCard(
-                    elevation: 3.0,
-                    content: Text(
-                      f.notas,
-                      textAlign: TextAlign.justify,
-                    ),
-                  ))
-            ],
-          ),
-        ],
-      );
-    }).toList();
-  }
-}
-
-class _AccordionDetalleConsulta extends StatelessWidget {
-  const _AccordionDetalleConsulta({
-    Key key,
-    @required ConsultaGeneralModel consultaGeneral,
-    @required this.estiloDatos,
-    @required TextStyle estiloSubt,
-  })  : _consultaGeneral = consultaGeneral,
-        _estiloSubt = estiloSubt,
-        super(key: key);
-
-  final ConsultaGeneralModel _consultaGeneral;
-  final TextStyle estiloDatos;
-  final TextStyle _estiloSubt;
-
-  @override
-  Widget build(BuildContext context) {
-    return GFAccordion(
-      contentPadding: EdgeInsets.all(3.0),
-      collapsedTitlebackgroundColor: Theme.of(context).accentColor,
-      expandedTitlebackgroundColor: Colors.redAccent,
-      collapsedIcon: Icon(
-        Icons.keyboard_arrow_down,
-        color: Colors.white,
-      ),
-      expandedIcon: Icon(
-        Icons.keyboard_arrow_up,
-        color: Colors.white,
-      ),
-      titleChild: Text(
-        'Información Consulta General',
-        style: TextStyle(color: Colors.white, fontSize: 16.0),
-      ),
-      contentChild: GFCard(
-          content: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(
-            'Motivo de consulta:',
-            style: _estiloSubt,
-          ),
-          Text(
-            _consultaGeneral.motivoConsulta,
-            textAlign: TextAlign.justify,
-            style: estiloDatos,
-          ),
-          Divider(),
-          Text(
-            'Fog:',
-            style: _estiloSubt,
-          ),
-          Text(
-            _consultaGeneral.fog,
-            textAlign: TextAlign.justify,
-            style: estiloDatos,
-          ),
-          Divider(),
-          Text(
-            'Hea:',
-            style: _estiloSubt,
-          ),
-          Text(
-            _consultaGeneral.hea,
-            textAlign: TextAlign.justify,
-            style: estiloDatos,
-          ),
-          Divider(),
-          Text(
-            'Notas:',
-            style: _estiloSubt,
-          ),
-          Text(
-            _consultaGeneral.notas,
-            textAlign: TextAlign.justify,
-            style: estiloDatos,
-          ),
-          Divider(),
-        ],
-      )),
-    );
-  }
-}
-
-class _AccordionExamenesIndicados extends StatelessWidget {
-  const _AccordionExamenesIndicados({
-    Key key,
-    @required List<ExamenesIndicadosViewModel> examenes,
-    @required this.estiloDatos,
-    @required TextStyle estiloSubt,
-  })  : _examenes = examenes,
-        super(key: key);
-
-  final List<ExamenesIndicadosViewModel> _examenes;
-  final TextStyle estiloDatos;
-
-  @override
-  Widget build(BuildContext context) {
-    return GFAccordion(
-      contentPadding: EdgeInsets.all(3.0),
-      collapsedTitlebackgroundColor: Theme.of(context).accentColor,
-      expandedTitlebackgroundColor: Colors.redAccent,
-      collapsedIcon: Icon(
-        Icons.keyboard_arrow_down,
-        color: Colors.white,
-      ),
-      expandedIcon: Icon(
-        Icons.keyboard_arrow_up,
-        color: Colors.white,
-      ),
-      titleChild: Text(
-        'Examenes indicados',
-        style: TextStyle(color: Colors.white, fontSize: 16.0),
-      ),
-      contentChild: GFCard(
-          content: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: _crearItems(_examenes))),
-    );
-  }
-
-  List<Widget> _crearItems(List<ExamenesIndicadosViewModel> lista) {
-    return lista.map((f) {
-      return Column(
-        children: <Widget>[
-          ExpansionTile(
-            title: Text('Nombre: ${f.nombre}'),
-            children: <Widget>[
-              Container(
-                  alignment: Alignment.centerLeft,
-                  padding: EdgeInsets.all(10.0),
-                  child: Table(
-                    children: [
-                      TableRow(children: [
-                        Text('Examen categoria:'),
-                        Text(
-                          f.examenCategoria,
-                          textAlign: TextAlign.justify,
-                        )
-                      ]),
-                      TableRow(children: [
-                        Text('Examen tipo:'),
-                        Text(
-                          f.examenTipo,
-                          textAlign: TextAlign.justify,
-                        )
-                      ]),
-                      TableRow(children: [
-                        Text('Examen detalle:'),
-                        Text(
-                          (f.examenDetalle != null)
-                              ? (f.examenDetalle[0].toUpperCase() +
-                                  f.examenDetalle.substring(1).toLowerCase())
-                              : '',
-                          textAlign: TextAlign.justify,
-                        )
-                      ]),
-                      TableRow(children: [
-                        Text('Notas:'),
-                        Text(
-                          (f.notas != null) ? f.notas : '',
-                          textAlign: TextAlign.justify,
-                        )
-                      ])
-                    ],
-                  ))
-            ],
-          ),
-        ],
-      );
-    }).toList();
-  }
-}
-
-class _AccordionPlanTerapeutico extends StatelessWidget {
-  const _AccordionPlanTerapeutico({
-    Key key,
-    @required List<PlanTerapeuticoViewModel> planes,
-    @required this.estiloDatos,
-    @required TextStyle estiloSubt,
-  })  : _planes = planes,
-        super(key: key);
-
-  final List<PlanTerapeuticoViewModel> _planes;
-  final TextStyle estiloDatos;
-
-  @override
-  Widget build(BuildContext context) {
-    return GFAccordion(
-      contentPadding: EdgeInsets.all(3.0),
-      collapsedTitlebackgroundColor: Theme.of(context).accentColor,
-      expandedTitlebackgroundColor: Colors.redAccent,
-      collapsedIcon: Icon(
-        Icons.keyboard_arrow_down,
-        color: Colors.white,
-      ),
-      expandedIcon: Icon(
-        Icons.keyboard_arrow_up,
-        color: Colors.white,
-      ),
-      titleChild: Text(
-        'Plan Terapeutico',
-        style: TextStyle(color: Colors.white, fontSize: 16.0),
-      ),
-      contentChild: GFCard(
-          content: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: _crearItems(_planes))),
-    );
-  }
-
-  List<Widget> _crearItems(List<PlanTerapeuticoViewModel> lista) {
-    return lista.map((f) {
-      return Column(
-        children: <Widget>[
-          ExpansionTile(
-            title: Text('Nombre: ${f.nombreMedicamento}'),
-            children: <Widget>[
-              Container(
-                  alignment: Alignment.centerLeft,
-                  padding: EdgeInsets.all(10.0),
-                  child: Table(
-                    children: [
-                      TableRow(children: [
-                        Text('Via administración:'),
-                        Text(
-                          f.viaAdministracion,
-                          textAlign: TextAlign.justify,
-                        )
-                      ]),
-                      TableRow(children: [
-                        Text('Dosis:'),
-                        Text(
-                          f.dosis,
-                          textAlign: TextAlign.justify,
-                        )
-                      ]),
-                      TableRow(children: [
-                        Text('Horario:'),
-                        Text(
-                          (f.horario),
-                          textAlign: TextAlign.justify,
-                        )
-                      ]),
-                      TableRow(children: [
-                        Text('Dias requeridos:'),
-                        Text(
-                          (f.diasRequeridos),
-                          textAlign: TextAlign.justify,
-                        )
-                      ]),
-                      TableRow(children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text('Permanente:'),
-                            Divider(),
-                          ],
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            (f.permanente)
-                                ? Icon(
-                                    Icons.check_circle,
-                                    size: 16.0,
-                                    color: Colors.green,
-                                  )
-                                : Icon(
-                                    FontAwesomeIcons.timesCircle,
-                                    size: 16.0,
-                                    color: Colors.red,
-                                  ),
-                            Divider(),
-                          ],
-                        ),
-                      ]),
-                      TableRow(children: [
-                        Text('Notas:'),
-                        Text(
-                          (f.notas != null) ? f.notas : '',
-                          textAlign: TextAlign.justify,
-                        )
-                      ])
-                    ],
-                  ))
-            ],
-          ),
-        ],
-      );
-    }).toList();
   }
 }

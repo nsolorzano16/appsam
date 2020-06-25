@@ -6,6 +6,7 @@ import 'package:appsam/src/utils/storage_util.dart';
 import 'package:appsam/src/utils/utils.dart';
 import 'package:appsam/src/widgets/firebaseMessageWrapper.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:getflutter/getflutter.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 
@@ -124,23 +125,22 @@ class _CrearConsultaGeneralPageState extends State<CrearConsultaGeneralPage> {
           GFCard(
             elevation: 6.0,
             title: GFListTile(
-              title: Row(
-                mainAxisSize: MainAxisSize.max,
-                children: <Widget>[
-                  Text(
-                    'Antecedentes Personales',
-                    style: TextStyle(fontSize: 16.0),
-                  ),
-                ],
-              ),
-            ),
+                color: Colors.red,
+                title: Text('Consulta General',
+                    style: TextStyle(
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white)),
+                icon: FaIcon(FontAwesomeIcons.user, color: Colors.white)),
             content: Form(
                 key: _formkey,
                 child: Column(
                   children: <Widget>[
                     _campoMotivoConsulta(),
-                    _campoFog(),
                     _campoHea(),
+                    _espacio(),
+                    _campoFog(),
+                    _espacio(),
                     _campoNotas(),
                     _crearBotones(context),
                   ],
@@ -164,6 +164,12 @@ class _CrearConsultaGeneralPageState extends State<CrearConsultaGeneralPage> {
     );
   }
 
+  Widget _espacio() {
+    return SizedBox(
+      height: 8.0,
+    );
+  }
+
   Widget _campoFog() {
     return Padding(
       padding: EdgeInsets.only(left: 8.0, right: 8.0),
@@ -172,7 +178,8 @@ class _CrearConsultaGeneralPageState extends State<CrearConsultaGeneralPage> {
         onSaved: (value) => _consultaGeneral.fog = value,
         maxLines: 2,
         keyboardType: TextInputType.text,
-        decoration: inputsDecorations('Fog', Icons.note),
+        decoration: inputsDecorations('Fog', Icons.note,
+            helperTexto: 'Funciones Orgánicas Generales'),
       ),
     );
   }
@@ -185,7 +192,8 @@ class _CrearConsultaGeneralPageState extends State<CrearConsultaGeneralPage> {
         onSaved: (value) => _consultaGeneral.hea = value,
         maxLines: 2,
         keyboardType: TextInputType.text,
-        decoration: inputsDecorations('Hea', Icons.note),
+        decoration: inputsDecorations('HEA', Icons.note,
+            helperTexto: 'Historia de la enfermedad actual'),
       ),
     );
   }

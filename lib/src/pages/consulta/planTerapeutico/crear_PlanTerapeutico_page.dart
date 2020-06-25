@@ -309,7 +309,10 @@ class _CrearPlanTerapeuticoPageState extends State<CrearPlanTerapeuticoPage> {
         _notasController.text.isEmpty) {
       mostrarFlushBar(context, Colors.black, 'Info',
           'El formulario no puede estar vacio', 3, Icons.info, Colors.white);
-    } else if (_formkey.currentState.validate()) {
+    } else if (!_formkey.currentState.validate()) {
+      mostrarFlushBar(context, Colors.black, 'Info', 'Revise todos los campos',
+          3, Icons.info, Colors.white);
+    } else {
       _formkey.currentState.save();
       await _pr.show();
 

@@ -146,7 +146,7 @@ class _CrearHistorialGinecoObstetraPageState
             elevation: 6.0,
             title: GFListTile(
                 color: Colors.red,
-                title: Text('Historial Gineco Obstetra',
+                title: Text('Antecedentes Ginecológicos',
                     style: TextStyle(
                         fontSize: 18.0,
                         fontWeight: FontWeight.bold,

@@ -12,7 +12,8 @@ import 'package:appsam/src/models/examenFisico_model.dart';
 import 'package:appsam/src/models/examenesIndicados_viewmodel.dart';
 import 'package:appsam/src/models/farmacosUsoActual_model.dart';
 import 'package:appsam/src/models/habitos_model.dart';
-import 'package:appsam/src/models/historialGinecoObstetra_model.dart';
+
+import 'package:appsam/src/models/historialGineco_viewmodel.dart';
 import 'package:appsam/src/models/notas_model.dart';
 import 'package:appsam/src/models/planTerapeutico_viewmodel.dart';
 import 'package:appsam/src/models/preclinica_model.dart';
@@ -26,7 +27,7 @@ class ConsultaModel {
   Preclinica preclinica;
   AntecedentesFamiliaresPersonales antecedentesFamiliaresPersonales;
   Habitos habitos;
-  HistorialGinecoObstetra historialGinecoObstetra;
+  HistorialGinecoViewModel historialGinecoObstetra;
   List<FarmacosUsoActual> farmacosUsoActual;
   ExamenFisico examenFisico;
   //ExamenFisicoGinecologico examenFisicoGinecologico;
@@ -64,7 +65,8 @@ class ConsultaModel {
             json["habitos"] == null ? null : Habitos.fromJson(json["habitos"]),
         historialGinecoObstetra: json["historialGinecoObstetra"] == null
             ? null
-            : HistorialGinecoObstetra.fromJson(json["historialGinecoObstetra"]),
+            : HistorialGinecoViewModel.fromJson(
+                json["historialGinecoObstetra"]),
         farmacosUsoActual: json["farmacosUsoActual"] == null
             ? null
             : List<FarmacosUsoActual>.from(json["farmacosUsoActual"]
