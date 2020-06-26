@@ -264,6 +264,7 @@ class _ConsultaDetallePageState extends State<ConsultaDetallePage> {
                 ),
               ),
               Container(
+                padding: EdgeInsets.only(top: 20),
                 child: Hero(
                   tag: 'consultageneralportada',
                   child: FaIcon(
