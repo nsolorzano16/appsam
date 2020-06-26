@@ -1,7 +1,6 @@
 import 'package:appsam/src/models/notas_model.dart';
 import 'package:appsam/src/models/paginados/preclinica_paginadoVM.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:getflutter/getflutter.dart';
 
 class DetNotasPage extends StatelessWidget {
@@ -26,7 +25,7 @@ class DetNotasPage extends StatelessWidget {
         children: _cardItem(size, _notas, estiloTitulos),
       ),
       floatingActionButton: FloatingActionButton(
-          backgroundColor: Color.fromRGBO(219, 84, 97, 1),
+          backgroundColor: Colors.red,
           child: Icon(Icons.arrow_back_ios),
           onPressed: () => Navigator.of(context).pop()),
     );
@@ -70,7 +69,7 @@ class DetNotasPage extends StatelessWidget {
     return Container(
       height: size.height * 0.30,
       decoration: BoxDecoration(
-        color: Color.fromRGBO(219, 84, 97, 1),
+        color: Colors.red,
       ),
     );
   }
@@ -117,8 +116,10 @@ Widget _imagenPortada(Size size) {
         width: 130,
         child: Hero(
           tag: 'notasportada',
-          child: SvgPicture.asset(
-            'assets/svg/notas.svg',
+          child: Icon(
+            Icons.note_add,
+            size: 120,
+            color: Colors.white,
           ),
         )),
   );

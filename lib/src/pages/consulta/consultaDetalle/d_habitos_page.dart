@@ -1,7 +1,7 @@
 import 'package:appsam/src/models/habitos_model.dart';
 import 'package:appsam/src/models/paginados/preclinica_paginadoVM.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class DetHabitosPage extends StatelessWidget {
   final PreclinicaViewModel _preclinica;
@@ -40,7 +40,7 @@ class DetHabitosPage extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-          backgroundColor: Color.fromRGBO(35, 2, 46, 1),
+          backgroundColor: Colors.red,
           child: Icon(Icons.arrow_back_ios),
           onPressed: () => Navigator.of(context).pop()),
     );
@@ -116,7 +116,7 @@ class DetHabitosPage extends StatelessWidget {
     return Container(
       height: size.height * 0.30,
       decoration: BoxDecoration(
-        color: Color.fromRGBO(225, 242, 254, 1),
+        color: Colors.red,
       ),
     );
   }
@@ -134,7 +134,7 @@ class DetHabitosPage extends StatelessWidget {
             style: TextStyle(
               fontSize: 22,
               fontWeight: FontWeight.w500,
-              color: Color.fromRGBO(35, 2, 46, 1),
+              color: Colors.white,
             ),
           ),
           SizedBox(
@@ -145,7 +145,7 @@ class DetHabitosPage extends StatelessWidget {
             style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w300,
-              color: Color.fromRGBO(35, 2, 46, 1),
+              color: Colors.white,
             ),
           ),
         ],
@@ -162,10 +162,11 @@ Widget _imagenPortada(Size size) {
         height: 130,
         width: 130,
         child: Hero(
-          tag: 'habitosportada',
-          child: SvgPicture.asset(
-            'assets/svg/habitos.svg',
-          ),
-        )),
+            tag: 'habitosportada',
+            child: FaIcon(
+              FontAwesomeIcons.coffee,
+              size: 120,
+              color: Colors.white,
+            ))),
   );
 }

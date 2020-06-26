@@ -1,7 +1,6 @@
 import 'package:appsam/src/models/diagnosticos_model.dart';
 import 'package:appsam/src/models/paginados/preclinica_paginadoVM.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:getflutter/getflutter.dart';
 
 class DetalleDiagnosticosPage extends StatelessWidget {
@@ -26,7 +25,7 @@ class DetalleDiagnosticosPage extends StatelessWidget {
         children: _cardItem(size, _diagnosticos, estiloTitulos),
       ),
       floatingActionButton: FloatingActionButton(
-          backgroundColor: Color.fromRGBO(70, 50, 57, 1),
+          backgroundColor: Colors.red,
           child: Icon(Icons.arrow_back_ios),
           onPressed: () => Navigator.of(context).pop()),
     );
@@ -70,7 +69,7 @@ class DetalleDiagnosticosPage extends StatelessWidget {
     return Container(
       height: size.height * 0.30,
       decoration: BoxDecoration(
-        color: Color.fromRGBO(250, 179, 169, 1),
+        color: Colors.red,
       ),
     );
   }
@@ -88,7 +87,7 @@ class DetalleDiagnosticosPage extends StatelessWidget {
             style: TextStyle(
               fontSize: 22,
               fontWeight: FontWeight.w500,
-              color: Color.fromRGBO(70, 50, 57, 1),
+              color: Colors.white,
             ),
           ),
           SizedBox(
@@ -99,7 +98,7 @@ class DetalleDiagnosticosPage extends StatelessWidget {
             style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w300,
-              color: Color.fromRGBO(70, 50, 57, 1),
+              color: Colors.white,
             ),
           ),
         ],
@@ -117,8 +116,10 @@ Widget _imagenPortada(Size size) {
         width: 130,
         child: Hero(
           tag: 'diagnosticosportada',
-          child: SvgPicture.asset(
-            'assets/svg/diagnosticos.svg',
+          child: Icon(
+            Icons.note,
+            size: 120,
+            color: Colors.white,
           ),
         )),
   );

@@ -1,7 +1,7 @@
 import 'package:appsam/src/models/antecedentesFamiliaresPersonales_model.dart';
 import 'package:appsam/src/models/paginados/preclinica_paginadoVM.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:getflutter/getflutter.dart';
 
 class DetalleAntecedentesConsultaPage extends StatelessWidget {
@@ -57,7 +57,7 @@ class DetalleAntecedentesConsultaPage extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-          backgroundColor: Color.fromRGBO(124, 106, 10, 1),
+          backgroundColor: Theme.of(context).primaryColor,
           child: Icon(Icons.arrow_back_ios),
           onPressed: () => Navigator.of(context).pop()),
     );
@@ -83,7 +83,7 @@ class DetalleAntecedentesConsultaPage extends StatelessWidget {
     return Container(
       height: size.height * 0.30,
       decoration: BoxDecoration(
-        color: Color.fromRGBO(255, 218, 198, 1),
+        color: Colors.red,
       ),
     );
   }
@@ -101,7 +101,7 @@ class DetalleAntecedentesConsultaPage extends StatelessWidget {
             style: TextStyle(
               fontSize: 22,
               fontWeight: FontWeight.w500,
-              color: Color.fromRGBO(124, 106, 10, 1),
+              color: Colors.white,
             ),
           ),
           SizedBox(
@@ -112,7 +112,7 @@ class DetalleAntecedentesConsultaPage extends StatelessWidget {
             style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w300,
-              color: Color.fromRGBO(124, 106, 10, 1),
+              color: Colors.white,
             ),
           ),
         ],
@@ -130,8 +130,10 @@ Widget _imagenPortada(Size size) {
         width: 130,
         child: Hero(
           tag: 'antecedentesPortada',
-          child: SvgPicture.asset(
-            'assets/svg/antecedentes.svg',
+          child: FaIcon(
+            FontAwesomeIcons.heartbeat,
+            size: 120,
+            color: Colors.white,
           ),
         )),
   );

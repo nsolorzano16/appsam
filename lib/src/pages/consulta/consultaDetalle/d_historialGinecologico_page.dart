@@ -1,7 +1,7 @@
 import 'package:appsam/src/models/historialGineco_viewmodel.dart';
 import 'package:appsam/src/models/paginados/preclinica_paginadoVM.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 
 class DetHistorialGinecologico extends StatelessWidget {
@@ -43,7 +43,7 @@ class DetHistorialGinecologico extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-          backgroundColor: Color.fromRGBO(41, 191, 18, 1),
+          backgroundColor: Colors.red,
           child: Icon(Icons.arrow_back_ios),
           onPressed: () => Navigator.of(context).pop()),
     );
@@ -135,7 +135,7 @@ class DetHistorialGinecologico extends StatelessWidget {
     return Container(
       height: size.height * 0.30,
       decoration: BoxDecoration(
-        color: Color.fromRGBO(171, 255, 79, 1),
+        color: Colors.red,
       ),
     );
   }
@@ -153,7 +153,7 @@ class DetHistorialGinecologico extends StatelessWidget {
             style: TextStyle(
               fontSize: 22,
               fontWeight: FontWeight.w500,
-              color: Color.fromRGBO(41, 191, 18, 1),
+              color: Colors.white,
             ),
           ),
           SizedBox(
@@ -164,7 +164,7 @@ class DetHistorialGinecologico extends StatelessWidget {
             style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w300,
-              color: Color.fromRGBO(41, 191, 18, 1),
+              color: Colors.white,
             ),
           ),
         ],
@@ -182,8 +182,10 @@ Widget _imagenPortada(Size size) {
         width: 130,
         child: Hero(
           tag: 'historialginecologicoportada',
-          child: SvgPicture.asset(
-            'assets/svg/historialginecologico.svg',
+          child: FaIcon(
+            FontAwesomeIcons.female,
+            size: 120,
+            color: Colors.white,
           ),
         )),
   );

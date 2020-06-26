@@ -32,7 +32,8 @@ import 'package:appsam/src/utils/utils.dart';
 import 'package:appsam/src/widgets/drawer.dart';
 import 'package:appsam/src/widgets/firebaseMessageWrapper.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:font_awesome_flutter/fa_icon.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:getflutter/getflutter.dart';
 import 'package:intl/intl.dart';
@@ -76,6 +77,7 @@ class _ConsultaDetallePageState extends State<ConsultaDetallePage> {
     return WillPopScope(
         child: FirebaseMessageWrapper(
           child: Scaffold(
+            backgroundColor: Color.fromRGBO(255, 244, 233, 1),
             appBar: AppBar(
               title: Text('Detalle de Consulta'),
               actions: <Widget>[
@@ -98,100 +100,62 @@ class _ConsultaDetallePageState extends State<ConsultaDetallePage> {
                 if (snapshot.hasData) {
                   return Column(
                     children: <Widget>[
+                      GFCard(
+                        height: size.height * 0.5,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20.0)),
+                        elevation: 5.0,
+                        title: GFListTile(
+                          title: Text(
+                              '${_preclinicaDetalle.nombres} ${_preclinicaDetalle.primerApellido} ${_preclinicaDetalle.segundoApellido}'),
+                          subTitle:
+                              Text('${_preclinicaDetalle.identificacion}'),
+                          avatar: ClipOval(
+                            child: FadeInImage(
+                                fit: BoxFit.cover,
+                                width: 40.0,
+                                height: 40.0,
+                                placeholder:
+                                    AssetImage('assets/jar-loading.gif'),
+                                image:
+                                    NetworkImage(_preclinicaDetalle.fotoUrl)),
+                          ),
+                        ),
+                        content: Table(
+                            children: _camposPaciente(_preclinicaDetalle)),
+                      ),
                       Expanded(
-                        child: Stack(
+                        child: ListView(
+                          padding: EdgeInsets.all(30),
+                          scrollDirection: Axis.horizontal,
                           children: <Widget>[
-                            Positioned(
-                              child: GFCard(
-                                height: size.height * 0.5,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20.0)),
-                                elevation: 5.0,
-                                title: GFListTile(
-                                  title: Text(
-                                      '${_preclinicaDetalle.nombres} ${_preclinicaDetalle.primerApellido} ${_preclinicaDetalle.segundoApellido}'),
-                                  subTitle: Text(
-                                      '${_preclinicaDetalle.identificacion}'),
-                                  avatar: ClipOval(
-                                    child: FadeInImage(
-                                        fit: BoxFit.cover,
-                                        width: 40.0,
-                                        height: 40.0,
-                                        placeholder: AssetImage(
-                                            'assets/jar-loading.gif'),
-                                        image: NetworkImage(
-                                            _preclinicaDetalle.fotoUrl)),
-                                  ),
-                                ),
-                                content: Table(
-                                    children:
-                                        _camposPaciente(_preclinicaDetalle)),
-                              ),
-                            ),
-                            Positioned(
-                              top: size.height * 0.55,
-                              bottom: size.height * 0.05,
-                              right: 0,
-                              left: 0,
-                              child: PageView(
-                                controller: _pageController,
-                                children: <Widget>[
-                                  _cardPreclinica(
-                                      context, size, _preclinicaDetalle),
-                                  _cardAntecedentes(
-                                      context,
-                                      size,
-                                      _preclinicaDetalle,
-                                      _consultaDetalle
-                                          .antecedentesFamiliaresPersonales),
-                                  _cardConsultaGeneral(
-                                      context,
-                                      size,
-                                      _preclinicaDetalle,
-                                      _consultaDetalle.consultaGeneral),
-                                  _cardDiagnosticos(
-                                      context,
-                                      size,
-                                      _preclinicaDetalle,
-                                      _consultaDetalle.diagnosticos),
-                                  _cardExamenes(
-                                      context,
-                                      size,
-                                      _preclinicaDetalle,
-                                      _consultaDetalle.examenesIndicados),
-                                  _cardExamenFisico(
-                                      context,
-                                      size,
-                                      _preclinicaDetalle,
-                                      _consultaDetalle.examenFisico),
-                                  _cardFarmacos(
-                                      context,
-                                      size,
-                                      _preclinicaDetalle,
-                                      _consultaDetalle.farmacosUsoActual),
-                                  _cardHabitos(
-                                      context,
-                                      size,
-                                      _preclinicaDetalle,
-                                      _consultaDetalle.habitos),
-                                  _cardHistorialGineco(
-                                      context,
-                                      size,
-                                      _preclinicaDetalle,
-                                      _consultaDetalle.historialGinecoObstetra),
-                                  _cardNotas(context, size, _preclinicaDetalle,
-                                      _consultaDetalle.notas),
-                                  _cardPlanTerapeutico(
-                                      context,
-                                      size,
-                                      _preclinicaDetalle,
-                                      _consultaDetalle.planesTerapeuticos),
-                                ],
-                              ),
-                            )
+                            _cardPreclinica(context, _preclinicaDetalle),
+                            _cardAntecedentes(
+                                context,
+                                _preclinicaDetalle,
+                                _consultaDetalle
+                                    .antecedentesFamiliaresPersonales),
+                            _cardConsultaGeneral(context, _preclinicaDetalle,
+                                _consultaDetalle.consultaGeneral),
+                            _cardDiagnosticos(context, _preclinicaDetalle,
+                                _consultaDetalle.diagnosticos),
+                            _cardExamenes(context, _preclinicaDetalle,
+                                _consultaDetalle.examenesIndicados),
+                            _cardExamenFisico(context, _preclinicaDetalle,
+                                _consultaDetalle.examenFisico),
+                            _cardFarmacos(context, _preclinicaDetalle,
+                                _consultaDetalle.farmacosUsoActual),
+                            _cardHabitos(context, _preclinicaDetalle,
+                                _consultaDetalle.habitos),
+                            _cardHistorialGineco(context, _preclinicaDetalle,
+                                _consultaDetalle.historialGinecoObstetra),
+                            _cardNotas(context, _preclinicaDetalle,
+                                _consultaDetalle.notas),
+                            _cardPlanTerapeutico(context, _preclinicaDetalle,
+                                _consultaDetalle.planesTerapeuticos),
                           ],
                         ),
-                      ),
+                      )
                     ],
                   );
                 } else {
@@ -206,7 +170,6 @@ class _ConsultaDetallePageState extends State<ConsultaDetallePage> {
 
   GestureDetector _cardAntecedentes(
       BuildContext context,
-      Size size,
       PreclinicaViewModel preclinica,
       AntecedentesFamiliaresPersonales antecedentes) {
     return GestureDetector(
@@ -226,37 +189,43 @@ class _ConsultaDetallePageState extends State<ConsultaDetallePage> {
                         ),
                       )));
             },
-      child: Card(
-        color: Color.fromRGBO(255, 218, 198, 1),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-        margin: EdgeInsets.all(10),
-        elevation: 4,
-        child: Column(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(top: 10, bottom: 20),
-              child: Text(
-                'Antecedentes Personales',
-                style: TextStyle(
-                    fontSize: 16, color: Color.fromRGBO(124, 106, 10, 1)),
-              ),
-            ),
-            Container(
-              height: size.height * 0.15,
-              child: Hero(
-                tag: 'antecedentesPortada',
-                child: SvgPicture.asset(
-                  'assets/svg/antecedentes.svg',
+      child: Container(
+        width: 120,
+        height: 120,
+        child: Card(
+          color: Colors.white,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          elevation: 4,
+          child: Column(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(top: 10, bottom: 20),
+                child: Text(
+                  'Antecedentes Personales',
+                  style: TextStyle(fontSize: 14, color: Colors.red),
+                  textAlign: TextAlign.center,
                 ),
               ),
-            )
-          ],
+              Container(
+                padding: EdgeInsets.only(top: 10),
+                child: Hero(
+                  tag: 'antecedentesPortada',
+                  child: FaIcon(
+                    FontAwesomeIcons.heartbeat,
+                    size: 90,
+                    color: Colors.red,
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
   }
 
-  GestureDetector _cardConsultaGeneral(BuildContext context, Size size,
+  GestureDetector _cardConsultaGeneral(BuildContext context,
       PreclinicaViewModel preclinica, ConsultaGeneralModel consulta) {
     return GestureDetector(
       onTap: (consulta == null)
@@ -275,37 +244,43 @@ class _ConsultaDetallePageState extends State<ConsultaDetallePage> {
                         ),
                       )));
             },
-      child: Card(
-        color: Color.fromRGBO(242, 232, 109, 1),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-        margin: EdgeInsets.all(10),
-        elevation: 4,
-        child: Column(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(top: 10, bottom: 20),
-              child: Text(
-                'Consulta General',
-                style: TextStyle(
-                    fontSize: 16, color: Color.fromRGBO(163, 133, 96, 1)),
-              ),
-            ),
-            Container(
-              height: size.height * 0.15,
-              child: Hero(
-                tag: 'consultageneralportada',
-                child: SvgPicture.asset(
-                  'assets/svg/consultageneral.svg',
+      child: Container(
+        height: 120,
+        width: 120,
+        child: Card(
+          color: Colors.white,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          elevation: 4,
+          child: Column(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(
+                    top: 10, bottom: 20, left: 5, right: 5),
+                child: Text(
+                  'Consulta General',
+                  style: TextStyle(fontSize: 14, color: Colors.red),
+                  textAlign: TextAlign.center,
                 ),
               ),
-            )
-          ],
+              Container(
+                child: Hero(
+                  tag: 'consultageneralportada',
+                  child: FaIcon(
+                    FontAwesomeIcons.briefcaseMedical,
+                    size: 100,
+                    color: Colors.red,
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
   }
 
-  GestureDetector _cardDiagnosticos(BuildContext context, Size size,
+  GestureDetector _cardDiagnosticos(BuildContext context,
       PreclinicaViewModel preclinica, List<Diagnosticos> diagnosticos) {
     return GestureDetector(
       onTap: (diagnosticos.length == 0)
@@ -324,31 +299,37 @@ class _ConsultaDetallePageState extends State<ConsultaDetallePage> {
                         ),
                       )));
             },
-      child: Card(
-        color: Color.fromRGBO(250, 179, 169, 1),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-        margin: EdgeInsets.all(10),
-        elevation: 4,
-        child: Column(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(top: 10, bottom: 20),
-              child: Text(
-                'Diagnosticos',
-                style: TextStyle(
-                    fontSize: 16, color: Color.fromRGBO(70, 50, 57, 1)),
-              ),
-            ),
-            Container(
-              height: size.height * 0.15,
-              child: Hero(
-                tag: 'diagnosticosportada',
-                child: SvgPicture.asset(
-                  'assets/svg/diagnosticos.svg',
+      child: Container(
+        width: 120,
+        height: 120,
+        child: Card(
+          color: Colors.white,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          elevation: 4,
+          child: Column(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(top: 10, bottom: 20),
+                child: Text(
+                  'Diagnosticos',
+                  style: TextStyle(fontSize: 14, color: Colors.red),
+                  textAlign: TextAlign.center,
                 ),
               ),
-            )
-          ],
+              Container(
+                padding: EdgeInsets.only(top: 35),
+                child: Hero(
+                  tag: 'diagnosticosportada',
+                  child: Icon(
+                    Icons.note,
+                    size: 100,
+                    color: Colors.red,
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -356,7 +337,6 @@ class _ConsultaDetallePageState extends State<ConsultaDetallePage> {
 
   GestureDetector _cardExamenes(
       BuildContext context,
-      Size size,
       PreclinicaViewModel preclinica,
       List<ExamenesIndicadosViewModel> examenes) {
     return GestureDetector(
@@ -376,37 +356,43 @@ class _ConsultaDetallePageState extends State<ConsultaDetallePage> {
                         ),
                       )));
             },
-      child: Card(
-        color: Color.fromRGBO(0, 148, 198, 1),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-        margin: EdgeInsets.all(10),
-        elevation: 4,
-        child: Column(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(top: 10, bottom: 20),
-              child: Text(
-                'Examenes',
-                style: TextStyle(
-                    fontSize: 16, color: Color.fromRGBO(4, 15, 22, 1)),
-              ),
-            ),
-            Container(
-              height: size.height * 0.15,
-              child: Hero(
-                tag: 'examenesportada',
-                child: SvgPicture.asset(
-                  'assets/svg/examenes.svg',
+      child: Container(
+        width: 120,
+        height: 120,
+        child: Card(
+          color: Colors.white,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          elevation: 4,
+          child: Column(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(top: 10, bottom: 20),
+                child: Text(
+                  'Examenes',
+                  style: TextStyle(fontSize: 14, color: Colors.red),
+                  textAlign: TextAlign.center,
                 ),
               ),
-            )
-          ],
+              Container(
+                padding: EdgeInsets.only(top: 15),
+                child: Hero(
+                  tag: 'examenesportada',
+                  child: FaIcon(
+                    FontAwesomeIcons.flask,
+                    size: 100,
+                    color: Colors.red,
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
   }
 
-  GestureDetector _cardExamenFisico(BuildContext context, Size size,
+  GestureDetector _cardExamenFisico(BuildContext context,
       PreclinicaViewModel preclinica, ExamenFisico examen) {
     return GestureDetector(
       onTap: (examen == null)
@@ -425,37 +411,43 @@ class _ConsultaDetallePageState extends State<ConsultaDetallePage> {
                         ),
                       )));
             },
-      child: Card(
-        color: Color.fromRGBO(153, 225, 217, 1),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-        margin: EdgeInsets.all(10),
-        elevation: 4,
-        child: Column(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(top: 10, bottom: 20),
-              child: Text(
-                'Examen Fisico',
-                style: TextStyle(
-                    fontSize: 16, color: Color.fromRGBO(50, 41, 47, 1)),
-              ),
-            ),
-            Container(
-              height: size.height * 0.15,
-              child: Hero(
-                tag: 'examenfisicoportada',
-                child: SvgPicture.asset(
-                  'assets/svg/examenfisico.svg',
+      child: Container(
+        width: 120,
+        height: 120,
+        child: Card(
+          color: Colors.white,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          elevation: 4,
+          child: Column(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(top: 10, bottom: 20),
+                child: Text(
+                  'Examen Fisico',
+                  style: TextStyle(fontSize: 14, color: Colors.red),
+                  textAlign: TextAlign.center,
                 ),
               ),
-            )
-          ],
+              Container(
+                padding: EdgeInsets.only(top: 32),
+                child: Hero(
+                  tag: 'examenfisicoportada',
+                  child: FaIcon(
+                    FontAwesomeIcons.diagnoses,
+                    size: 80,
+                    color: Colors.red,
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
   }
 
-  GestureDetector _cardFarmacos(BuildContext context, Size size,
+  GestureDetector _cardFarmacos(BuildContext context,
       PreclinicaViewModel preclinica, List<FarmacosUsoActual> farmacos) {
     return GestureDetector(
       onTap: (farmacos.length == 0)
@@ -474,37 +466,44 @@ class _ConsultaDetallePageState extends State<ConsultaDetallePage> {
                         ),
                       )));
             },
-      child: Card(
-        color: Color.fromRGBO(183, 182, 193, 1),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-        margin: EdgeInsets.all(10),
-        elevation: 4,
-        child: Column(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(top: 10, bottom: 20),
-              child: Text(
-                'Farmacos',
-                style: TextStyle(fontSize: 16, color: Colors.white),
-              ),
-            ),
-            Container(
-              height: size.height * 0.15,
-              child: Hero(
-                tag: 'farmacosportada',
-                child: SvgPicture.asset(
-                  'assets/svg/farmacos.svg',
+      child: Container(
+        width: 120,
+        height: 120,
+        child: Card(
+          color: Colors.white,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          elevation: 4,
+          child: Column(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(top: 10, bottom: 20),
+                child: Text(
+                  'Farmacos',
+                  style: TextStyle(fontSize: 14, color: Colors.red),
+                  textAlign: TextAlign.center,
                 ),
               ),
-            )
-          ],
+              Container(
+                padding: EdgeInsets.only(top: 35),
+                child: Hero(
+                  tag: 'farmacosportada',
+                  child: FaIcon(
+                    FontAwesomeIcons.capsules,
+                    size: 80,
+                    color: Colors.red,
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
   }
 
-  GestureDetector _cardHabitos(BuildContext context, Size size,
-      PreclinicaViewModel preclinica, Habitos habitos) {
+  GestureDetector _cardHabitos(
+      BuildContext context, PreclinicaViewModel preclinica, Habitos habitos) {
     return GestureDetector(
       onTap: (habitos == null)
           ? () {
@@ -522,37 +521,43 @@ class _ConsultaDetallePageState extends State<ConsultaDetallePage> {
                         ),
                       )));
             },
-      child: Card(
-        color: Color.fromRGBO(225, 242, 254, 1),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-        margin: EdgeInsets.all(10),
-        elevation: 4,
-        child: Column(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(top: 10, bottom: 20),
-              child: Text(
-                'Habitos',
-                style: TextStyle(
-                    fontSize: 16, color: Color.fromRGBO(35, 2, 46, 1)),
-              ),
-            ),
-            Container(
-              height: size.height * 0.15,
-              child: Hero(
-                tag: 'habitosPortada',
-                child: SvgPicture.asset(
-                  'assets/svg/habitos.svg',
+      child: Container(
+        width: 120,
+        height: 120,
+        child: Card(
+          color: Colors.white,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          elevation: 4,
+          child: Column(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(top: 10, bottom: 20),
+                child: Text(
+                  'Habitos',
+                  style: TextStyle(fontSize: 14, color: Colors.red),
+                  textAlign: TextAlign.center,
                 ),
               ),
-            )
-          ],
+              Container(
+                padding: EdgeInsets.only(top: 35),
+                child: Hero(
+                  tag: 'habitosportada',
+                  child: FaIcon(
+                    FontAwesomeIcons.coffee,
+                    size: 80,
+                    color: Colors.red,
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
   }
 
-  GestureDetector _cardHistorialGineco(BuildContext context, Size size,
+  GestureDetector _cardHistorialGineco(BuildContext context,
       PreclinicaViewModel preclinica, HistorialGinecoViewModel historial) {
     return GestureDetector(
       onTap: (historial == null)
@@ -571,38 +576,43 @@ class _ConsultaDetallePageState extends State<ConsultaDetallePage> {
                         ),
                       )));
             },
-      child: Card(
-        color: Color.fromRGBO(171, 255, 79, 1),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-        margin: EdgeInsets.all(10),
-        elevation: 4,
-        child: Column(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(top: 10, bottom: 20),
-              child: Text(
-                'Historial Ginecológico',
-                style: TextStyle(
-                    fontSize: 16, color: Color.fromRGBO(41, 191, 18, 1)),
-              ),
-            ),
-            Container(
-              height: size.height * 0.15,
-              child: Hero(
-                tag: 'historialginecologicoportada',
-                child: SvgPicture.asset(
-                  'assets/svg/historialginecologico.svg',
+      child: Container(
+        width: 120,
+        height: 120,
+        child: Card(
+          color: Colors.white,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          elevation: 4,
+          child: Column(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(top: 10, bottom: 20),
+                child: Text(
+                  'Historial Ginecológico',
+                  style: TextStyle(fontSize: 14, color: Colors.red),
+                  textAlign: TextAlign.center,
                 ),
               ),
-            )
-          ],
+              Container(
+                child: Hero(
+                  tag: 'historialginecologicoportada',
+                  child: FaIcon(
+                    FontAwesomeIcons.female,
+                    size: 100,
+                    color: Colors.red,
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
   }
 
-  GestureDetector _cardNotas(BuildContext context, Size size,
-      PreclinicaViewModel preclinica, List<Notas> notas) {
+  GestureDetector _cardNotas(
+      BuildContext context, PreclinicaViewModel preclinica, List<Notas> notas) {
     return GestureDetector(
       onTap: (notas.length == 0)
           ? () {
@@ -620,36 +630,43 @@ class _ConsultaDetallePageState extends State<ConsultaDetallePage> {
                         ),
                       )));
             },
-      child: Card(
-        color: Color.fromRGBO(219, 84, 97, 1),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-        margin: EdgeInsets.all(10),
-        elevation: 4,
-        child: Column(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(top: 10, bottom: 20),
-              child: Text(
-                'Notas',
-                style: TextStyle(fontSize: 16, color: Colors.white),
-              ),
-            ),
-            Container(
-              height: size.height * 0.15,
-              child: Hero(
-                tag: 'notasportada',
-                child: SvgPicture.asset(
-                  'assets/svg/notas.svg',
+      child: Container(
+        width: 120,
+        height: 120,
+        child: Card(
+          color: Colors.white,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          elevation: 4,
+          child: Column(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(top: 10, bottom: 20),
+                child: Text(
+                  'Notas',
+                  style: TextStyle(fontSize: 14, color: Colors.red),
+                  textAlign: TextAlign.center,
                 ),
               ),
-            )
-          ],
+              Container(
+                padding: EdgeInsets.only(top: 30),
+                child: Hero(
+                  tag: 'notasportada',
+                  child: Icon(
+                    Icons.note_add,
+                    size: 100,
+                    color: Colors.red,
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
   }
 
-  GestureDetector _cardPlanTerapeutico(BuildContext context, Size size,
+  GestureDetector _cardPlanTerapeutico(BuildContext context,
       PreclinicaViewModel preclinica, List<PlanTerapeuticoViewModel> planes) {
     return GestureDetector(
       onTap: (planes.length == 0)
@@ -669,25 +686,28 @@ class _ConsultaDetallePageState extends State<ConsultaDetallePage> {
                       )));
             },
       child: Card(
-        color: Color.fromRGBO(140, 173, 167, 1),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-        margin: EdgeInsets.all(10),
+        color: Colors.white,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         elevation: 4,
         child: Column(
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.only(top: 10, bottom: 20),
+              padding:
+                  const EdgeInsets.only(top: 10, bottom: 20, left: 5, right: 5),
               child: Text(
                 'Plan Terapeutico',
-                style: TextStyle(fontSize: 16, color: Colors.white),
+                style: TextStyle(fontSize: 14, color: Colors.red),
+                textAlign: TextAlign.center,
               ),
             ),
             Container(
-              height: size.height * 0.15,
+              padding: EdgeInsets.only(top: 25),
               child: Hero(
                 tag: 'planterapeuticoportada',
-                child: SvgPicture.asset(
-                  'assets/svg/planterapeutico.svg',
+                child: FaIcon(
+                  FontAwesomeIcons.stickyNote,
+                  size: 100,
+                  color: Colors.red,
                 ),
               ),
             )
@@ -698,7 +718,7 @@ class _ConsultaDetallePageState extends State<ConsultaDetallePage> {
   }
 
   GestureDetector _cardPreclinica(
-      BuildContext context, Size size, PreclinicaViewModel preclinica) {
+      BuildContext context, PreclinicaViewModel preclinica) {
     return GestureDetector(
       onTap: () {
         Navigator.of(context).push(PageRouteBuilder(
@@ -710,31 +730,37 @@ class _ConsultaDetallePageState extends State<ConsultaDetallePage> {
                   ),
                 )));
       },
-      child: Card(
-        color: Color.fromRGBO(180, 212, 238, 1),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-        margin: EdgeInsets.all(10),
-        elevation: 4,
-        child: Column(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(top: 10, bottom: 20),
-              child: Text(
-                'Preclinica',
-                style: TextStyle(
-                    fontSize: 16, color: Color.fromRGBO(129, 113, 122, 1)),
-              ),
-            ),
-            Container(
-              height: size.height * 0.15,
-              child: Hero(
-                tag: 'preclinicaPortada',
-                child: SvgPicture.asset(
-                  'assets/svg/preclinica.svg',
+      child: Container(
+        width: 120,
+        height: 120,
+        child: Card(
+          color: Colors.white,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          elevation: 4,
+          child: Column(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(top: 10, bottom: 20),
+                child: Text(
+                  'Preclinica',
+                  style: TextStyle(fontSize: 14, color: Colors.red),
+                  textAlign: TextAlign.center,
                 ),
               ),
-            )
-          ],
+              Container(
+                padding: EdgeInsets.only(top: 25),
+                child: Hero(
+                  tag: 'preclinicaPortada',
+                  child: FaIcon(
+                    FontAwesomeIcons.fileMedical,
+                    size: 90,
+                    color: Colors.red,
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

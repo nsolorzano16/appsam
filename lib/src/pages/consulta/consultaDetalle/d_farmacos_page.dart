@@ -1,7 +1,7 @@
 import 'package:appsam/src/models/farmacosUsoActual_model.dart';
 import 'package:appsam/src/models/paginados/preclinica_paginadoVM.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:getflutter/getflutter.dart';
 
 class DetFarmacosPage extends StatelessWidget {
@@ -32,7 +32,7 @@ class DetFarmacosPage extends StatelessWidget {
         children: _cardItem(size, _farmacos, estiloTitulos, estiloItems),
       ),
       floatingActionButton: FloatingActionButton(
-          backgroundColor: Color.fromRGBO(183, 182, 193, 1),
+          backgroundColor: Colors.red,
           child: Icon(Icons.arrow_back_ios),
           onPressed: () => Navigator.of(context).pop()),
     );
@@ -95,7 +95,7 @@ class DetFarmacosPage extends StatelessWidget {
     return Container(
       height: size.height * 0.30,
       decoration: BoxDecoration(
-        color: Color.fromRGBO(183, 182, 193, 1),
+        color: Colors.red,
       ),
     );
   }
@@ -142,8 +142,10 @@ Widget _imagenPortada(Size size) {
         width: 130,
         child: Hero(
           tag: 'farmacosportada',
-          child: SvgPicture.asset(
-            'assets/svg/farmacos.svg',
+          child: FaIcon(
+            FontAwesomeIcons.capsules,
+            size: 120,
+            color: Colors.white,
           ),
         )),
   );

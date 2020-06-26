@@ -1,7 +1,7 @@
 import 'package:appsam/src/models/examenesIndicados_viewmodel.dart';
 import 'package:appsam/src/models/paginados/preclinica_paginadoVM.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:getflutter/getflutter.dart';
 
 class DetExamenesPage extends StatelessWidget {
@@ -27,7 +27,7 @@ class DetExamenesPage extends StatelessWidget {
         children: _cardItem(size, _examenes, estilo),
       ),
       floatingActionButton: FloatingActionButton(
-          backgroundColor: Color.fromRGBO(4, 15, 22, 1),
+          backgroundColor: Colors.red,
           child: Icon(Icons.arrow_back_ios),
           onPressed: () => Navigator.of(context).pop()),
     );
@@ -96,7 +96,7 @@ class DetExamenesPage extends StatelessWidget {
     return Container(
       height: size.height * 0.30,
       decoration: BoxDecoration(
-        color: Color.fromRGBO(0, 148, 198, 1),
+        color: Colors.red,
       ),
     );
   }
@@ -114,7 +114,7 @@ class DetExamenesPage extends StatelessWidget {
             style: TextStyle(
               fontSize: 22,
               fontWeight: FontWeight.w500,
-              color: Color.fromRGBO(4, 15, 22, 1),
+              color: Colors.white,
             ),
           ),
           SizedBox(
@@ -125,7 +125,7 @@ class DetExamenesPage extends StatelessWidget {
             style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w300,
-              color: Color.fromRGBO(4, 15, 22, 1),
+              color: Colors.white,
             ),
           ),
         ],
@@ -142,10 +142,11 @@ Widget _imagenPortada(Size size) {
         height: 130,
         width: 130,
         child: Hero(
-          tag: 'examenesportada',
-          child: SvgPicture.asset(
-            'assets/svg/examenes.svg',
-          ),
-        )),
+            tag: 'examenesportada',
+            child: FaIcon(
+              FontAwesomeIcons.flask,
+              size: 120,
+              color: Colors.white,
+            ))),
   );
 }

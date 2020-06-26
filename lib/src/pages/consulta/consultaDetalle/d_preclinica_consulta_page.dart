@@ -1,6 +1,6 @@
 import 'package:appsam/src/models/paginados/preclinica_paginadoVM.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class DetallePreclinicaConsultaPage extends StatelessWidget {
   final PreclinicaViewModel _preclinica;
@@ -37,7 +37,7 @@ class DetallePreclinicaConsultaPage extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-          backgroundColor: Color.fromRGBO(129, 113, 122, 1),
+          backgroundColor: Colors.red,
           child: Icon(Icons.arrow_back_ios),
           onPressed: () => Navigator.of(context).pop()),
     );
@@ -109,7 +109,7 @@ class DetallePreclinicaConsultaPage extends StatelessWidget {
     return Container(
       height: size.height * 0.30,
       decoration: BoxDecoration(
-        color: Color.fromRGBO(180, 212, 238, 1),
+        color: Colors.red,
       ),
     );
   }
@@ -127,7 +127,7 @@ class DetallePreclinicaConsultaPage extends StatelessWidget {
             style: TextStyle(
               fontSize: 22,
               fontWeight: FontWeight.w500,
-              color: Color.fromRGBO(129, 113, 122, 1),
+              color: Colors.white,
             ),
           ),
           SizedBox(
@@ -138,7 +138,7 @@ class DetallePreclinicaConsultaPage extends StatelessWidget {
             style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w300,
-              color: Color.fromRGBO(129, 113, 122, 1),
+              color: Colors.white,
             ),
           ),
         ],
@@ -156,8 +156,10 @@ Widget _imagenPortada(Size size) {
         width: 130,
         child: Hero(
           tag: 'preclinicaPortada',
-          child: SvgPicture.asset(
-            'assets/svg/preclinica.svg',
+          child: FaIcon(
+            FontAwesomeIcons.fileMedical,
+            size: 120,
+            color: Colors.white,
           ),
         )),
   );

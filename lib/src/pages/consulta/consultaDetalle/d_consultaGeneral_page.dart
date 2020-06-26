@@ -1,7 +1,7 @@
 import 'package:appsam/src/models/consultaGeneral_model.dart';
 import 'package:appsam/src/models/paginados/preclinica_paginadoVM.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:getflutter/getflutter.dart';
 
 class DetConsultaGeneralPage extends StatelessWidget {
@@ -47,7 +47,7 @@ class DetConsultaGeneralPage extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-          backgroundColor: Color.fromRGBO(163, 133, 96, 1),
+          backgroundColor: Colors.red,
           child: Icon(Icons.arrow_back_ios),
           onPressed: () => Navigator.of(context).pop()),
     );
@@ -73,7 +73,7 @@ class DetConsultaGeneralPage extends StatelessWidget {
     return Container(
       height: size.height * 0.30,
       decoration: BoxDecoration(
-        color: Color.fromRGBO(242, 232, 109, 1),
+        color: Colors.red,
       ),
     );
   }
@@ -91,7 +91,7 @@ class DetConsultaGeneralPage extends StatelessWidget {
             style: TextStyle(
               fontSize: 22,
               fontWeight: FontWeight.w500,
-              color: Color.fromRGBO(163, 133, 96, 1),
+              color: Colors.white,
             ),
           ),
           SizedBox(
@@ -102,7 +102,7 @@ class DetConsultaGeneralPage extends StatelessWidget {
             style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w300,
-              color: Color.fromRGBO(163, 133, 96, 1),
+              color: Colors.white,
             ),
           ),
         ],
@@ -120,8 +120,10 @@ Widget _imagenPortada(Size size) {
         width: 130,
         child: Hero(
           tag: 'consultageneralportada',
-          child: SvgPicture.asset(
-            'assets/svg/consultageneral.svg',
+          child: FaIcon(
+            FontAwesomeIcons.briefcaseMedical,
+            size: 120,
+            color: Colors.white,
           ),
         )),
   );

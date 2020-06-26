@@ -260,15 +260,14 @@ class _MenuConsultaPageState extends State<MenuConsultaPage>
       String ruta, Color color, BuildContext context) {
     return GestureDetector(
       onTap: () {
-        if (ruta == 'crear_examen_fisico' ||
-            ruta == 'crear_examen_ginecologico' ||
+        if (ruta == 'crear_consulta_general' ||
+            ruta == 'crear_examen_fisico' ||
             ruta == 'crear_diagnosticos' ||
             ruta == 'crear_notas' ||
             ruta == 'examenes_indicados' ||
             ruta == 'planes_terapeuticos') {
           StorageUtil.putInt('indexTabMenuConsulta', 1);
         } else if (ruta == 'consulta_detalle' ||
-            ruta == 'crear_consulta_general' ||
             ruta == 'crear_antecedentes' ||
             ruta == 'crear_habitos' ||
             ruta == 'crear_historial_gineco' ||
@@ -364,6 +363,7 @@ class _MenuConsultaPageState extends State<MenuConsultaPage>
                 preclinica.pacienteId, preclinica.doctorId);
         await _pr.hide();
         if (historial != null) {
+          StorageUtil.putInt('indexTabMenuConsulta', 0);
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
@@ -372,6 +372,7 @@ class _MenuConsultaPageState extends State<MenuConsultaPage>
                         preclinica: preclinica,
                       )));
         } else {
+          StorageUtil.putInt('indexTabMenuConsulta', 0);
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
@@ -461,6 +462,7 @@ class _MenuConsultaPageState extends State<MenuConsultaPage>
                 preclinica.doctorId, preclinica.preclinicaId);
         await _pr.hide();
         if (examenFisico != null) {
+          StorageUtil.putInt('indexTabMenuConsulta', 1);
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
@@ -469,6 +471,7 @@ class _MenuConsultaPageState extends State<MenuConsultaPage>
                         preclinica: preclinica,
                       )));
         } else {
+          StorageUtil.putInt('indexTabMenuConsulta', 1);
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(

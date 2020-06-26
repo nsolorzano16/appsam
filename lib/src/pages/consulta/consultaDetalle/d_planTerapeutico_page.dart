@@ -2,7 +2,7 @@ import 'package:appsam/src/models/paginados/preclinica_paginadoVM.dart';
 
 import 'package:appsam/src/models/planTerapeutico_viewmodel.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:getflutter/getflutter.dart';
 
 class DetPlanTerapeutico extends StatelessWidget {
@@ -33,7 +33,7 @@ class DetPlanTerapeutico extends StatelessWidget {
         children: _cardItem(size, _plan, estiloTitulos, estiloItems),
       ),
       floatingActionButton: FloatingActionButton(
-          backgroundColor: Color.fromRGBO(140, 173, 167, 1),
+          backgroundColor: Colors.red,
           child: Icon(Icons.arrow_back_ios),
           onPressed: () => Navigator.of(context).pop()),
     );
@@ -104,7 +104,7 @@ class DetPlanTerapeutico extends StatelessWidget {
     return Container(
       height: size.height * 0.30,
       decoration: BoxDecoration(
-        color: Color.fromRGBO(140, 173, 167, 1),
+        color: Colors.red,
       ),
     );
   }
@@ -167,8 +167,10 @@ Widget _imagenPortada(Size size) {
         width: 130,
         child: Hero(
           tag: 'planterapeuticoportada',
-          child: SvgPicture.asset(
-            'assets/svg/planterapeutico.svg',
+          child: FaIcon(
+            FontAwesomeIcons.stickyNote,
+            size: 120,
+            color: Colors.white,
           ),
         )),
   );

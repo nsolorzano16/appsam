@@ -1,7 +1,7 @@
 import 'package:appsam/src/models/examenFisico_model.dart';
 import 'package:appsam/src/models/paginados/preclinica_paginadoVM.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class DetExamenFisicoPage extends StatelessWidget {
   final PreclinicaViewModel _preclinica;
@@ -40,7 +40,7 @@ class DetExamenFisicoPage extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-          backgroundColor: Color.fromRGBO(50, 41, 47, 1),
+          backgroundColor: Colors.red,
           child: Icon(Icons.arrow_back_ios),
           onPressed: () => Navigator.of(context).pop()),
     );
@@ -143,7 +143,7 @@ class DetExamenFisicoPage extends StatelessWidget {
     return Container(
       height: size.height * 0.30,
       decoration: BoxDecoration(
-        color: Color.fromRGBO(153, 225, 217, 1),
+        color: Colors.red,
       ),
     );
   }
@@ -161,7 +161,7 @@ class DetExamenFisicoPage extends StatelessWidget {
             style: TextStyle(
               fontSize: 22,
               fontWeight: FontWeight.w500,
-              color: Color.fromRGBO(50, 41, 47, 1),
+              color: Colors.white,
             ),
           ),
           SizedBox(
@@ -172,7 +172,7 @@ class DetExamenFisicoPage extends StatelessWidget {
             style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w300,
-              color: Color.fromRGBO(50, 41, 47, 1),
+              color: Colors.white,
             ),
           ),
         ],
@@ -190,8 +190,10 @@ Widget _imagenPortada(Size size) {
         width: 130,
         child: Hero(
           tag: 'examenfisicoportada',
-          child: SvgPicture.asset(
-            'assets/svg/examenfisico.svg',
+          child: FaIcon(
+            FontAwesomeIcons.diagnoses,
+            size: 120,
+            color: Colors.white,
           ),
         )),
   );
