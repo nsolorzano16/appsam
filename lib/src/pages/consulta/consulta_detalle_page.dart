@@ -49,7 +49,6 @@ class _ConsultaDetallePageState extends State<ConsultaDetallePage> {
   final TextStyle estiloDatos = new TextStyle(
     fontSize: 14.0,
   );
-  final _pageController = PageController(viewportFraction: 0.9);
 
   final ConsultaBloc _consultaBloc = new ConsultaBloc();
   Future<ConsultaModel> _consultaFuture;

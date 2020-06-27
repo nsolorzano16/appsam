@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:appsam/src/models/consultaGeneral_model.dart';
+import 'package:appsam/src/models/expediente_model.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:appsam/src/models/consulta_model.dart';
@@ -89,6 +90,28 @@ class ConsultaService {
     if (resp.statusCode == 200 && resp.body.isNotEmpty) {
       final decodedData = json.decode(resp.body);
       final consulta = new ConsultaGeneralModel.fromJson(decodedData);
+      return consulta;
+    }
+
+    return null;
+  }
+
+  Future<ExpedienteViewModel> getExpediente(
+      int pacienteId, int doctorId) async {
+    final String token = StorageUtil.getString('token');
+    final headers = {
+      "content-type": "application/json",
+      "accept": "application/json",
+      'authorization': 'Bearer $token',
+    };
+    final url =
+        '$_apiURL/api/Consulta/expediente/pacienteid/$pacienteId/doctorid/$doctorId';
+
+    final resp = await http.get(url, headers: headers);
+
+    if (resp.statusCode == 200 && resp.body.isNotEmpty) {
+      final decodedData = json.decode(resp.body);
+      final consulta = new ExpedienteViewModel.fromJson(decodedData);
       return consulta;
     }
 

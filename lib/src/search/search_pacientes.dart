@@ -1,3 +1,6 @@
+import 'package:appsam/src/models/usuario_model.dart';
+import 'package:appsam/src/pages/expediente/expediente_page.dart';
+import 'package:appsam/src/utils/storage_util.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -10,6 +13,10 @@ import '../providers/pacientes_service.dart';
 class DataSearchPacientes extends SearchDelegate {
   Future<PacientesPaginadoModel> pacientesFuture;
   PacientesService pacientesService = new PacientesService();
+
+  UsuarioModel _usuario =
+      usuarioModelFromJson(StorageUtil.getString('usuarioGlobal'));
+
   @override
   List<Widget> buildActions(BuildContext context) {
     // acciones de nuestro app bar
@@ -106,23 +113,51 @@ class DataSearchPacientes extends SearchDelegate {
             ),
           ),
           subtitle: Text('Identificación: ${paciente.identificacion}'),
-          trailing: IconButton(
-              icon: FaIcon(
-                FontAwesomeIcons.fileMedical,
-                size: 20.0,
-                color: Theme.of(context).primaryColor,
-              ),
-              onPressed: () => (paciente.preclinicasPendientes == 0)
-                  ? Navigator.pushReplacementNamed(context, 'crear_preclinica',
-                      arguments: paciente)
-                  : mostrarFlushBar(
-                      context,
-                      Colors.lightGreen[700],
-                      'Info',
-                      'Paciente con preclinicas pendientes',
-                      2,
-                      Icons.info,
-                      Colors.white))),
+          trailing: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              IconButton(
+                  icon: FaIcon(
+                    FontAwesomeIcons.solidFolderOpen,
+                    size: 20.0,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                  onPressed: () => (_usuario.rolId == 2)
+                      ? Navigator.of(context).pushReplacement(PageRouteBuilder(
+                          transitionDuration: const Duration(milliseconds: 800),
+                          pageBuilder: (_, animation, __) => FadeTransition(
+                                opacity: animation,
+                                child: ExpedientePage(
+                                    pacienteId: paciente.pacienteId,
+                                    doctorId: _usuario.usuarioId),
+                              )))
+                      : mostrarFlushBar(
+                          context,
+                          Colors.lightGreen[700],
+                          'Info',
+                          'Usted no tiene acceso a este contenido',
+                          2,
+                          Icons.info,
+                          Colors.white)),
+              IconButton(
+                  icon: FaIcon(
+                    FontAwesomeIcons.fileMedical,
+                    size: 20.0,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                  onPressed: () => (paciente.preclinicasPendientes == 0)
+                      ? Navigator.pushReplacementNamed(
+                          context, 'crear_preclinica', arguments: paciente)
+                      : mostrarFlushBar(
+                          context,
+                          Colors.lightGreen[700],
+                          'Info',
+                          'Paciente con preclinicas pendientes',
+                          2,
+                          Icons.info,
+                          Colors.white))
+            ],
+          )),
     );
   }
 }
