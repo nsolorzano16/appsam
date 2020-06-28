@@ -1,6 +1,7 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:appsam/src/models/expediente_model.dart';
 import 'package:appsam/src/pages/expediente/exp_antecedentes_page.dart';
+import 'package:appsam/src/pages/expediente/exp_consultas_page.dart';
 import 'package:appsam/src/pages/expediente/exp_farmacos_page.dart';
 import 'package:appsam/src/pages/expediente/exp_habitos.dart';
 import 'package:appsam/src/pages/expediente/exp_historialGineco_page.dart';
@@ -85,7 +86,7 @@ class _ExpedientePageState extends State<ExpedientePage> {
                         _navItem(FontAwesomeIcons.coffee),
                         _navItem(FontAwesomeIcons.baby),
                         _navItem(FontAwesomeIcons.capsules),
-                        // _navItem(FontAwesomeIcons.clipboardList)
+                        _navItem(FontAwesomeIcons.clipboardList),
                       ],
                     ),
                   ],
@@ -135,6 +136,9 @@ class _ExpedientePageState extends State<ExpedientePage> {
             : ZoomIn(
                 child: ExpFarmacos(farmacos: expediente.farmacosUsoActual),
               ),
+        ZoomIn(
+          child: ExpConsultas(consultas: expediente.consultas),
+        ),
       ],
     );
   }
