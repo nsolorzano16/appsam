@@ -1,15 +1,12 @@
 import 'package:appsam/src/models/examenFisico_model.dart';
-import 'package:appsam/src/models/paginados/preclinica_paginadoVM.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class DetExamenFisicoPage extends StatelessWidget {
-  final PreclinicaViewModel _preclinica;
   final ExamenFisico _examenFisico;
 
-  const DetExamenFisicoPage({@required preclinica, @required examenFisico})
-      : _preclinica = preclinica,
-        _examenFisico = examenFisico;
+  const DetExamenFisicoPage({@required examenFisico})
+      : _examenFisico = examenFisico;
 
   @override
   Widget build(BuildContext context) {
@@ -161,17 +158,6 @@ class DetExamenFisicoPage extends StatelessWidget {
             style: TextStyle(
               fontSize: 22,
               fontWeight: FontWeight.w500,
-              color: Colors.white,
-            ),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          Text(
-            '${_preclinica.nombres} ${_preclinica.primerApellido} ${_preclinica.segundoApellido}',
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w300,
               color: Colors.white,
             ),
           ),

@@ -1,15 +1,11 @@
 import 'package:appsam/src/models/notas_model.dart';
-import 'package:appsam/src/models/paginados/preclinica_paginadoVM.dart';
 import 'package:flutter/material.dart';
 import 'package:getflutter/getflutter.dart';
 
 class DetNotasPage extends StatelessWidget {
-  final PreclinicaViewModel _preclinica;
   final List<Notas> _notas;
 
-  const DetNotasPage({@required preclinica, @required notas})
-      : _preclinica = preclinica,
-        _notas = notas;
+  const DetNotasPage({@required notas}) : _notas = notas;
 
   @override
   Widget build(BuildContext context) {
@@ -87,17 +83,6 @@ class DetNotasPage extends StatelessWidget {
             style: TextStyle(
               fontSize: 22,
               fontWeight: FontWeight.w500,
-              color: Colors.white,
-            ),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          Text(
-            '${_preclinica.nombres} ${_preclinica.primerApellido} ${_preclinica.segundoApellido}',
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w300,
               color: Colors.white,
             ),
           ),

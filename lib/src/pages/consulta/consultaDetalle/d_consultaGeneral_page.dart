@@ -1,16 +1,12 @@
 import 'package:appsam/src/models/consultaGeneral_model.dart';
-import 'package:appsam/src/models/paginados/preclinica_paginadoVM.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:getflutter/getflutter.dart';
 
 class DetConsultaGeneralPage extends StatelessWidget {
-  final PreclinicaViewModel _preclinica;
   final ConsultaGeneralModel _consulta;
 
-  const DetConsultaGeneralPage({@required preclinica, @required consulta})
-      : _preclinica = preclinica,
-        _consulta = consulta;
+  const DetConsultaGeneralPage({@required consulta}) : _consulta = consulta;
 
   @override
   Widget build(BuildContext context) {
@@ -77,38 +73,6 @@ class DetConsultaGeneralPage extends StatelessWidget {
       ),
     );
   }
-
-  Widget _titleText(Size size) {
-    return Positioned(
-      left: 20,
-      bottom: size.height * 0.15,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(
-            'Consulta General',
-            style: TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.w500,
-              color: Colors.white,
-            ),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          Text(
-            '${_preclinica.nombres} ${_preclinica.primerApellido} ${_preclinica.segundoApellido}',
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w300,
-              color: Colors.white,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 }
 
 Widget _imagenPortada(Size size) {
@@ -126,5 +90,29 @@ Widget _imagenPortada(Size size) {
             color: Colors.white,
           ),
         )),
+  );
+}
+
+Widget _titleText(Size size) {
+  return Positioned(
+    left: 20,
+    bottom: size.height * 0.15,
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Text(
+          'Consulta General',
+          style: TextStyle(
+            fontSize: 22,
+            fontWeight: FontWeight.w500,
+            color: Colors.white,
+          ),
+        ),
+        SizedBox(
+          height: 10,
+        )
+      ],
+    ),
   );
 }

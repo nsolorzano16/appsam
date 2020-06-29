@@ -1,17 +1,12 @@
-import 'package:appsam/src/models/paginados/preclinica_paginadoVM.dart';
-
 import 'package:appsam/src/models/planTerapeutico_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:getflutter/getflutter.dart';
 
 class DetPlanTerapeutico extends StatelessWidget {
-  final PreclinicaViewModel _preclinica;
   final List<PlanTerapeuticoViewModel> _plan;
 
-  const DetPlanTerapeutico({@required preclinica, @required plan})
-      : _preclinica = preclinica,
-        _plan = plan;
+  const DetPlanTerapeutico({@required plan}) : _plan = plan;
 
   @override
   Widget build(BuildContext context) {
@@ -138,17 +133,6 @@ class DetPlanTerapeutico extends StatelessWidget {
             style: TextStyle(
               fontSize: 22,
               fontWeight: FontWeight.w500,
-              color: Colors.white,
-            ),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          Text(
-            '${_preclinica.nombres} ${_preclinica.primerApellido} ${_preclinica.segundoApellido}',
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w300,
               color: Colors.white,
             ),
           ),

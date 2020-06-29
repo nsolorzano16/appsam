@@ -1,15 +1,12 @@
 import 'package:appsam/src/models/diagnosticos_model.dart';
-import 'package:appsam/src/models/paginados/preclinica_paginadoVM.dart';
 import 'package:flutter/material.dart';
 import 'package:getflutter/getflutter.dart';
 
 class DetalleDiagnosticosPage extends StatelessWidget {
-  final PreclinicaViewModel _preclinica;
   final List<Diagnosticos> _diagnosticos;
 
-  const DetalleDiagnosticosPage({@required preclinica, @required diagnosticos})
-      : _preclinica = preclinica,
-        _diagnosticos = diagnosticos;
+  const DetalleDiagnosticosPage({@required diagnosticos})
+      : _diagnosticos = diagnosticos;
 
   @override
   Widget build(BuildContext context) {
@@ -87,17 +84,6 @@ class DetalleDiagnosticosPage extends StatelessWidget {
             style: TextStyle(
               fontSize: 22,
               fontWeight: FontWeight.w500,
-              color: Colors.white,
-            ),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          Text(
-            '${_preclinica.nombres} ${_preclinica.primerApellido} ${_preclinica.segundoApellido}',
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w300,
               color: Colors.white,
             ),
           ),

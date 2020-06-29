@@ -212,7 +212,7 @@ class _ConsultaDetallePageState extends State<ConsultaDetallePage> {
                   tag: 'antecedentesPortada',
                   child: FaIcon(
                     FontAwesomeIcons.heartbeat,
-                    size: 90,
+                    size: 45,
                     color: Colors.red,
                   ),
                 ),
@@ -238,7 +238,6 @@ class _ConsultaDetallePageState extends State<ConsultaDetallePage> {
                   pageBuilder: (_, animation, __) => FadeTransition(
                         opacity: animation,
                         child: DetConsultaGeneralPage(
-                          preclinica: preclinica,
                           consulta: consulta,
                         ),
                       )));
@@ -268,7 +267,7 @@ class _ConsultaDetallePageState extends State<ConsultaDetallePage> {
                   tag: 'consultageneralportada',
                   child: FaIcon(
                     FontAwesomeIcons.briefcaseMedical,
-                    size: 100,
+                    size: 50,
                     color: Colors.red,
                   ),
                 ),
@@ -294,7 +293,6 @@ class _ConsultaDetallePageState extends State<ConsultaDetallePage> {
                   pageBuilder: (_, animation, __) => FadeTransition(
                         opacity: animation,
                         child: DetalleDiagnosticosPage(
-                          preclinica: preclinica,
                           diagnosticos: diagnosticos,
                         ),
                       )));
@@ -323,7 +321,7 @@ class _ConsultaDetallePageState extends State<ConsultaDetallePage> {
                   tag: 'diagnosticosportada',
                   child: Icon(
                     Icons.note,
-                    size: 100,
+                    size: 50,
                     color: Colors.red,
                   ),
                 ),
@@ -351,7 +349,6 @@ class _ConsultaDetallePageState extends State<ConsultaDetallePage> {
                   pageBuilder: (_, animation, __) => FadeTransition(
                         opacity: animation,
                         child: DetExamenesPage(
-                          preclinica: preclinica,
                           examenes: examenes,
                         ),
                       )));
@@ -380,7 +377,7 @@ class _ConsultaDetallePageState extends State<ConsultaDetallePage> {
                   tag: 'examenesportada',
                   child: FaIcon(
                     FontAwesomeIcons.flask,
-                    size: 100,
+                    size: 50,
                     color: Colors.red,
                   ),
                 ),
@@ -406,7 +403,6 @@ class _ConsultaDetallePageState extends State<ConsultaDetallePage> {
                   pageBuilder: (_, animation, __) => FadeTransition(
                         opacity: animation,
                         child: DetExamenFisicoPage(
-                          preclinica: preclinica,
                           examenFisico: examen,
                         ),
                       )));
@@ -435,7 +431,7 @@ class _ConsultaDetallePageState extends State<ConsultaDetallePage> {
                   tag: 'examenfisicoportada',
                   child: FaIcon(
                     FontAwesomeIcons.diagnoses,
-                    size: 80,
+                    size: 40,
                     color: Colors.red,
                   ),
                 ),
@@ -490,7 +486,7 @@ class _ConsultaDetallePageState extends State<ConsultaDetallePage> {
                   tag: 'farmacosportada',
                   child: FaIcon(
                     FontAwesomeIcons.capsules,
-                    size: 80,
+                    size: 40,
                     color: Colors.red,
                   ),
                 ),
@@ -545,7 +541,7 @@ class _ConsultaDetallePageState extends State<ConsultaDetallePage> {
                   tag: 'habitosportada',
                   child: FaIcon(
                     FontAwesomeIcons.coffee,
-                    size: 80,
+                    size: 40,
                     color: Colors.red,
                   ),
                 ),
@@ -599,7 +595,7 @@ class _ConsultaDetallePageState extends State<ConsultaDetallePage> {
                   tag: 'historialginecologicoportada',
                   child: FaIcon(
                     FontAwesomeIcons.female,
-                    size: 100,
+                    size: 50,
                     color: Colors.red,
                   ),
                 ),
@@ -625,7 +621,6 @@ class _ConsultaDetallePageState extends State<ConsultaDetallePage> {
                   pageBuilder: (_, animation, __) => FadeTransition(
                         opacity: animation,
                         child: DetNotasPage(
-                          preclinica: preclinica,
                           notas: notas,
                         ),
                       )));
@@ -654,7 +649,7 @@ class _ConsultaDetallePageState extends State<ConsultaDetallePage> {
                   tag: 'notasportada',
                   child: Icon(
                     Icons.note_add,
-                    size: 100,
+                    size: 50,
                     color: Colors.red,
                   ),
                 ),
@@ -680,7 +675,6 @@ class _ConsultaDetallePageState extends State<ConsultaDetallePage> {
                   pageBuilder: (_, animation, __) => FadeTransition(
                         opacity: animation,
                         child: DetPlanTerapeutico(
-                          preclinica: preclinica,
                           plan: planes,
                         ),
                       )));
@@ -706,7 +700,7 @@ class _ConsultaDetallePageState extends State<ConsultaDetallePage> {
                 tag: 'planterapeuticoportada',
                 child: FaIcon(
                   FontAwesomeIcons.stickyNote,
-                  size: 100,
+                  size: 50,
                   color: Colors.red,
                 ),
               ),
@@ -754,7 +748,7 @@ class _ConsultaDetallePageState extends State<ConsultaDetallePage> {
                   tag: 'preclinicaPortada',
                   child: FaIcon(
                     FontAwesomeIcons.fileMedical,
-                    size: 90,
+                    size: 45,
                     color: Colors.red,
                   ),
                 ),

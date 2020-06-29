@@ -1,16 +1,12 @@
 import 'package:appsam/src/models/examenesIndicados_viewmodel.dart';
-import 'package:appsam/src/models/paginados/preclinica_paginadoVM.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:getflutter/getflutter.dart';
 
 class DetExamenesPage extends StatelessWidget {
-  final PreclinicaViewModel _preclinica;
   final List<ExamenesIndicadosViewModel> _examenes;
 
-  const DetExamenesPage({@required preclinica, @required examenes})
-      : _preclinica = preclinica,
-        _examenes = examenes;
+  const DetExamenesPage({@required examenes}) : _examenes = examenes;
 
   @override
   Widget build(BuildContext context) {
@@ -114,17 +110,6 @@ class DetExamenesPage extends StatelessWidget {
             style: TextStyle(
               fontSize: 22,
               fontWeight: FontWeight.w500,
-              color: Colors.white,
-            ),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          Text(
-            '${_preclinica.nombres} ${_preclinica.primerApellido} ${_preclinica.segundoApellido}',
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w300,
               color: Colors.white,
             ),
           ),
