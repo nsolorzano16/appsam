@@ -41,7 +41,7 @@ class _ExpConsultasState extends State<ExpConsultas> {
               _currentPage = page;
             });
           },
-          controller: PageController(viewportFraction: 0.87),
+          controller: PageController(viewportFraction: 0.85),
           itemBuilder: (_, index) => AnimatedOpacity(
             opacity: _currentPage == index ? 1.0 : 0.5,
             duration: duration,
@@ -298,11 +298,9 @@ class _BackItem extends StatelessWidget {
               SizedBox(
                 height: 8,
               ),
-              Padding(
-                padding: const EdgeInsets.all(1.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  mainAxisSize: MainAxisSize.max,
+              Expanded(
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
                   children: <Widget>[
                     _botonConsultaGeneral(context),
                     _botonDiagnosticos(context),
@@ -313,6 +311,13 @@ class _BackItem extends StatelessWidget {
                   ],
                 ),
               )
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //   mainAxisSize: MainAxisSize.max,
+              //   children: <Widget>[
+
+              //   ],
+              // )
             ],
           )),
     );
