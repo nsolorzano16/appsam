@@ -78,7 +78,7 @@ class __ItemConsultaState extends State<_ItemConsulta> {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
         final itemHeight =
-            constraints.maxHeight * (_itemSelected ? 0.50 : 0.52);
+            constraints.maxHeight * (_itemSelected ? 0.53 : 0.55);
         final itemWidth = constraints.maxWidth * 0.90;
 
         // final backWidth = _selected ? itemWidth * 1.05 : itemWidth;
