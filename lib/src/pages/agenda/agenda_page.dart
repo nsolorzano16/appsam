@@ -249,9 +249,9 @@ class _AgendaPageState extends State<AgendaPage> with TickerProviderStateMixin {
                         color: HexColor.fromHex(event.colorPrimario))),
                 child: ListTile(
                   dense: true,
-                  title: Text('Hora inicio: ${format.format(event.inicio)}'),
+                  title: Text('Título: ${event.notas}'),
                   subtitle: Text(
-                    'Hora fin: ${format.format(event.fin)}',
+                    'Hora inicio: ${format.format(event.inicio)} - Hora fin: ${format.format(event.fin)} ',
                     style: TextStyle(color: Colors.black),
                   ),
                   trailing: Icon(

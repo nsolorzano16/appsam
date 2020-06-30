@@ -14,16 +14,7 @@
         }
       ]
     },
-    {
-      "ruta": "asistentes",
-      "icon": "account_box",
-      "texto": "Asistentes",
-      "roles": [
-        {
-          "autorizados": 2
-        }
-      ]
-    },
+
     {
       "ruta": "pacientes",
       "icon": "person",
@@ -57,6 +48,16 @@
         },
         {
           "autorizados": 3
+        }
+      ]
+    },
+    {
+      "ruta": "asistentes",
+      "icon": "account_box",
+      "texto": "Asistentes",
+      "roles": [
+        {
+          "autorizados": 2
         }
       ]
     },

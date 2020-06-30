@@ -181,6 +181,7 @@ class _CrearAgendaPageState extends State<CrearAgendaPage> {
 
                     _evento.colorPrimario = pickerColor.toHex();
                   });
+                  FocusScope.of(context).requestFocus(new FocusNode());
                   Navigator.of(context).pop();
                 },
                 child: const Text('Ok'))
@@ -205,6 +206,7 @@ class _CrearAgendaPageState extends State<CrearAgendaPage> {
                     currentColorSecond = pickerColorSecond;
                     _evento.colorSecundario = pickerColorSecond.toHex();
                   });
+                  FocusScope.of(context).requestFocus(new FocusNode());
                   Navigator.of(context).pop();
                 },
                 child: const Text('Ok'))
@@ -276,7 +278,7 @@ class _CrearAgendaPageState extends State<CrearAgendaPage> {
         onSaved: (value) => _evento.notas = value,
         maxLines: 3,
         keyboardType: TextInputType.text,
-        decoration: inputsDecorations('Notas', Icons.note),
+        decoration: inputsDecorations('Título', Icons.note),
       ),
     );
   }

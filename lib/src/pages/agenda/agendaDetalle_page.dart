@@ -31,6 +31,7 @@ class _AgendaDetallePageState extends State<AgendaDetallePage> {
       appBar: AppBar(),
       body: SingleChildScrollView(
         child: GFCard(
+            elevation: 3,
             title: GFListTile(
               color: Colors.red,
               title: Center(
@@ -45,6 +46,23 @@ class _AgendaDetallePageState extends State<AgendaDetallePage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
+                  Text(
+                    'Título:',
+                    style: TextStyle(fontSize: 18.0),
+                  ),
+                  SizedBox(
+                    height: 8.0,
+                  ),
+                  Text(
+                    '${evento.notas}',
+                    style: TextStyle(fontSize: 16.0),
+                  ),
+                  SizedBox(
+                    height: 8.0,
+                  ),
+                  Divider(
+                    height: 5.0,
+                  ),
                   Text(
                     'Fecha de inicio:',
                     style: TextStyle(fontSize: 18.0),
@@ -121,21 +139,7 @@ class _AgendaDetallePageState extends State<AgendaDetallePage> {
                   ),
                   SizedBox(
                     height: 8.0,
-                  ),
-                  Text(
-                    'Notas:',
-                    style: TextStyle(fontSize: 18.0),
-                  ),
-                  SizedBox(
-                    height: 8.0,
-                  ),
-                  Text(
-                    '${evento.notas}',
-                    style: TextStyle(fontSize: 16.0),
-                  ),
-                  Divider(
-                    height: 5.0,
-                  ),
+                  )
                 ],
               ),
             )),
