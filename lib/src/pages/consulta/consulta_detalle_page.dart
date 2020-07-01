@@ -183,7 +183,6 @@ class _ConsultaDetallePageState extends State<ConsultaDetallePage> {
                   pageBuilder: (_, animation, __) => FadeTransition(
                         opacity: animation,
                         child: DetalleAntecedentesConsultaPage(
-                          preclinica: preclinica,
                           antecedentes: antecedentes,
                         ),
                       )));
@@ -457,7 +456,6 @@ class _ConsultaDetallePageState extends State<ConsultaDetallePage> {
                   pageBuilder: (_, animation, __) => FadeTransition(
                         opacity: animation,
                         child: DetFarmacosPage(
-                          preclinica: preclinica,
                           farmacos: farmacos,
                         ),
                       )));
@@ -512,7 +510,6 @@ class _ConsultaDetallePageState extends State<ConsultaDetallePage> {
                   pageBuilder: (_, animation, __) => FadeTransition(
                         opacity: animation,
                         child: DetHabitosPage(
-                          preclinica: preclinica,
                           habitos: habitos,
                         ),
                       )));
@@ -567,7 +564,6 @@ class _ConsultaDetallePageState extends State<ConsultaDetallePage> {
                   pageBuilder: (_, animation, __) => FadeTransition(
                         opacity: animation,
                         child: DetHistorialGinecologico(
-                          preclinica: preclinica,
                           historial: historial,
                         ),
                       )));

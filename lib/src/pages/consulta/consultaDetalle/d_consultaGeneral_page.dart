@@ -22,16 +22,7 @@ class DetConsultaGeneralPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            Stack(
-              alignment: AlignmentDirectional.topCenter,
-              overflow: Overflow.visible,
-              children: <Widget>[
-                _backCover(size),
-                _titleText(size),
-                _imagenPortada(size),
-              ],
-            ),
-            SizedBox(height: 10.0),
+            _appBar(size),
             _cardItem('Motivo Consulta', '${_consulta.motivoConsulta}',
                 estiloTitulos),
             _cardItem('Historia de la enfermedad actual', '${_consulta.hea}',
@@ -46,6 +37,32 @@ class DetConsultaGeneralPage extends StatelessWidget {
           backgroundColor: Colors.red,
           child: Icon(Icons.arrow_back_ios),
           onPressed: () => Navigator.of(context).pop()),
+    );
+  }
+
+  Container _appBar(Size size) {
+    return Container(
+      color: Colors.red,
+      width: double.infinity,
+      height: size.height * 0.2,
+      padding: const EdgeInsets.all(20.0),
+      child: Center(
+        child: ListTile(
+          title: Text(
+            'Consulta General',
+            style: TextStyle(
+                fontSize: 24, color: Colors.white, fontWeight: FontWeight.bold),
+          ),
+          trailing: Hero(
+            tag: 'consultageneralportada',
+            child: FaIcon(
+              FontAwesomeIcons.briefcaseMedical,
+              size: 50,
+              color: Colors.white,
+            ),
+          ),
+        ),
+      ),
     );
   }
 
@@ -64,55 +81,4 @@ class DetConsultaGeneralPage extends StatelessWidget {
           subtitleText: descripcion),
     );
   }
-
-  Widget _backCover(Size size) {
-    return Container(
-      height: size.height * 0.30,
-      decoration: BoxDecoration(
-        color: Colors.red,
-      ),
-    );
-  }
-}
-
-Widget _imagenPortada(Size size) {
-  return Positioned(
-    top: size.height * 0.1,
-    left: size.width * 0.6,
-    child: Container(
-        height: 130,
-        width: 130,
-        child: Hero(
-          tag: 'consultageneralportada',
-          child: FaIcon(
-            FontAwesomeIcons.briefcaseMedical,
-            size: 120,
-            color: Colors.white,
-          ),
-        )),
-  );
-}
-
-Widget _titleText(Size size) {
-  return Positioned(
-    left: 20,
-    bottom: size.height * 0.15,
-    child: Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Text(
-          'Consulta General',
-          style: TextStyle(
-            fontSize: 22,
-            fontWeight: FontWeight.w500,
-            color: Colors.white,
-          ),
-        ),
-        SizedBox(
-          height: 10,
-        )
-      ],
-    ),
-  );
 }

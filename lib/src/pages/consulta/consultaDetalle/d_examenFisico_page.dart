@@ -21,19 +21,7 @@ class DetExamenFisicoPage extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            Stack(
-              alignment: AlignmentDirectional.topCenter,
-              overflow: Overflow.visible,
-              children: <Widget>[
-                _backCover(size),
-                _titleText(size),
-                _imagenPortada(size),
-              ],
-            ),
-            SizedBox(height: 10.0),
-            _cardPrincipal(estiloTitulos)
-          ],
+          children: <Widget>[_appBar(size), _cardPrincipal(estiloTitulos)],
         ),
       ),
       floatingActionButton: FloatingActionButton(
@@ -51,75 +39,82 @@ class DetExamenFisicoPage extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Table(
-              children: [
-                TableRow(children: [
-                  _itemTexto('Aspecto General:', estiloTitulos),
-                  _itemTexto('${_examenFisico.aspectoGeneral}', estiloTitulos),
-                ]),
-                TableRow(children: [
-                  _itemTexto('Piel y Faneras:', estiloTitulos),
-                  _itemTexto('${_examenFisico.pielFaneras}', estiloTitulos),
-                ]),
-                TableRow(children: [
-                  _itemTexto('Cabeza:', estiloTitulos),
-                  _itemTexto('${_examenFisico.cabeza}', estiloTitulos),
-                ]),
-                TableRow(children: [
-                  _itemTexto('Oidos:', estiloTitulos),
-                  _itemTexto('${_examenFisico.oidos}', estiloTitulos),
-                ]),
-                TableRow(children: [
-                  _itemTexto('Ojos:', estiloTitulos),
-                  _itemTexto('${_examenFisico.ojos}', estiloTitulos),
-                ]),
-                TableRow(children: [
-                  _itemTexto('Nariz:', estiloTitulos),
-                  _itemTexto('${_examenFisico.nariz}', estiloTitulos),
-                ]),
-                TableRow(children: [
-                  _itemTexto('Boca:', estiloTitulos),
-                  _itemTexto('${_examenFisico.boca}', estiloTitulos),
-                ]),
-                TableRow(children: [
-                  _itemTexto('Cuello:', estiloTitulos),
-                  _itemTexto('${_examenFisico.cuello}', estiloTitulos),
-                ]),
-                TableRow(children: [
-                  _itemTexto('Torax:', estiloTitulos),
-                  _itemTexto('${_examenFisico.torax}', estiloTitulos),
-                ]),
-                TableRow(children: [
-                  _itemTexto('Abdomen:', estiloTitulos),
-                  _itemTexto('${_examenFisico.abdomen}', estiloTitulos),
-                ]),
-                TableRow(children: [
-                  _itemTexto('Columna Vertebral Region Lumbar:', estiloTitulos),
-                  _itemTexto('${_examenFisico.columnaVertebralRegionLumbar}',
-                      estiloTitulos),
-                ]),
-                TableRow(children: [
-                  _itemTexto(
-                      'Miembros Superiores e Inferiores:', estiloTitulos),
-                  _itemTexto('${_examenFisico.miembrosInferioresSuperiores}',
-                      estiloTitulos),
-                ]),
-                TableRow(children: [
-                  _itemTexto('Genitales:', estiloTitulos),
-                  _itemTexto('${_examenFisico.genitales}', estiloTitulos),
-                ]),
-                TableRow(children: [
-                  _itemTexto('Neurológico:', estiloTitulos),
-                  _itemTexto('${_examenFisico.neurologico}', estiloTitulos),
-                ]),
-                TableRow(children: [
-                  _itemTexto('Notas Adicionales:', estiloTitulos),
-                  _itemTexto('${_examenFisico.notas}', estiloTitulos),
-                ]),
-              ],
-            )
+            _itemTexto('Aspecto General:', estiloTitulos),
+            _itemTexto('${_examenFisico.aspectoGeneral}', estiloTitulos),
+            Divider(),
+            _itemTexto('Piel y Faneras:', estiloTitulos),
+            _itemTexto('${_examenFisico.pielFaneras}', estiloTitulos),
+            Divider(),
+            _itemTexto('Cabeza:', estiloTitulos),
+            _itemTexto('${_examenFisico.cabeza}', estiloTitulos),
+            Divider(),
+            _itemTexto('Oidos:', estiloTitulos),
+            _itemTexto('${_examenFisico.oidos}', estiloTitulos),
+            Divider(),
+            _itemTexto('Ojos:', estiloTitulos),
+            _itemTexto('${_examenFisico.ojos}', estiloTitulos),
+            Divider(),
+            _itemTexto('Nariz:', estiloTitulos),
+            _itemTexto('${_examenFisico.nariz}', estiloTitulos),
+            Divider(),
+            _itemTexto('Boca:', estiloTitulos),
+            _itemTexto('${_examenFisico.boca}', estiloTitulos),
+            Divider(),
+            _itemTexto('Cuello:', estiloTitulos),
+            _itemTexto('${_examenFisico.cuello}', estiloTitulos),
+            Divider(),
+            _itemTexto('Torax:', estiloTitulos),
+            _itemTexto('${_examenFisico.torax}', estiloTitulos),
+            Divider(),
+            _itemTexto('Abdomen:', estiloTitulos),
+            _itemTexto('${_examenFisico.abdomen}', estiloTitulos),
+            Divider(),
+            _itemTexto('Columna Vertebral Region Lumbar:', estiloTitulos),
+            _itemTexto(
+                '${_examenFisico.columnaVertebralRegionLumbar}', estiloTitulos),
+            Divider(),
+            _itemTexto('Miembros Superiores e Inferiores:', estiloTitulos),
+            _itemTexto(
+                '${_examenFisico.miembrosInferioresSuperiores}', estiloTitulos),
+            Divider(),
+            _itemTexto('Genitales:', estiloTitulos),
+            _itemTexto('${_examenFisico.genitales}', estiloTitulos),
+            Divider(),
+            _itemTexto('Neurológico:', estiloTitulos),
+            _itemTexto('${_examenFisico.neurologico}', estiloTitulos),
+            Divider(),
+            _itemTexto('Notas Adicionales:', estiloTitulos),
+            _itemTexto('${_examenFisico.notas}', estiloTitulos),
+            Divider(),
           ],
+        ),
+      ),
+    );
+  }
+
+  Container _appBar(Size size) {
+    return Container(
+      color: Colors.red,
+      width: double.infinity,
+      height: size.height * 0.2,
+      padding: const EdgeInsets.all(20.0),
+      child: Center(
+        child: ListTile(
+          title: Text(
+            'Examen Físico',
+            style: TextStyle(
+                fontSize: 24, color: Colors.white, fontWeight: FontWeight.bold),
+          ),
+          trailing: Hero(
+            tag: 'examenfisicoportada',
+            child: FaIcon(
+              FontAwesomeIcons.diagnoses,
+              size: 50,
+              color: Colors.white,
+            ),
+          ),
         ),
       ),
     );
@@ -135,52 +130,4 @@ class DetExamenFisicoPage extends StatelessWidget {
       ),
     );
   }
-
-  Widget _backCover(Size size) {
-    return Container(
-      height: size.height * 0.30,
-      decoration: BoxDecoration(
-        color: Colors.red,
-      ),
-    );
-  }
-
-  Widget _titleText(Size size) {
-    return Positioned(
-      left: 20,
-      bottom: size.height * 0.15,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(
-            'Examen Fisico',
-            style: TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.w500,
-              color: Colors.white,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-Widget _imagenPortada(Size size) {
-  return Positioned(
-    top: size.height * 0.1,
-    left: size.width * 0.6,
-    child: Container(
-        height: 130,
-        width: 130,
-        child: Hero(
-          tag: 'examenfisicoportada',
-          child: FaIcon(
-            FontAwesomeIcons.diagnoses,
-            size: 120,
-            color: Colors.white,
-          ),
-        )),
-  );
 }

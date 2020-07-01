@@ -37,15 +37,7 @@ class DetPlanTerapeutico extends StatelessWidget {
   List<Widget> _cardItem(Size size, List<PlanTerapeuticoViewModel> listaPlanes,
       TextStyle estiloTitulos, TextStyle estiloItems) {
     final List<Widget> lista = new List();
-    final stack = Stack(
-      alignment: AlignmentDirectional.topCenter,
-      overflow: Overflow.visible,
-      children: <Widget>[
-        _backCover(size),
-        _titleText(size),
-        _imagenPortada(size),
-      ],
-    );
+    final stack = _appBar(size);
     lista.add(stack);
     listaPlanes.forEach((element) {
       final itemTemp = GFCard(
@@ -53,39 +45,29 @@ class DetPlanTerapeutico extends StatelessWidget {
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
         content: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Table(
-              children: [
-                TableRow(children: [
-                  _itemTexto('Nombre medicamento:', estiloItems),
-                  _itemTexto('${element.nombreMedicamento}', estiloItems),
-                ]),
-                TableRow(children: [
-                  _itemTexto('Dosis:', estiloItems),
-                  _itemTexto('${element.dosis}', estiloItems),
-                ]),
-                TableRow(children: [
-                  _itemTexto('Horario:', estiloItems),
-                  _itemTexto('${element.horario}', estiloItems),
-                ]),
-                TableRow(children: [
-                  _itemTexto('Dias requeridos:', estiloItems),
-                  _itemTexto('${element.diasRequeridos}', estiloItems),
-                ]),
-                TableRow(children: [
-                  _itemTexto('Via administración:', estiloItems),
-                  _itemTexto('${element.viaAdministracion}', estiloItems),
-                ]),
-                TableRow(children: [
-                  _itemTexto('Notas:', estiloItems),
-                  _itemTexto('${element.notas}', estiloItems),
-                ]),
-                TableRow(children: [
-                  _itemTexto('Permanente:', estiloItems),
-                  _itemBoolean(element.permanente)
-                ])
-              ],
-            )
+            _itemTexto('Nombre medicamento:', estiloItems),
+            _itemTexto('${element.nombreMedicamento}', estiloItems),
+            Divider(),
+            _itemTexto('Dosis:', estiloItems),
+            _itemTexto('${element.dosis}', estiloItems),
+            Divider(),
+            _itemTexto('Horario:', estiloItems),
+            _itemTexto('${element.horario}', estiloItems),
+            Divider(),
+            _itemTexto('Dias requeridos:', estiloItems),
+            _itemTexto('${element.diasRequeridos}', estiloItems),
+            Divider(),
+            _itemTexto('Via administración:', estiloItems),
+            _itemTexto('${element.viaAdministracion}', estiloItems),
+            Divider(),
+            _itemTexto('Permanente:', estiloItems),
+            _itemBoolean(element.permanente),
+            Divider(),
+            _itemTexto('Notas:', estiloItems),
+            _itemTexto('${element.notas}', estiloItems),
+            Divider(),
           ],
         ),
       );
@@ -95,11 +77,28 @@ class DetPlanTerapeutico extends StatelessWidget {
     return lista;
   }
 
-  Widget _backCover(Size size) {
+  Container _appBar(Size size) {
     return Container(
-      height: size.height * 0.30,
-      decoration: BoxDecoration(
-        color: Colors.red,
+      color: Colors.red,
+      width: double.infinity,
+      height: size.height * 0.2,
+      padding: const EdgeInsets.all(20.0),
+      child: Center(
+        child: ListTile(
+          title: Text(
+            'Plan Terapeutico',
+            style: TextStyle(
+                fontSize: 24, color: Colors.white, fontWeight: FontWeight.bold),
+          ),
+          trailing: Hero(
+            tag: 'planterapeuticoportada',
+            child: FaIcon(
+              FontAwesomeIcons.stickyNote,
+              size: 50,
+              color: Colors.white,
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -120,52 +119,13 @@ class DetPlanTerapeutico extends StatelessWidget {
     );
   }
 
-  Widget _titleText(Size size) {
-    return Positioned(
-      left: 20,
-      bottom: size.height * 0.15,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(
-            'Farmacos',
-            style: TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.w500,
-              color: Colors.white,
-            ),
-          ),
-        ],
+  Widget _itemTexto(String texto, TextStyle estilo) {
+    return Container(
+      margin: EdgeInsets.all(5),
+      child: Text(
+        '$texto',
+        style: estilo,
       ),
     );
   }
-}
-
-Widget _imagenPortada(Size size) {
-  return Positioned(
-    top: size.height * 0.1,
-    left: size.width * 0.6,
-    child: Container(
-        height: 130,
-        width: 130,
-        child: Hero(
-          tag: 'planterapeuticoportada',
-          child: FaIcon(
-            FontAwesomeIcons.stickyNote,
-            size: 120,
-            color: Colors.white,
-          ),
-        )),
-  );
-}
-
-Widget _itemTexto(String texto, TextStyle estilo) {
-  return Container(
-    margin: EdgeInsets.all(5),
-    child: Text(
-      '$texto',
-      style: estilo,
-    ),
-  );
 }

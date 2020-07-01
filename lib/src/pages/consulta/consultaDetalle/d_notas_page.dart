@@ -30,15 +30,7 @@ class DetNotasPage extends StatelessWidget {
   List<Widget> _cardItem(
       Size size, List<Notas> listaNotas, TextStyle estiloTitulos) {
     final List<Widget> lista = new List();
-    final stack = Stack(
-      alignment: AlignmentDirectional.topCenter,
-      overflow: Overflow.visible,
-      children: <Widget>[
-        _backCover(size),
-        _titleText(size),
-        _imagenPortada(size),
-      ],
-    );
+    final stack = _appBar(size);
     lista.add(stack);
     listaNotas.forEach((element) {
       final itemTemp = GFCard(
@@ -61,51 +53,29 @@ class DetNotasPage extends StatelessWidget {
     return lista;
   }
 
-  Widget _backCover(Size size) {
+  Container _appBar(Size size) {
     return Container(
-      height: size.height * 0.30,
-      decoration: BoxDecoration(
-        color: Colors.red,
-      ),
-    );
-  }
-
-  Widget _titleText(Size size) {
-    return Positioned(
-      left: 20,
-      bottom: size.height * 0.15,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(
+      color: Colors.red,
+      width: double.infinity,
+      height: size.height * 0.2,
+      padding: const EdgeInsets.all(20.0),
+      child: Center(
+        child: ListTile(
+          title: Text(
             'Notas',
             style: TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.w500,
+                fontSize: 24, color: Colors.white, fontWeight: FontWeight.bold),
+          ),
+          trailing: Hero(
+            tag: 'notasportada',
+            child: Icon(
+              Icons.note_add,
+              size: 50,
               color: Colors.white,
             ),
           ),
-        ],
+        ),
       ),
     );
   }
-}
-
-Widget _imagenPortada(Size size) {
-  return Positioned(
-    top: size.height * 0.1,
-    left: size.width * 0.6,
-    child: Container(
-        height: 130,
-        width: 130,
-        child: Hero(
-          tag: 'notasportada',
-          child: Icon(
-            Icons.note_add,
-            size: 120,
-            color: Colors.white,
-          ),
-        )),
-  );
 }

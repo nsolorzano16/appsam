@@ -1,16 +1,12 @@
 import 'package:appsam/src/models/farmacosUsoActual_model.dart';
-import 'package:appsam/src/models/paginados/preclinica_paginadoVM.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:getflutter/getflutter.dart';
 
 class DetFarmacosPage extends StatelessWidget {
-  final PreclinicaViewModel _preclinica;
   final List<FarmacosUsoActual> _farmacos;
 
-  const DetFarmacosPage({@required preclinica, @required farmacos})
-      : _preclinica = preclinica,
-        _farmacos = farmacos;
+  const DetFarmacosPage({@required farmacos}) : _farmacos = farmacos;
 
   @override
   Widget build(BuildContext context) {
@@ -41,15 +37,7 @@ class DetFarmacosPage extends StatelessWidget {
   List<Widget> _cardItem(Size size, List<FarmacosUsoActual> listaFarmacos,
       TextStyle estiloTitulos, TextStyle estiloItems) {
     final List<Widget> lista = new List();
-    final stack = Stack(
-      alignment: AlignmentDirectional.topCenter,
-      overflow: Overflow.visible,
-      children: <Widget>[
-        _backCover(size),
-        _titleText(size),
-        _imagenPortada(size),
-      ],
-    );
+    final stack = _appBar(size);
     lista.add(stack);
     listaFarmacos.forEach((element) {
       final itemTemp = GFCard(
@@ -91,72 +79,39 @@ class DetFarmacosPage extends StatelessWidget {
     return lista;
   }
 
-  Widget _backCover(Size size) {
+  Container _appBar(Size size) {
     return Container(
-      height: size.height * 0.30,
-      decoration: BoxDecoration(
-        color: Colors.red,
-      ),
-    );
-  }
-
-  Widget _titleText(Size size) {
-    return Positioned(
-      left: 20,
-      bottom: size.height * 0.15,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(
+      color: Colors.red,
+      width: double.infinity,
+      height: size.height * 0.2,
+      padding: const EdgeInsets.all(20.0),
+      child: Center(
+        child: ListTile(
+          title: Text(
             'Farmacos',
             style: TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.w500,
+                fontSize: 24, color: Colors.white, fontWeight: FontWeight.bold),
+          ),
+          trailing: Hero(
+            tag: 'farmacosportada',
+            child: FaIcon(
+              FontAwesomeIcons.capsules,
+              size: 50,
               color: Colors.white,
             ),
           ),
-          SizedBox(
-            height: 10,
-          ),
-          Text(
-            '${_preclinica.nombres} ${_preclinica.primerApellido} ${_preclinica.segundoApellido}',
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w300,
-              color: Colors.white,
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
-}
 
-Widget _imagenPortada(Size size) {
-  return Positioned(
-    top: size.height * 0.1,
-    left: size.width * 0.6,
-    child: Container(
-        height: 130,
-        width: 130,
-        child: Hero(
-          tag: 'farmacosportada',
-          child: FaIcon(
-            FontAwesomeIcons.capsules,
-            size: 120,
-            color: Colors.white,
-          ),
-        )),
-  );
-}
-
-Widget _itemTexto(String texto, TextStyle estilo) {
-  return Container(
-    margin: EdgeInsets.all(5),
-    child: Text(
-      '$texto',
-      style: estilo,
-    ),
-  );
+  Widget _itemTexto(String texto, TextStyle estilo) {
+    return Container(
+      margin: EdgeInsets.all(5),
+      child: Text(
+        '$texto',
+        style: estilo,
+      ),
+    );
+  }
 }

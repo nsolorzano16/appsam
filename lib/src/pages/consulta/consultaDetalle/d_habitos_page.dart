@@ -1,15 +1,11 @@
 import 'package:appsam/src/models/habitos_model.dart';
-import 'package:appsam/src/models/paginados/preclinica_paginadoVM.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class DetHabitosPage extends StatelessWidget {
-  final PreclinicaViewModel _preclinica;
   final Habitos _habitos;
 
-  const DetHabitosPage({@required preclinica, @required habitos})
-      : _preclinica = preclinica,
-        _habitos = habitos;
+  const DetHabitosPage({@required habitos}) : _habitos = habitos;
 
   @override
   Widget build(BuildContext context) {
@@ -25,15 +21,7 @@ class DetHabitosPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            Stack(
-              alignment: AlignmentDirectional.topCenter,
-              overflow: Overflow.visible,
-              children: <Widget>[
-                _backCover(size),
-                _titleText(size),
-                _imagenPortada(size),
-              ],
-            ),
+            _appBar(size),
             SizedBox(height: 10.0),
             _cardPrincipal(estiloTitulos)
           ],
@@ -85,6 +73,31 @@ class DetHabitosPage extends StatelessWidget {
     );
   }
 
+  Container _appBar(Size size) {
+    return Container(
+      color: Colors.red,
+      width: double.infinity,
+      height: size.height * 0.2,
+      padding: const EdgeInsets.all(20.0),
+      child: Center(
+        child: ListTile(
+          title: Text(
+            'Habitos',
+            style: TextStyle(
+                fontSize: 24, color: Colors.white, fontWeight: FontWeight.bold),
+          ),
+          trailing: Hero(
+              tag: 'habitosportada',
+              child: FaIcon(
+                FontAwesomeIcons.coffee,
+                size: 50,
+                color: Colors.white,
+              )),
+        ),
+      ),
+    );
+  }
+
   Widget _itemTexto(String texto, TextStyle estilo) {
     return Container(
       margin: EdgeInsets.all(5),
@@ -111,62 +124,4 @@ class DetHabitosPage extends StatelessWidget {
             ),
     );
   }
-
-  Widget _backCover(Size size) {
-    return Container(
-      height: size.height * 0.30,
-      decoration: BoxDecoration(
-        color: Colors.red,
-      ),
-    );
-  }
-
-  Widget _titleText(Size size) {
-    return Positioned(
-      left: 20,
-      bottom: size.height * 0.15,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(
-            'Habitos',
-            style: TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.w500,
-              color: Colors.white,
-            ),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          Text(
-            '${_preclinica.nombres} ${_preclinica.primerApellido} ${_preclinica.segundoApellido}',
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w300,
-              color: Colors.white,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-Widget _imagenPortada(Size size) {
-  return Positioned(
-    top: size.height * 0.1,
-    left: size.width * 0.6,
-    child: Container(
-        height: 130,
-        width: 130,
-        child: Hero(
-            tag: 'habitosportada',
-            child: FaIcon(
-              FontAwesomeIcons.coffee,
-              size: 120,
-              color: Colors.white,
-            ))),
-  );
 }

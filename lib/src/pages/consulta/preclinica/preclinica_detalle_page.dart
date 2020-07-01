@@ -440,7 +440,7 @@ class PreclinicaDetallePage extends StatelessWidget {
               style: estiloDatos,
             ),
             Text(
-              'Ritmo Cardiaco/bpm',
+              'Ritmo Cardiaco/ppm',
               textAlign: TextAlign.left,
               style: _estiloSubt,
             ),

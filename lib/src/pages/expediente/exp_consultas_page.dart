@@ -148,7 +148,7 @@ class _FrontItem extends StatelessWidget {
                       _consulta.preclinica.frecuenciaRespiratoria.toString(),
                       'Frecuencia respiratoria/rpm'),
                   _itemInfo(_consulta.preclinica.ritmoCardiaco.toString(),
-                      'Ritmo cardiaco/bpm'),
+                      'Ritmo cardiaco/ppm'),
                   _itemInfo(_consulta.preclinica.presionSistolica.toString(),
                       'Presión sistolica/mmHg'),
                   _itemInfo(_consulta.preclinica.presionDiastolica.toString(),

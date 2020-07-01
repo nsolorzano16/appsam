@@ -1,16 +1,13 @@
 import 'package:appsam/src/models/historialGineco_viewmodel.dart';
-import 'package:appsam/src/models/paginados/preclinica_paginadoVM.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 
 class DetHistorialGinecologico extends StatelessWidget {
-  final PreclinicaViewModel _preclinica;
   final HistorialGinecoViewModel _historial;
 
-  const DetHistorialGinecologico({@required preclinica, @required historial})
-      : _preclinica = preclinica,
-        _historial = historial;
+  const DetHistorialGinecologico({@required historial})
+      : _historial = historial;
 
   @override
   Widget build(BuildContext context) {
@@ -28,16 +25,7 @@ class DetHistorialGinecologico extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            Stack(
-              alignment: AlignmentDirectional.topCenter,
-              overflow: Overflow.visible,
-              children: <Widget>[
-                _backCover(size),
-                _titleText(size),
-                _imagenPortada(size),
-              ],
-            ),
-            SizedBox(height: 10.0),
+            _appBar(size),
             _cardPrincipal(estiloTitulos, format)
           ],
         ),
@@ -120,6 +108,32 @@ class DetHistorialGinecologico extends StatelessWidget {
     );
   }
 
+  Container _appBar(Size size) {
+    return Container(
+      color: Colors.red,
+      width: double.infinity,
+      height: size.height * 0.2,
+      padding: const EdgeInsets.all(20.0),
+      child: Center(
+        child: ListTile(
+          title: Text(
+            'Historial Ginecológico',
+            style: TextStyle(
+                fontSize: 24, color: Colors.white, fontWeight: FontWeight.bold),
+          ),
+          trailing: Hero(
+            tag: 'historialginecologicoportada',
+            child: FaIcon(
+              FontAwesomeIcons.female,
+              size: 50,
+              color: Colors.white,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _itemTexto(String texto, TextStyle estilo) {
     return Container(
       margin: EdgeInsets.all(5),
@@ -130,63 +144,4 @@ class DetHistorialGinecologico extends StatelessWidget {
       ),
     );
   }
-
-  Widget _backCover(Size size) {
-    return Container(
-      height: size.height * 0.30,
-      decoration: BoxDecoration(
-        color: Colors.red,
-      ),
-    );
-  }
-
-  Widget _titleText(Size size) {
-    return Positioned(
-      left: 20,
-      bottom: size.height * 0.15,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(
-            'Historial Ginecológico',
-            style: TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.w500,
-              color: Colors.white,
-            ),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          Text(
-            '${_preclinica.nombres} ${_preclinica.primerApellido} ${_preclinica.segundoApellido}',
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w300,
-              color: Colors.white,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-Widget _imagenPortada(Size size) {
-  return Positioned(
-    top: size.height * 0.1,
-    left: size.width * 0.6,
-    child: Container(
-        height: 130,
-        width: 130,
-        child: Hero(
-          tag: 'historialginecologicoportada',
-          child: FaIcon(
-            FontAwesomeIcons.female,
-            size: 120,
-            color: Colors.white,
-          ),
-        )),
-  );
 }
