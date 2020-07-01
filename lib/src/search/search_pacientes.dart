@@ -55,7 +55,11 @@ class DataSearchPacientes extends SearchDelegate {
     final bloc = Provider.pacientesBloc(context);
 
     if (query.isEmpty) return Container();
-    bloc.cargarPacientesPaginadoBusqueda(1, query);
+    if (query.length >= 4) {
+      bloc.cargarPacientesPaginadoBusqueda(1, query);
+    } else {
+      return Container();
+    }
 
     return StreamBuilder(
       stream: bloc.pacientesBusquedaStream,

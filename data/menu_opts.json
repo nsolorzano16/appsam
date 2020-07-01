@@ -41,7 +41,7 @@
     {
       "ruta": "agenda",
       "icon": "supervised_user_circle",
-      "texto": "agenda",
+      "texto": "Agenda",
       "roles": [
         {
           "autorizados": 2

@@ -357,7 +357,7 @@ class PreclinicaDetallePage extends StatelessWidget {
                 style: estiloDatos,
               ),
               Text(
-                'Peso lb.',
+                'Peso lbs.',
                 textAlign: TextAlign.left,
                 style: _estiloSubt,
               ),
@@ -389,7 +389,7 @@ class PreclinicaDetallePage extends StatelessWidget {
                 style: estiloDatos,
               ),
               Text(
-                'Frec. Respiratoria/min',
+                'Frec. Respiratoria/rpm',
                 textAlign: TextAlign.left,
                 style: _estiloSubt,
               ),
@@ -408,7 +408,7 @@ class PreclinicaDetallePage extends StatelessWidget {
               style: estiloDatos,
             ),
             Text(
-              'IMC',
+              'IMC kg/m²',
               textAlign: TextAlign.left,
               style: _estiloSubt,
             ),
@@ -440,7 +440,7 @@ class PreclinicaDetallePage extends StatelessWidget {
               style: estiloDatos,
             ),
             Text(
-              'Ritmo Cardiaco',
+              'Ritmo Cardiaco/bpm',
               textAlign: TextAlign.left,
               style: _estiloSubt,
             ),
@@ -458,7 +458,7 @@ class PreclinicaDetallePage extends StatelessWidget {
               style: estiloDatos,
             ),
             Text(
-              'Temperatura Cº',
+              'Temperatura C°',
               textAlign: TextAlign.left,
               style: _estiloSubt,
             ),
