@@ -90,5 +90,3 @@ class CustomLocalization extends DefaultMaterialLocalizations {
   @override
   String get searchFieldLabel => 'Buscar';
 }
-
-// qp
