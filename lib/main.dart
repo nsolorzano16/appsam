@@ -9,7 +9,7 @@ import 'package:appsam/src/blocs/theme_bloc.dart';
 import 'package:appsam/src/pages/error404_page.dart';
 import 'package:appsam/src/routes/routes.dart';
 import 'package:appsam/src/utils/storage_util.dart';
-//asp
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await StorageUtil.getInstance();
