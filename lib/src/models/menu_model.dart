@@ -32,6 +32,7 @@ class Ruta {
   String ruta;
   String icon;
   String texto;
+  int notificaciones;
   List<Role> roles;
 
   Ruta({
@@ -39,12 +40,14 @@ class Ruta {
     this.icon,
     this.texto,
     this.roles,
+    this.notificaciones,
   });
 
   factory Ruta.fromJson(Map<String, dynamic> json) => Ruta(
         ruta: json["ruta"],
         icon: json["icon"],
         texto: json["texto"],
+        notificaciones: 0,
         roles: List<Role>.from(json["roles"].map((x) => Role.fromJson(x))),
       );
 
@@ -52,6 +55,7 @@ class Ruta {
         "ruta": ruta,
         "icon": icon,
         "texto": texto,
+        "notificaciones": notificaciones,
         "roles": List<dynamic>.from(roles.map((x) => x.toJson())),
       };
 }

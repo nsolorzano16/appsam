@@ -3,25 +3,26 @@ import 'package:appsam/src/models/usuario_model.dart';
 import 'package:appsam/src/providers/menu_provider.dart';
 import 'package:appsam/src/utils/storage_util.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:getflutter/getflutter.dart';
+
 import 'package:icons_helper/icons_helper.dart';
 
 class MenuWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final UsuarioModel usuario =
+        usuarioModelFromJson(StorageUtil.getString('usuarioGlobal'));
     return Drawer(
         child: Column(
       children: <Widget>[
-        Expanded(child: _lista()),
+        Expanded(child: _lista(usuario)),
         Divider(),
         ListTile(
-          title: Row(
-            children: <Widget>[
-              Icon(Icons.gesture),
-              Padding(
-                padding: EdgeInsets.only(left: 8.0),
-                child: Text('Salir'),
-              ),
-            ],
+          title: Text('Salir'),
+          leading: Icon(
+            FontAwesomeIcons.signOutAlt,
+            color: Colors.red,
           ),
           onTap: () {
             // set up the AlertDialog
@@ -60,7 +61,7 @@ class MenuWidget extends StatelessWidget {
     ));
   }
 
-  Widget _lista() {
+  Widget _lista(UsuarioModel usuario) {
     // menuProvider.cargarData()
     return FutureBuilder(
       future: menuProvider.cargarData(),
@@ -68,18 +69,16 @@ class MenuWidget extends StatelessWidget {
       builder: (context, AsyncSnapshot<List<Ruta>> snapshot) {
         if (snapshot.data != null) {
           return ListView(
-            children: _listaItems(snapshot.data, context),
+            children: _listaItems(usuario, snapshot.data, context),
           );
         } else {
-          return Container();
+          return Center(child: CircularProgressIndicator());
         }
       },
     );
   }
 
-  Widget _fotoDelDrawer() {
-    final UsuarioModel usuario =
-        usuarioModelFromJson(StorageUtil.getString('usuarioGlobal'));
+  Widget _fotoDelDrawer(UsuarioModel usuario) {
     if (usuario != null) {
       return UserAccountsDrawerHeader(
           accountName: Text(
@@ -103,28 +102,28 @@ class MenuWidget extends StatelessWidget {
     }
   }
 
-  List<Widget> _listaItems(List<Ruta> data, BuildContext context) {
-    final UsuarioModel usuario =
-        usuarioModelFromJson(StorageUtil.getString('usuarioGlobal'));
+  List<Widget> _listaItems(
+    UsuarioModel usuario,
+    List<Ruta> data,
+    BuildContext context,
+  ) {
     final List<Widget> opciones = [];
-    opciones.add(_fotoDelDrawer());
+    opciones.add(_fotoDelDrawer(usuario));
     var widgetTemp;
 
     data.forEach((opt) {
       opt.roles.forEach((rol) {
         if (rol.autorizados == usuario.rolId) {
           widgetTemp = ListTile(
-            title: Row(
-              children: <Widget>[
-                Icon(
-                  getIconUsingPrefix(name: opt.icon),
-                  color: Theme.of(context).primaryColor,
-                ),
-                Padding(
-                  padding: EdgeInsets.only(left: 8.0),
-                  child: Text(opt.texto),
-                ),
-              ],
+            title: Text(opt.texto),
+            leading: Icon(
+              getIconUsingPrefix(name: opt.icon),
+              color: Theme.of(context).primaryColor,
+            ),
+            trailing: GFBadge(
+              child: Text('${opt.notificaciones}'),
+              size: GFSize.SMALL,
+              borderShape: StadiumBorder(),
             ),
             onTap: () {
               Navigator.pushReplacementNamed(

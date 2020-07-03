@@ -5,6 +5,8 @@ import 'package:appsam/src/models/usuario_model.dart';
 import 'package:appsam/src/providers/FirebaseNotificationService.dart';
 import 'package:appsam/src/providers/devices_service.dart';
 import 'package:appsam/src/widgets/firebaseMessageWrapper.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 import 'package:flutter/material.dart';
 
@@ -20,10 +22,11 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final UsuarioModel _usuario =
       usuarioModelFromJson(StorageUtil.getString('usuarioGlobal'));
+  final String name = 'sam-app';
+  Firestore _firestore;
 
   @override
   void initState() {
-    super.initState();
     StorageUtil.putString('ultimaPagina', HomePage.routeName);
     //final _pushService = new Firebasem();
     // _pushService.initNotifications();
@@ -44,6 +47,9 @@ class _HomePageState extends State<HomePage> {
     device.tokenDevice = StorageUtil.getString('tokenDevice');
     device.platform = Platform.operatingSystem;
     _devicesService.addDevice(device);
+
+    configure();
+    super.initState();
   }
 
   @override
@@ -56,8 +62,68 @@ class _HomePageState extends State<HomePage> {
               title: Text('Inicio'),
             ),
             body: Container(),
+
+            // StreamBuilder<QuerySnapshot>(
+            //   stream: _firestore.collection("agenda").document("1").snapshots(),
+            //   builder: (BuildContext context, AsyncSnapshot snapshot) {
+            //     if (!snapshot.hasData) return const Text('Loading...');
+            //     final int messageCount = snapshot.data.documents.length;
+            //     return ListView.builder(
+            //       itemCount: messageCount,
+            //       itemBuilder: (_, int index) {
+            //         final DocumentSnapshot document =
+            //             snapshot.data.documents[index];
+            //         final dynamic message = document['message'];
+            //         return ListTile(
+            //           trailing: IconButton(
+            //             onPressed: () {},
+            //             icon: Icon(Icons.delete),
+            //           ),
+            //           title: Text('hola'),
+            //           subtitle: Text('Message ${index + 1} of $messageCount'),
+            //         );
+            //       },
+            //     );
+            //   },
+            // ),
           ),
         ),
         onWillPop: () async => false);
+  }
+
+  final FirebaseOptions options = const FirebaseOptions(
+    googleAppID: '1:830338990221:android:c7f85e56856b9d7ccde2c4',
+    gcmSenderID: '830338990221',
+    apiKey: 'AIzaSyB_zGgdbaJtCSkM9GGYfu-1BTUThvOOSSo',
+    projectID: 'sam-app-446ee',
+  );
+
+  Future<void> configure() async {
+    final FirebaseApp app = await FirebaseApp.configure(
+      name: name,
+      options: options,
+    );
+    assert(app != null);
+
+    _firestore = Firestore(app: app);
+
+    _firestore
+        .collection("agenda")
+        .document("1")
+        .snapshots()
+        .forEach((element) => print('${element.data}'));
+
+    print('Configured $app');
+  }
+
+  Future<void> allApps() async {
+    final List<FirebaseApp> apps = await FirebaseApp.allApps();
+    print('Currently configured apps: $apps');
+  }
+
+  Future<void> optiones() async {
+    final FirebaseApp app = await FirebaseApp.appNamed(name);
+    final FirebaseOptions options = await app?.options;
+    print('Current options for app $name: $options');
   }
 }
