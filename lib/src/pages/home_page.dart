@@ -48,7 +48,7 @@ class _HomePageState extends State<HomePage> {
     device.platform = Platform.operatingSystem;
     _devicesService.addDevice(device);
 
-    configure();
+    //configure();
     super.initState();
   }
 

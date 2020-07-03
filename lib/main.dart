@@ -10,6 +10,8 @@ import 'package:appsam/src/pages/error404_page.dart';
 import 'package:appsam/src/routes/routes.dart';
 import 'package:appsam/src/utils/storage_util.dart';
 
+// configuraacion de ios y android con el google services de sam firebase
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await StorageUtil.getInstance();
