@@ -1,3 +1,4 @@
+import 'package:appsam/src/blocs/notifications_bloc/webNotificationsStream.dart';
 import 'package:appsam/src/models/menu_model.dart';
 import 'package:appsam/src/models/usuario_model.dart';
 import 'package:appsam/src/providers/menu_provider.dart';
@@ -13,6 +14,7 @@ class MenuWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final UsuarioModel usuario =
         usuarioModelFromJson(StorageUtil.getString('usuarioGlobal'));
+
     return Drawer(
         child: Column(
       children: <Widget>[
@@ -41,6 +43,7 @@ class MenuWidget extends StatelessWidget {
                     child: Text('Cancelar')),
                 FlatButton(
                     onPressed: () {
+                      WebNotificicationsStream.instance.dispose();
                       Navigator.of(context).pushNamedAndRemoveUntil(
                           'login', (Route<dynamic> route) => false);
                     },
@@ -120,11 +123,16 @@ class MenuWidget extends StatelessWidget {
               getIconUsingPrefix(name: opt.icon),
               color: Theme.of(context).primaryColor,
             ),
-            trailing: GFBadge(
-              child: Text('${opt.notificaciones}'),
-              size: GFSize.SMALL,
-              borderShape: StadiumBorder(),
-            ),
+            trailing: (opt.texto == 'Consulta' || opt.texto == 'Agenda')
+                ? GFBadge(
+                    child: Text('${opt.notificaciones}'),
+                    size: GFSize.SMALL,
+                    borderShape: StadiumBorder(),
+                  )
+                : Icon(
+                    Icons.arrow_forward_ios,
+                    color: Theme.of(context).primaryColor,
+                  ),
             onTap: () {
               Navigator.pushReplacementNamed(
                 context,

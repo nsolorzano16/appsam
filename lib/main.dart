@@ -1,4 +1,5 @@
 import 'package:appsam/src/providers/FirebaseNotificationService.dart';
+import 'package:appsam/src/providers/webNotifications_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -35,8 +36,10 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
-    super.initState();
     FirebaseNotificationService.instance;
+    WebNotificationService.instance;
+
+    super.initState();
   }
 
   @override

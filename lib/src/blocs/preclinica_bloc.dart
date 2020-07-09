@@ -7,7 +7,8 @@ import 'package:appsam/src/providers/preclinica_service.dart';
 class PreclinicaBloc with Validators {
   final _preclinicaService = new PreclinicaService();
   final _preclinicaController = BehaviorSubject<List<PreclinicaViewModel>>();
-  final _ultimaPaginaController = BehaviorSubject<int>();
+  final _totalPagesController = BehaviorSubject<int>();
+  final _currentPageController = BehaviorSubject<int>();
   final listPreclinicas = new List<PreclinicaViewModel>();
 
   Stream<List<PreclinicaViewModel>> get preclinicasListStream =>
@@ -19,9 +20,10 @@ class PreclinicaBloc with Validators {
   cargarPreclinicasPaginado(int page, int doctorId, int atendida) async {
     final preclinicas = await _preclinicaService.getpreclinicasPaginado(
         page, doctorId, atendida);
-    _ultimaPaginaController.sink.add(preclinicas.totalPages);
     listPreclinicas.addAll(preclinicas.items);
     preclinicasSink(listPreclinicas);
+    _totalPagesController.sink.add(preclinicas.totalPages);
+    _currentPageController.sink.add(preclinicas.currentPage);
   }
 
   Future<bool> addPreclinica(Preclinica preclinica) async {
@@ -34,9 +36,11 @@ class PreclinicaBloc with Validators {
   }
 
   dispose() {
-    _preclinicaController?.close();
-    _ultimaPaginaController?.close();
+    _preclinicaController.close();
+    _totalPagesController.close();
+    _currentPageController.close();
   }
 
-  int get ultimaPagina => _ultimaPaginaController.value;
+  int get totalPages => _totalPagesController.value;
+  int get currentPage => _currentPageController.value;
 }

@@ -1,7 +1,7 @@
 import 'dart:async';
+import 'package:appsam/src/utils/utils.dart';
 import 'package:appsam/src/widgets/firebaseMessageWrapper.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 
 import 'package:appsam/src/blocs/asistentes_bloc.dart';
@@ -23,7 +23,7 @@ class _AsistentesPageState extends State<AsistentesPage> {
   final UsuarioModel _usuario =
       usuarioModelFromJson(StorageUtil.getString('usuarioGlobal'));
 
-  int totalPages = 0;
+  int _totalAsistententes;
 
   int page = 1;
 
@@ -36,21 +36,22 @@ class _AsistentesPageState extends State<AsistentesPage> {
 
   @override
   void initState() {
-    super.initState();
     StorageUtil.putString('ultimaPagina', AsistentesPage.routeName);
     asistentesBloc.cargarAsistentesPaginado(1, '', _usuario.usuarioId);
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     _scrollController.addListener(() {
-      if (_scrollController.position.pixels ==
-          _scrollController.position.maxScrollExtent) {
+      if (_scrollController.position.maxScrollExtent ==
+          _scrollController.position.pixels) {
         page++;
-        totalPages = asistentesBloc.ultimaPagina;
 
-        if (page <= totalPages) {
-          fetchData(page, _usuario.usuarioId);
+        if (asistentesBloc.currentPage != asistentesBloc.totalPages) {
+          if (page <= asistentesBloc.totalPages) {
+            fetchData(page, _usuario.usuarioId);
+          }
         }
       }
     });
@@ -78,7 +79,16 @@ class _AsistentesPageState extends State<AsistentesPage> {
             floatingActionButton: FloatingActionButton(
               backgroundColor: Theme.of(context).primaryColor,
               child: Icon(Icons.add),
-              onPressed: () => _goToCrearAsistente(),
+              onPressed: () => (_totalAsistententes != 0)
+                  ? mostrarFlushBar(
+                      context,
+                      Colors.black,
+                      'Info',
+                      'Usted no puede crear mas asistentes',
+                      2,
+                      Icons.info,
+                      Colors.white)
+                  : _goToCrearAsistente(),
             ),
           ),
         ),
@@ -86,14 +96,13 @@ class _AsistentesPageState extends State<AsistentesPage> {
   }
 
   Future<Null> fetchData(int page, int doctorId) async {
-    asistentesBloc.cargarAsistentesPaginado(page, '', doctorId);
-    final ProgressDialog pd = new ProgressDialog(
+    final ProgressDialog _pr = new ProgressDialog(
       context,
       type: ProgressDialogType.Normal,
       isDismissible: false,
       showLogs: false,
     );
-    pd.update(
+    _pr.update(
       progress: 50.0,
       message: "Espere...",
       progressWidget: Container(child: CircularProgressIndicator()),
@@ -103,41 +112,28 @@ class _AsistentesPageState extends State<AsistentesPage> {
       messageTextStyle:
           TextStyle(color: Colors.black, fontWeight: FontWeight.w600),
     );
-    pd.show();
-    Timer(Duration(seconds: 2), () {
-      pd.hide();
-    });
+    await _pr.show();
+    asistentesBloc.cargarAsistentesPaginado(page, '', doctorId);
+    await _pr.hide();
   }
 
   Widget _crearListaAsistentes(BuildContext context) {
     return StreamBuilder(
       stream: asistentesBloc.asistentesStream,
       builder: (context, AsyncSnapshot<List<UsuarioModel>> snapshot) {
-        if (snapshot.hasError) {
-          return Text('Error: ${snapshot.error}');
-        }
-        switch (snapshot.connectionState) {
-          case ConnectionState.waiting:
-            return Center(
-              child: SpinKitWave(
-                color: Theme.of(context).primaryColor,
-              ),
-            );
-
-          default:
-            final asistentes = snapshot.data;
-
-            return (asistentes.length == 0)
-                ? Center(
-                    child: Text('No hay registros para mostrar'),
-                  )
-                : ListView.builder(
-                    controller: _scrollController,
-                    itemCount: asistentes.length,
-                    itemBuilder: (context, int index) {
-                      return _crearItem(context, asistentes[index]);
-                    });
-        }
+        if (!snapshot.hasData) return loadingIndicator(context);
+        final asistentes = snapshot.data;
+        _totalAsistententes = asistentes.length;
+        return (asistentes.length == 0)
+            ? Center(
+                child: Text('No hay registros para mostrar'),
+              )
+            : ListView.builder(
+                controller: _scrollController,
+                itemCount: asistentes.length,
+                itemBuilder: (context, int index) {
+                  return _crearItem(context, asistentes[index], index);
+                });
       },
     );
   }
@@ -145,7 +141,9 @@ class _AsistentesPageState extends State<AsistentesPage> {
   Widget _crearItem(
     BuildContext context,
     UsuarioModel usuario,
+    int index,
   ) {
+    index++;
     return Card(
       elevation: 3.0,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
@@ -174,7 +172,7 @@ class _AsistentesPageState extends State<AsistentesPage> {
               )),
           title: Container(
             child: Text(
-              '${usuario.nombres} ${usuario.primerApellido} ${usuario.segundoApellido}',
+              '${usuario.nombres} ${usuario.primerApellido} ${usuario.segundoApellido} $index',
               overflow: TextOverflow.ellipsis,
             ),
           ),

@@ -1,11 +1,10 @@
 import 'dart:async';
+import 'package:appsam/src/utils/utils.dart';
 import 'package:appsam/src/widgets/firebaseMessageWrapper.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 
 import 'package:appsam/src/blocs/preclinica_bloc.dart';
-import 'package:appsam/src/blocs/provider.dart';
 import 'package:appsam/src/models/paginados/preclinica_paginadoVM.dart';
 import 'package:appsam/src/models/usuario_model.dart';
 import 'package:appsam/src/utils/storage_util.dart';
@@ -24,7 +23,6 @@ class _PreclinicaPageState extends State<PreclinicaPage> {
   final UsuarioModel _usuario =
       usuarioModelFromJson(StorageUtil.getString('usuarioGlobal'));
 
-  int totalPages = 0;
   int page = 1;
   @override
   void initState() {
@@ -41,20 +39,20 @@ class _PreclinicaPageState extends State<PreclinicaPage> {
     super.dispose();
   }
 
+//TODO: poner q no hay data en preclinicas en expediente cuando no tenga consultas
   @override
   Widget build(BuildContext context) {
-    final PreclinicaBloc _preclinicaBloc = Provider.preclinicaBloc(context);
-
     _scrollController.addListener(() {
-      if (_scrollController.position.pixels ==
-          _scrollController.position.maxScrollExtent) {
+      if (_scrollController.position.maxScrollExtent ==
+          _scrollController.position.pixels) {
         page++;
-        totalPages = _preclinicaBloc.ultimaPagina;
 
-        if (page <= totalPages) {
-          fetchData(
-            page,
-          );
+        if (_preclinicaBloc.currentPage != _preclinicaBloc.totalPages) {
+          if (page <= _preclinicaBloc.totalPages) {
+            fetchData(
+              page,
+            );
+          }
         }
       }
     });
@@ -77,14 +75,13 @@ class _PreclinicaPageState extends State<PreclinicaPage> {
   }
 
   Future<Null> fetchData(int page) async {
-    _preclinicaBloc.cargarPreclinicasPaginado(page, _usuario.usuarioId, 0);
-    final ProgressDialog pd = new ProgressDialog(
+    final ProgressDialog _pr = new ProgressDialog(
       context,
       type: ProgressDialogType.Normal,
       isDismissible: false,
       showLogs: false,
     );
-    pd.update(
+    _pr.update(
       progress: 50.0,
       message: "Espere...",
       progressWidget: Container(child: CircularProgressIndicator()),
@@ -94,41 +91,28 @@ class _PreclinicaPageState extends State<PreclinicaPage> {
       messageTextStyle:
           TextStyle(color: Colors.black, fontWeight: FontWeight.w600),
     );
-    pd.show();
-    Timer(Duration(seconds: 2), () {
-      pd.hide();
-    });
+    await _pr.show();
+    _preclinicaBloc.cargarPreclinicasPaginado(page, _usuario.usuarioId, 0);
+    await _pr.hide();
   }
 
   Widget _crearListaPreclinicas(BuildContext context) {
     return StreamBuilder(
       stream: _preclinicaBloc.preclinicasListStream,
       builder: (context, AsyncSnapshot<List<PreclinicaViewModel>> snapshot) {
-        if (snapshot.hasError) {
-          return Text('Error: ${snapshot.error}');
-        }
-        switch (snapshot.connectionState) {
-          case ConnectionState.waiting:
-            return Center(
-              child: SpinKitWave(
-                color: Theme.of(context).primaryColor,
-              ),
-            );
+        if (!snapshot.hasData) return loadingIndicator(context);
+        final preclinicas = snapshot.data;
 
-          default:
-            final preclinicas = snapshot.data;
-
-            return (preclinicas.length == 0)
-                ? Center(
-                    child: Text('No hay registros para mostrar'),
-                  )
-                : ListView.builder(
-                    controller: _scrollController,
-                    itemCount: preclinicas.length,
-                    itemBuilder: (context, int index) {
-                      return _crearItem(context, preclinicas[index]);
-                    });
-        }
+        return (preclinicas.length == 0)
+            ? Center(
+                child: Text('No hay registros para mostrar'),
+              )
+            : ListView.builder(
+                controller: _scrollController,
+                itemCount: preclinicas.length,
+                itemBuilder: (context, int index) {
+                  return _crearItem(context, preclinicas[index], index);
+                });
       },
     );
   }
@@ -136,7 +120,9 @@ class _PreclinicaPageState extends State<PreclinicaPage> {
   Widget _crearItem(
     BuildContext context,
     PreclinicaViewModel preclinica,
+    int index,
   ) {
+    index++;
     return Card(
       elevation: 3.0,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
@@ -162,14 +148,14 @@ class _PreclinicaPageState extends State<PreclinicaPage> {
               )),
           title: Container(
             child: Text(
-              '${preclinica.nombres} ${preclinica.primerApellido} ${preclinica.segundoApellido}',
+              '${preclinica.nombres} ${preclinica.primerApellido} ${preclinica.segundoApellido} $index',
               overflow: TextOverflow.ellipsis,
             ),
           ),
           subtitle: Row(
             children: <Widget>[
               Text(
-                'Identificación: ${preclinica.identificacion}',
+                'Identificación: ${preclinica.identificacion} id ${preclinica.preclinicaId}',
               ),
             ],
           ),

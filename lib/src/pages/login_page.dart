@@ -1,3 +1,4 @@
+import 'package:appsam/src/providers/webNotifications_service.dart';
 import 'package:flutter/material.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 
@@ -20,6 +21,8 @@ class _LoginPageState extends State<LoginPage> {
 
   String usuario;
   String password;
+
+  int _usuarioID;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -219,6 +222,12 @@ class _LoginPageState extends State<LoginPage> {
         await _pr.hide();
         final UsuarioModel usuario = UsuarioModel.fromJson(info['usuario']);
         StorageUtil.putString('usuarioGlobal', usuarioModelToJson(usuario));
+        if (usuario.rolId == 2) {
+          _usuarioID = usuario.usuarioId;
+        } else if (usuario.rolId == 3) {
+          _usuarioID = usuario.asistenteId;
+        }
+        WebNotificationService.instance.loadNotificaciones(_usuarioID);
         Navigator.pushReplacementNamed(context, 'home');
       } else {
         await _pr.hide();
