@@ -39,7 +39,6 @@ class _PreclinicaPageState extends State<PreclinicaPage> {
     super.dispose();
   }
 
-//TODO: poner q no hay data en preclinicas en expediente cuando no tenga consultas
   @override
   Widget build(BuildContext context) {
     _scrollController.addListener(() {
@@ -148,14 +147,14 @@ class _PreclinicaPageState extends State<PreclinicaPage> {
               )),
           title: Container(
             child: Text(
-              '${preclinica.nombres} ${preclinica.primerApellido} ${preclinica.segundoApellido} $index',
+              '${preclinica.nombres} ${preclinica.primerApellido} ${preclinica.segundoApellido}',
               overflow: TextOverflow.ellipsis,
             ),
           ),
           subtitle: Row(
             children: <Widget>[
               Text(
-                'Identificación: ${preclinica.identificacion} id ${preclinica.preclinicaId}',
+                'Identificación: ${preclinica.identificacion}',
               ),
             ],
           ),

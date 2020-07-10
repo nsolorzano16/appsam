@@ -172,7 +172,7 @@ class _AsistentesPageState extends State<AsistentesPage> {
               )),
           title: Container(
             child: Text(
-              '${usuario.nombres} ${usuario.primerApellido} ${usuario.segundoApellido} $index',
+              '${usuario.nombres} ${usuario.primerApellido} ${usuario.segundoApellido}',
               overflow: TextOverflow.ellipsis,
             ),
           ),

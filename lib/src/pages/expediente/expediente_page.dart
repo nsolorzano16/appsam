@@ -53,93 +53,88 @@ class _ExpedientePageState extends State<ExpedientePage> {
     return WillPopScope(
       child: FirebaseMessageWrapper(
         child: Scaffold(
-            appBar: AppBar(
-              title: Text('Expediente'),
-              actions: <Widget>[
-                IconButton(
-                    icon: Icon(Icons.arrow_back_ios),
-                    onPressed: () =>
-                        Navigator.pushReplacementNamed(context, 'pacientes'))
-              ],
-            ),
-            drawer: MenuWidget(),
-            body: FutureBuilder(
-              future: _expedienteFuture,
-              builder: (BuildContext context,
-                  AsyncSnapshot<ExpedienteViewModel> snapshot) {
-                if (!snapshot.hasData) return loadingIndicator(context);
-                return Row(
-                  children: <Widget>[
-                    Expanded(
-                      child: _pages(snapshot.data),
-                    ),
-                    NavigationRail(
-                      elevation: 3,
-                      selectedIndex: _selectedIndex,
-                      labelType: NavigationRailLabelType.none,
-                      onDestinationSelected: (index) {
-                        _changeIndex(index);
+          appBar: AppBar(
+            title: Text('Expediente'),
+            actions: <Widget>[
+              IconButton(
+                  icon: Icon(Icons.arrow_back_ios),
+                  onPressed: () =>
+                      Navigator.pushReplacementNamed(context, 'pacientes'))
+            ],
+          ),
+          drawer: MenuWidget(),
+          body: FutureBuilder(
+            future: _expedienteFuture,
+            builder: (BuildContext context,
+                AsyncSnapshot<ExpedienteViewModel> snapshot) {
+              if (!snapshot.hasData) return loadingIndicator(context);
+              final expediente = snapshot.data;
+              return SafeArea(
+                  child: PageView(
+                      physics: NeverScrollableScrollPhysics(),
+                      controller: _pageController,
+                      onPageChanged: (value) {
+                        setState(() {
+                          _selectedIndex = value;
+                        });
                       },
-                      destinations: [
-                        _navItem(FontAwesomeIcons.userCircle),
-                        _navItem(FontAwesomeIcons.heartbeat),
-                        _navItem(FontAwesomeIcons.coffee),
-                        _navItem(FontAwesomeIcons.baby),
-                        _navItem(FontAwesomeIcons.capsules),
-                        _navItem(FontAwesomeIcons.clipboardList),
-                      ],
-                    ),
-                  ],
-                );
-              },
-            )),
+                      children: <Widget>[
+                    ZoomIn(
+                        child: PacienteDetail(paciente: expediente.paciente)),
+                    (expediente.antecedentesFamiliaresPersonales == null)
+                        ? _noInfo()
+                        : ZoomIn(
+                            child: ExpAntecedentes(
+                                antecedentes: expediente
+                                    .antecedentesFamiliaresPersonales),
+                          ),
+                    (expediente.habitos == null)
+                        ? _noInfo()
+                        : ZoomIn(
+                            child: ExpHabitos(habitos: expediente.habitos)),
+                    (expediente.historialGinecoObstetra == null)
+                        ? _noInfo()
+                        : ZoomIn(
+                            child: ExpHistorialGineco(
+                                historial: expediente.historialGinecoObstetra),
+                          ),
+                    (expediente.farmacosUsoActual.length == 0)
+                        ? _noInfo()
+                        : ZoomIn(
+                            child: ExpFarmacos(
+                                farmacos: expediente.farmacosUsoActual)),
+                    ZoomIn(
+                        child: ExpConsultas(consultas: expediente.consultas)),
+                  ]));
+            },
+          ),
+          bottomNavigationBar: BottomNavigationBar(
+              type: BottomNavigationBarType.fixed,
+              backgroundColor: Colors.red,
+              selectedItemColor: Colors.white,
+              unselectedItemColor: Colors.black,
+              currentIndex: _selectedIndex,
+              onTap: (index) => _changeIndex(index),
+              items: <BottomNavigationBarItem>[
+                _botonNavigationItem(FontAwesomeIcons.userCircle),
+                _botonNavigationItem(FontAwesomeIcons.heartbeat),
+                _botonNavigationItem(FontAwesomeIcons.coffee),
+                _botonNavigationItem(FontAwesomeIcons.baby),
+                _botonNavigationItem(FontAwesomeIcons.capsules),
+                _botonNavigationItem(FontAwesomeIcons.clipboardList),
+              ]),
+        ),
       ),
       onWillPop: () async => false,
     );
   }
 
-  NavigationRailDestination _navItem(IconData icon) {
-    return NavigationRailDestination(
-        icon: Icon(icon), selectedIcon: Icon(icon), label: Text(''));
-  }
-
-  PageView _pages(ExpedienteViewModel expediente) {
-    return PageView(
-      physics: NeverScrollableScrollPhysics(),
-      controller: _pageController,
-      onPageChanged: (value) {
-        setState(() {
-          _selectedIndex = value;
-        });
-      },
-      children: <Widget>[
-        ZoomIn(child: PacienteDetail(paciente: expediente.paciente)),
-        (expediente.antecedentesFamiliaresPersonales == null)
-            ? _noInfo()
-            : ZoomIn(
-                child: ExpAntecedentes(
-                    antecedentes: expediente.antecedentesFamiliaresPersonales),
-              ),
-        (expediente.habitos == null)
-            ? _noInfo()
-            : ZoomIn(
-                child: ExpHabitos(habitos: expediente.habitos),
-              ),
-        (expediente.historialGinecoObstetra == null)
-            ? _noInfo()
-            : ZoomIn(
-                child: ExpHistorialGineco(
-                    historial: expediente.historialGinecoObstetra),
-              ),
-        (expediente.farmacosUsoActual == null)
-            ? _noInfo()
-            : ZoomIn(
-                child: ExpFarmacos(farmacos: expediente.farmacosUsoActual),
-              ),
-        ZoomIn(
-          child: ExpConsultas(consultas: expediente.consultas),
-        ),
-      ],
+  BottomNavigationBarItem _botonNavigationItem(IconData icon) {
+    return BottomNavigationBarItem(
+      icon: FaIcon(
+        icon,
+      ),
+      title: Container(),
     );
   }
 

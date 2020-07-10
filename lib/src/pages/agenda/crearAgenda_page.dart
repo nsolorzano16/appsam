@@ -330,23 +330,28 @@ class _CrearAgendaPageState extends State<CrearAgendaPage> {
     if (_formkey.currentState.validate()) {
       _formkey.currentState.save();
       _evento.fechaFiltro = _evento.inicio;
-      await _pr.show();
 
-      CalendarioFechaModel _eventoGuardado =
-          await _eventoService.addEvento(_evento);
+      if (_evento.inicio.isBefore(_evento.fin)) {
+        await _pr.show();
+        CalendarioFechaModel _eventoGuardado =
+            await _eventoService.addEvento(_evento);
 
-      if (_eventoGuardado != null) {
-        await _pr.hide();
-        mostrarFlushBar(context, Colors.green, 'Info', 'Datos Guardados', 2,
-            Icons.info, Colors.black);
+        if (_eventoGuardado != null) {
+          await _pr.hide();
+          mostrarFlushBar(context, Colors.green, 'Info', 'Datos Guardados', 2,
+              Icons.info, Colors.black);
+        } else {
+          await _pr.hide();
+          mostrarFlushBar(context, Colors.red, 'Info', 'Ha ocurrido un error',
+              2, Icons.info, Colors.white);
+        }
+        Future.delayed(Duration(seconds: 2)).then((_) {
+          Navigator.pushReplacementNamed(context, 'agenda');
+        });
       } else {
-        await _pr.hide();
-        mostrarFlushBar(context, Colors.red, 'Info', 'Ha ocurrido un error', 2,
-            Icons.info, Colors.white);
+        mostrarFlushBar(context, Colors.black, 'Info',
+            'Seleccione fechas correctas.', 2, Icons.info, Colors.white);
       }
-      Future.delayed(Duration(seconds: 2)).then((_) {
-        Navigator.pushReplacementNamed(context, 'agenda');
-      });
     } else {
       mostrarFlushBar(context, Colors.black, 'Info', 'Rellene todos los campos',
           2, Icons.info, Colors.white);

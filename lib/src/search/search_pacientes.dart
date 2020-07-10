@@ -55,7 +55,7 @@ class DataSearchPacientes extends SearchDelegate {
     final bloc = Provider.pacientesBloc(context);
 
     if (query.isEmpty) return Container();
-    if (query.length >= 4) {
+    if (query.length >= 13) {
       bloc.cargarPacientesPaginadoBusqueda(1, query);
     } else {
       return Container();
@@ -85,83 +85,108 @@ class DataSearchPacientes extends SearchDelegate {
     BuildContext context,
     PacientesViewModel paciente,
   ) {
+    final size = MediaQuery.of(context).size;
     return Card(
-      elevation: 3.0,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-      child: ListTile(
-          dense: true,
-          onTap: () {
-            Navigator.pushReplacementNamed(context, 'paciente_detalle',
-                arguments: paciente);
-          },
-          contentPadding: EdgeInsets.symmetric(
-            horizontal: 10.0,
-          ),
-          leading: Container(
-              padding: EdgeInsets.only(right: 5.0),
-              decoration: BoxDecoration(
-                  border: Border(
-                      right: BorderSide(width: 1.0, color: Colors.black))),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(30.0),
-                child: FadeInImage(
-                    width: 40.0,
-                    height: 40.0,
-                    placeholder: AssetImage('assets/jar-loading.gif'),
-                    image: NetworkImage(paciente.fotoUrl)),
-              )),
-          title: Container(
-            child: Text(
+      margin: EdgeInsets.all(10),
+      elevation: 4,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      child: Column(
+        children: <Widget>[
+          ListTile(
+            dense: true,
+            leading: Container(
+                padding: EdgeInsets.only(right: 5.0),
+                decoration: BoxDecoration(
+                    border: Border(
+                        right: BorderSide(width: 1.0, color: Colors.black))),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(30.0),
+                  child: FadeInImage(
+                      width: 40.0,
+                      height: 40.0,
+                      placeholder: AssetImage('assets/jar-loading.gif'),
+                      image: NetworkImage(paciente.fotoUrl)),
+                )),
+            title: Text(
               '${paciente.nombres} ${paciente.primerApellido} ${paciente.segundoApellido}',
               overflow: TextOverflow.ellipsis,
             ),
+            subtitle: Text('Identificación: ${paciente.identificacion}'),
           ),
-          subtitle: Text('Identificación: ${paciente.identificacion}'),
-          trailing: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              IconButton(
-                  icon: FaIcon(
-                    FontAwesomeIcons.solidFolderOpen,
-                    size: 20.0,
-                    color: Theme.of(context).primaryColor,
-                  ),
-                  onPressed: () => (_usuario.rolId == 2)
-                      ? Navigator.of(context).pushReplacement(PageRouteBuilder(
-                          transitionDuration: const Duration(milliseconds: 800),
-                          pageBuilder: (_, animation, __) => FadeTransition(
-                                opacity: animation,
-                                child: ExpedientePage(
-                                    pacienteId: paciente.pacienteId,
-                                    doctorId: _usuario.usuarioId),
-                              )))
-                      : mostrarFlushBar(
-                          context,
-                          Colors.lightGreen[700],
-                          'Info',
-                          'Usted no tiene acceso a este contenido',
-                          2,
-                          Icons.info,
-                          Colors.white)),
-              IconButton(
-                  icon: FaIcon(
-                    FontAwesomeIcons.fileMedical,
-                    size: 20.0,
-                    color: Theme.of(context).primaryColor,
-                  ),
-                  onPressed: () => (paciente.preclinicasPendientes == 0)
-                      ? Navigator.pushReplacementNamed(
-                          context, 'crear_preclinica', arguments: paciente)
-                      : mostrarFlushBar(
-                          context,
-                          Colors.lightGreen[700],
-                          'Info',
-                          'Paciente con preclinicas pendientes',
-                          2,
-                          Icons.info,
-                          Colors.white))
-            ],
-          )),
+          Container(
+            width: size.width * 0.9,
+            child: Divider(
+              thickness: 2,
+            ),
+          ),
+          ListTile(
+            title: Text('Detalle'),
+            trailing: Icon(
+              Icons.arrow_forward_ios,
+              color: Theme.of(context).primaryColor,
+            ),
+            leading: FaIcon(
+              FontAwesomeIcons.child,
+              color: Theme.of(context).primaryColor,
+            ),
+            onTap: () => Navigator.pushReplacementNamed(
+                context, 'paciente_detalle',
+                arguments: paciente),
+          ),
+          ListTile(
+            title: Text('Expediente'),
+            trailing: Icon(
+              Icons.arrow_forward_ios,
+              color: Theme.of(context).primaryColor,
+            ),
+            leading: FaIcon(
+              FontAwesomeIcons.solidFolderOpen,
+              size: 20.0,
+              color: Theme.of(context).primaryColor,
+            ),
+            onTap: () => (_usuario.rolId == 2)
+                ? Navigator.of(context).pushReplacement(PageRouteBuilder(
+                    transitionDuration: const Duration(milliseconds: 800),
+                    pageBuilder: (_, animation, __) => FadeTransition(
+                          opacity: animation,
+                          child: ExpedientePage(
+                              pacienteId: paciente.pacienteId,
+                              doctorId: _usuario.usuarioId),
+                        )))
+                : mostrarFlushBar(
+                    context,
+                    Colors.lightGreen[700],
+                    'Info',
+                    'Usted no tiene acceso a este contenido',
+                    2,
+                    Icons.info,
+                    Colors.white),
+          ),
+          ListTile(
+            title: Text('Preclinica'),
+            trailing: Icon(
+              Icons.arrow_forward_ios,
+              color: Theme.of(context).primaryColor,
+            ),
+            leading: FaIcon(
+              FontAwesomeIcons.fileMedical,
+              size: 20.0,
+              color: Theme.of(context).primaryColor,
+            ),
+            onTap: () => (paciente.preclinicasPendientes == 0)
+                ? Navigator.pushReplacementNamed(context, 'crear_preclinica',
+                    arguments: paciente)
+                : mostrarFlushBar(
+                    context,
+                    Colors.lightGreen[700],
+                    'Info',
+                    'Paciente con preclinicas pendientes',
+                    2,
+                    Icons.info,
+                    Colors.white),
+          ),
+        ],
+      ),
     );
   }
 }

@@ -184,7 +184,7 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
                 hasBackground: false,
                 parentButtonBackground: Theme.of(context).primaryColor,
                 orientation: UnicornOrientation.VERTICAL,
-                parentButton: Icon(Icons.add),
+                parentButton: Icon(Icons.menu),
                 childButtons: botones(_preclinica)),
           ),
         ),

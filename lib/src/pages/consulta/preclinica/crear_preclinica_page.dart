@@ -192,6 +192,7 @@ class _CrearPreclinicaPageState extends State<CrearPreclinicaPage> {
       child: TextFormField(
         autovalidate: true,
         validator: isNumeric,
+        maxLength: 2,
         onSaved: (value) =>
             _preclinica.frecuenciaRespiratoria = int.parse(value),
         keyboardType: TextInputType.number,

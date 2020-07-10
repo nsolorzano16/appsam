@@ -43,7 +43,7 @@ class MenuWidget extends StatelessWidget {
                     child: Text('Cancelar')),
                 FlatButton(
                     onPressed: () {
-                      WebNotificicationsStream.instance.dispose();
+                      //WebNotificicationsStream.instance.dispose();
                       Navigator.of(context).pushNamedAndRemoveUntil(
                           'login', (Route<dynamic> route) => false);
                     },

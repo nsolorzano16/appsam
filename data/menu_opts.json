@@ -14,7 +14,19 @@
         }
       ]
     },
-
+    {
+      "ruta": "agenda",
+      "icon": "supervised_user_circle",
+      "texto": "Agenda",
+      "roles": [
+        {
+          "autorizados": 2
+        },
+        {
+          "autorizados": 3
+        }
+      ]
+    },
     {
       "ruta": "pacientes",
       "icon": "person",
@@ -38,19 +50,7 @@
         }
       ]
     },
-    {
-      "ruta": "agenda",
-      "icon": "supervised_user_circle",
-      "texto": "Agenda",
-      "roles": [
-        {
-          "autorizados": 2
-        },
-        {
-          "autorizados": 3
-        }
-      ]
-    },
+   
     {
       "ruta": "asistentes",
       "icon": "account_box",

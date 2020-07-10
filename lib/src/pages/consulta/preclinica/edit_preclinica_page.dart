@@ -195,6 +195,7 @@ class _EditarPreclinicaPageState extends State<EditarPreclinicaPage> {
         initialValue: preclinica.frecuenciaRespiratoria.toString(),
         autovalidate: true,
         validator: isNumeric,
+        maxLength: 2,
         onSaved: (value) =>
             preclinica.frecuenciaRespiratoria = int.parse(value),
         keyboardType: TextInputType.number,

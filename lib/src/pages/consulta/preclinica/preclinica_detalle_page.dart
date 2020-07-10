@@ -11,6 +11,7 @@ import 'package:appsam/src/models/paginados/preclinica_paginadoVM.dart';
 import 'package:appsam/src/utils/storage_util.dart';
 import 'package:appsam/src/widgets/drawer.dart';
 import 'package:progress_dialog/progress_dialog.dart';
+import 'package:unicorndial/unicorndial.dart';
 
 class PreclinicaDetallePage extends StatelessWidget {
   static final String routeName = 'preclinica_detalle';
@@ -27,79 +28,99 @@ class PreclinicaDetallePage extends StatelessWidget {
     return WillPopScope(
         child: FirebaseMessageWrapper(
           child: Scaffold(
-            appBar: AppBar(
-              title: Text('Preclinica Detalle'),
-              actions: <Widget>[
-                IconButton(
-                    icon: Icon(Icons.edit),
-                    onPressed: () => Navigator.pushNamed(
-                        context, 'editar_preclinica',
-                        arguments: _preclinica)),
-                IconButton(
-                    icon: Icon(Icons.arrow_back_ios),
-                    onPressed: () =>
-                        Navigator.popAndPushNamed(context, 'preclinica'))
-              ],
-            ),
-            drawer: MenuWidget(),
-            body: Stack(
-              children: <Widget>[
-                SingleChildScrollView(
-                  child: Column(
-                    children: <Widget>[
-                      _crearDatosPaciente(_preclinica),
-                      _crearDatosPreclinica(_preclinica),
-                      _crearNotasPreclinica(_preclinica),
-                      _crearNotasPaciente(_preclinica),
-                    ],
-                  ),
-                )
-              ],
-            ),
-            floatingActionButton: FloatingActionButton(
-              onPressed: () {
-// set up the AlertDialog
-                AlertDialog alert = AlertDialog(
-                  title: Text("Información"),
-                  content: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Text(
-                        'Al confirmar esta acción la preclinica se cambiara a estado \"Atendida\"',
-                        textAlign: TextAlign.center,
-                      ),
-                      Text('Desea completar esta acción?'),
-                    ],
-                  ),
-                  elevation: 24.0,
-                  actions: [
-                    FlatButton(
-                        onPressed: () => Navigator.pop(context),
-                        child: Text('Cancelar')),
-                    FlatButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                          updatePreclinicaAndGoToDetalleConsulta(
-                              _preclinica, context);
-                        },
-                        child: Text('Aceptar'))
-                  ],
-                );
-
-                // show the dialog
-                showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return alert;
-                    },
-                    barrierDismissible: false);
-              },
-              child: FaIcon(FontAwesomeIcons.notesMedical),
-              backgroundColor: Theme.of(context).primaryColor,
-            ),
-          ),
+              appBar: AppBar(
+                title: Text('Preclinica Detalle'),
+                actions: <Widget>[
+                  IconButton(
+                      icon: Icon(Icons.arrow_back_ios),
+                      onPressed: () =>
+                          Navigator.popAndPushNamed(context, 'preclinica'))
+                ],
+              ),
+              drawer: MenuWidget(),
+              body: Stack(
+                children: <Widget>[
+                  SingleChildScrollView(
+                    child: Column(
+                      children: <Widget>[
+                        _crearDatosPaciente(_preclinica),
+                        _crearDatosPreclinica(_preclinica),
+                        _crearNotasPreclinica(_preclinica),
+                        _crearNotasPaciente(_preclinica),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+              floatingActionButton: UnicornDialer(
+                  backgroundColor: Color.fromRGBO(255, 255, 255, 0.6),
+                  hasBackground: false,
+                  parentButtonBackground: Theme.of(context).primaryColor,
+                  orientation: UnicornOrientation.VERTICAL,
+                  parentButton: Icon(Icons.menu),
+                  childButtons: botones(context, _preclinica))),
         ),
         onWillPop: () async => false);
+  }
+
+  List<UnicornButton> botones(
+      BuildContext context, PreclinicaViewModel preclinica) {
+    var childButtons = List<UnicornButton>();
+
+    childButtons.add(UnicornButton(
+      hasLabel: true,
+      labelText: 'Editar',
+      currentButton: FloatingActionButton(
+          heroTag: 'editandopreclinica',
+          backgroundColor: Colors.red,
+          mini: true,
+          child: Icon(Icons.edit),
+          onPressed: () => Navigator.pushNamed(context, 'editar_preclinica',
+              arguments: preclinica)),
+    ));
+
+    childButtons.add(UnicornButton(
+        hasLabel: true,
+        labelText: 'Eliminar',
+        currentButton: FloatingActionButton(
+          heroTag: 'eliminandopreclinica',
+          backgroundColor: Colors.red,
+          mini: true,
+          child: Icon(Icons.delete),
+          onPressed: () => _desactivar(preclinica, context),
+        )));
+
+    childButtons.add(UnicornButton(
+        hasLabel: true,
+        labelText: 'Atendida',
+        currentButton: FloatingActionButton(
+          heroTag: 'guardandopreclinica',
+          backgroundColor: Colors.greenAccent,
+          mini: true,
+          child: Icon(Icons.save),
+          onPressed: () => _atendida(context, preclinica),
+        )));
+
+    childButtons.add(UnicornButton(
+        hasLabel: true,
+        labelText: 'Consulta',
+        currentButton: FloatingActionButton(
+          heroTag: 'entrandoconsulta',
+          backgroundColor: Color.fromRGBO(17, 29, 74, 1),
+          mini: true,
+          child: FaIcon(
+            FontAwesomeIcons.clinicMedical,
+            size: 18.0,
+          ),
+          onPressed: () {
+            Navigator.pushReplacementNamed(context, 'menu_consulta',
+                arguments: preclinica);
+
+            StorageUtil.putInt('indexTabMenuConsulta', 0);
+          },
+        )));
+
+    return childButtons;
   }
 
   Widget _crearDatosPaciente(PreclinicaViewModel preclinica) {
@@ -553,12 +574,82 @@ class PreclinicaDetallePage extends StatelessWidget {
 
     if (preclinicaEdit != null) {
       await _pr.hide();
-      StorageUtil.putInt('indexTabMenuConsulta', 0);
-      Navigator.pushReplacementNamed(context, 'menu_consulta',
-          arguments: preclinicaEdit);
+      Navigator.pushReplacementNamed(
+        context,
+        'preclinica',
+      );
     } else {
       mostrarFlushBar(context, Colors.red, 'Info', 'Ha ocurrido un error', 2,
           Icons.info, Colors.white);
     }
+  }
+
+  _desactivar(PreclinicaViewModel preclinica, BuildContext context) async {
+    final ProgressDialog _pr = new ProgressDialog(
+      context,
+      type: ProgressDialogType.Normal,
+      isDismissible: false,
+      showLogs: false,
+    );
+    _pr.update(
+      progress: 50.0,
+      message: "Espere...",
+      progressWidget: Container(
+          padding: EdgeInsets.all(8.0), child: CircularProgressIndicator()),
+      maxProgress: 100.0,
+      progressTextStyle: TextStyle(
+          color: Colors.black, fontSize: 13.0, fontWeight: FontWeight.w400),
+      messageTextStyle: TextStyle(
+          color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600),
+    );
+    await _pr.show();
+    preclinica.activo = false;
+    final preclinicaEdit = await _preclinicaBloc.updatePreclinica(preclinica);
+    if (preclinicaEdit != null) {
+      await _pr.hide();
+
+      Navigator.pushReplacementNamed(
+        context,
+        'preclinica',
+      );
+    } else {
+      mostrarFlushBar(context, Colors.red, 'Info', 'Ha ocurrido un error', 2,
+          Icons.info, Colors.white);
+    }
+  }
+
+  _atendida(BuildContext context, PreclinicaViewModel preclinica) {
+    AlertDialog alert = AlertDialog(
+      title: Text("Información"),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Text(
+            'Al confirmar esta acción la preclinica se cambiara a estado \"Atendida\"',
+            textAlign: TextAlign.center,
+          ),
+          Text('Desea completar esta acción?'),
+        ],
+      ),
+      elevation: 24.0,
+      actions: [
+        FlatButton(
+            onPressed: () => Navigator.pop(context), child: Text('Cancelar')),
+        FlatButton(
+            onPressed: () {
+              Navigator.pop(context);
+              updatePreclinicaAndGoToDetalleConsulta(preclinica, context);
+            },
+            child: Text('Aceptar'))
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return alert;
+        },
+        barrierDismissible: false);
   }
 }

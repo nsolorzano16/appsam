@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:appsam/src/pages/edit_profile_page.dart';
 import 'package:appsam/src/utils/utils.dart';
 import 'package:appsam/src/widgets/drawer.dart';
 import 'package:appsam/src/widgets/firebaseMessageWrapper.dart';
@@ -11,15 +12,20 @@ import 'package:appsam/src/blocs/asistentes_bloc/create_edit_asistentes.dart';
 import 'package:appsam/src/blocs/provider.dart';
 import 'package:appsam/src/models/usuario_model.dart';
 import 'package:appsam/src/utils/storage_util.dart';
+import 'package:unicorndial/unicorndial.dart';
 
 class MyProfilePage extends StatefulWidget {
   static final String routeName = 'my-profile';
+
   @override
   _MyProfilePageState createState() => _MyProfilePageState();
 }
 
 class _MyProfilePageState extends State<MyProfilePage> {
   File foto;
+
+  final UsuarioModel _usuario =
+      usuarioModelFromJson(StorageUtil.getString('usuarioGlobal'));
   @override
   void initState() {
     super.initState();
@@ -31,8 +37,6 @@ class _MyProfilePageState extends State<MyProfilePage> {
     final _screenSize = MediaQuery.of(context).size;
     final bloc = Provider.crearEditarAsistentesBloc(context);
 
-    final UsuarioModel _usuario =
-        usuarioModelFromJson(StorageUtil.getString('usuarioGlobal'));
     if (_usuario != null) {
       return WillPopScope(
           child: FirebaseMessageWrapper(
@@ -40,14 +44,6 @@ class _MyProfilePageState extends State<MyProfilePage> {
                 appBar: AppBar(
                   title: Text('Mi Perfil'),
                   actions: <Widget>[
-                    IconButton(
-                        icon: Icon(Icons.add_photo_alternate),
-                        onPressed: () => _procesarImagen(
-                            ImageSource.gallery, _usuario, bloc)),
-                    IconButton(
-                        icon: Icon(Icons.add_a_photo),
-                        onPressed: () => _procesarImagen(
-                            ImageSource.camera, _usuario, bloc)),
                     IconButton(
                         icon: Icon(Icons.arrow_back_ios),
                         onPressed: () =>
@@ -71,45 +67,66 @@ class _MyProfilePageState extends State<MyProfilePage> {
                               top: 1.0,
                               bottom: 3.0),
                           child: Card(
-                            elevation: 10,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30.0)),
-                            child: Container(
-                              padding: EdgeInsets.only(
-                                  left: 40.0,
-                                  right: 40.0,
-                                  top: 10.0,
-                                  bottom: 10.0),
-                              child: Padding(
-                                  padding: EdgeInsets.only(left: 2.0, top: 2.0),
-                                  child: Padding(
-                                      padding: EdgeInsets.only(top: 5.0),
-                                      child: Stack(
-                                          fit: StackFit.loose,
-                                          children: <Widget>[
-                                            Row(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: <Widget>[
-                                                _imageStorage(_usuario),
-                                              ],
-                                            ),
-                                          ]))),
-                            ),
-                          ),
+                              elevation: 10,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(30.0)),
+                              child: _imageStorage(_usuario)),
                         ),
                         _campoTexto(_usuario, Icons.email, context)
                       ],
                     ),
                   ),
-                )),
+                ),
+                floatingActionButton: UnicornDialer(
+                    backgroundColor: Color.fromRGBO(255, 255, 255, 0.6),
+                    hasBackground: false,
+                    parentButtonBackground: Theme.of(context).primaryColor,
+                    orientation: UnicornOrientation.VERTICAL,
+                    parentButton: Icon(Icons.menu),
+                    childButtons: botones(bloc))),
           ),
           onWillPop: () async => false);
     } else {
       return loadingIndicator(context);
     }
+  }
+
+  List<UnicornButton> botones(CrearEditarAsistentesBloc bloc) {
+    var childButtons = List<UnicornButton>();
+
+    childButtons.add(UnicornButton(
+        currentButton: FloatingActionButton(
+      heroTag: 'cambiafotoimagen',
+      backgroundColor: Colors.red,
+      mini: true,
+      child: Icon(Icons.add_photo_alternate),
+      onPressed: () => _procesarImagen(ImageSource.gallery, _usuario, bloc),
+    )));
+
+    childButtons.add(UnicornButton(
+        currentButton: FloatingActionButton(
+      heroTag: 'cambiafotocamara',
+      backgroundColor: Colors.red,
+      mini: true,
+      child: Icon(Icons.add_a_photo),
+      onPressed: () => _procesarImagen(ImageSource.camera, _usuario, bloc),
+    )));
+
+    childButtons.add(UnicornButton(
+        currentButton: FloatingActionButton(
+      heroTag: 'editarmiperfil',
+      backgroundColor: Colors.red,
+      mini: true,
+      child: Icon(Icons.edit),
+      onPressed: () => Navigator.of(context).pushReplacement(PageRouteBuilder(
+          transitionDuration: const Duration(milliseconds: 800),
+          pageBuilder: (_, animation, __) => FadeTransition(
+                opacity: animation,
+                child: EditarMiPerfilPage(usuario: _usuario),
+              ))),
+    )));
+
+    return childButtons;
   }
 
   Widget _campoTexto(
@@ -241,18 +258,14 @@ class _MyProfilePageState extends State<MyProfilePage> {
   // }
 
   Widget _imageStorage(UsuarioModel _usuario) {
-    return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100.0)),
-      child: Container(
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(100.0),
-          child: FadeInImage(
-              width: 150,
-              height: 150,
-              fit: BoxFit.cover,
-              placeholder: AssetImage('assets/jar-loading.gif'),
-              image: NetworkImage(_usuario.fotoUrl)),
-        ),
+    return Padding(
+      padding: const EdgeInsets.all(15.0),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(20),
+        child: FadeInImage(
+            fit: BoxFit.fill,
+            placeholder: AssetImage('assets/jar-loading.gif'),
+            image: NetworkImage(_usuario.fotoUrl)),
       ),
     );
   }
