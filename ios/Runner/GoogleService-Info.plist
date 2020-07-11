@@ -3,23 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>277417104621-fiv1hphug3d00ugs3mqure8gguebfga5.apps.googleusercontent.com</string>
+	<string>830338990221-uu2r7k3gtthmb3k92lrb1u9qb745tgjb.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.277417104621-fiv1hphug3d00ugs3mqure8gguebfga5</string>
-	<key>ANDROID_CLIENT_ID</key>
-	<string>277417104621-r6tetf15qdd9npc036vnl5nav2kbkm17.apps.googleusercontent.com</string>
+	<string>com.googleusercontent.apps.830338990221-uu2r7k3gtthmb3k92lrb1u9qb745tgjb</string>
 	<key>API_KEY</key>
-	<string>AIzaSyDeFtTYeFWYslQKyC3pFotao0mEe06swiU</string>
+	<string>AIzaSyB6Tan9osTPQm1Dj_8REZuKwUxxAVLXmhw</string>
 	<key>GCM_SENDER_ID</key>
-	<string>277417104621</string>
+	<string>830338990221</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.nelsonsolorzano.appsam</string>
 	<key>PROJECT_ID</key>
-	<string>sam-app-22268</string>
+	<string>sam-app-446ee</string>
 	<key>STORAGE_BUCKET</key>
-	<string>sam-app-22268.appspot.com</string>
+	<string>sam-app-446ee.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -31,8 +29,8 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:277417104621:ios:e677c5fa7367abebdb28e4</string>
+	<string>1:830338990221:ios:bad03db16a243c93cde2c4</string>
 	<key>DATABASE_URL</key>
-	<string>https://sam-app-22268.firebaseio.com</string>
+	<string>https://sam-app-446ee.firebaseio.com</string>
 </dict>
 </plist>
