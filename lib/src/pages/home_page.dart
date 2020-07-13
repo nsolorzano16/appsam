@@ -57,7 +57,12 @@ class _HomePageState extends State<HomePage> {
               appBar: AppBar(
                 title: Text('Inicio'),
               ),
-              body: Container()),
+              body: Center(
+                child: Text(
+                  'Release Date: 7 de julio de 2020 11:00 a.m',
+                  style: TextStyle(fontSize: 16.0),
+                ),
+              )),
         ),
         onWillPop: () async => false);
   }

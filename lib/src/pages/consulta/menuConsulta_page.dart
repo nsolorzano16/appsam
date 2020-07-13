@@ -151,16 +151,18 @@ class _MenuConsultaPageState extends State<MenuConsultaPage>
                       )
                     ]),
                     TableRow(children: [
-                      FadeInLeft(
-                        child: _cardItemHistorialGineco(
-                            _preclinica,
-                            FontAwesomeIcons.baby,
-                            'Antecedentes Ginecológicos',
-                            'crear_historial_gineco',
-                            Colors.blueGrey,
-                            context,
-                            _usuario),
-                      ),
+                      (_preclinica.sexo == 'F')
+                          ? FadeInLeft(
+                              child: _cardItemHistorialGineco(
+                                  _preclinica,
+                                  FontAwesomeIcons.baby,
+                                  'Antecedentes Ginecológicos',
+                                  'crear_historial_gineco',
+                                  Colors.blueGrey,
+                                  context,
+                                  _usuario),
+                            )
+                          : Container(),
                       Container()
                     ]),
                   ],
@@ -213,21 +215,6 @@ class _MenuConsultaPageState extends State<MenuConsultaPage>
                       FadeInLeft(
                         child: _cardItem(
                             _preclinica,
-                            Icons.note,
-                            'Diagnosticos',
-                            'crear_diagnosticos',
-                            Colors.pink,
-                            context),
-                      ),
-                      FadeInRight(
-                        child: _cardItem(_preclinica, Icons.note_add, 'Notas',
-                            'crear_notas', Colors.deepPurple, context),
-                      ),
-                    ]),
-                    TableRow(children: [
-                      FadeInLeft(
-                        child: _cardItem(
-                            _preclinica,
                             FontAwesomeIcons.stickyNote,
                             'Plan Terapeutico',
                             'planes_terapeuticos',
@@ -242,6 +229,21 @@ class _MenuConsultaPageState extends State<MenuConsultaPage>
                             'examenes_indicados',
                             Colors.cyan,
                             context),
+                      ),
+                    ]),
+                    TableRow(children: [
+                      FadeInLeft(
+                        child: _cardItem(
+                            _preclinica,
+                            Icons.note,
+                            'Diagnosticos',
+                            'crear_diagnosticos',
+                            Colors.pink,
+                            context),
+                      ),
+                      FadeInRight(
+                        child: _cardItem(_preclinica, Icons.note_add, 'Notas',
+                            'crear_notas', Colors.deepPurple, context),
                       ),
                     ]),
                   ],
