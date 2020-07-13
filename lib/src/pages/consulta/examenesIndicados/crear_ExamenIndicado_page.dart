@@ -26,6 +26,8 @@ class _CrearExamenIndicadoPageState extends State<CrearExamenIndicadoPage> {
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
   final ExamenIndicadoModel _examen = new ExamenIndicadoModel();
 
+  bool _habilitarNombre = false;
+
   final _examenesBloc = new ExamenesBloc();
   final UsuarioModel _usuario =
       usuarioModelFromJson(StorageUtil.getString('usuarioGlobal'));
@@ -149,6 +151,9 @@ class _CrearExamenIndicadoPageState extends State<CrearExamenIndicadoPage> {
                     isDense: true,
                     onChanged: (value) async {
                       _comboModel.examenCategoriaId = value;
+                      setState(() {
+                        _habilitarNombre = !_habilitarNombre;
+                      });
 
                       final listaTipos =
                           await _combosService.getTiposExamenes(value);
@@ -303,6 +308,7 @@ class _CrearExamenIndicadoPageState extends State<CrearExamenIndicadoPage> {
         onSaved: (value) => _examen.nombre = value,
         keyboardType: TextInputType.text,
         decoration: inputsDecorations('Nombre', Icons.note),
+        readOnly: _habilitarNombre,
       ),
     );
   }

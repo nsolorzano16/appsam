@@ -43,6 +43,7 @@ class _EditarExamenIndicadoPageState extends State<EditarExamenIndicadoPage> {
   final TextEditingController _notasController = new TextEditingController();
 
   String labelBoton = 'Editar';
+  bool _habilitarNombre;
 
   @override
   void initState() {
@@ -58,6 +59,12 @@ class _EditarExamenIndicadoPageState extends State<EditarExamenIndicadoPage> {
     _examen.modificadoPor = _usuario.userName;
     _examen.modificadoFecha = DateTime.now();
     _comboModel.examenCategoriaId = widget.examen.examenCategoriaId;
+    if (widget.examen.examenCategoriaId == 1) {
+      _habilitarNombre = true;
+    } else {
+      _habilitarNombre = false;
+    }
+
     _comboModel.examenTipoId = widget.examen.examenTipoId;
     _comboModel.examenDetalleId = (widget.examen.examenDetalleId != 0)
         ? widget.examen.examenDetalleId
@@ -134,54 +141,56 @@ class _EditarExamenIndicadoPageState extends State<EditarExamenIndicadoPage> {
       future: _combosService.getCategoriasExamenes(),
       builder: (BuildContext context,
           AsyncSnapshot<List<ExamenCategoriaModel>> snapshot) {
+        if (!snapshot.hasData) return CircularProgressIndicator();
         final lista = snapshot.data;
-        if (lista != null) {
-          return Padding(
-            padding: EdgeInsets.only(left: 8.0, right: 8.0),
-            child: InputDecorator(
-              decoration:
-                  inputsDecorations('Examen categoria', FontAwesomeIcons.flask),
-              child: StreamBuilder(
-                stream: _examenesBloc.combosListStream,
-                initialData: _comboModel,
-                builder: (BuildContext context,
-                    AsyncSnapshot<ListCombosExamenes> snapshot) {
-                  final categoria = snapshot.data;
-                  return DropdownButtonHideUnderline(
-                      child: DropdownButton(
-                    value: categoria.examenCategoriaId,
-                    isDense: true,
-                    onChanged: (value) async {
-                      _comboModel.examenCategoriaId = value;
+        return Padding(
+          padding: EdgeInsets.only(left: 8.0, right: 8.0),
+          child: InputDecorator(
+            decoration:
+                inputsDecorations('Examen categoria', FontAwesomeIcons.flask),
+            child: StreamBuilder(
+              stream: _examenesBloc.combosListStream,
+              initialData: _comboModel,
+              builder: (BuildContext context,
+                  AsyncSnapshot<ListCombosExamenes> snapshot) {
+                final categoria = snapshot.data;
+                return DropdownButtonHideUnderline(
+                    child: DropdownButton(
+                  value: categoria.examenCategoriaId,
+                  isDense: true,
+                  onChanged: (value) async {
+                    _comboModel.examenCategoriaId = value;
+                    if (value == 1) _nombreController.text = '';
+                    setState(() {
+                      _habilitarNombre = !_habilitarNombre;
+                    });
 
-                      final listaTipos =
-                          await _combosService.getTiposExamenes(value);
+                    _comboModel.listExamenTipo.clear();
+                    _comboModel.listExamenDetalle.clear();
+                    _comboModel.examenTipoId = null;
 
-                      _comboModel.listExamenTipo.clear();
-                      _comboModel.listExamenTipo.addAll(listaTipos);
-                      _comboModel.listExamenDetalle.clear();
-                      _comboModel.examenTipoId = null;
-                      _examenesBloc.onChangeCombosList(_comboModel);
+                    final listaTipos =
+                        await _combosService.getTiposExamenes(value);
+                    _comboModel.listExamenTipo.addAll(listaTipos);
 
-                      FocusScope.of(context).requestFocus(FocusNode());
-                    },
-                    items: lista.map((x) {
-                      return DropdownMenuItem(
-                        value: x.examenCategoriaId,
-                        child: Text(
-                          x.nombre,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      );
-                    }).toList(),
-                  ));
-                },
-              ),
+                    _examenesBloc.onChangeCombosList(_comboModel);
+
+                    FocusScope.of(context).requestFocus(FocusNode());
+                  },
+                  items: lista.map((x) {
+                    return DropdownMenuItem(
+                      value: x.examenCategoriaId,
+                      child: Text(
+                        x.nombre,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    );
+                  }).toList(),
+                ));
+              },
             ),
-          );
-        } else {
-          return CircularProgressIndicator();
-        }
+          ),
+        );
       },
     );
   }
@@ -200,46 +209,43 @@ class _EditarExamenIndicadoPageState extends State<EditarExamenIndicadoPage> {
           stream: _examenesBloc.combosListStream,
           builder: (BuildContext context,
               AsyncSnapshot<ListCombosExamenes> snapshot) {
-            if (snapshot.data == null) {
-              return CircularProgressIndicator();
-            } else {
-              final lista = snapshot.data.listExamenTipo;
-              return Padding(
-                  padding: EdgeInsets.only(left: 8.0, right: 8.0),
-                  child: InputDecorator(
-                      decoration: inputsDecorations(
-                          'Tipo de examen', FontAwesomeIcons.flask),
-                      child: DropdownButtonHideUnderline(
-                          child: DropdownButton(
-                        icon: Icon(Icons.arrow_drop_down),
-                        isDense: true,
-                        value: snapshot.data.examenTipoId,
-                        onChanged: (value) async {
-                          _comboModel.examenTipoId = value;
-                          final detalles =
-                              await _combosService.getDetalleExamenes(
-                                  value, _comboModel.examenCategoriaId);
-                          _comboModel.listExamenDetalle.clear();
-                          _comboModel.listExamenDetalle.addAll(detalles);
-                          _comboModel.examenDetalleId = null;
+            if (!snapshot.hasData) return CircularProgressIndicator();
+            final lista = snapshot.data.listExamenTipo;
+            return Padding(
+                padding: EdgeInsets.only(left: 8.0, right: 8.0),
+                child: InputDecorator(
+                    decoration: inputsDecorations(
+                        'Tipo de examen', FontAwesomeIcons.flask),
+                    child: DropdownButtonHideUnderline(
+                        child: DropdownButton(
+                      icon: Icon(Icons.arrow_drop_down),
+                      isDense: true,
+                      value: snapshot.data.examenTipoId,
+                      onChanged: (value) async {
+                        _comboModel.examenTipoId = value;
+                        final detalles =
+                            await _combosService.getDetalleExamenes(
+                                value, _comboModel.examenCategoriaId);
+                        _comboModel.listExamenDetalle.clear();
+                        _comboModel.listExamenDetalle.addAll(detalles);
+                        _comboModel.examenDetalleId = null;
 
-                          _examenesBloc.onChangeCombosList(_comboModel);
+                        _examenesBloc.onChangeCombosList(_comboModel);
 
-                          FocusScope.of(context).requestFocus(FocusNode());
-                        },
-                        items: (lista.length == 0)
-                            ? []
-                            : lista.map((x) {
-                                return DropdownMenuItem(
-                                  value: x.examenTipoId,
-                                  child: Text(
-                                    x.nombre,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                );
-                              }).toList(),
-                      ))));
-            }
+                        FocusScope.of(context).requestFocus(FocusNode());
+                      },
+                      items: (lista.length == 0)
+                          ? []
+                          : lista.map((x) {
+                              return DropdownMenuItem(
+                                value: x.examenTipoId,
+                                child: Text(
+                                  x.nombre,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              );
+                            }).toList(),
+                    ))));
           },
         );
       },
@@ -307,6 +313,7 @@ class _EditarExamenIndicadoPageState extends State<EditarExamenIndicadoPage> {
         onSaved: (value) => _examen.nombre = value,
         keyboardType: TextInputType.text,
         decoration: inputsDecorations('Nombre', Icons.note),
+        readOnly: _habilitarNombre,
       ),
     );
   }

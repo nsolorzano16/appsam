@@ -119,19 +119,19 @@ class _ExamenesIndicadosPageState extends State<ExamenesIndicadosPage> {
             leading: Row(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                IconButton(
-                    icon: Icon(
-                      Icons.edit,
-                      size: 16.0,
-                      color: Theme.of(context).primaryColor,
-                    ),
-                    onPressed: () => Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => EditarExamenIndicadoPage(
-                                  examen: f,
-                                  preclinica: preclinica,
-                                )))),
+                // IconButton(
+                //     icon: Icon(
+                //       Icons.edit,
+                //       size: 16.0,
+                //       color: Theme.of(context).primaryColor,
+                //     ),
+                //     onPressed: () => Navigator.pushReplacement(
+                //         context,
+                //         MaterialPageRoute(
+                //             builder: (context) => EditarExamenIndicadoPage(
+                //                   examen: f,
+                //                   preclinica: preclinica,
+                //                 )))),
                 IconButton(
                     icon: Icon(
                       Icons.delete,

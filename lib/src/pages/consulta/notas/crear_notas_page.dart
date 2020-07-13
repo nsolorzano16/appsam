@@ -131,15 +131,15 @@ class _CrearNotasPageState extends State<CrearNotasPage> {
             leading: Row(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                IconButton(
-                    icon: Icon(
-                      Icons.edit,
-                      size: 16.0,
-                      color: Theme.of(context).primaryColor,
-                    ),
-                    onPressed: () {
-                      _dialogEdit(context, f);
-                    }),
+                // IconButton(
+                //     icon: Icon(
+                //       Icons.edit,
+                //       size: 16.0,
+                //       color: Theme.of(context).primaryColor,
+                //     ),
+                //     onPressed: () {
+                //       _dialogEdit(context, f);
+                //     }),
                 IconButton(
                   icon: Icon(
                     Icons.delete,
