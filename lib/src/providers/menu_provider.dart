@@ -16,10 +16,14 @@ class _MenuProvider {
     opciones.forEach((element) {
       if (element.texto == 'Consulta') {
         element.notificaciones =
-            WebNotificicationsStream.instance.consultaPendiente.total;
+            (WebNotificicationsStream.instance.consultaPendiente.total == null)
+                ? 0
+                : WebNotificicationsStream.instance.consultaPendiente.total;
       } else if (element.texto == 'Agenda') {
         element.notificaciones =
-            WebNotificicationsStream.instance.agendaPendiente.total;
+            (WebNotificicationsStream.instance.agendaPendiente.total == null)
+                ? 0
+                : WebNotificicationsStream.instance.agendaPendiente.total;
       }
     });
 
