@@ -151,24 +151,11 @@ class _FrontItem extends StatelessWidget {
               height: 10,
             ),
             _botonConsultaGeneral(context),
-            _botonDiagnosticos(context),
-            _botonExamenes(context),
             _botonExamenFisico(context),
             _botonPlanTerapeutico(context),
+            _botonExamenes(context),
+            _botonDiagnosticos(context),
             _botonNotas(context),
-            // Table(
-            //   children: [
-            //     TableRow(children: [
-
-            //     ]),
-            //     TableRow(children: [
-
-            //     ]),
-            //     TableRow(children: [
-
-            //     ])
-            //   ],
-            // ),
           ],
         ));
   }

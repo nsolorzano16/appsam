@@ -2,6 +2,7 @@ import 'package:animate_do/animate_do.dart';
 import 'package:appsam/src/blocs/consulta_bloc.dart';
 import 'package:appsam/src/blocs/examenFisico_bloc.dart';
 import 'package:appsam/src/blocs/historialGineco_bloc.dart';
+import 'package:appsam/src/blocs/preclinica_bloc.dart';
 
 import 'package:appsam/src/models/consulta_model.dart';
 import 'package:appsam/src/models/examenFisico_model.dart';
@@ -33,6 +34,7 @@ class MenuConsultaPage extends StatefulWidget {
 class _MenuConsultaPageState extends State<MenuConsultaPage>
     with SingleTickerProviderStateMixin {
   final _consultaBloc = new ConsultaBloc();
+  final PreclinicaBloc _preclinicaBloc = new PreclinicaBloc();
 
   Future<ConsultaModel> _consultaFuture;
   final UsuarioModel _usuario =
@@ -71,6 +73,11 @@ class _MenuConsultaPageState extends State<MenuConsultaPage>
                   _tabHistorial(_preclinica),
                   _tabConsulta(_preclinica)
                 ]),
+                floatingActionButton: FloatingActionButton(
+                  onPressed: () => -_atendida(context, _preclinica),
+                  child: Icon(Icons.save),
+                  backgroundColor: Colors.greenAccent,
+                ),
                 bottomNavigationBar: Container(
                   color: Colors.red,
                   child: TabBar(
@@ -513,5 +520,77 @@ class _MenuConsultaPageState extends State<MenuConsultaPage>
         ),
       ),
     );
+  }
+
+  _atendida(BuildContext context, PreclinicaViewModel preclinica) {
+    AlertDialog alert = AlertDialog(
+      title: Text("Información"),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Text(
+            'Al confirmar esta acción la preclinica se cambiara a estado \"Atendida\"',
+            textAlign: TextAlign.center,
+          ),
+          Text('Desea completar esta acción?'),
+        ],
+      ),
+      elevation: 24.0,
+      actions: [
+        FlatButton(
+            onPressed: () => Navigator.pop(context), child: Text('Cancelar')),
+        FlatButton(
+            onPressed: () {
+              Navigator.pop(context);
+              updatePreclinicaAndGoToDetalleConsulta(preclinica, context);
+            },
+            child: Text('Aceptar'))
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return alert;
+        },
+        barrierDismissible: false);
+  }
+
+  void updatePreclinicaAndGoToDetalleConsulta(
+      PreclinicaViewModel preclinica, BuildContext context) async {
+    final ProgressDialog _pr = new ProgressDialog(
+      context,
+      type: ProgressDialogType.Normal,
+      isDismissible: false,
+      showLogs: false,
+    );
+    _pr.update(
+      progress: 50.0,
+      message: "Espere...",
+      progressWidget: Container(
+          padding: EdgeInsets.all(8.0), child: CircularProgressIndicator()),
+      maxProgress: 100.0,
+      progressTextStyle: TextStyle(
+          color: Colors.black, fontSize: 13.0, fontWeight: FontWeight.w400),
+      messageTextStyle: TextStyle(
+          color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600),
+    );
+    await _pr.show();
+
+    preclinica.atendida = true;
+
+    final preclinicaEdit = await _preclinicaBloc.updatePreclinica(preclinica);
+
+    if (preclinicaEdit != null) {
+      await _pr.hide();
+      Navigator.pushReplacementNamed(
+        context,
+        'preclinica',
+      );
+    } else {
+      mostrarFlushBar(context, Colors.red, 'Info', 'Ha ocurrido un error', 2,
+          Icons.info, Colors.white);
+    }
   }
 }

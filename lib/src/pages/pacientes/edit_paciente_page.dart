@@ -438,6 +438,7 @@ class _EditarPacientePageState extends State<EditarPacientePage> {
           LengthLimitingTextInputFormatter(8),
           WhitelistingTextInputFormatter.digitsOnly
         ],
+        maxLength: 8,
         decoration: inputsDecorations('Teléfono', Icons.phone_android),
         onChanged: (value) => widget.paciente.telefono1 = value,
         onSaved: (value) => widget.paciente.telefono1 = value,
@@ -826,6 +827,7 @@ class _EditarPacientePageState extends State<EditarPacientePage> {
           LengthLimitingTextInputFormatter(8),
           WhitelistingTextInputFormatter.digitsOnly
         ],
+        maxLength: 8,
         decoration: inputsDecorations('Tel. Contacto Emergencia', Icons.phone),
         onChanged: (value) => widget.paciente.telefonoEmergencia = value,
         onSaved: (value) => widget.paciente.telefonoEmergencia = value,

@@ -25,7 +25,7 @@ class _CrearDiagnosticosPageState extends State<CrearDiagnosticosPage> {
   final DiagnosticosBloc _diagnosticosBloc = new DiagnosticosBloc();
 
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
-  final GlobalKey<FormState> _formkeyEditar = GlobalKey<FormState>();
+  //final GlobalKey<FormState> _formkeyEditar = GlobalKey<FormState>();
 
   final _problemasClinicosController = new TextEditingController();
   final _editarproblemasClinicosController = new TextEditingController();
@@ -183,18 +183,18 @@ class _CrearDiagnosticosPageState extends State<CrearDiagnosticosPage> {
     );
   }
 
-  _campoProblemasClinicosEditar(Diagnosticos diagnostico) {
-    return Padding(
-      padding: EdgeInsets.only(left: 8.0, right: 8.0, top: 10.0),
-      child: TextFormField(
-        controller: _editarproblemasClinicosController,
-        onSaved: (value) => diagnostico.problemasClinicos = value,
-        maxLines: 3,
-        keyboardType: TextInputType.text,
-        decoration: InputDecoration(hintText: 'Problemas Clinicos'),
-      ),
-    );
-  }
+  // _campoProblemasClinicosEditar(Diagnosticos diagnostico) {
+  //   return Padding(
+  //     padding: EdgeInsets.only(left: 8.0, right: 8.0, top: 10.0),
+  //     child: TextFormField(
+  //       controller: _editarproblemasClinicosController,
+  //       onSaved: (value) => diagnostico.problemasClinicos = value,
+  //       maxLines: 3,
+  //       keyboardType: TextInputType.text,
+  //       decoration: InputDecoration(hintText: 'Problemas Clinicos'),
+  //     ),
+  //   );
+  // }
 
   void _dialogAdd(BuildContext context, PreclinicaViewModel preclinica) {
     final _diagnostico = new Diagnosticos();
@@ -224,24 +224,24 @@ class _CrearDiagnosticosPageState extends State<CrearDiagnosticosPage> {
         barrierDismissible: false);
   }
 
-  void _dialogEdit(BuildContext context, Diagnosticos diagnostico) {
-    _editarproblemasClinicosController.text = diagnostico.problemasClinicos;
-    showDialog(
-        context: context,
-        builder: (context) {
-          return Dialog(
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  _formularioEditar(diagnostico, context),
-                ],
-              ),
-            ),
-          );
-        },
-        barrierDismissible: false);
-  }
+  // void _dialogEdit(BuildContext context, Diagnosticos diagnostico) {
+  //   _editarproblemasClinicosController.text = diagnostico.problemasClinicos;
+  //   showDialog(
+  //       context: context,
+  //       builder: (context) {
+  //         return Dialog(
+  //           child: SingleChildScrollView(
+  //             child: Column(
+  //               mainAxisSize: MainAxisSize.min,
+  //               children: <Widget>[
+  //                 _formularioEditar(diagnostico, context),
+  //               ],
+  //             ),
+  //           ),
+  //         );
+  //       },
+  //       barrierDismissible: false);
+  // }
 
   Widget _formularioAgregar(Diagnosticos diagnostico, BuildContext context) {
     return Container(
@@ -278,75 +278,75 @@ class _CrearDiagnosticosPageState extends State<CrearDiagnosticosPage> {
     );
   }
 
-  Widget _formularioEditar(Diagnosticos diagnostico, BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(5.0),
-      child: Form(
-          key: _formkeyEditar,
-          child: Column(
-            children: <Widget>[
-              Padding(
-                padding: EdgeInsets.only(top: 10.0),
-                child: Text(
-                  'Nota: *El formulario no puede estar vacio*',
-                  style: TextStyle(color: Colors.red),
-                ),
-              ),
-              _campoProblemasClinicosEditar(diagnostico),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  FlatButton(
-                      onPressed: () => Navigator.pop(context),
-                      child: Text(
-                        'Cancelar',
-                        style: TextStyle(color: Colors.blue),
-                      )),
-                  FlatButton(
-                      onPressed: () => _editar(diagnostico, context),
-                      child: Text(
-                        'Editar',
-                        style: TextStyle(color: Colors.blue),
-                      ))
-                ],
-              )
-            ],
-          )),
-    );
-  }
+  // Widget _formularioEditar(Diagnosticos diagnostico, BuildContext context) {
+  //   return Container(
+  //     padding: EdgeInsets.all(5.0),
+  //     child: Form(
+  //         key: _formkeyEditar,
+  //         child: Column(
+  //           children: <Widget>[
+  //             Padding(
+  //               padding: EdgeInsets.only(top: 10.0),
+  //               child: Text(
+  //                 'Nota: *El formulario no puede estar vacio*',
+  //                 style: TextStyle(color: Colors.red),
+  //               ),
+  //             ),
+  //             _campoProblemasClinicosEditar(diagnostico),
+  //             Row(
+  //               mainAxisAlignment: MainAxisAlignment.end,
+  //               children: <Widget>[
+  //                 FlatButton(
+  //                     onPressed: () => Navigator.pop(context),
+  //                     child: Text(
+  //                       'Cancelar',
+  //                       style: TextStyle(color: Colors.blue),
+  //                     )),
+  //                 FlatButton(
+  //                     onPressed: () => _editar(diagnostico, context),
+  //                     child: Text(
+  //                       'Editar',
+  //                       style: TextStyle(color: Colors.blue),
+  //                     ))
+  //               ],
+  //             )
+  //           ],
+  //         )),
+  //   );
+  // }
 
-  void _editar(Diagnosticos diagnostico, BuildContext context) async {
-    if (_editarproblemasClinicosController.text.isEmpty) {
-    } else {
-      _formkeyEditar.currentState.save();
+  // void _editar(Diagnosticos diagnostico, BuildContext context) async {
+  //   if (_editarproblemasClinicosController.text.isEmpty) {
+  //   } else {
+  //     _formkeyEditar.currentState.save();
 
-      _editarproblemasClinicosController.text = '';
+  //     _editarproblemasClinicosController.text = '';
 
-      final item = _listaDiagnosticos.firstWhere(
-          (item) => item.diagnosticoId == diagnostico.diagnosticoId,
-          orElse: null);
-      if (item != null) {
-        item.problemasClinicos = diagnostico.problemasClinicos;
-      }
-      Navigator.pop(context);
-      await editarBaseDatos(context);
-      final snackBar = SnackBar(
-          backgroundColor: Colors.green,
-          content: Row(
-            mainAxisSize: MainAxisSize.max,
-            children: <Widget>[
-              Icon(Icons.info),
-              Padding(
-                padding: EdgeInsets.only(left: 5.0),
-                child: Text('Datos guardados'),
-              )
-            ],
-          ));
-      mScaffoldState.currentState.showSnackBar(snackBar);
+  //     final item = _listaDiagnosticos.firstWhere(
+  //         (item) => item.diagnosticoId == diagnostico.diagnosticoId,
+  //         orElse: null);
+  //     if (item != null) {
+  //       item.problemasClinicos = diagnostico.problemasClinicos;
+  //     }
+  //     Navigator.pop(context);
+  //     await editarBaseDatos(context);
+  //     final snackBar = SnackBar(
+  //         backgroundColor: Colors.green,
+  //         content: Row(
+  //           mainAxisSize: MainAxisSize.max,
+  //           children: <Widget>[
+  //             Icon(Icons.info),
+  //             Padding(
+  //               padding: EdgeInsets.only(left: 5.0),
+  //               child: Text('Datos guardados'),
+  //             )
+  //           ],
+  //         ));
+  //     mScaffoldState.currentState.showSnackBar(snackBar);
 
-      setState(() {});
-    }
-  }
+  //     setState(() {});
+  //   }
+  // }
 
   void _guardar(Diagnosticos diagnostico, BuildContext context) async {
     if (_problemasClinicosController.text.isEmpty) {

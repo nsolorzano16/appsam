@@ -437,6 +437,7 @@ class _CrearPacientePageState extends State<CrearPacientePage> {
           LengthLimitingTextInputFormatter(8),
           WhitelistingTextInputFormatter.digitsOnly
         ],
+        maxLength: 8,
         decoration: inputsDecorations('Teléfono', Icons.phone_android),
         onChanged: (value) => _paciente.telefono1 = value,
         onSaved: (value) => _paciente.telefono1 = value,
@@ -822,6 +823,7 @@ class _CrearPacientePageState extends State<CrearPacientePage> {
           LengthLimitingTextInputFormatter(8),
           WhitelistingTextInputFormatter.digitsOnly
         ],
+        maxLength: 8,
         decoration: inputsDecorations('Tel. Contacto Emergencia', Icons.phone),
         onChanged: (value) => _paciente.telefonoEmergencia = value,
         onSaved: (value) => _paciente.telefonoEmergencia = value,

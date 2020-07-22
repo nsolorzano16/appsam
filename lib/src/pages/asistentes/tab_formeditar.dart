@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:getflutter/getflutter.dart';
 import 'package:intl/intl.dart';
@@ -38,10 +39,6 @@ class _FormEditarPageState extends State<FormEditarPage> {
   Widget build(BuildContext context) {
     final UsuarioModel _asistente = ModalRoute.of(context).settings.arguments;
 
-    MaskTextInputFormatter maskTelefono1 = new MaskTextInputFormatter(
-        mask: '####-####', filter: {"#": RegExp(r'[0-9]')});
-    MaskTextInputFormatter maskTelefono2 = new MaskTextInputFormatter(
-        mask: '####-####', filter: {"#": RegExp(r'[0-9]')});
     MaskTextInputFormatter maskNumeroColegiado = new MaskTextInputFormatter(
         mask: '#######', filter: {"#": RegExp(r'[0-9]')});
     MaskTextInputFormatter maskIdentificacion = new MaskTextInputFormatter(
@@ -89,9 +86,9 @@ class _FormEditarPageState extends State<FormEditarPage> {
                 ),
                 _crearSexo('M', 'Masculino', _asistente),
                 _crearSexo('F', 'Femenino', _asistente),
-                _crearCampoTelefono1(maskTelefono1, _asistente),
+                _crearCampoTelefono1(_asistente),
                 _espacio(),
-                _crearCampoTelefono2(maskTelefono2, _asistente),
+                _crearCampoTelefono2(_asistente),
                 _espacio(),
                 _crearCampoColegioNumero(_asistente, maskNumeroColegiado),
                 _espacio(),
@@ -268,13 +265,13 @@ class _FormEditarPageState extends State<FormEditarPage> {
     );
   }
 
-  _crearCampoTelefono1(MaskTextInputFormatter mask, UsuarioModel _asistente) {
+  _crearCampoTelefono1(UsuarioModel _asistente) {
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
         autovalidate: true,
         validator: (value) {
-          if (value.length <= 8) {
+          if (value.length < 8) {
             return 'Campo incompleto';
           } else {
             return null;
@@ -282,19 +279,27 @@ class _FormEditarPageState extends State<FormEditarPage> {
         },
         initialValue: _asistente.telefono1,
         keyboardType: TextInputType.number,
-        inputFormatters: [mask],
+        inputFormatters: [
+          LengthLimitingTextInputFormatter(8),
+          WhitelistingTextInputFormatter.digitsOnly
+        ],
+        maxLength: 8,
         decoration: inputsDecorations('Teléfono', Icons.phone_android),
         onSaved: (value) => _asistente.telefono1 = value,
       ),
     );
   }
 
-  _crearCampoTelefono2(MaskTextInputFormatter mask, UsuarioModel _asistente) {
+  _crearCampoTelefono2(UsuarioModel _asistente) {
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
         keyboardType: TextInputType.number,
-        inputFormatters: [mask],
+        inputFormatters: [
+          LengthLimitingTextInputFormatter(8),
+          WhitelistingTextInputFormatter.digitsOnly
+        ],
+        maxLength: 8,
         initialValue:
             (_asistente.telefono2 != null) ? _asistente.telefono2 : '',
         decoration:

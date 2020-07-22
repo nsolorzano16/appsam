@@ -24,7 +24,7 @@ class _CrearNotasPageState extends State<CrearNotasPage> {
   final NotasBloc _notasBloc = new NotasBloc();
 
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
-  final GlobalKey<FormState> _formkeyEditar = GlobalKey<FormState>();
+  //final GlobalKey<FormState> _formkeyEditar = GlobalKey<FormState>();
 
   final _notasController = new TextEditingController();
   final _editarNotasController = new TextEditingController();
@@ -182,18 +182,18 @@ class _CrearNotasPageState extends State<CrearNotasPage> {
     );
   }
 
-  _campoNotasEditar(Notas nota) {
-    return Padding(
-      padding: EdgeInsets.only(left: 8.0, right: 8.0, top: 10.0),
-      child: TextFormField(
-        controller: _editarNotasController,
-        onSaved: (value) => nota.notas = value,
-        maxLines: 3,
-        keyboardType: TextInputType.text,
-        decoration: InputDecoration(hintText: 'Nota'),
-      ),
-    );
-  }
+  // _campoNotasEditar(Notas nota) {
+  //   return Padding(
+  //     padding: EdgeInsets.only(left: 8.0, right: 8.0, top: 10.0),
+  //     child: TextFormField(
+  //       controller: _editarNotasController,
+  //       onSaved: (value) => nota.notas = value,
+  //       maxLines: 3,
+  //       keyboardType: TextInputType.text,
+  //       decoration: InputDecoration(hintText: 'Nota'),
+  //     ),
+  //   );
+  // }
 
   void _dialogAdd(BuildContext context, PreclinicaViewModel preclinica) {
     final _nota = new Notas();
@@ -223,24 +223,24 @@ class _CrearNotasPageState extends State<CrearNotasPage> {
         barrierDismissible: false);
   }
 
-  void _dialogEdit(BuildContext context, Notas nota) {
-    _editarNotasController.text = nota.notas;
-    showDialog(
-        context: context,
-        builder: (context) {
-          return Dialog(
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  _formularioEditar(nota, context),
-                ],
-              ),
-            ),
-          );
-        },
-        barrierDismissible: false);
-  }
+  // void _dialogEdit(BuildContext context, Notas nota) {
+  //   _editarNotasController.text = nota.notas;
+  //   showDialog(
+  //       context: context,
+  //       builder: (context) {
+  //         return Dialog(
+  //           child: SingleChildScrollView(
+  //             child: Column(
+  //               mainAxisSize: MainAxisSize.min,
+  //               children: <Widget>[
+  //                 _formularioEditar(nota, context),
+  //               ],
+  //             ),
+  //           ),
+  //         );
+  //       },
+  //       barrierDismissible: false);
+  // }
 
   Widget _formularioAgregar(Notas nota, BuildContext context) {
     return Container(
@@ -273,74 +273,74 @@ class _CrearNotasPageState extends State<CrearNotasPage> {
     );
   }
 
-  Widget _formularioEditar(Notas nota, BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(5.0),
-      child: Form(
-          key: _formkeyEditar,
-          child: Column(
-            children: <Widget>[
-              Padding(
-                padding: EdgeInsets.only(top: 10.0),
-                child: Text(
-                  'Nota: *El formulario no puede estar vacio*',
-                  style: TextStyle(color: Colors.red),
-                ),
-              ),
-              _campoNotasEditar(nota),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  FlatButton(
-                      onPressed: () => Navigator.pop(context),
-                      child: Text(
-                        'Cancelar',
-                        style: TextStyle(color: Colors.blue),
-                      )),
-                  FlatButton(
-                      onPressed: () => _editar(nota, context),
-                      child: Text(
-                        'Editar',
-                        style: TextStyle(color: Colors.blue),
-                      ))
-                ],
-              )
-            ],
-          )),
-    );
-  }
+  // Widget _formularioEditar(Notas nota, BuildContext context) {
+  //   return Container(
+  //     padding: EdgeInsets.all(5.0),
+  //     child: Form(
+  //         key: _formkeyEditar,
+  //         child: Column(
+  //           children: <Widget>[
+  //             Padding(
+  //               padding: EdgeInsets.only(top: 10.0),
+  //               child: Text(
+  //                 'Nota: *El formulario no puede estar vacio*',
+  //                 style: TextStyle(color: Colors.red),
+  //               ),
+  //             ),
+  //             _campoNotasEditar(nota),
+  //             Row(
+  //               mainAxisAlignment: MainAxisAlignment.end,
+  //               children: <Widget>[
+  //                 FlatButton(
+  //                     onPressed: () => Navigator.pop(context),
+  //                     child: Text(
+  //                       'Cancelar',
+  //                       style: TextStyle(color: Colors.blue),
+  //                     )),
+  //                 FlatButton(
+  //                     onPressed: () => _editar(nota, context),
+  //                     child: Text(
+  //                       'Editar',
+  //                       style: TextStyle(color: Colors.blue),
+  //                     ))
+  //               ],
+  //             )
+  //           ],
+  //         )),
+  //   );
+  // }
 
-  void _editar(Notas nota, BuildContext context) async {
-    if (_editarNotasController.text.isEmpty) {
-    } else {
-      _formkeyEditar.currentState.save();
+  // void _editar(Notas nota, BuildContext context) async {
+  //   if (_editarNotasController.text.isEmpty) {
+  //   } else {
+  //     _formkeyEditar.currentState.save();
 
-      _editarNotasController.text = '';
+  //     _editarNotasController.text = '';
 
-      final item = _listaNotas.firstWhere((item) => item.notaId == nota.notaId,
-          orElse: null);
-      if (item != null) {
-        item.notas = nota.notas;
-      }
-      Navigator.pop(context);
-      await editarBaseDatos(context);
-      final snackBar = SnackBar(
-          backgroundColor: Colors.green,
-          content: Row(
-            mainAxisSize: MainAxisSize.max,
-            children: <Widget>[
-              Icon(Icons.info),
-              Padding(
-                padding: EdgeInsets.only(left: 5.0),
-                child: Text('Datos guardados'),
-              )
-            ],
-          ));
-      mScaffoldState.currentState.showSnackBar(snackBar);
+  //     final item = _listaNotas.firstWhere((item) => item.notaId == nota.notaId,
+  //         orElse: null);
+  //     if (item != null) {
+  //       item.notas = nota.notas;
+  //     }
+  //     Navigator.pop(context);
+  //     await editarBaseDatos(context);
+  //     final snackBar = SnackBar(
+  //         backgroundColor: Colors.green,
+  //         content: Row(
+  //           mainAxisSize: MainAxisSize.max,
+  //           children: <Widget>[
+  //             Icon(Icons.info),
+  //             Padding(
+  //               padding: EdgeInsets.only(left: 5.0),
+  //               child: Text('Datos guardados'),
+  //             )
+  //           ],
+  //         ));
+  //     mScaffoldState.currentState.showSnackBar(snackBar);
 
-      setState(() {});
-    }
-  }
+  //     setState(() {});
+  //   }
+  // }
 
   void _guardar(Notas nota, BuildContext context) async {
     if (_notasController.text.isEmpty) {

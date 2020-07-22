@@ -1,6 +1,7 @@
 import 'package:appsam/src/utils/storage_util.dart';
 import 'package:appsam/src/widgets/drawer.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:getflutter/getflutter.dart';
 import 'package:intl/intl.dart';
@@ -45,10 +46,6 @@ class _EditarMiPerfilPageState extends State<EditarMiPerfilPage> {
 
   @override
   Widget build(BuildContext context) {
-    MaskTextInputFormatter maskTelefono1 = new MaskTextInputFormatter(
-        mask: '####-####', filter: {"#": RegExp(r'[0-9]')});
-    MaskTextInputFormatter maskTelefono2 = new MaskTextInputFormatter(
-        mask: '####-####', filter: {"#": RegExp(r'[0-9]')});
     MaskTextInputFormatter maskNumeroColegiado = new MaskTextInputFormatter(
         mask: '#######', filter: {"#": RegExp(r'[0-9]')});
 
@@ -99,9 +96,9 @@ class _EditarMiPerfilPageState extends State<EditarMiPerfilPage> {
                       ),
                       _crearSexo('M', 'Masculino'),
                       _crearSexo('F', 'Femenino'),
-                      _crearCampoTelefono1(maskTelefono1),
+                      _crearCampoTelefono1(),
                       _espacio(),
-                      _crearCampoTelefono2(maskTelefono2),
+                      _crearCampoTelefono2(),
                       _espacio(),
                       _crearCampoColegioNumero(maskNumeroColegiado),
                       _espacio(),
@@ -260,13 +257,13 @@ class _EditarMiPerfilPageState extends State<EditarMiPerfilPage> {
     );
   }
 
-  _crearCampoTelefono1(MaskTextInputFormatter mask) {
+  _crearCampoTelefono1() {
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
         autovalidate: true,
         validator: (value) {
-          if (value.length <= 8) {
+          if (value.length < 8) {
             return 'Campo incompleto';
           } else {
             return null;
@@ -274,19 +271,27 @@ class _EditarMiPerfilPageState extends State<EditarMiPerfilPage> {
         },
         initialValue: usuario.telefono1,
         keyboardType: TextInputType.number,
-        inputFormatters: [mask],
+        inputFormatters: [
+          LengthLimitingTextInputFormatter(8),
+          WhitelistingTextInputFormatter.digitsOnly
+        ],
+        maxLength: 8,
         decoration: inputsDecorations('Teléfono', Icons.phone_android),
         onSaved: (value) => usuario.telefono1 = value,
       ),
     );
   }
 
-  _crearCampoTelefono2(MaskTextInputFormatter mask) {
+  _crearCampoTelefono2() {
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
         keyboardType: TextInputType.number,
-        inputFormatters: [mask],
+        inputFormatters: [
+          LengthLimitingTextInputFormatter(8),
+          WhitelistingTextInputFormatter.digitsOnly
+        ],
+        maxLength: 8,
         initialValue: (usuario.telefono2 != null) ? usuario.telefono2 : '',
         decoration:
             inputsDecorations('Teléfono Secundario', Icons.phone_iphone),

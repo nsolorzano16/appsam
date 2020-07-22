@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:appsam/src/models/consultaGeneral_model.dart';
 import 'package:appsam/src/models/expediente_model.dart';
 import 'package:http/http.dart' as http;
@@ -6,6 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:appsam/src/models/consulta_model.dart';
 import 'package:appsam/src/utils/storage_util.dart';
 import 'package:appsam/src/utils/utils.dart';
+import 'package:path_provider/path_provider.dart';
 
 class ConsultaService {
   final _apiURL = EnviromentVariables().getApiURL();
@@ -113,6 +115,31 @@ class ConsultaService {
       final decodedData = json.decode(resp.body);
       final consulta = new ExpedienteViewModel.fromJson(decodedData);
       return consulta;
+    }
+
+    return null;
+  }
+
+  Future<File> getExpedientePDF(int pacienteId, int doctorId) async {
+    final String token = StorageUtil.getString('token');
+    final headers = {
+      "content-type": "application/json",
+      "accept": "application/json",
+      'authorization': 'Bearer $token',
+    };
+    final url =
+        '$_apiURL/api/Consulta/pdf/expediente/pacienteid/$pacienteId/doctorid/$doctorId';
+
+    final resp = await http.get(url, headers: headers);
+
+    if (resp.statusCode == 200) {
+      var bytes = resp.bodyBytes;
+
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String dir = appDocDir.path;
+      File file = new File('$dir/expediente.pdf');
+      await file.writeAsBytes(bytes);
+      return file;
     }
 
     return null;

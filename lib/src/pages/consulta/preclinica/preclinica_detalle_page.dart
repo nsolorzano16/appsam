@@ -72,7 +72,7 @@ class PreclinicaDetallePage extends StatelessWidget {
       labelText: 'Editar',
       currentButton: FloatingActionButton(
           heroTag: 'editandopreclinica',
-          backgroundColor: Colors.red,
+          backgroundColor: Colors.amber,
           mini: true,
           child: Icon(Icons.edit),
           onPressed: () => Navigator.pushNamed(context, 'editar_preclinica',
@@ -87,19 +87,19 @@ class PreclinicaDetallePage extends StatelessWidget {
           backgroundColor: Colors.red,
           mini: true,
           child: Icon(Icons.delete),
-          onPressed: () => _desactivar(preclinica, context),
+          onPressed: () => _eliminar(context, preclinica),
         )));
 
-    childButtons.add(UnicornButton(
-        hasLabel: true,
-        labelText: 'Atendida',
-        currentButton: FloatingActionButton(
-          heroTag: 'guardandopreclinica',
-          backgroundColor: Colors.greenAccent,
-          mini: true,
-          child: Icon(Icons.save),
-          onPressed: () => _atendida(context, preclinica),
-        )));
+    // childButtons.add(UnicornButton(
+    //     hasLabel: true,
+    //     labelText: 'Atendida',
+    //     currentButton: FloatingActionButton(
+    //       heroTag: 'guardandopreclinica',
+    //       backgroundColor: Colors.greenAccent,
+    //       mini: true,
+    //       child: Icon(Icons.save),
+    //       onPressed: () => _atendida(context, preclinica),
+    //     )));
 
     childButtons.add(UnicornButton(
         hasLabel: true,
@@ -618,16 +618,12 @@ class PreclinicaDetallePage extends StatelessWidget {
     }
   }
 
-  _atendida(BuildContext context, PreclinicaViewModel preclinica) {
+  _eliminar(BuildContext context, PreclinicaViewModel preclinica) {
     AlertDialog alert = AlertDialog(
       title: Text("Información"),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          Text(
-            'Al confirmar esta acción la preclinica se cambiara a estado \"Atendida\"',
-            textAlign: TextAlign.center,
-          ),
           Text('Desea completar esta acción?'),
         ],
       ),
@@ -638,7 +634,7 @@ class PreclinicaDetallePage extends StatelessWidget {
         FlatButton(
             onPressed: () {
               Navigator.pop(context);
-              updatePreclinicaAndGoToDetalleConsulta(preclinica, context);
+              _desactivar(preclinica, context);
             },
             child: Text('Aceptar'))
       ],

@@ -1,5 +1,6 @@
 import 'package:appsam/src/widgets/firebaseMessageWrapper.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'dart:async';
 import 'package:getflutter/getflutter.dart';
@@ -51,10 +52,6 @@ class _CrearAsistentesPageState extends State<CrearAsistentesPage> {
     final GlobalKey<ScaffoldState> _scaffoldKey =
         new GlobalKey<ScaffoldState>();
 
-    MaskTextInputFormatter maskTelefono1 = new MaskTextInputFormatter(
-        mask: '####-####', filter: {"#": RegExp(r'[0-9]')});
-    MaskTextInputFormatter maskTelefono2 = new MaskTextInputFormatter(
-        mask: '####-####', filter: {"#": RegExp(r'[0-9]')});
     MaskTextInputFormatter maskNumeroColegiado = new MaskTextInputFormatter(
         mask: '#######', filter: {"#": RegExp(r'[0-9]')});
 
@@ -117,9 +114,9 @@ class _CrearAsistentesPageState extends State<CrearAsistentesPage> {
                           ),
                           _crearSexo('M', 'Masculino'),
                           _crearSexo('F', 'Femenino'),
-                          _crearCampoTelefono1(maskTelefono1, _asistente),
+                          _crearCampoTelefono1(_asistente),
                           _espacio(),
-                          _crearCampoTelefono2(maskTelefono2, _asistente),
+                          _crearCampoTelefono2(_asistente),
                           _espacio(),
                           _crearCampoColegioNumero(
                               _asistente, maskNumeroColegiado),
@@ -211,7 +208,10 @@ class _CrearAsistentesPageState extends State<CrearAsistentesPage> {
         controller: _txtControllerIdentificacion,
         autovalidate: true,
         maxLength: 13,
-        inputFormatters: [mask],
+        inputFormatters: [
+          LengthLimitingTextInputFormatter(13),
+          WhitelistingTextInputFormatter.digitsOnly
+        ],
         validator: (value) {
           if (value.length < 13) {
             return 'Campo obligatorio';
@@ -226,32 +226,40 @@ class _CrearAsistentesPageState extends State<CrearAsistentesPage> {
     );
   }
 
-  _crearCampoTelefono1(MaskTextInputFormatter mask, UsuarioModel _asistente) {
+  _crearCampoTelefono1(UsuarioModel _asistente) {
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
         autovalidate: true,
         validator: (value) {
-          if (value.length <= 8) {
+          if (value.length < 8) {
             return 'Campo incompleto';
           } else {
             return null;
           }
         },
         keyboardType: TextInputType.number,
-        inputFormatters: [mask],
+        inputFormatters: [
+          LengthLimitingTextInputFormatter(8),
+          WhitelistingTextInputFormatter.digitsOnly
+        ],
+        maxLength: 8,
         decoration: inputsDecorations('Teléfono', Icons.phone_android),
         onSaved: (value) => _asistente.telefono1 = value,
       ),
     );
   }
 
-  _crearCampoTelefono2(MaskTextInputFormatter mask, UsuarioModel _asistente) {
+  _crearCampoTelefono2(UsuarioModel _asistente) {
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
         keyboardType: TextInputType.number,
-        inputFormatters: [mask],
+        inputFormatters: [
+          LengthLimitingTextInputFormatter(8),
+          WhitelistingTextInputFormatter.digitsOnly
+        ],
+        maxLength: 8,
         decoration:
             inputsDecorations('Teléfono Secundario', Icons.phone_iphone),
         onSaved: (value) => _asistente.telefono2 = value,

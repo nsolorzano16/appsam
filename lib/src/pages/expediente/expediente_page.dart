@@ -7,6 +7,7 @@ import 'package:appsam/src/pages/expediente/exp_habitos.dart';
 import 'package:appsam/src/pages/expediente/exp_historialGineco_page.dart';
 
 import 'package:appsam/src/pages/expediente/exp_paciente_page.dart';
+import 'package:appsam/src/pages/expediente/exp_view_pdf_page.dart';
 import 'package:appsam/src/providers/consulta_service.dart';
 import 'package:appsam/src/utils/utils.dart';
 import 'package:appsam/src/widgets/drawer.dart';
@@ -107,6 +108,18 @@ class _ExpedientePageState extends State<ExpedientePage> {
                         child: ExpConsultas(consultas: expediente.consultas)),
                   ]));
             },
+          ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () => Navigator.of(context).push(PageRouteBuilder(
+                transitionDuration: const Duration(milliseconds: 800),
+                pageBuilder: (_, animation, __) => FadeTransition(
+                      opacity: animation,
+                      child: ViewPDFPage(
+                        pacienteId: _pacienteId,
+                        doctorId: _doctorId,
+                      ),
+                    ))),
+            child: FaIcon(FontAwesomeIcons.filePdf),
           ),
           bottomNavigationBar: BottomNavigationBar(
               type: BottomNavigationBarType.fixed,
