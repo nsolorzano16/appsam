@@ -195,24 +195,28 @@ class _CrearExamenFisicoPageState extends State<CrearExamenFisicoPage> {
     var childButtons = List<UnicornButton>();
 
     childButtons.add(UnicornButton(
+        hasLabel: true,
+        labelText: 'Eliminar',
         currentButton: FloatingActionButton(
-      heroTag: 'borrar',
-      backgroundColor: Colors.redAccent,
-      mini: true,
-      child: Icon(Icons.delete),
-      onPressed: () => (widget.examen.examenFisicoId != 0)
-          ? _confirmDesactivar(context)
-          : null,
-    )));
+          heroTag: 'borrar',
+          backgroundColor: Colors.redAccent,
+          mini: true,
+          child: Icon(Icons.delete),
+          onPressed: () => (widget.examen.examenFisicoId != 0)
+              ? _confirmDesactivar(context)
+              : null,
+        )));
 
     childButtons.add(UnicornButton(
+        hasLabel: true,
+        labelText: 'Guardar',
         currentButton: FloatingActionButton(
-      heroTag: 'guardar',
-      backgroundColor: Colors.greenAccent,
-      mini: true,
-      child: Icon(Icons.save),
-      onPressed: () => _guardar(context, preclinica),
-    )));
+          heroTag: 'guardar',
+          backgroundColor: Colors.greenAccent,
+          mini: true,
+          child: Icon(Icons.save),
+          onPressed: () => _guardar(context, preclinica),
+        )));
     return childButtons;
   }
 

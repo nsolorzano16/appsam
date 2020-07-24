@@ -74,9 +74,9 @@ class _MenuConsultaPageState extends State<MenuConsultaPage>
                   _tabConsulta(_preclinica)
                 ]),
                 floatingActionButton: FloatingActionButton(
-                  onPressed: () => -_atendida(context, _preclinica),
+                  onPressed: () => _atendida(context, _preclinica),
                   child: Icon(Icons.save),
-                  backgroundColor: Colors.greenAccent,
+                  backgroundColor: Colors.pinkAccent,
                 ),
                 bottomNavigationBar: Container(
                   color: Colors.red,
@@ -529,7 +529,7 @@ class _MenuConsultaPageState extends State<MenuConsultaPage>
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Text(
-            'Al confirmar esta acción la preclinica se cambiara a estado \"Atendida\"',
+            'Al confirmar esta acción la consulta se cambiara a estado \"Atendida\"',
             textAlign: TextAlign.center,
           ),
           Text('Desea completar esta acción?'),

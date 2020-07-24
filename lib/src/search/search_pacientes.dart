@@ -1,5 +1,6 @@
 import 'package:appsam/src/models/usuario_model.dart';
 import 'package:appsam/src/pages/expediente/expediente_page.dart';
+import 'package:appsam/src/search/search_delegate.dart';
 import 'package:appsam/src/utils/storage_util.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -10,7 +11,7 @@ import 'package:appsam/src/models/paginados/pacientesPaginado_model.dart';
 
 import '../providers/pacientes_service.dart';
 
-class DataSearchPacientes extends SearchDelegate {
+class DataSearchPacientes extends SearchDelegate<String> {
   Future<PacientesPaginadoModel> pacientesFuture;
   PacientesService pacientesService = new PacientesService();
 
@@ -80,6 +81,15 @@ class DataSearchPacientes extends SearchDelegate {
       },
     );
   }
+
+  // @override
+  // ThemeData appBarTheme(BuildContext context) {
+  //   assert(context != null);
+  //   final ThemeData theme = Theme.of(context);
+  //   assert(theme != null);
+
+  //   return theme;
+  // }
 
   Widget _item(
     BuildContext context,

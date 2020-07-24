@@ -93,5 +93,5 @@ class CustomLocalization extends DefaultMaterialLocalizations {
   const CustomLocalization();
 
   @override
-  String get searchFieldLabel => 'Buscar';
+  String get searchFieldLabel => 'Buscar por identificacion';
 }
