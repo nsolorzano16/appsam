@@ -71,7 +71,6 @@ class _ConsultaDetallePageState extends State<ConsultaDetallePage> {
         _preclinicaDetalle.pacienteId,
         _preclinicaDetalle.doctorId,
         _preclinicaDetalle.preclinicaId);
-    final size = MediaQuery.of(context).size;
 
     return WillPopScope(
         child: FirebaseMessageWrapper(
@@ -97,65 +96,54 @@ class _ConsultaDetallePageState extends State<ConsultaDetallePage> {
                   AsyncSnapshot<ConsultaModel> snapshot) {
                 final _consultaDetalle = snapshot.data;
                 if (snapshot.hasData) {
-                  return Column(
-                    children: <Widget>[
-                      GFCard(
-                        height: size.height * 0.5,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20.0)),
-                        elevation: 5.0,
-                        title: GFListTile(
-                          title: Text(
-                              '${_preclinicaDetalle.nombres} ${_preclinicaDetalle.primerApellido} ${_preclinicaDetalle.segundoApellido}'),
-                          subTitle:
-                              Text('${_preclinicaDetalle.identificacion}'),
-                          avatar: ClipOval(
-                            child: FadeInImage(
-                                fit: BoxFit.cover,
-                                width: 40.0,
-                                height: 40.0,
-                                placeholder:
-                                    AssetImage('assets/jar-loading.gif'),
-                                image:
-                                    NetworkImage(_preclinicaDetalle.fotoUrl)),
-                          ),
+                  return SingleChildScrollView(
+                    child: GFCard(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20.0)),
+                      elevation: 5.0,
+                      title: GFListTile(
+                        title: Text(
+                            '${_preclinicaDetalle.nombres} ${_preclinicaDetalle.primerApellido} ${_preclinicaDetalle.segundoApellido}'),
+                        subTitle: Text('${_preclinicaDetalle.identificacion}'),
+                        avatar: ClipOval(
+                          child: FadeInImage(
+                              fit: BoxFit.cover,
+                              width: 40.0,
+                              height: 40.0,
+                              placeholder: AssetImage('assets/jar-loading.gif'),
+                              image: NetworkImage(_preclinicaDetalle.fotoUrl)),
                         ),
-                        content: Table(
-                            children: _camposPaciente(_preclinicaDetalle)),
                       ),
-                      Expanded(
-                        child: ListView(
-                          padding: EdgeInsets.all(30),
-                          scrollDirection: Axis.horizontal,
-                          children: <Widget>[
-                            _cardPreclinica(context, _preclinicaDetalle),
-                            _cardAntecedentes(
-                                context,
-                                _preclinicaDetalle,
-                                _consultaDetalle
-                                    .antecedentesFamiliaresPersonales),
-                            _cardConsultaGeneral(context, _preclinicaDetalle,
-                                _consultaDetalle.consultaGeneral),
-                            _cardDiagnosticos(context, _preclinicaDetalle,
-                                _consultaDetalle.diagnosticos),
-                            _cardExamenes(context, _preclinicaDetalle,
-                                _consultaDetalle.examenesIndicados),
-                            _cardExamenFisico(context, _preclinicaDetalle,
-                                _consultaDetalle.examenFisico),
-                            _cardFarmacos(context, _preclinicaDetalle,
-                                _consultaDetalle.farmacosUsoActual),
-                            _cardHabitos(context, _preclinicaDetalle,
-                                _consultaDetalle.habitos),
-                            _cardHistorialGineco(context, _preclinicaDetalle,
-                                _consultaDetalle.historialGinecoObstetra),
-                            _cardNotas(context, _preclinicaDetalle,
-                                _consultaDetalle.notas),
-                            _cardPlanTerapeutico(context, _preclinicaDetalle,
-                                _consultaDetalle.planesTerapeuticos),
-                          ],
-                        ),
-                      )
-                    ],
+                      content: Column(
+                        children: <Widget>[
+                          Table(children: _camposPaciente(_preclinicaDetalle)),
+                          _cardPreclinica(context, _preclinicaDetalle),
+                          _cardAntecedentes(
+                              context,
+                              _preclinicaDetalle,
+                              _consultaDetalle
+                                  .antecedentesFamiliaresPersonales),
+                          _cardHabitos(context, _preclinicaDetalle,
+                              _consultaDetalle.habitos),
+                          _cardHistorialGineco(context, _preclinicaDetalle,
+                              _consultaDetalle.historialGinecoObstetra),
+                          _cardFarmacos(context, _preclinicaDetalle,
+                              _consultaDetalle.farmacosUsoActual),
+                          _cardConsultaGeneral(context, _preclinicaDetalle,
+                              _consultaDetalle.consultaGeneral),
+                          _cardExamenFisico(context, _preclinicaDetalle,
+                              _consultaDetalle.examenFisico),
+                          _cardPlanTerapeutico(context, _preclinicaDetalle,
+                              _consultaDetalle.planesTerapeuticos),
+                          _cardExamenes(context, _preclinicaDetalle,
+                              _consultaDetalle.examenesIndicados),
+                          _cardDiagnosticos(context, _preclinicaDetalle,
+                              _consultaDetalle.diagnosticos),
+                          _cardNotas(context, _preclinicaDetalle,
+                              _consultaDetalle.notas),
+                        ],
+                      ),
+                    ),
                   );
                 } else {
                   return loadingIndicator(context);
@@ -167,11 +155,9 @@ class _ConsultaDetallePageState extends State<ConsultaDetallePage> {
         onWillPop: () async => false);
   }
 
-  GestureDetector _cardAntecedentes(
-      BuildContext context,
-      PreclinicaViewModel preclinica,
+  Widget _cardAntecedentes(BuildContext context, PreclinicaViewModel preclinica,
       AntecedentesFamiliaresPersonales antecedentes) {
-    return GestureDetector(
+    return ListTile(
       onTap: (antecedentes == null)
           ? () {
               mostrarFlushBar(context, Colors.black, 'Info',
@@ -187,45 +173,29 @@ class _ConsultaDetallePageState extends State<ConsultaDetallePage> {
                         ),
                       )));
             },
-      child: Container(
-        width: 120,
-        height: 120,
-        child: Card(
-          color: Colors.white,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-          elevation: 4,
-          child: Column(
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(top: 10, bottom: 20),
-                child: Text(
-                  'Antecedentes Personales',
-                  style: TextStyle(fontSize: 14, color: Colors.red),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.only(top: 10),
-                child: Hero(
-                  tag: 'antecedentesPortada',
-                  child: FaIcon(
-                    FontAwesomeIcons.heartbeat,
-                    size: 45,
-                    color: Colors.red,
-                  ),
-                ),
-              )
-            ],
-          ),
+      leading: Hero(
+        tag: 'antecedentesPortada',
+        child: FaIcon(
+          FontAwesomeIcons.heartbeat,
+          size: 18,
+          color: Colors.red,
         ),
+      ),
+      trailing: FaIcon(
+        FontAwesomeIcons.arrowAltCircleRight,
+        color: Colors.red,
+      ),
+      title: Text(
+        'Antecedentes Personales',
+        overflow: TextOverflow.ellipsis,
+        style: TextStyle(fontSize: 14, color: Colors.red),
       ),
     );
   }
 
-  GestureDetector _cardConsultaGeneral(BuildContext context,
+  Widget _cardConsultaGeneral(BuildContext context,
       PreclinicaViewModel preclinica, ConsultaGeneralModel consulta) {
-    return GestureDetector(
+    return ListTile(
       onTap: (consulta == null)
           ? () {
               mostrarFlushBar(context, Colors.black, 'Info',
@@ -241,46 +211,28 @@ class _ConsultaDetallePageState extends State<ConsultaDetallePage> {
                         ),
                       )));
             },
-      child: Container(
-        height: 120,
-        width: 120,
-        child: Card(
-          color: Colors.white,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-          elevation: 4,
-          child: Column(
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(
-                    top: 10, bottom: 20, left: 5, right: 5),
-                child: Text(
-                  'Consulta General',
-                  style: TextStyle(fontSize: 14, color: Colors.red),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.only(top: 20),
-                child: Hero(
-                  tag: 'consultageneralportada',
-                  child: FaIcon(
-                    FontAwesomeIcons.briefcaseMedical,
-                    size: 50,
-                    color: Colors.red,
-                  ),
-                ),
-              )
-            ],
-          ),
+      trailing: FaIcon(
+        FontAwesomeIcons.arrowAltCircleRight,
+        color: Colors.red,
+      ),
+      leading: Hero(
+        tag: 'consultageneralportada',
+        child: FaIcon(
+          FontAwesomeIcons.briefcaseMedical,
+          size: 18,
+          color: Colors.red,
         ),
+      ),
+      title: Text(
+        'Consulta General',
+        style: TextStyle(fontSize: 14, color: Colors.red),
       ),
     );
   }
 
-  GestureDetector _cardDiagnosticos(BuildContext context,
-      PreclinicaViewModel preclinica, List<Diagnosticos> diagnosticos) {
-    return GestureDetector(
+  Widget _cardDiagnosticos(BuildContext context, PreclinicaViewModel preclinica,
+      List<Diagnosticos> diagnosticos) {
+    return ListTile(
       onTap: (diagnosticos.length == 0)
           ? () {
               mostrarFlushBar(context, Colors.black, 'Info',
@@ -296,47 +248,28 @@ class _ConsultaDetallePageState extends State<ConsultaDetallePage> {
                         ),
                       )));
             },
-      child: Container(
-        width: 120,
-        height: 120,
-        child: Card(
-          color: Colors.white,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-          elevation: 4,
-          child: Column(
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(top: 10, bottom: 20),
-                child: Text(
-                  'Diagnosticos',
-                  style: TextStyle(fontSize: 14, color: Colors.red),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.only(top: 35),
-                child: Hero(
-                  tag: 'diagnosticosportada',
-                  child: Icon(
-                    Icons.note,
-                    size: 50,
-                    color: Colors.red,
-                  ),
-                ),
-              )
-            ],
-          ),
+      trailing: FaIcon(
+        FontAwesomeIcons.arrowAltCircleRight,
+        color: Colors.red,
+      ),
+      leading: Hero(
+        tag: 'diagnosticosportada',
+        child: Icon(
+          Icons.note,
+          size: 18,
+          color: Colors.red,
         ),
+      ),
+      title: Text(
+        'Diagnosticos',
+        style: TextStyle(fontSize: 14, color: Colors.red),
       ),
     );
   }
 
-  GestureDetector _cardExamenes(
-      BuildContext context,
-      PreclinicaViewModel preclinica,
+  Widget _cardExamenes(BuildContext context, PreclinicaViewModel preclinica,
       List<ExamenesIndicadosViewModel> examenes) {
-    return GestureDetector(
+    return ListTile(
       onTap: (examenes.length == 0)
           ? () {
               mostrarFlushBar(context, Colors.black, 'Info',
@@ -352,45 +285,28 @@ class _ConsultaDetallePageState extends State<ConsultaDetallePage> {
                         ),
                       )));
             },
-      child: Container(
-        width: 120,
-        height: 120,
-        child: Card(
-          color: Colors.white,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-          elevation: 4,
-          child: Column(
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(top: 10, bottom: 20),
-                child: Text(
-                  'Examenes',
-                  style: TextStyle(fontSize: 14, color: Colors.red),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.only(top: 15),
-                child: Hero(
-                  tag: 'examenesportada',
-                  child: FaIcon(
-                    FontAwesomeIcons.flask,
-                    size: 50,
-                    color: Colors.red,
-                  ),
-                ),
-              )
-            ],
-          ),
+      trailing: FaIcon(
+        FontAwesomeIcons.arrowAltCircleRight,
+        color: Colors.red,
+      ),
+      leading: Hero(
+        tag: 'examenesportada',
+        child: FaIcon(
+          FontAwesomeIcons.flask,
+          size: 18,
+          color: Colors.red,
         ),
+      ),
+      title: Text(
+        'Examenes',
+        style: TextStyle(fontSize: 14, color: Colors.red),
       ),
     );
   }
 
-  GestureDetector _cardExamenFisico(BuildContext context,
-      PreclinicaViewModel preclinica, ExamenFisico examen) {
-    return GestureDetector(
+  Widget _cardExamenFisico(BuildContext context, PreclinicaViewModel preclinica,
+      ExamenFisico examen) {
+    return ListTile(
       onTap: (examen == null)
           ? () {
               mostrarFlushBar(context, Colors.black, 'Info',
@@ -406,45 +322,28 @@ class _ConsultaDetallePageState extends State<ConsultaDetallePage> {
                         ),
                       )));
             },
-      child: Container(
-        width: 120,
-        height: 120,
-        child: Card(
-          color: Colors.white,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-          elevation: 4,
-          child: Column(
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(top: 10, bottom: 20),
-                child: Text(
-                  'Examen Fisico',
-                  style: TextStyle(fontSize: 14, color: Colors.red),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.only(top: 32),
-                child: Hero(
-                  tag: 'examenfisicoportada',
-                  child: FaIcon(
-                    FontAwesomeIcons.diagnoses,
-                    size: 40,
-                    color: Colors.red,
-                  ),
-                ),
-              )
-            ],
-          ),
+      trailing: FaIcon(
+        FontAwesomeIcons.arrowAltCircleRight,
+        color: Colors.red,
+      ),
+      leading: Hero(
+        tag: 'examenfisicoportada',
+        child: FaIcon(
+          FontAwesomeIcons.diagnoses,
+          size: 18,
+          color: Colors.red,
         ),
+      ),
+      title: Text(
+        'Examen Fisico',
+        style: TextStyle(fontSize: 14, color: Colors.red),
       ),
     );
   }
 
-  GestureDetector _cardFarmacos(BuildContext context,
-      PreclinicaViewModel preclinica, List<FarmacosUsoActual> farmacos) {
-    return GestureDetector(
+  Widget _cardFarmacos(BuildContext context, PreclinicaViewModel preclinica,
+      List<FarmacosUsoActual> farmacos) {
+    return ListTile(
       onTap: (farmacos.length == 0)
           ? () {
               mostrarFlushBar(context, Colors.black, 'Info',
@@ -460,45 +359,28 @@ class _ConsultaDetallePageState extends State<ConsultaDetallePage> {
                         ),
                       )));
             },
-      child: Container(
-        width: 120,
-        height: 120,
-        child: Card(
-          color: Colors.white,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-          elevation: 4,
-          child: Column(
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(top: 10, bottom: 20),
-                child: Text(
-                  'Farmacos',
-                  style: TextStyle(fontSize: 14, color: Colors.red),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.only(top: 35),
-                child: Hero(
-                  tag: 'farmacosportada',
-                  child: FaIcon(
-                    FontAwesomeIcons.capsules,
-                    size: 40,
-                    color: Colors.red,
-                  ),
-                ),
-              )
-            ],
-          ),
+      trailing: FaIcon(
+        FontAwesomeIcons.arrowAltCircleRight,
+        color: Colors.red,
+      ),
+      leading: Hero(
+        tag: 'farmacosportada',
+        child: FaIcon(
+          FontAwesomeIcons.capsules,
+          size: 18,
+          color: Colors.red,
         ),
+      ),
+      title: Text(
+        'Farmacos',
+        style: TextStyle(fontSize: 14, color: Colors.red),
       ),
     );
   }
 
-  GestureDetector _cardHabitos(
+  Widget _cardHabitos(
       BuildContext context, PreclinicaViewModel preclinica, Habitos habitos) {
-    return GestureDetector(
+    return ListTile(
       onTap: (habitos == null)
           ? () {
               mostrarFlushBar(context, Colors.black, 'Info',
@@ -514,45 +396,28 @@ class _ConsultaDetallePageState extends State<ConsultaDetallePage> {
                         ),
                       )));
             },
-      child: Container(
-        width: 120,
-        height: 120,
-        child: Card(
-          color: Colors.white,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-          elevation: 4,
-          child: Column(
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(top: 10, bottom: 20),
-                child: Text(
-                  'Habitos',
-                  style: TextStyle(fontSize: 14, color: Colors.red),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.only(top: 35),
-                child: Hero(
-                  tag: 'habitosportada',
-                  child: FaIcon(
-                    FontAwesomeIcons.coffee,
-                    size: 40,
-                    color: Colors.red,
-                  ),
-                ),
-              )
-            ],
-          ),
+      trailing: FaIcon(
+        FontAwesomeIcons.arrowAltCircleRight,
+        color: Colors.red,
+      ),
+      leading: Hero(
+        tag: 'habitosportada',
+        child: FaIcon(
+          FontAwesomeIcons.coffee,
+          size: 18,
+          color: Colors.red,
         ),
+      ),
+      title: Text(
+        'Habitos',
+        style: TextStyle(fontSize: 14, color: Colors.red),
       ),
     );
   }
 
-  GestureDetector _cardHistorialGineco(BuildContext context,
+  Widget _cardHistorialGineco(BuildContext context,
       PreclinicaViewModel preclinica, HistorialGinecoViewModel historial) {
-    return GestureDetector(
+    return ListTile(
       onTap: (historial == null)
           ? () {
               mostrarFlushBar(context, Colors.black, 'Info',
@@ -568,44 +433,28 @@ class _ConsultaDetallePageState extends State<ConsultaDetallePage> {
                         ),
                       )));
             },
-      child: Container(
-        width: 120,
-        height: 120,
-        child: Card(
-          color: Colors.white,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-          elevation: 4,
-          child: Column(
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(top: 10, bottom: 20),
-                child: Text(
-                  'Historial Ginecológico',
-                  style: TextStyle(fontSize: 14, color: Colors.red),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              Container(
-                child: Hero(
-                  tag: 'historialginecologicoportada',
-                  child: FaIcon(
-                    FontAwesomeIcons.female,
-                    size: 50,
-                    color: Colors.red,
-                  ),
-                ),
-              )
-            ],
-          ),
+      trailing: FaIcon(
+        FontAwesomeIcons.arrowAltCircleRight,
+        color: Colors.red,
+      ),
+      leading: Hero(
+        tag: 'historialginecologicoportada',
+        child: FaIcon(
+          FontAwesomeIcons.female,
+          size: 18,
+          color: Colors.red,
         ),
+      ),
+      title: Text(
+        'Historial Ginecológico',
+        style: TextStyle(fontSize: 14, color: Colors.red),
       ),
     );
   }
 
-  GestureDetector _cardNotas(
+  Widget _cardNotas(
       BuildContext context, PreclinicaViewModel preclinica, List<Notas> notas) {
-    return GestureDetector(
+    return ListTile(
       onTap: (notas.length == 0)
           ? () {
               mostrarFlushBar(context, Colors.black, 'Info',
@@ -621,45 +470,28 @@ class _ConsultaDetallePageState extends State<ConsultaDetallePage> {
                         ),
                       )));
             },
-      child: Container(
-        width: 120,
-        height: 120,
-        child: Card(
-          color: Colors.white,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-          elevation: 4,
-          child: Column(
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(top: 10, bottom: 20),
-                child: Text(
-                  'Notas',
-                  style: TextStyle(fontSize: 14, color: Colors.red),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.only(top: 30),
-                child: Hero(
-                  tag: 'notasportada',
-                  child: Icon(
-                    Icons.note_add,
-                    size: 50,
-                    color: Colors.red,
-                  ),
-                ),
-              )
-            ],
-          ),
+      trailing: FaIcon(
+        FontAwesomeIcons.arrowAltCircleRight,
+        color: Colors.red,
+      ),
+      leading: Hero(
+        tag: 'notasportada',
+        child: Icon(
+          Icons.note_add,
+          size: 18,
+          color: Colors.red,
         ),
+      ),
+      title: Text(
+        'Notas',
+        style: TextStyle(fontSize: 14, color: Colors.red),
       ),
     );
   }
 
-  GestureDetector _cardPlanTerapeutico(BuildContext context,
+  Widget _cardPlanTerapeutico(BuildContext context,
       PreclinicaViewModel preclinica, List<PlanTerapeuticoViewModel> planes) {
-    return GestureDetector(
+    return ListTile(
       onTap: (planes.length == 0)
           ? () {
               mostrarFlushBar(context, Colors.black, 'Info',
@@ -675,41 +507,27 @@ class _ConsultaDetallePageState extends State<ConsultaDetallePage> {
                         ),
                       )));
             },
-      child: Card(
-        color: Colors.white,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        elevation: 4,
-        child: Column(
-          children: <Widget>[
-            Padding(
-              padding:
-                  const EdgeInsets.only(top: 10, bottom: 20, left: 5, right: 5),
-              child: Text(
-                'Plan Terapeutico',
-                style: TextStyle(fontSize: 14, color: Colors.red),
-                textAlign: TextAlign.center,
-              ),
-            ),
-            Container(
-              padding: EdgeInsets.only(top: 25),
-              child: Hero(
-                tag: 'planterapeuticoportada',
-                child: FaIcon(
-                  FontAwesomeIcons.stickyNote,
-                  size: 50,
-                  color: Colors.red,
-                ),
-              ),
-            )
-          ],
+      trailing: FaIcon(
+        FontAwesomeIcons.arrowAltCircleRight,
+        color: Colors.red,
+      ),
+      leading: Hero(
+        tag: 'planterapeuticoportada',
+        child: FaIcon(
+          FontAwesomeIcons.stickyNote,
+          size: 18,
+          color: Colors.red,
         ),
+      ),
+      title: Text(
+        'Plan Terapeutico',
+        style: TextStyle(fontSize: 14, color: Colors.red),
       ),
     );
   }
 
-  GestureDetector _cardPreclinica(
-      BuildContext context, PreclinicaViewModel preclinica) {
-    return GestureDetector(
+  Widget _cardPreclinica(BuildContext context, PreclinicaViewModel preclinica) {
+    return ListTile(
       onTap: () {
         Navigator.of(context).push(PageRouteBuilder(
             transitionDuration: const Duration(milliseconds: 800),
@@ -720,38 +538,21 @@ class _ConsultaDetallePageState extends State<ConsultaDetallePage> {
                   ),
                 )));
       },
-      child: Container(
-        width: 120,
-        height: 120,
-        child: Card(
-          color: Colors.white,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-          elevation: 4,
-          child: Column(
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(top: 10, bottom: 20),
-                child: Text(
-                  'Preclinica',
-                  style: TextStyle(fontSize: 14, color: Colors.red),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.only(top: 25),
-                child: Hero(
-                  tag: 'preclinicaPortada',
-                  child: FaIcon(
-                    FontAwesomeIcons.fileMedical,
-                    size: 45,
-                    color: Colors.red,
-                  ),
-                ),
-              )
-            ],
-          ),
+      leading: Hero(
+        tag: 'preclinicaPortada',
+        child: FaIcon(
+          FontAwesomeIcons.fileMedical,
+          size: 18,
+          color: Colors.red,
         ),
+      ),
+      trailing: FaIcon(
+        FontAwesomeIcons.arrowAltCircleRight,
+        color: Colors.red,
+      ),
+      title: Text(
+        'Preclinica',
+        style: TextStyle(fontSize: 14, color: Colors.red),
       ),
     );
   }
@@ -935,7 +736,7 @@ class _ConsultaDetallePageState extends State<ConsultaDetallePage> {
               ),
               Container()
             ])
-          : TableRow(children: [Container(), Container()])
+          : TableRow(children: [Container(), Container()]),
     ];
 
     return lista;

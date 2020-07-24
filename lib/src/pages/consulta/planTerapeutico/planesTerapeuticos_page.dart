@@ -36,6 +36,7 @@ class _PlanesTerapeuticosPageState extends State<PlanesTerapeuticosPage> {
     return WillPopScope(
         child: FirebaseMessageWrapper(
           child: Scaffold(
+            backgroundColor: colorFondoApp(),
             appBar: AppBar(
               title: Text('Consulta'),
               actions: <Widget>[

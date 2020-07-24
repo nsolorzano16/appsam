@@ -119,6 +119,7 @@ class _CrearHistorialGinecoObstetraPageState
     return WillPopScope(
         child: FirebaseMessageWrapper(
           child: Scaffold(
+              backgroundColor: colorFondoApp(),
               appBar: AppBar(
                 title: Text('Consulta'),
                 actions: <Widget>[

@@ -28,6 +28,7 @@ class PreclinicaDetallePage extends StatelessWidget {
     return WillPopScope(
         child: FirebaseMessageWrapper(
           child: Scaffold(
+              backgroundColor: colorFondoApp(),
               appBar: AppBar(
                 title: Text('Preclinica Detalle'),
                 actions: <Widget>[

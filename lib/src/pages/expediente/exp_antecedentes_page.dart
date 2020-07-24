@@ -36,6 +36,10 @@ class ExpAntecedentes extends StatelessWidget {
               'Antecedentes No Patológicos Personales',
               '${_antecedentes.antecedentesNoPatologicosPersonales}',
               estiloTitulos),
+          _cardItem(
+              'Antecedentes Inmuno Alérgicos',
+              '${_antecedentes.antecedentesInmunoAlergicosPersonales}',
+              estiloTitulos),
         ],
       ),
     );

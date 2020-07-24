@@ -54,6 +54,7 @@ class _ExpedientePageState extends State<ExpedientePage> {
     return WillPopScope(
       child: FirebaseMessageWrapper(
         child: Scaffold(
+          backgroundColor: colorFondoApp(),
           appBar: AppBar(
             title: Text('Expediente'),
             actions: <Widget>[

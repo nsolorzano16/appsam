@@ -1,4 +1,5 @@
 import 'package:appsam/src/models/notas_model.dart';
+import 'package:appsam/src/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:getflutter/getflutter.dart';
 
@@ -16,7 +17,7 @@ class DetNotasPage extends StatelessWidget {
       color: Colors.black,
     );
     return Scaffold(
-      backgroundColor: Color.fromRGBO(255, 244, 233, 1),
+      backgroundColor: colorFondoApp(),
       body: ListView(
         children: _cardItem(size, _notas, estiloTitulos),
       ),

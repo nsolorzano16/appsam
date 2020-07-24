@@ -49,6 +49,7 @@ class _CrearPreclinicaPageState extends State<CrearPreclinicaPage> {
     return WillPopScope(
         child: FirebaseMessageWrapper(
           child: Scaffold(
+              backgroundColor: colorFondoApp(),
               appBar: AppBar(
                 title: Text('Nueva Preclinica'),
                 actions: <Widget>[

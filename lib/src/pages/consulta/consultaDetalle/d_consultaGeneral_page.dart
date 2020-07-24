@@ -1,4 +1,5 @@
 import 'package:appsam/src/models/consultaGeneral_model.dart';
+import 'package:appsam/src/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:getflutter/getflutter.dart';
@@ -17,7 +18,7 @@ class DetConsultaGeneralPage extends StatelessWidget {
       color: Colors.black,
     );
     return Scaffold(
-      backgroundColor: Color.fromRGBO(255, 244, 233, 1),
+      backgroundColor: colorFondoApp(),
       body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,

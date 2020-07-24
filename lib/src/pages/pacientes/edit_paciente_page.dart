@@ -74,6 +74,7 @@ class _EditarPacientePageState extends State<EditarPacientePage> {
     return WillPopScope(
         child: FirebaseMessageWrapper(
           child: Scaffold(
+            backgroundColor: colorFondoApp(),
             appBar: AppBar(
               title: Text('Editar Paciente'),
               actions: <Widget>[

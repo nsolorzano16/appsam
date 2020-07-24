@@ -1,3 +1,4 @@
+import 'package:appsam/src/utils/utils.dart';
 import 'package:appsam/src/widgets/firebaseMessageWrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:getflutter/getflutter.dart';
@@ -33,6 +34,7 @@ class _PacienteDetalleState extends State<PacienteDetalle> {
     return WillPopScope(
         child: FirebaseMessageWrapper(
           child: Scaffold(
+              backgroundColor: colorFondoApp(),
               appBar: AppBar(
                 title: Text('${_paciente.nombres}'),
                 actions: <Widget>[

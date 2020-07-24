@@ -47,6 +47,7 @@ class _EditarPreclinicaPageState extends State<EditarPreclinicaPage> {
     return WillPopScope(
         child: FirebaseMessageWrapper(
           child: Scaffold(
+              backgroundColor: colorFondoApp(),
               appBar: AppBar(
                 title: Text('Editar Preclinica'),
                 actions: <Widget>[

@@ -27,6 +27,7 @@ class ResetMyPasswordPage extends StatelessWidget {
     return WillPopScope(
         child: FirebaseMessageWrapper(
           child: Scaffold(
+              backgroundColor: colorFondoApp(),
               drawer: MenuWidget(),
               appBar: AppBar(
                 title: Text('Cambiar mi contraseña'),

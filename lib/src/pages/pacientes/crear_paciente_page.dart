@@ -83,6 +83,7 @@ class _CrearPacientePageState extends State<CrearPacientePage> {
     return WillPopScope(
         child: FirebaseMessageWrapper(
           child: Scaffold(
+            backgroundColor: colorFondoApp(),
             appBar: AppBar(
               title: Text('Nuevo Paciente'),
               actions: <Widget>[

@@ -65,6 +65,7 @@ class _MenuConsultaPageState extends State<MenuConsultaPage>
             initialIndex: StorageUtil.getInt('indexTabMenuConsulta'),
             length: 2,
             child: Scaffold(
+                backgroundColor: colorFondoApp(),
                 appBar: AppBar(
                   title: Text('Menu Consulta'),
                 ),

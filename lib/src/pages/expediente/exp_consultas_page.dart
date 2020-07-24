@@ -28,7 +28,7 @@ class _ExpConsultasState extends State<ExpConsultas> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        color: Color.fromRGBO(255, 244, 233, 1),
+        color: colorFondoApp(),
         child: Column(
           children: <Widget>[
             (_consultas.length == 0)

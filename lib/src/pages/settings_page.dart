@@ -1,3 +1,4 @@
+import 'package:appsam/src/utils/utils.dart';
 import 'package:appsam/src/widgets/firebaseMessageWrapper.dart';
 import 'package:flutter/material.dart';
 
@@ -34,6 +35,7 @@ class _SettingsPageState extends State<SettingsPage> {
     return WillPopScope(
         child: FirebaseMessageWrapper(
           child: Scaffold(
+            backgroundColor: colorFondoApp(),
             drawer: MenuWidget(),
             appBar: AppBar(
               title: Text('Configuración'),

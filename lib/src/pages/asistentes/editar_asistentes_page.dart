@@ -1,3 +1,4 @@
+import 'package:appsam/src/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:appsam/src/widgets/drawer.dart';
 import 'package:appsam/src/widgets/firebaseMessageWrapper.dart';
@@ -25,6 +26,7 @@ class _EditarAsistentesPageState extends State<EditarAsistentesPage> {
     return WillPopScope(
         child: FirebaseMessageWrapper(
           child: Scaffold(
+            backgroundColor: colorFondoApp(),
             appBar: AppBar(
               title: Text('Editar Asistente'),
               actions: <Widget>[

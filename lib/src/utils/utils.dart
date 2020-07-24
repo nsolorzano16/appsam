@@ -29,6 +29,10 @@ void mostrarAlerta(BuildContext context, String mensaje) {
       });
 }
 
+Color colorFondoApp() {
+  return Color.fromRGBO(255, 244, 233, 1);
+}
+
 Widget loadingIndicator(BuildContext context) {
   return Center(
     child: SpinKitWave(

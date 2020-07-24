@@ -1,4 +1,5 @@
 import 'package:appsam/src/models/planTerapeutico_viewmodel.dart';
+import 'package:appsam/src/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:getflutter/getflutter.dart';
@@ -23,7 +24,7 @@ class DetPlanTerapeutico extends StatelessWidget {
       color: Colors.black,
     );
     return Scaffold(
-      backgroundColor: Color.fromRGBO(255, 244, 233, 1),
+      backgroundColor: colorFondoApp(),
       body: ListView(
         children: _cardItem(size, _plan, estiloTitulos, estiloItems),
       ),

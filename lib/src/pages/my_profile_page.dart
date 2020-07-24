@@ -41,6 +41,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
       return WillPopScope(
           child: FirebaseMessageWrapper(
             child: Scaffold(
+                backgroundColor: colorFondoApp(),
                 appBar: AppBar(
                   title: Text('Mi Perfil'),
                   actions: <Widget>[

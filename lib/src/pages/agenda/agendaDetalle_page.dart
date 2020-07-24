@@ -28,6 +28,7 @@ class _AgendaDetallePageState extends State<AgendaDetallePage> {
     final formatHoras = DateFormat.Hm('es_Es');
     final formatDates = DateFormat.yMMMMEEEEd('es_Es');
     return Scaffold(
+      backgroundColor: colorFondoApp(),
       appBar: AppBar(),
       body: SingleChildScrollView(
         child: GFCard(

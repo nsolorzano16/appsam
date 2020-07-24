@@ -1,4 +1,5 @@
 import 'package:appsam/src/models/antecedentesFamiliaresPersonales_model.dart';
+import 'package:appsam/src/utils/utils.dart';
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -19,7 +20,7 @@ class DetalleAntecedentesConsultaPage extends StatelessWidget {
       color: Colors.black,
     );
     return Scaffold(
-      backgroundColor: Color.fromRGBO(255, 244, 233, 1),
+      backgroundColor: colorFondoApp(),
       body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -41,6 +42,10 @@ class DetalleAntecedentesConsultaPage extends StatelessWidget {
                 'Antecedentes No Patológicos Personales',
                 '${_antecedentes.antecedentesNoPatologicosPersonales}',
                 estiloTitulos),
+            _cardItem(
+                'Antecedentes Inmuno Alérgicos',
+                '${_antecedentes.antecedentesInmunoAlergicosPersonales}',
+                estiloTitulos)
           ],
         ),
       ),
@@ -76,7 +81,7 @@ class DetalleAntecedentesConsultaPage extends StatelessWidget {
       child: Center(
         child: ListTile(
           title: Text(
-            'Plan Terapeutico',
+            'Antecedentes Personales',
             style: TextStyle(
                 fontSize: 24, color: Colors.white, fontWeight: FontWeight.bold),
           ),

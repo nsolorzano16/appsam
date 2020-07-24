@@ -59,6 +59,7 @@ class _AsistentesPageState extends State<AsistentesPage> {
     return WillPopScope(
         child: FirebaseMessageWrapper(
           child: Scaffold(
+            backgroundColor: colorFondoApp(),
             key: _scaffoldKey,
             drawer: MenuWidget(),
             appBar: AppBar(

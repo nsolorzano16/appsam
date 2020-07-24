@@ -1,7 +1,6 @@
 import 'package:appsam/src/providers/consulta_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_full_pdf_viewer/flutter_full_pdf_viewer.dart';
-import 'package:share/share.dart';
 
 class ViewPDFPage extends StatefulWidget {
   final int pacienteId;
@@ -47,6 +46,5 @@ class _ViewPDFPageState extends State<ViewPDFPage> {
             ),
             body: Center(child: CircularProgressIndicator()),
           );
-    ;
   }
 }

@@ -1,6 +1,5 @@
 import 'package:appsam/src/models/usuario_model.dart';
 import 'package:appsam/src/pages/expediente/expediente_page.dart';
-import 'package:appsam/src/search/search_delegate.dart';
 import 'package:appsam/src/utils/storage_util.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';

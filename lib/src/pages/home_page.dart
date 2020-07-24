@@ -4,6 +4,7 @@ import 'package:appsam/src/models/device_model.dart';
 import 'package:appsam/src/models/usuario_model.dart';
 import 'package:appsam/src/providers/FirebaseNotificationService.dart';
 import 'package:appsam/src/providers/devices_service.dart';
+import 'package:appsam/src/utils/utils.dart';
 import 'package:appsam/src/widgets/firebaseMessageWrapper.dart';
 
 import 'package:flutter/material.dart';
@@ -54,6 +55,7 @@ class _HomePageState extends State<HomePage> {
     return WillPopScope(
         child: FirebaseMessageWrapper(
           child: Scaffold(
+              backgroundColor: colorFondoApp(),
               drawer: MenuWidget(),
               appBar: AppBar(
                 title: Text('Inicio'),

@@ -58,6 +58,7 @@ class _CrearNotasPageState extends State<CrearNotasPage> {
     return WillPopScope(
         child: FirebaseMessageWrapper(
           child: Scaffold(
+              backgroundColor: colorFondoApp(),
               key: mScaffoldState,
               appBar: AppBar(
                 title: Text('Consulta'),

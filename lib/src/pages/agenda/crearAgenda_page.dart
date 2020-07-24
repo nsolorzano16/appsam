@@ -66,6 +66,7 @@ class _CrearAgendaPageState extends State<CrearAgendaPage> {
   Widget build(BuildContext context) {
     return WillPopScope(
       child: Scaffold(
+        backgroundColor: colorFondoApp(),
         drawer: MenuWidget(),
         appBar: AppBar(
           title: Text('Agendar cita'),

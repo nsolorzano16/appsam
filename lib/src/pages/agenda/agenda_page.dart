@@ -73,6 +73,7 @@ class _AgendaPageState extends State<AgendaPage> with TickerProviderStateMixin {
 
     return WillPopScope(
       child: Scaffold(
+        backgroundColor: colorFondoApp(),
         drawer: MenuWidget(),
         appBar: AppBar(
           title: Text('Agenda'),

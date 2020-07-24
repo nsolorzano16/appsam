@@ -72,6 +72,7 @@ class _EditPlanTerapeuticoPageState extends State<EditPlanTerapeuticoPage> {
     return WillPopScope(
         child: FirebaseMessageWrapper(
           child: Scaffold(
+            backgroundColor: colorFondoApp(),
             appBar: AppBar(
               title: Text('Consulta'),
               actions: <Widget>[

@@ -41,6 +41,7 @@ class _ExamenesIndicadosPageState extends State<ExamenesIndicadosPage> {
     return WillPopScope(
         child: FirebaseMessageWrapper(
           child: Scaffold(
+            backgroundColor: colorFondoApp(),
             appBar: AppBar(
               title: Text('Consulta'),
               actions: <Widget>[

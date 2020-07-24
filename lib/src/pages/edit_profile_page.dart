@@ -56,8 +56,15 @@ class _EditarMiPerfilPageState extends State<EditarMiPerfilPage> {
 
     return WillPopScope(
         child: Scaffold(
+          backgroundColor: colorFondoApp(),
           appBar: AppBar(
             title: Text('Editar mi información'),
+            actions: <Widget>[
+              IconButton(
+                  icon: Icon(Icons.arrow_back_ios),
+                  onPressed: () =>
+                      Navigator.pushReplacementNamed(context, 'my-profile'))
+            ],
           ),
           drawer: MenuWidget(),
           body: SingleChildScrollView(

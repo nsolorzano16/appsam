@@ -58,6 +58,7 @@ class _CrearHabitosPageState extends State<CrearHabitosPage> {
     return WillPopScope(
         child: FirebaseMessageWrapper(
           child: Scaffold(
+            backgroundColor: colorFondoApp(),
             appBar: AppBar(
               title: Text('Consulta'),
               actions: <Widget>[

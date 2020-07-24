@@ -59,6 +59,7 @@ class _CrearAsistentesPageState extends State<CrearAsistentesPage> {
     return WillPopScope(
         child: FirebaseMessageWrapper(
           child: Scaffold(
+              backgroundColor: colorFondoApp(),
               appBar: AppBar(
                 key: _scaffoldKey,
                 title: Text('Nuevo Asistente'),
