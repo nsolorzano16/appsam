@@ -48,6 +48,7 @@ class _HomePageState extends State<HomePage> {
     super.initState();
   }
 
+//23 de julio 7pm mac
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -59,7 +60,7 @@ class _HomePageState extends State<HomePage> {
               ),
               body: Center(
                 child: Text(
-                  'Release Date: 22 de julio de 2020 6:00 p.m',
+                  'Release Date: 23 de julio de 2020 7:00 p.m',
                   style: TextStyle(fontSize: 16.0),
                 ),
               )),
