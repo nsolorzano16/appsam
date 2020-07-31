@@ -1,3 +1,4 @@
+import 'package:appsam/src/blocs/cie_bloc.dart';
 import 'package:appsam/src/blocs/examenes_bloc.dart';
 import 'package:appsam/src/blocs/habitos_bloc.dart';
 import 'package:appsam/src/blocs/historialGineco_bloc.dart';
@@ -22,6 +23,7 @@ class Provider extends InheritedWidget {
   final _habitosBloc = new HabitosBloc();
   final _historialGinecoBloc = new HistorialGinecoObstetraBloc();
   final _examenesBloc = new ExamenesBloc();
+  final _cieBloc = new CieBloc();
 
   static Provider _instancia;
 
@@ -87,5 +89,9 @@ class Provider extends InheritedWidget {
 
   static ExamenesBloc examenesBloc(BuildContext context) {
     return context.dependOnInheritedWidgetOfExactType<Provider>()._examenesBloc;
+  }
+
+  static CieBloc cieBloc(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<Provider>()._cieBloc;
   }
 }

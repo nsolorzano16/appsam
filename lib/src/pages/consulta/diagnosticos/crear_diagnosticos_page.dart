@@ -2,6 +2,7 @@ import 'package:appsam/src/blocs/diagnosticos_bloc.dart';
 import 'package:appsam/src/models/diagnosticos_model.dart';
 import 'package:appsam/src/models/paginados/preclinica_paginadoVM.dart';
 import 'package:appsam/src/models/usuario_model.dart';
+import 'package:appsam/src/pages/consulta/diagnosticos/search_enfermedad.dart';
 import 'package:appsam/src/utils/storage_util.dart';
 import 'package:appsam/src/utils/utils.dart';
 import 'package:appsam/src/widgets/drawer.dart';
@@ -93,8 +94,8 @@ class _CrearDiagnosticosPageState extends State<CrearDiagnosticosPage> {
                             ),
                             child: ListTile(
                               title: Text('Diagnosticos'),
-                              subtitle:
-                                  Text('Click en el boton \"+\" para agregar'),
+                              subtitle: Text(
+                                  'Click en el boton \"Buscar\" para agregar'),
                             )),
                         Divider(
                           thickness: 2.0,
@@ -114,8 +115,9 @@ class _CrearDiagnosticosPageState extends State<CrearDiagnosticosPage> {
               ),
               floatingActionButton: FloatingActionButton(
                 backgroundColor: Theme.of(context).primaryColor,
-                onPressed: () => _dialogAdd(context, _preclinica),
-                child: Icon(Icons.add),
+                onPressed: () => showSearch(
+                    context: context, delegate: SearchEnfermedades()),
+                child: Icon(Icons.search),
               )),
         ),
         onWillPop: () async => false);

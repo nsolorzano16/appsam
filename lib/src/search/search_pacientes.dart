@@ -65,18 +65,13 @@ class DataSearchPacientes extends SearchDelegate<String> {
       stream: bloc.pacientesBusquedaStream,
       builder: (BuildContext context,
           AsyncSnapshot<List<PacientesViewModel>> snapshot) {
-        if (snapshot.hasData) {
-          if (!snapshot.hasData) return loadingIndicator(context);
-
-          return ListView.builder(
-            itemCount: snapshot.data.length,
-            itemBuilder: (BuildContext context, int index) {
-              return _item(context, snapshot.data[index]);
-            },
-          );
-        } else {
-          return loadingIndicator(context);
-        }
+        if (!snapshot.hasData) return loadingIndicator(context);
+        return ListView.builder(
+          itemCount: snapshot.data.length,
+          itemBuilder: (BuildContext context, int index) {
+            return _item(context, snapshot.data[index]);
+          },
+        );
       },
     );
   }
