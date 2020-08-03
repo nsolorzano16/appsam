@@ -62,7 +62,7 @@ class _HomePageState extends State<HomePage> {
               ),
               body: Center(
                 child: Text(
-                  'Release Date: 28 de julio de 2020 7:00 p.m',
+                  'Release Date: 03 de agosto de 2020 3:00 p.m',
                   style: TextStyle(fontSize: 16.0),
                 ),
               )),
