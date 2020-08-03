@@ -1,3 +1,5 @@
+import 'package:appsam/src/common/debouncer.dart';
+import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:appsam/src/blocs/validators.dart';
 import 'package:appsam/src/models/municipio_model.dart';
@@ -72,27 +74,6 @@ class PacientesBloc with Validators {
     _cargandoMunicipiosResiController.sink.add(false);
   }
 
-  // cargarPacientesPaginado(int page, String filter) async {
-  //   final pacientes = await _pacienteService.getPacientesPaginado(page, filter);
-  //   _ultimaPaginaController.add(pacientes.totalPages);
-  //   listPacientes.addAll(pacientes.items);
-
-  //   onChangePacientesLista(listPacientes);
-  // }
-
-  // cargarPacientesPaginadoRefresh(int page, String filter) async {
-  //   final pacientes = await _pacienteService.getPacientesPaginado(page, filter);
-  //   _ultimaPaginaController.add(pacientes.totalPages);
-  //   listPacientes.clear();
-  //   listPacientes.addAll(pacientes.items);
-  //   onChangePacientesLista(listPacientes);
-  // }
-
-  cargarPacientesPaginadoBusqueda(int page, String filter) async {
-    final pacientes = await _pacienteService.getPacientesPaginado(page, filter);
-    onChangePacientesBusqueda(pacientes.items);
-  }
-
   Future<bool> addPaciente(PacienteModel paciente) async {
     return await _pacienteService.addPaciente(paciente);
   }
@@ -113,4 +94,28 @@ class PacientesBloc with Validators {
   int get ultimaPagina => _ultimaPaginaController.value;
   bool get cargando => _cargandoMunicipiosController.value;
   bool get cargandoMunicipiosResi => _cargandoMunicipiosResiController.value;
+}
+
+class PacientesBlocBusqueda extends ChangeNotifier {
+  bool loading = false;
+  final debouncer = Debouncer();
+  final _pacienteService = new PacientesService();
+  List<PacientesViewModel> pacientes = List();
+
+  void cargarPacientesPaginadoBusqueda(int page, String filter) async {
+    debouncer.run(
+      () async {
+        if (filter.isNotEmpty && filter.length == 13) {
+          loading = true;
+          notifyListeners();
+          final resp =
+              await _pacienteService.getPacientesPaginado(page, filter);
+          pacientes = resp.items;
+
+          loading = false;
+          notifyListeners();
+        }
+      },
+    );
+  }
 }

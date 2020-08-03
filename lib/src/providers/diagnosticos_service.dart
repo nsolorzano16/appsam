@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:appsam/src/models/diagnosticos_viewmodel.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:appsam/src/models/diagnosticos_model.dart';
@@ -32,6 +33,27 @@ class DiagnosticosService {
     return [];
   }
 
+  Future<Diagnosticos> addDiagnosticos(diagnostico) async {
+    final String token = StorageUtil.getString('token');
+    final headers = {
+      "content-type": "application/json",
+      "accept": "application/json",
+      'authorization': 'Bearer $token',
+    };
+    final url = '$_apiURL/api/Diagnosticos/agregar';
+    final resp = await http.post(url,
+        headers: headers, body: diagnosticosToJson(diagnostico));
+
+    print(resp.body);
+    if (resp.statusCode == 200 && resp.body.isNotEmpty) {
+      final decodedData = json.decode(resp.body);
+      final diagnosticoTemp = Diagnosticos.fromJson(decodedData);
+
+      return diagnosticoTemp;
+    }
+    return null;
+  }
+
   Future<List<Diagnosticos>> updateListaDiagnosticos(
       List<Diagnosticos> diagnosticos) async {
     final String token = StorageUtil.getString('token');
@@ -58,7 +80,7 @@ class DiagnosticosService {
     return [];
   }
 
-  Future<bool> desactivar(Diagnosticos diagnostico) async {
+  Future<bool> desactivar(DiagnosticosViewModel diagnostico) async {
     final String token = StorageUtil.getString('token');
     final headers = {
       "content-type": "application/json",
@@ -68,17 +90,17 @@ class DiagnosticosService {
     final url = '$_apiURL/api/Diagnosticos/desactivar';
 
     final resp = await http.put(url,
-        headers: headers, body: diagnosticosToJson(diagnostico));
+        headers: headers, body: diagnosticosViewModelToJson(diagnostico));
 
-    if (resp.statusCode == 200) return true;
+    if (resp.statusCode == 200 && resp.body.isNotEmpty) return true;
 
     return false;
   }
 
-  Future<List<Diagnosticos>> getDiagnosticos(
+  Future<List<DiagnosticosViewModel>> getDiagnosticos(
       int pacienteId, int doctorId, int preclinicaId) async {
     final String token = StorageUtil.getString('token');
-    final List<Diagnosticos> lista = new List();
+    final List<DiagnosticosViewModel> lista = new List();
     final headers = {
       "content-type": "application/json",
       "accept": "application/json",
@@ -92,7 +114,7 @@ class DiagnosticosService {
     if (resp.statusCode == 200 && resp.body.isNotEmpty) {
       final decodedData = json.decode(resp.body);
       decodedData.forEach((diagnostico) {
-        final diagnosticoTemp = Diagnosticos.fromJson(diagnostico);
+        final diagnosticoTemp = DiagnosticosViewModel.fromJson(diagnostico);
         lista.add(diagnosticoTemp);
       });
       if (lista != null) return lista;

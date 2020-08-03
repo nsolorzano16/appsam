@@ -1,87 +1,97 @@
 import 'package:appsam/src/blocs/cie_bloc.dart';
-import 'package:appsam/src/blocs/provider.dart';
-import 'package:appsam/src/models/cie_model.dart';
-import 'package:appsam/src/models/paginados/enfermedadesPaginado_model.dart';
-import 'package:appsam/src/models/usuario_model.dart';
-import 'package:appsam/src/utils/storage_util.dart';
+import 'package:appsam/src/models/paginados/preclinica_paginadoVM.dart';
+import 'package:appsam/src/pages/consulta/diagnosticos/crear_diagnosticos_page.dart';
 import 'package:appsam/src/utils/utils.dart';
 import 'package:flutter/material.dart';
 
-class SearchEnfermedades extends SearchDelegate<String> {
-  Future<EnfermedadesPaginadoModel> enfermedadesfuture;
+class SearchEnfemedadesPage extends StatelessWidget {
+  final PreclinicaViewModel preclinica;
 
-  UsuarioModel _usuario =
-      usuarioModelFromJson(StorageUtil.getString('usuarioGlobal'));
-
-  @override
-  List<Widget> buildActions(BuildContext context) {
-    // acciones de nuestro appbar
-    return [
-      IconButton(
-          icon: Icon(
-            Icons.delete,
-            color: Colors.red,
-          ),
-          onPressed: () {
-            query = '';
-          }),
-    ];
-  }
+  const SearchEnfemedadesPage({Key key, this.preclinica}) : super(key: key);
 
   @override
-  Widget buildLeading(BuildContext context) {
-    // icono a la izquierda del appbar
-    return IconButton(
-        icon: AnimatedIcon(
-            icon: AnimatedIcons.menu_arrow, progress: transitionAnimation),
-        onPressed: () {
-          close(context, null);
-        });
-  }
+  Widget build(BuildContext context) {
+    CieBlocNoti bloc = CieBlocNoti();
 
-  @override
-  Widget buildResults(BuildContext context) {
-    return Container();
-  }
-
-  @override
-  Widget buildSuggestions(BuildContext context) {
-    final cieBloc = Provider.cieBloc(context);
-    if (query.isEmpty) return Container();
-    if (query.length >= 3) {
-      cieBloc.cargarEnfermedadesBusqueda(1, query);
-    } else {
-      return Container();
-    }
-
-    return StreamBuilder(
-      stream: cieBloc.enfermedadesBusquedaStream,
-      builder: (BuildContext context, AsyncSnapshot<List<CieModel>> snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting)
-          return loadingIndicator(context);
-        if (!snapshot.hasData) return loadingIndicator(context);
-        return ListView.separated(
-          itemCount: snapshot.data.length,
-          separatorBuilder: (BuildContext context, int index) => Divider(),
-          itemBuilder: (BuildContext context, int index) {
-            return _item(context, snapshot.data[index], index);
-          },
-        );
-      },
-    );
-  }
-
-  Widget _item(BuildContext context, CieModel data, int index) {
-    index++;
-    return Container(
-      child: ListTile(
-        title: Text(
-          '$index-${data.nombre.toLowerCase()}',
-          textAlign: TextAlign.justify,
+    return Scaffold(
+        appBar: AppBar(
+          title: Text(''),
         ),
-        subtitle: Text('${data.codigo}'),
-        trailing: Icon(Icons.arrow_right),
-      ),
-    );
+        body: Column(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Card(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0)),
+                elevation: 6.0,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextField(
+                    onChanged: bloc.onChangedText,
+                    decoration: inputsDecorations('', Icons.search,
+                        helperTexto: 'Nombre, codigo de la enfermedad.',
+                        hintTexto: 'buscar'),
+                  ),
+                ),
+              ),
+            ),
+            Expanded(
+              child: AnimatedBuilder(
+                animation: bloc,
+                builder: (context, child) {
+                  return (bloc.loading)
+                      ? loadingIndicator(context)
+                      : ListView.builder(
+                          itemCount: bloc.enfermedades.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            final enf = bloc.enfermedades[index];
+                            return Padding(
+                              padding: const EdgeInsets.all(4.0),
+                              child: Card(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10.0)),
+                                elevation: 2,
+                                child: ListTile(
+                                  onTap: () => Navigator.of(context).push(
+                                    PageRouteBuilder(
+                                        pageBuilder: (context, animation,
+                                                secondAnimation) =>
+                                            CrearDiagnosticosPage(
+                                              preclinica: preclinica,
+                                              cieId: enf.cieId,
+                                              enfermedad: enf.nombre,
+                                            ),
+                                        transitionsBuilder: (context, animation,
+                                            secondAnimation, child) {
+                                          var begin = Offset(0.0, 1.0);
+                                          var end = Offset.zero;
+                                          var curve = Curves.ease;
+                                          var tween = Tween(
+                                                  begin: begin, end: end)
+                                              .chain(CurveTween(curve: curve));
+                                          return SlideTransition(
+                                            position: animation.drive(tween),
+                                            child: child,
+                                          );
+                                        }),
+                                  ),
+                                  title: Text(
+                                    enf.nombre.toLowerCase(),
+                                    textAlign: TextAlign.justify,
+                                  ),
+                                  subtitle: Text('${enf.codigo}'),
+                                  trailing: Icon(Icons.arrow_right,
+                                      color: Colors.red),
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                },
+              ),
+            ),
+          ],
+        ));
   }
 }

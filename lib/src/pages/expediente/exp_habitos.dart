@@ -51,9 +51,12 @@ class ExpHabitos extends StatelessWidget {
                   _itemTexto('Droga:', estiloTitulos),
                   _itemBoolean(_habitos.drogasEstupefaciente)
                 ]),
+              ],
+            ),
+            Table(
+              children: [
                 TableRow(children: [
-                  _itemTexto('Notas:', estiloTitulos),
-                  _itemTexto('${_habitos.notas}', estiloTitulos),
+                  _itemTexto('Notas: ${_habitos.notas}', estiloTitulos),
                 ]),
               ],
             )

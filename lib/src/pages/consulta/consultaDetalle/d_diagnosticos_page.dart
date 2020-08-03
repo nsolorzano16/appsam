@@ -1,10 +1,10 @@
-import 'package:appsam/src/models/diagnosticos_model.dart';
+import 'package:appsam/src/models/diagnosticos_viewmodel.dart';
 import 'package:appsam/src/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:getflutter/getflutter.dart';
 
 class DetalleDiagnosticosPage extends StatelessWidget {
-  final List<Diagnosticos> _diagnosticos;
+  final List<DiagnosticosViewModel> _diagnosticos;
 
   const DetalleDiagnosticosPage({@required diagnosticos})
       : _diagnosticos = diagnosticos;
@@ -29,8 +29,8 @@ class DetalleDiagnosticosPage extends StatelessWidget {
     );
   }
 
-  List<Widget> _cardItem(Size size, List<Diagnosticos> listaDiagnosticos,
-      TextStyle estiloTitulos) {
+  List<Widget> _cardItem(Size size,
+      List<DiagnosticosViewModel> listaDiagnosticos, TextStyle estiloTitulos) {
     final List<Widget> lista = new List();
     final stack = _appBar(size);
     lista.add(stack);
@@ -40,14 +40,15 @@ class DetalleDiagnosticosPage extends StatelessWidget {
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
         title: GFListTile(
-            title: Padding(
-              padding: EdgeInsets.all(3),
-              child: Text(
-                'Diagnostico',
-                style: estiloTitulos,
-              ),
+            title: Text(
+              'Enfermedad',
+              style: estiloTitulos,
             ),
-            subtitleText: element.problemasClinicos),
+            subtitleText: '${element.nombreCie.toLowerCase()}'),
+        content: Text(
+          'Problema clínico: ${element.problemasClinicos} ',
+          textAlign: TextAlign.justify,
+        ),
       );
       lista.add(itemTemp);
     });

@@ -86,9 +86,13 @@ class ExpHistorialGineco extends StatelessWidget {
                       '${(_historial.fechaMenopausia == null) ? '' : format.format(_historial.fechaMenopausia)}',
                       estiloTitulos),
                 ]),
+              ],
+            ),
+            Table(
+              children: [
                 TableRow(children: [
-                  _itemTexto('Notas adicionales:', estiloTitulos),
-                  _itemTexto('${_historial.notas}', estiloTitulos),
+                  _itemTexto(
+                      'Notas adicionales: ${_historial.notas}', estiloTitulos),
                 ]),
               ],
             )

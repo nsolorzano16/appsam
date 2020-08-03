@@ -4,7 +4,7 @@ import 'package:appsam/src/blocs/consulta_bloc.dart';
 import 'package:appsam/src/models/antecedentesFamiliaresPersonales_model.dart';
 import 'package:appsam/src/models/consultaGeneral_model.dart';
 import 'package:appsam/src/models/consulta_model.dart';
-import 'package:appsam/src/models/diagnosticos_model.dart';
+import 'package:appsam/src/models/diagnosticos_viewmodel.dart';
 
 import 'package:appsam/src/models/examenFisico_model.dart';
 import 'package:appsam/src/models/examenesIndicados_viewmodel.dart';
@@ -231,7 +231,7 @@ class _ConsultaDetallePageState extends State<ConsultaDetallePage> {
   }
 
   Widget _cardDiagnosticos(BuildContext context, PreclinicaViewModel preclinica,
-      List<Diagnosticos> diagnosticos) {
+      List<DiagnosticosViewModel> diagnosticos) {
     return ListTile(
       onTap: (diagnosticos.length == 0)
           ? () {

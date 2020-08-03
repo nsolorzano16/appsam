@@ -245,7 +245,7 @@ class _MenuConsultaPageState extends State<MenuConsultaPage>
                             _preclinica,
                             Icons.note,
                             'Diagnosticos',
-                            'crear_diagnosticos',
+                            'diagnosticos',
                             Colors.pink,
                             context),
                       ),

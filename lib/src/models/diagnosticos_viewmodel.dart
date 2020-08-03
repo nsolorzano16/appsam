@@ -1,14 +1,19 @@
+// To parse this JSON data, do
+//
+//     final diagnosticosViewModel = diagnosticosViewModelFromJson(jsonString);
+
 import 'dart:convert';
 
-Diagnosticos diagnosticosFromJson(String str) =>
-    Diagnosticos.fromJson(json.decode(str));
+DiagnosticosViewModel diagnosticosViewModelFromJson(String str) =>
+    DiagnosticosViewModel.fromJson(json.decode(str));
 
-String diagnosticosToJson(Diagnosticos data) => json.encode(data.toJson());
+String diagnosticosViewModelToJson(DiagnosticosViewModel data) =>
+    json.encode(data.toJson());
 
-String diagnosticosToJsonList(List<Diagnosticos> data) => json.encode(data);
-
-class Diagnosticos {
-  Diagnosticos({
+class DiagnosticosViewModel {
+  DiagnosticosViewModel({
+    this.codigoCie,
+    this.nombreCie,
     this.diagnosticoId,
     this.pacienteId,
     this.doctorId,
@@ -23,6 +28,8 @@ class Diagnosticos {
     this.notas,
   });
 
+  String codigoCie;
+  String nombreCie;
   int diagnosticoId;
   int pacienteId;
   int doctorId;
@@ -36,15 +43,18 @@ class Diagnosticos {
   DateTime modificadoFecha;
   String notas;
 
-  factory Diagnosticos.fromJson(Map<String, dynamic> json) => Diagnosticos(
-        diagnosticoId:
-            json["diagnosticoId"] == null ? null : json["diagnosticoId"],
+  factory DiagnosticosViewModel.fromJson(Map<String, dynamic> json) =>
+      DiagnosticosViewModel(
+        codigoCie: json["codigoCie"],
+        nombreCie: json["nombreCie"],
+        diagnosticoId: json["diagnosticoId"],
         pacienteId: json["pacienteId"],
         doctorId: json["doctorId"],
         cieId: json["cieId"],
         preclinicaId: json["preclinicaId"],
-        problemasClinicos:
-            json["problemasClinicos"] == null ? '' : json["problemasClinicos"],
+        problemasClinicos: json["problemasClinicos"] == null
+            ? null
+            : json["problemasClinicos"],
         activo: json["activo"],
         creadoPor: json["creadoPor"],
         creadoFecha: DateTime.parse(json["creadoFecha"]),
@@ -54,6 +64,8 @@ class Diagnosticos {
       );
 
   Map<String, dynamic> toJson() => {
+        "codigoCie": codigoCie,
+        "nombreCie": nombreCie,
         "diagnosticoId": diagnosticoId,
         "pacienteId": pacienteId,
         "doctorId": doctorId,

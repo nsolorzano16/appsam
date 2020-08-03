@@ -2,7 +2,7 @@ import 'package:appsam/src/pages/agenda/agenda_page.dart';
 import 'package:appsam/src/pages/agenda/crearAgenda_page.dart';
 import 'package:appsam/src/pages/consulta/consultaGeneral/crear_consultaGeneral_page.dart';
 import 'package:appsam/src/pages/consulta/consulta_detalle_page.dart';
-import 'package:appsam/src/pages/consulta/diagnosticos/crear_diagnosticos_page.dart';
+import 'package:appsam/src/pages/consulta/diagnosticos/diagnosticos_page.dart';
 
 import 'package:appsam/src/pages/consulta/examenesIndicados/crear_ExamenIndicado_page.dart';
 
@@ -74,8 +74,7 @@ Map<String, WidgetBuilder> getApplicationRoutes(ThemeBloc bloc) {
     CrearHabitosPage.routeName: (BuildContext context) => CrearHabitosPage(),
     CrearFarmacosUsoActualPage.routeName: (BuildContext context) =>
         CrearFarmacosUsoActualPage(),
-    CrearDiagnosticosPage.routeName: (BuildContext context) =>
-        CrearDiagnosticosPage(),
+    DiagnosticosPage.routeName: (BuildContext context) => DiagnosticosPage(),
     CrearNotasPage.routeName: (BuildContext context) => CrearNotasPage(),
     ConsultaDetallePage.routeName: (BuildContext context) =>
         ConsultaDetallePage(),

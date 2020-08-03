@@ -12,7 +12,7 @@ class ExpAntecedentes extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final estiloTitulos = TextStyle(
-      fontSize: 14,
+      fontSize: 16,
       fontWeight: FontWeight.w500,
       color: Colors.black,
     );
@@ -50,14 +50,19 @@ class ExpAntecedentes extends StatelessWidget {
       elevation: 3,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
       title: GFListTile(
-          title: Padding(
-            padding: EdgeInsets.all(3),
-            child: Text(
-              titulo,
-              style: estiloTitulos,
-            ),
+        title: Padding(
+          padding: EdgeInsets.all(3),
+          child: Text(
+            titulo,
+            style: estiloTitulos,
           ),
-          subtitleText: descripcion),
+        ),
+        subTitle: Text(
+          descripcion,
+          textAlign: TextAlign.justify,
+          style: TextStyle(fontSize: 15.0),
+        ),
+      ),
     );
   }
 }

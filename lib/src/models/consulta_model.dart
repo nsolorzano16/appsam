@@ -6,7 +6,7 @@ import 'dart:convert';
 
 import 'package:appsam/src/models/antecedentesFamiliaresPersonales_model.dart';
 import 'package:appsam/src/models/consultaGeneral_model.dart';
-import 'package:appsam/src/models/diagnosticos_model.dart';
+import 'package:appsam/src/models/diagnosticos_viewmodel.dart';
 
 import 'package:appsam/src/models/examenFisico_model.dart';
 import 'package:appsam/src/models/examenesIndicados_viewmodel.dart';
@@ -31,7 +31,7 @@ class ConsultaModel {
   List<FarmacosUsoActual> farmacosUsoActual;
   ExamenFisico examenFisico;
   //ExamenFisicoGinecologico examenFisicoGinecologico;
-  List<Diagnosticos> diagnosticos;
+  List<DiagnosticosViewModel> diagnosticos;
   List<Notas> notas;
   ConsultaGeneralModel consultaGeneral;
   List<ExamenesIndicadosViewModel> examenesIndicados;
@@ -80,8 +80,8 @@ class ConsultaModel {
         //         json["examenFisicoGinecologico"]),
         diagnosticos: json["diagnosticos"] == null
             ? null
-            : List<Diagnosticos>.from(
-                json["diagnosticos"].map((x) => Diagnosticos.fromJson(x))),
+            : List<DiagnosticosViewModel>.from(json["diagnosticos"]
+                .map((x) => DiagnosticosViewModel.fromJson(x))),
         notas: json["notas"] == null
             ? null
             : List<Notas>.from(json["notas"].map((x) => Notas.fromJson(x))),
