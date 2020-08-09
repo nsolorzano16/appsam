@@ -3,6 +3,7 @@ import 'package:appsam/src/models/expediente_model.dart';
 import 'package:appsam/src/pages/expediente/exp_antecedentes_page.dart';
 import 'package:appsam/src/pages/expediente/exp_consultas_page.dart';
 import 'package:appsam/src/pages/expediente/exp_farmacos_page.dart';
+import 'package:appsam/src/pages/expediente/gallery/exp_gallery.dart';
 import 'package:appsam/src/pages/expediente/exp_habitos.dart';
 import 'package:appsam/src/pages/expediente/exp_historialGineco_page.dart';
 
@@ -14,6 +15,7 @@ import 'package:appsam/src/widgets/drawer.dart';
 import 'package:appsam/src/widgets/firebaseMessageWrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:unicorndial/unicorndial.dart';
 
 class ExpedientePage extends StatefulWidget {
   final int pacienteId;
@@ -110,18 +112,15 @@ class _ExpedientePageState extends State<ExpedientePage> {
                   ]));
             },
           ),
-          floatingActionButton: FloatingActionButton(
-            onPressed: () => Navigator.of(context).push(PageRouteBuilder(
-                transitionDuration: const Duration(milliseconds: 800),
-                pageBuilder: (_, animation, __) => FadeTransition(
-                      opacity: animation,
-                      child: ViewPDFPage(
-                        pacienteId: _pacienteId,
-                        doctorId: _doctorId,
-                      ),
-                    ))),
-            child: FaIcon(FontAwesomeIcons.filePdf),
-          ),
+          floatingActionButton: UnicornDialer(
+              backgroundColor: Color.fromRGBO(255, 255, 255, 0.6),
+              hasBackground: false,
+              parentButtonBackground: Theme.of(context).primaryColor,
+              orientation: UnicornOrientation.VERTICAL,
+              parentButton: Icon(Icons.menu),
+              childButtons: botones(
+                context,
+              )),
           bottomNavigationBar: BottomNavigationBar(
               type: BottomNavigationBarType.fixed,
               backgroundColor: Colors.red,
@@ -154,5 +153,62 @@ class _ExpedientePageState extends State<ExpedientePage> {
 
   Widget _noInfo() {
     return ZoomIn(child: Center(child: Text('No hay información.')));
+  }
+
+  List<UnicornButton> botones(BuildContext context) {
+    var childButtons = List<UnicornButton>();
+
+    childButtons.add(
+      UnicornButton(
+        labelText: 'galeria',
+        currentButton: FloatingActionButton(
+          heroTag: 'albumfotos',
+          backgroundColor: Colors.blueGrey,
+          mini: true,
+          child: FaIcon(
+            FontAwesomeIcons.images,
+            size: 17,
+          ),
+          onPressed: () => Navigator.of(context).push(
+            PageRouteBuilder(
+              transitionDuration: const Duration(milliseconds: 400),
+              pageBuilder: (_, animation, __) => SlideTransition(
+                position: Tween<Offset>(
+                  begin: Offset(0.0, 1.0),
+                  end: Offset(0.0, 0.0),
+                ).animate(animation),
+                child: ExpGalleryPage(
+                  pacienteId: _pacienteId,
+                  doctorId: _doctorId,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+
+    childButtons.add(UnicornButton(
+      labelText: 'Consulta',
+      currentButton: FloatingActionButton(
+        mini: true,
+        heroTag: 'generandopdf',
+        onPressed: () => Navigator.of(context).push(PageRouteBuilder(
+            transitionDuration: const Duration(milliseconds: 600),
+            pageBuilder: (_, animation, __) => FadeTransition(
+                  opacity: animation,
+                  child: ViewPDFPage(
+                    pacienteId: _pacienteId,
+                    doctorId: _doctorId,
+                  ),
+                ))),
+        child: FaIcon(
+          FontAwesomeIcons.filePdf,
+          size: 17,
+        ),
+      ),
+    ));
+
+    return childButtons;
   }
 }

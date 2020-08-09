@@ -1,4 +1,3 @@
-import 'package:appsam/src/blocs/examenes_bloc.dart';
 import 'package:appsam/src/blocs/habitos_bloc.dart';
 import 'package:appsam/src/blocs/historialGineco_bloc.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +20,6 @@ class Provider extends InheritedWidget {
   final _consultaBloc = new ConsultaBloc();
   final _habitosBloc = new HabitosBloc();
   final _historialGinecoBloc = new HistorialGinecoObstetraBloc();
-  final _examenesBloc = new ExamenesBloc();
 
   static Provider _instancia;
 
@@ -83,9 +81,5 @@ class Provider extends InheritedWidget {
     return context
         .dependOnInheritedWidgetOfExactType<Provider>()
         ._historialGinecoBloc;
-  }
-
-  static ExamenesBloc examenesBloc(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<Provider>()._examenesBloc;
   }
 }

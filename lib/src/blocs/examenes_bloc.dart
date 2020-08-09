@@ -1,20 +1,44 @@
-import 'package:appsam/src/blocs/validators.dart';
-import 'package:appsam/src/models/examenCategoria_model.dart';
 import 'package:appsam/src/models/examenDetalle_model.dart';
 import 'package:appsam/src/models/examenIndicado_Model.dart';
 import 'package:appsam/src/models/examenTipo_model.dart';
 import 'package:appsam/src/models/examenesIndicados_viewmodel.dart';
+import 'package:appsam/src/providers/combos_service.dart';
 import 'package:appsam/src/providers/examenes_service.dart';
-import 'package:rxdart/rxdart.dart';
+import 'package:flutter/cupertino.dart';
 
-class ExamenesBloc with Validators {
-  final _examenService = new ExamenesService();
+class ExamenesBlocNoti extends ChangeNotifier {
+  final _examenService = ExamenesService();
+  final _combosService = CombosService();
 
-  final _combosController = new BehaviorSubject<ListCombosExamenes>();
-  Stream<ListCombosExamenes> get combosListStream => _combosController.stream;
-  Function(ListCombosExamenes) get onChangeCombosList =>
-      _combosController.sink.add;
-  ListCombosExamenes get comboModel => _combosController.value;
+  bool loading = false;
+  bool loadingDetalles = false;
+  List<ExamenTipoModel> listaTipos = List();
+  List<ExamenDetalleModel> listaDetalles = List();
+
+  void getTiposExamenes(int categoriaId) async {
+    loading = true;
+    notifyListeners();
+    final tipos = await _combosService.getTiposExamenes(categoriaId);
+    listaTipos = tipos;
+    loading = false;
+    notifyListeners();
+  }
+
+  void getDetalleExamenes(int tipoId, int categoriaId) async {
+    loadingDetalles = true;
+    notifyListeners();
+    final detalles =
+        await _combosService.getDetalleExamenes(tipoId, categoriaId);
+    listaDetalles = detalles;
+    loadingDetalles = false;
+    notifyListeners();
+  }
+
+  void clearList() {
+    listaDetalles.clear();
+    listaTipos.clear();
+    notifyListeners();
+  }
 
   Future<ExamenIndicadoModel> addExamen(ExamenIndicadoModel examen) async {
     return await _examenService.addExamen(examen);
@@ -30,25 +54,4 @@ class ExamenesBloc with Validators {
     return await _examenService.getDetalleExamenesIndicados(
         pacienteId, doctorId, preclinicaId);
   }
-
-  dispose() {
-    _combosController?.close();
-  }
-}
-
-class ListCombosExamenes {
-  List<ExamenTipoModel> listExamenTipo;
-  List<ExamenDetalleModel> listExamenDetalle;
-  List<ExamenCategoriaModel> listCategorias;
-  int examenCategoriaId;
-  int examenTipoId;
-  int examenDetalleId;
-
-  ListCombosExamenes(
-      {this.listExamenTipo,
-      this.listExamenDetalle,
-      this.listCategorias,
-      this.examenCategoriaId,
-      this.examenTipoId,
-      this.examenDetalleId});
 }

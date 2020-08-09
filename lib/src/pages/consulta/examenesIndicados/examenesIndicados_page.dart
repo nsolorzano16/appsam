@@ -18,12 +18,11 @@ class ExamenesIndicadosPage extends StatefulWidget {
 }
 
 class _ExamenesIndicadosPageState extends State<ExamenesIndicadosPage> {
-  final ExamenesBloc _examenesBloc = new ExamenesBloc();
   final List<ExamenesIndicadosViewModel> _lista = new List();
+  final ExamenesBlocNoti _blocNoti = ExamenesBlocNoti();
 
   @override
   void dispose() {
-    _examenesBloc.dispose();
     super.dispose();
   }
 
@@ -35,7 +34,7 @@ class _ExamenesIndicadosPageState extends State<ExamenesIndicadosPage> {
 
     Future<List<ExamenesIndicadosViewModel>> _examenesFuture;
 
-    _examenesFuture = _examenesBloc.getDetalleExamenesIndicados(
+    _examenesFuture = _blocNoti.getDetalleExamenesIndicados(
         _preclinica.pacienteId, _preclinica.doctorId, _preclinica.preclinicaId);
 
     return WillPopScope(
@@ -120,19 +119,6 @@ class _ExamenesIndicadosPageState extends State<ExamenesIndicadosPage> {
             leading: Row(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                // IconButton(
-                //     icon: Icon(
-                //       Icons.edit,
-                //       size: 16.0,
-                //       color: Theme.of(context).primaryColor,
-                //     ),
-                //     onPressed: () => Navigator.pushReplacement(
-                //         context,
-                //         MaterialPageRoute(
-                //             builder: (context) => EditarExamenIndicadoPage(
-                //                   examen: f,
-                //                   preclinica: preclinica,
-                //                 )))),
                 IconButton(
                     icon: Icon(
                       Icons.delete,
@@ -208,9 +194,25 @@ class _ExamenesIndicadosPageState extends State<ExamenesIndicadosPage> {
                             ),
                           ]),
                           TableRow(children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text('Nombre:'),
+                                Divider(),
+                              ],
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text((f.nombre != null) ? f.nombre : ''),
+                                Divider(),
+                              ],
+                            ),
+                          ]),
+                          TableRow(children: [
                             Text('Notas:'),
                             Text((f.notas != null) ? f.notas : ''),
-                          ])
+                          ]),
                         ],
                       )))
             ],
@@ -240,7 +242,7 @@ class _ExamenesIndicadosPageState extends State<ExamenesIndicadosPage> {
     );
     await _pr.show();
     ex.activo = false;
-    final resp = await _examenesBloc.updateExamen(ex);
+    final resp = await _blocNoti.updateExamen(ex);
 
     if (resp != null) {
       await _pr.hide();

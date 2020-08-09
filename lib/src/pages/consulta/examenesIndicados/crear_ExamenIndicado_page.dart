@@ -1,8 +1,6 @@
 import 'package:appsam/src/blocs/examenes_bloc.dart';
 import 'package:appsam/src/models/examenCategoria_model.dart';
-import 'package:appsam/src/models/examenDetalle_model.dart';
 import 'package:appsam/src/models/examenIndicado_Model.dart';
-import 'package:appsam/src/models/examenTipo_model.dart';
 import 'package:appsam/src/models/paginados/preclinica_paginadoVM.dart';
 import 'package:appsam/src/models/usuario_model.dart';
 import 'package:appsam/src/providers/combos_service.dart';
@@ -25,21 +23,17 @@ class CrearExamenIndicadoPage extends StatefulWidget {
 class _CrearExamenIndicadoPageState extends State<CrearExamenIndicadoPage> {
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
   final ExamenIndicadoModel _examen = new ExamenIndicadoModel();
+  int _examenCategoriaId = 1;
+  int _examenTipoId = 1;
+  int _examenDetalleId = 1;
+  final ExamenesBlocNoti blocNoti = ExamenesBlocNoti();
 
-  bool _habilitarNombre = false;
+  bool _habilitarNombre = true;
 
-  final _examenesBloc = new ExamenesBloc();
   final UsuarioModel _usuario =
       usuarioModelFromJson(StorageUtil.getString('usuarioGlobal'));
 
   final _combosService = new CombosService();
-  final _comboModel = new ListCombosExamenes(
-      listCategorias: [],
-      listExamenDetalle: [],
-      listExamenTipo: [],
-      examenCategoriaId: 1,
-      examenTipoId: 1,
-      examenDetalleId: 1);
 
   final TextEditingController _nombreController = new TextEditingController();
   final TextEditingController _notasController = new TextEditingController();
@@ -50,6 +44,8 @@ class _CrearExamenIndicadoPageState extends State<CrearExamenIndicadoPage> {
   void initState() {
     super.initState();
     StorageUtil.putString('ultimaPagina', CrearExamenIndicadoPage.routeName);
+    blocNoti.getTiposExamenes(_examenCategoriaId);
+    blocNoti.getDetalleExamenes(_examenTipoId, _examenCategoriaId);
     _examen.examenIndicadoId = 0;
     _examen.activo = true;
     _examen.creadoPor = _usuario.userName;
@@ -60,7 +56,6 @@ class _CrearExamenIndicadoPageState extends State<CrearExamenIndicadoPage> {
 
   @override
   void dispose() {
-    _examenesBloc.dispose();
     _nombreController.dispose();
     _notasController.dispose();
     super.dispose();
@@ -110,11 +105,8 @@ class _CrearExamenIndicadoPageState extends State<CrearExamenIndicadoPage> {
                           key: _formkey,
                           child: Column(children: <Widget>[
                             _crearDropDownExamenCategoria(),
-                            _crearDropDownExamenTipo(
-                                _comboModel.examenCategoriaId),
-                            _crearDropDownExamenDetalle(
-                                _comboModel.examenCategoriaId,
-                                _comboModel.examenTipoId),
+                            _crearDropDownExamenTipo(),
+                            _crearDropDownExamenDetalle(),
                             _campoNombre(),
                             _espacio(),
                             _campoNotas(),
@@ -133,170 +125,133 @@ class _CrearExamenIndicadoPageState extends State<CrearExamenIndicadoPage> {
       future: _combosService.getCategoriasExamenes(),
       builder: (BuildContext context,
           AsyncSnapshot<List<ExamenCategoriaModel>> snapshot) {
+        if (!snapshot.hasData)
+          return Center(
+            child: CircularProgressIndicator(),
+          );
         final lista = snapshot.data;
-        if (lista != null) {
-          return Padding(
-            padding: EdgeInsets.only(left: 8.0, right: 8.0),
-            child: InputDecorator(
-              decoration:
-                  inputsDecorations('Examen categoria', FontAwesomeIcons.flask),
-              child: StreamBuilder(
-                stream: _examenesBloc.combosListStream,
-                initialData: _comboModel,
-                builder: (BuildContext context,
-                    AsyncSnapshot<ListCombosExamenes> snapshot) {
-                  final categoria = snapshot.data;
-                  return DropdownButtonHideUnderline(
-                      child: DropdownButton(
-                    value: categoria.examenCategoriaId,
-                    isDense: true,
-                    onChanged: (value) async {
-                      _comboModel.examenCategoriaId = value;
-                      setState(() {
-                        _habilitarNombre = !_habilitarNombre;
-                      });
-
-                      final listaTipos =
-                          await _combosService.getTiposExamenes(value);
-
-                      _comboModel.listExamenTipo.clear();
-                      _comboModel.listExamenTipo.addAll(listaTipos);
-                      _comboModel.listExamenDetalle.clear();
-                      _comboModel.examenTipoId = null;
-                      _examenesBloc.onChangeCombosList(_comboModel);
-
-                      FocusScope.of(context).requestFocus(FocusNode());
-                    },
-                    items: lista.map((x) {
-                      return DropdownMenuItem(
-                        value: x.examenCategoriaId,
-                        child: Text(
-                          x.nombre,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      );
-                    }).toList(),
-                  ));
+        return Padding(
+          padding: EdgeInsets.only(left: 8.0, right: 8.0),
+          child: InputDecorator(
+            decoration:
+                inputsDecorations('Examen categoria', FontAwesomeIcons.flask),
+            child: DropdownButtonHideUnderline(
+              child: DropdownButton(
+                value: _examenCategoriaId,
+                isDense: true,
+                onChanged: (value) {
+                  blocNoti.clearList();
+                  blocNoti.getTiposExamenes(value);
+                  _examenCategoriaId = value;
+                  _examenTipoId = null;
+                  _examenDetalleId = null;
+                  FocusScope.of(context).requestFocus(FocusNode());
                 },
+                items: lista.map((x) {
+                  return DropdownMenuItem(
+                    value: x.examenCategoriaId,
+                    child: Text(
+                      x.nombre,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  );
+                }).toList(),
               ),
             ),
-          );
-        } else {
-          return CircularProgressIndicator();
-        }
-      },
-    );
-  }
-
-  Widget _crearDropDownExamenTipo(int categoriaId) {
-    return FutureBuilder(
-      future: _combosService.getTiposExamenes(categoriaId),
-      builder: (BuildContext context,
-          AsyncSnapshot<List<ExamenTipoModel>> snapshot) {
-        if (snapshot.hasData) {
-          _comboModel.listExamenTipo.clear();
-          _comboModel.listExamenTipo.addAll(snapshot.data);
-          _examenesBloc.onChangeCombosList(_comboModel);
-        }
-        return StreamBuilder(
-          stream: _examenesBloc.combosListStream,
-          builder: (BuildContext context,
-              AsyncSnapshot<ListCombosExamenes> snapshot) {
-            if (snapshot.data == null) {
-              return CircularProgressIndicator();
-            } else {
-              final lista = snapshot.data.listExamenTipo;
-              return Padding(
-                  padding: EdgeInsets.only(left: 8.0, right: 8.0),
-                  child: InputDecorator(
-                      decoration: inputsDecorations(
-                          'Tipo de examen', FontAwesomeIcons.flask),
-                      child: DropdownButtonHideUnderline(
-                          child: DropdownButton(
-                        icon: Icon(Icons.arrow_drop_down),
-                        isDense: true,
-                        value: snapshot.data.examenTipoId,
-                        onChanged: (value) async {
-                          _comboModel.examenTipoId = value;
-                          final detalles =
-                              await _combosService.getDetalleExamenes(
-                                  value, _comboModel.examenCategoriaId);
-                          _comboModel.listExamenDetalle.clear();
-                          _comboModel.listExamenDetalle.addAll(detalles);
-                          _comboModel.examenDetalleId = null;
-
-                          _examenesBloc.onChangeCombosList(_comboModel);
-
-                          FocusScope.of(context).requestFocus(FocusNode());
-                        },
-                        items: (lista.length == 0)
-                            ? []
-                            : lista.map((x) {
-                                return DropdownMenuItem(
-                                  value: x.examenTipoId,
-                                  child: Text(
-                                    x.nombre,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                );
-                              }).toList(),
-                      ))));
-            }
-          },
+          ),
         );
       },
     );
   }
 
-  Widget _crearDropDownExamenDetalle(int categoriaId, int tipoId) {
-    return FutureBuilder(
-      future: _combosService.getDetalleExamenes(tipoId, categoriaId),
-      builder: (BuildContext context,
-          AsyncSnapshot<List<ExamenDetalleModel>> snapshot) {
-        if (snapshot.hasData) {
-          _comboModel.listExamenDetalle.clear();
-          _comboModel.listExamenDetalle.addAll(snapshot.data);
-          _examenesBloc.onChangeCombosList(_comboModel);
-        }
-        return StreamBuilder(
-          stream: _examenesBloc.combosListStream,
-          builder: (BuildContext context,
-              AsyncSnapshot<ListCombosExamenes> snapshot) {
-            if (snapshot.data == null) {
-              return CircularProgressIndicator();
-            } else {
-              final lista = snapshot.data.listExamenDetalle;
-              return Padding(
-                  padding: EdgeInsets.only(left: 8.0, right: 8.0),
-                  child: InputDecorator(
-                      decoration: inputsDecorations(
-                          'Examen Detalle', FontAwesomeIcons.flask),
-                      child: DropdownButtonHideUnderline(
-                          child: DropdownButton(
-                        isExpanded: true,
-                        icon: Icon(Icons.arrow_drop_down),
-                        isDense: true,
-                        value: snapshot.data.examenDetalleId,
-                        onChanged: (value) {
-                          _comboModel.examenDetalleId = value;
-                          _examenesBloc.onChangeCombosList(_comboModel);
-                          FocusScope.of(context).requestFocus(FocusNode());
-                        },
-                        items: (lista.length == 0)
-                            ? []
-                            : lista.map((x) {
-                                return DropdownMenuItem(
-                                  value: x.examenDetalleId,
-                                  child: Text(
-                                    x.nombre,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                );
-                              }).toList(),
-                      ))));
-            }
-          },
-        );
+  Widget _crearDropDownExamenTipo() {
+    return AnimatedBuilder(
+      animation: blocNoti,
+      builder: (BuildContext context, Widget child) {
+        return (blocNoti.loading)
+            ? Center(
+                child: CircularProgressIndicator(),
+              )
+            : Padding(
+                padding: EdgeInsets.only(left: 8.0, right: 8.0),
+                child: InputDecorator(
+                  decoration:
+                      inputsDecorations('Examen Tipo', FontAwesomeIcons.flask),
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton(
+                      isExpanded: true,
+                      icon: Icon(Icons.arrow_drop_down),
+                      isDense: true,
+                      value: _examenTipoId,
+                      onChanged: (value) {
+                        _examenTipoId = value;
+                        _examenDetalleId = null;
+                        blocNoti.getDetalleExamenes(value, _examenCategoriaId);
+                        setState(() {
+                          if (value == 12) {
+                            _habilitarNombre = false;
+                          } else {
+                            _habilitarNombre = true;
+                          }
+                        });
+                      },
+                      items: blocNoti.listaTipos
+                          .map(
+                            (t) => DropdownMenuItem(
+                              value: t.examenTipoId,
+                              child: Text(
+                                t.nombre,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          )
+                          .toList(),
+                    ),
+                  ),
+                ),
+              );
+      },
+    );
+  }
+
+  Widget _crearDropDownExamenDetalle() {
+    return AnimatedBuilder(
+      animation: blocNoti,
+      builder: (BuildContext context, Widget child) {
+        return (blocNoti.loadingDetalles)
+            ? Center(
+                child: CircularProgressIndicator(),
+              )
+            : Padding(
+                padding: EdgeInsets.only(left: 8.0, right: 8.0),
+                child: InputDecorator(
+                  decoration: inputsDecorations(
+                      'Examen Detalle', FontAwesomeIcons.flask),
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton(
+                      isExpanded: true,
+                      icon: Icon(Icons.arrow_drop_down),
+                      isDense: true,
+                      value: _examenDetalleId,
+                      onChanged: (value) {
+                        _examenDetalleId = value;
+                        setState(() {});
+                      },
+                      items: blocNoti.listaDetalles
+                          .map(
+                            (t) => DropdownMenuItem(
+                              value: t.examenDetalleId,
+                              child: Text(
+                                '${t.nombre.toLowerCase()}',
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          )
+                          .toList(),
+                    ),
+                  ),
+                ),
+              );
       },
     );
   }
@@ -378,24 +333,18 @@ class _CrearExamenIndicadoPageState extends State<CrearExamenIndicadoPage> {
       messageTextStyle: TextStyle(
           color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600),
     );
-    if (_comboModel.examenTipoId == null) {
+    if (_examenTipoId == null) {
       mostrarFlushBar(context, Colors.black, 'Info',
           'Seleccione el tipo de examen', 2, Icons.info, Colors.white);
     } else {
       _formkey.currentState.save();
-      _examen.examenCategoriaId = _comboModel.examenCategoriaId;
-      _examen.examenTipoId = _comboModel.examenTipoId;
-      _examen.examenDetalleId = (_comboModel.examenDetalleId == null)
-          ? 0
-          : _comboModel.examenDetalleId;
+      _examen.examenCategoriaId = _examenCategoriaId;
+      _examen.examenTipoId = _examenTipoId;
+      _examen.examenDetalleId = _examenDetalleId == null ? 0 : _examenDetalleId;
       await _pr.show();
 
-      ExamenIndicadoModel _examenIndicadoGuard;
-      if (_examen.examenIndicadoId == 0) {
-        //guarda
-        _examenIndicadoGuard = await _examenesBloc.addExamen(_examen);
-      }
-
+      ExamenIndicadoModel _examenIndicadoGuard =
+          await blocNoti.addExamen(_examen);
       if (_examenIndicadoGuard != null) {
         await _pr.hide();
         mostrarFlushBar(context, Colors.green, 'Info', 'Datos Guardados', 1,

@@ -61,14 +61,15 @@ class DetalleAntecedentesConsultaPage extends StatelessWidget {
       elevation: 3,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
       title: GFListTile(
-          title: Padding(
-            padding: EdgeInsets.all(3),
-            child: Text(
-              titulo,
-              style: estiloTitulos,
-            ),
-          ),
-          subtitleText: descripcion),
+        title: Text(
+          titulo,
+          style: estiloTitulos,
+        ),
+        subTitle: Text(
+          descripcion,
+          textAlign: TextAlign.justify,
+        ),
+      ),
     );
   }
 
