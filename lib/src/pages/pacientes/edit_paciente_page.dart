@@ -500,21 +500,24 @@ class _EditarPacientePageState extends State<EditarPacientePage> {
             child: InputDecorator(
                 decoration: inputsDecorations('Profesión', Icons.people),
                 child: DropdownButtonHideUnderline(
-                    child: DropdownButton(
-                  value: widget.paciente.profesionId,
-                  isDense: true,
-                  onChanged: (value) {
-                    setState(() {
-                      widget.paciente.profesionId = value;
-                      FocusScope.of(context).requestFocus(FocusNode());
-                    });
-                  },
-                  items: lista.map((x) {
-                    return DropdownMenuItem(
-                      value: x.profesionId,
-                      child: Text(x.nombre),
-                    );
-                  }).toList(),
+                    child: FittedBox(
+                  fit: BoxFit.contain,
+                  child: DropdownButton(
+                    value: widget.paciente.profesionId,
+                    isDense: true,
+                    onChanged: (value) {
+                      setState(() {
+                        widget.paciente.profesionId = value;
+                        FocusScope.of(context).requestFocus(FocusNode());
+                      });
+                    },
+                    items: lista.map((x) {
+                      return DropdownMenuItem(
+                        value: x.profesionId,
+                        child: Text(x.nombre),
+                      );
+                    }).toList(),
+                  ),
                 ))),
           );
         } else {
@@ -536,24 +539,27 @@ class _EditarPacientePageState extends State<EditarPacientePage> {
             child: InputDecorator(
               decoration: inputsDecorations('Escolaridad', Icons.people),
               child: DropdownButtonHideUnderline(
-                  child: DropdownButton(
-                value: widget.paciente.escolaridadId,
-                isDense: true,
-                onChanged: (value) {
-                  setState(() {
-                    widget.paciente.escolaridadId = value;
-                    FocusScope.of(context).requestFocus(FocusNode());
-                  });
-                },
-                items: lista.map((x) {
-                  return DropdownMenuItem(
-                    value: x.escolaridadId,
-                    child: Text(
-                      x.nombre,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  );
-                }).toList(),
+                  child: FittedBox(
+                fit: BoxFit.contain,
+                child: DropdownButton(
+                  value: widget.paciente.escolaridadId,
+                  isDense: true,
+                  onChanged: (value) {
+                    setState(() {
+                      widget.paciente.escolaridadId = value;
+                      FocusScope.of(context).requestFocus(FocusNode());
+                    });
+                  },
+                  items: lista.map((x) {
+                    return DropdownMenuItem(
+                      value: x.escolaridadId,
+                      child: Text(
+                        x.nombre,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    );
+                  }).toList(),
+                ),
               )),
             ),
           );
@@ -776,25 +782,28 @@ class _EditarPacientePageState extends State<EditarPacientePage> {
             child: InputDecorator(
               decoration: inputsDecorations('Pais', Icons.people),
               child: DropdownButtonHideUnderline(
-                  child: DropdownButton(
-                value: widget.paciente.paisId,
-                isDense: true,
-                onChanged: (value) {
-                  setState(() {
-                    widget.paciente.paisId = value;
-                    FocusScope.of(context).requestFocus(FocusNode());
-                    widget.paciente.paisId = value;
-                  });
-                },
-                items: lista.map((x) {
-                  return DropdownMenuItem(
-                    value: x.paisId,
-                    child: Text(
-                      x.nombre,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  );
-                }).toList(),
+                  child: FittedBox(
+                fit: BoxFit.contain,
+                child: DropdownButton(
+                  value: widget.paciente.paisId,
+                  isDense: true,
+                  onChanged: (value) {
+                    setState(() {
+                      widget.paciente.paisId = value;
+                      FocusScope.of(context).requestFocus(FocusNode());
+                      widget.paciente.paisId = value;
+                    });
+                  },
+                  items: lista.map((x) {
+                    return DropdownMenuItem(
+                      value: x.paisId,
+                      child: Text(
+                        x.nombre,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    );
+                  }).toList(),
+                ),
               )),
             ),
           );

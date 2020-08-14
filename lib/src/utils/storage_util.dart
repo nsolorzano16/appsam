@@ -68,5 +68,7 @@ class StorageUtil {
   static void removeUsuario() {
     _preferences.remove('usuarioGlobal');
     _preferences.remove('tokenDevice');
+    _preferences.remove('consultasAtendidas');
+    _preferences.remove('planUsuario');
   }
 }

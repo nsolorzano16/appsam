@@ -92,7 +92,7 @@ class MenuWidget extends StatelessWidget {
             borderRadius: BorderRadius.circular(100.0),
             child: Container(
               child: FadeInImage(
-                  fit: BoxFit.fill,
+                  fit: BoxFit.cover,
                   placeholder: AssetImage('assets/jar-loading.gif'),
                   image: NetworkImage(usuario.fotoUrl)),
             ),

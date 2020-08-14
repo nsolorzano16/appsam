@@ -9,6 +9,7 @@ class UsuarioModel {
   int usuarioId;
   int rolId;
   int asistenteId;
+  int planId;
   String nombres;
   String primerApellido;
   String segundoApellido;
@@ -37,6 +38,7 @@ class UsuarioModel {
     this.usuarioId,
     this.rolId,
     this.asistenteId,
+    this.planId,
     this.nombres,
     this.primerApellido,
     this.segundoApellido,
@@ -66,6 +68,7 @@ class UsuarioModel {
       usuarioId: json["usuarioId"],
       rolId: json["rolId"],
       asistenteId: json["asistenteId"],
+      planId: json["planId"],
       nombres: json["nombres"] == null ? "" : json["nombres"],
       primerApellido:
           json["primerApellido"] == null ? "" : json["primerApellido"],
@@ -97,6 +100,7 @@ class UsuarioModel {
         "usuarioId": usuarioId,
         "rolId": rolId,
         "asistenteId": asistenteId,
+        "planId": planId,
         "nombres": nombres,
         "primerApellido": primerApellido,
         "segundoApellido": segundoApellido,

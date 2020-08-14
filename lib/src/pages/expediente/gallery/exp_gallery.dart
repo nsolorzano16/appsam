@@ -2,7 +2,6 @@ import 'package:appsam/src/blocs/fotosPaciente_bloc.dart';
 import 'package:appsam/src/pages/expediente/expediente_page.dart';
 import 'package:appsam/src/pages/expediente/gallery/exp_galleryDetail.dart';
 import 'package:appsam/src/pages/expediente/gallery/exp_uploadPhoto.dart';
-import 'package:appsam/src/utils/utils.dart';
 import 'package:appsam/src/widgets/drawer.dart';
 
 import 'package:flutter/material.dart';
@@ -20,7 +19,6 @@ class ExpGalleryPage extends StatefulWidget {
   _ExpGalleryPageState createState() => _ExpGalleryPageState();
 }
 
-//TODO: poner paginacion
 class _ExpGalleryPageState extends State<ExpGalleryPage> {
   int get _pacienteId => widget.pacienteId;
   int get _doctorId => widget.doctorId;

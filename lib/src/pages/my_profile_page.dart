@@ -24,8 +24,6 @@ class MyProfilePage extends StatefulWidget {
 class _MyProfilePageState extends State<MyProfilePage> {
   File foto;
 
-  final UsuarioModel _usuario =
-      usuarioModelFromJson(StorageUtil.getString('usuarioGlobal'));
   @override
   void initState() {
     super.initState();
@@ -34,6 +32,8 @@ class _MyProfilePageState extends State<MyProfilePage> {
 
   @override
   Widget build(BuildContext context) {
+    final UsuarioModel _usuario =
+        usuarioModelFromJson(StorageUtil.getString('usuarioGlobal'));
     final _screenSize = MediaQuery.of(context).size;
     final bloc = Provider.crearEditarAsistentesBloc(context);
 
@@ -84,7 +84,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
                     parentButtonBackground: Theme.of(context).primaryColor,
                     orientation: UnicornOrientation.VERTICAL,
                     parentButton: Icon(Icons.menu),
-                    childButtons: botones(bloc))),
+                    childButtons: botones(bloc, _usuario))),
           ),
           onWillPop: () async => false);
     } else {
@@ -92,7 +92,8 @@ class _MyProfilePageState extends State<MyProfilePage> {
     }
   }
 
-  List<UnicornButton> botones(CrearEditarAsistentesBloc bloc) {
+  List<UnicornButton> botones(
+      CrearEditarAsistentesBloc bloc, UsuarioModel _usuario) {
     var childButtons = List<UnicornButton>();
 
     childButtons.add(UnicornButton(
@@ -264,7 +265,9 @@ class _MyProfilePageState extends State<MyProfilePage> {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(20),
         child: FadeInImage(
-            fit: BoxFit.fill,
+            height: 200,
+            width: 200,
+            fit: BoxFit.cover,
             placeholder: AssetImage('assets/jar-loading.gif'),
             image: NetworkImage(_usuario.fotoUrl)),
       ),
@@ -295,6 +298,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
       await _pr.show();
       final UsuarioModel usuario =
           await bloc.subirFotoApi(user.usuarioId, foto);
+
       setState(() {
         StorageUtil.putString('usuarioGlobal', usuarioModelToJson(usuario));
       });

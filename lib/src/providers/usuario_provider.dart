@@ -26,19 +26,21 @@ class UsuarioProvider {
     if (resp.statusCode == 200) {
       if (decodeResp.containsKey('token')) {
         StorageUtil.putString('token', decodeResp['token']);
-        StorageUtil.putInt('usuarioId', decodeResp['usuarioId']);
-        StorageUtil.putInt('rolId', decodeResp['rolId']);
-        StorageUtil.putString('userName', decodeResp['userName']);
-        StorageUtil.putString('email', decodeResp['email']);
-        StorageUtil.putString('nombres', decodeResp['nombres']);
-        StorageUtil.putString('primerApellido', decodeResp['primerApellido']);
-        StorageUtil.putString('segundoApellido', decodeResp['segundoApellido']);
+        // StorageUtil.putInt('usuarioId', decodeResp['usuarioId']);
+        // StorageUtil.putInt('rolId', decodeResp['rolId']);
+        // StorageUtil.putString('userName', decodeResp['userName']);
+        // StorageUtil.putString('email', decodeResp['email']);
+        // StorageUtil.putString('nombres', decodeResp['nombres']);
+        // StorageUtil.putString('primerApellido', decodeResp['primerApellido']);
+        // StorageUtil.putString('segundoApellido', decodeResp['segundoApellido']);
         StorageUtil.putString('fotoUrl', decodeResp['fotoUrl']);
 
         return {
           'ok': true,
           'usuario': decodeResp['usuario'],
-          'token': decodeResp['token']
+          'token': decodeResp['token'],
+          'plan': decodeResp['plan'],
+          'consultasAtendidas': decodeResp['consultasAtendidas']
         };
       }
     }

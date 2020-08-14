@@ -1,3 +1,4 @@
+import 'package:appsam/src/models/planes_model.dart';
 import 'package:appsam/src/providers/webNotifications_service.dart';
 import 'package:flutter/material.dart';
 import 'package:progress_dialog/progress_dialog.dart';
@@ -17,7 +18,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final usuarioProvider = new UsuarioProvider();
   bool verPass = true;
-  bool logueando = true;
+  bool logueando = false;
 
   String usuario;
   String password;
@@ -32,10 +33,20 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: Stack(
-      children: <Widget>[_crearFondo(context), _loginForm(context)],
+      // fit: StackFit.expand,
+      alignment: Alignment.center,
+      children: <Widget>[
+        _crearFondo(context),
+        _fondoBlanco(context),
+      ],
     ));
   }
 
@@ -72,62 +83,52 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-//TODO: PONER MOVIMIENTO DE TECLADO
-  _loginForm(BuildContext context) {
+  Widget _fondoBlanco(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    return SingleChildScrollView(
+    return Container(
+      width: size.width * 0.90,
+      height: size.height * 0.8,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20.0),
+      ),
+      child: _camposForm(context),
+    );
+  }
+
+  Widget _camposForm(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    return Form(
+      key: _formKey,
       child: Column(
-        children: <Widget>[
-          SafeArea(
-              child: Container(
-            height: size.height * 0.05,
-          )),
-          Container(
-            padding: EdgeInsets.symmetric(vertical: 50.0),
-            margin: EdgeInsets.symmetric(vertical: 50.0),
-            width: size.width * 0.85,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(50.0),
-                border: Border.all(color: Colors.white),
-                color: Colors.white),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.only(left: 40.0, right: 40.0),
-                    child: Image(
-                      image: AssetImage('assets/samlogo.png'),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 60.0,
-                  ),
-                  _crearUsuario(),
-                  SizedBox(
-                    height: 30.0,
-                  ),
-                  _crearPassword(),
-                  SizedBox(
-                    height: 30.0,
-                  ),
-                  _crearBoton()
-                ],
-              ),
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: Image(
+              image: AssetImage('assets/samlogo.png'),
+              fit: BoxFit.cover,
             ),
           ),
           SizedBox(
-            height: 100.0,
-          )
+            height: 25,
+          ),
+          _crearUsuario(),
+          SizedBox(
+            height: 10,
+          ),
+          _crearPassword(),
+          SizedBox(
+            height: 10,
+          ),
+          _crearBoton(size),
         ],
       ),
     );
   }
 
   Widget _crearUsuario() {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20.0),
+    return Padding(
+      padding: const EdgeInsets.all(12.0),
       child: TextFormField(
           onSaved: (value) => usuario = value,
           autovalidate: true,
@@ -146,8 +147,8 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _crearPassword() {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20.0),
+    return Padding(
+      padding: const EdgeInsets.all(12.0),
       child: TextFormField(
         onSaved: (value) => password = value,
         autovalidate: true,
@@ -159,17 +160,16 @@ class _LoginPageState extends State<LoginPage> {
             Icons.lock_outline,
             color: Colors.red,
           ),
-          suffixIcon: GestureDetector(
-            onTap: () {
-              setState(() {
-                verPass = !verPass;
-              });
-            },
-            child: Icon(
-              (verPass) ? Icons.visibility : Icons.visibility_off,
-              color: Colors.red,
-            ),
-          ),
+          suffixIcon: IconButton(
+              icon: Icon(
+                (verPass) ? Icons.visibility : Icons.visibility_off,
+                color: Colors.red,
+              ),
+              onPressed: () {
+                setState(() {
+                  verPass = !verPass;
+                });
+              }),
           isDense: true,
           hintText: 'Password',
           labelText: 'Password',
@@ -178,25 +178,34 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _crearBoton() {
-    return RaisedButton(
-        child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 80.0, vertical: 15.0),
-          child: Text('Ingresar'),
+  Widget _crearBoton(Size size) {
+    return Container(
+      width: 250,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            Colors.red,
+            Colors.redAccent,
+          ],
+          begin: Alignment.centerLeft,
+          end: Alignment.centerRight,
         ),
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-        elevation: 0.0,
-        color: Colors.red,
-        disabledTextColor: Colors.white,
-        textColor: Colors.white,
-        onPressed: (logueando) ? () => _login(context) : null);
+        borderRadius: BorderRadius.circular(20.0),
+      ),
+      child: FlatButton(
+          onPressed: () => logueando ? null : _login(context),
+          child: Text(
+            'Login',
+            style: TextStyle(
+                fontSize: 18, fontWeight: FontWeight.w400, color: Colors.white),
+          )),
+    );
   }
 
   _login(BuildContext context) async {
     if (_formKey.currentState.validate()) {
       setState(() {
-        logueando = false;
+        logueando = true;
       });
       final ProgressDialog _pr = new ProgressDialog(
         context,
@@ -222,7 +231,14 @@ class _LoginPageState extends State<LoginPage> {
       if (info['ok']) {
         await _pr.hide();
         final UsuarioModel usuario = UsuarioModel.fromJson(info['usuario']);
+        final PlanesModel plan = PlanesModel.fromJson(info['plan']);
+        int consultasAtendidas = info['consultasAtendidas'];
+
+        //imprimirJSON(usuario);
         StorageUtil.putString('usuarioGlobal', usuarioModelToJson(usuario));
+        imprimirJSON(plan);
+        StorageUtil.putString('planUsuario', planesModelToJson(plan));
+        StorageUtil.putInt('consultasAtendidas', consultasAtendidas);
         if (usuario.rolId == 2) {
           _usuarioID = usuario.usuarioId;
         } else if (usuario.rolId == 3) {
@@ -234,7 +250,7 @@ class _LoginPageState extends State<LoginPage> {
         await _pr.hide();
         _formKey.currentState.reset();
         setState(() {
-          logueando = true;
+          logueando = false;
         });
         mostrarAlerta(context, info['mensaje']);
       }

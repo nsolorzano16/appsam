@@ -30,7 +30,8 @@ void mostrarAlerta(BuildContext context, String mensaje) {
 }
 
 Color colorFondoApp() {
-  return Color.fromRGBO(255, 244, 233, 1);
+  //return Color.fromRGBO(255, 244, 233, 1);
+  return Colors.white;
 }
 
 Widget loadingIndicator(BuildContext context) {
@@ -39,6 +40,10 @@ Widget loadingIndicator(BuildContext context) {
       color: Theme.of(context).primaryColor,
     ),
   );
+}
+
+double elevationCards() {
+  return 6.0;
 }
 
 void mostrarFlushBar(BuildContext context, Color color, String title,

@@ -61,11 +61,11 @@ class GalleryDetailPhotoUrlPage extends StatelessWidget {
                 ),
               ),
               Container(
-                height: MediaQuery.of(context).size.height * 0.5,
+                height: MediaQuery.of(context).size.height * 0.8,
                 child: AspectRatio(
                   aspectRatio: 16 / 9,
                   child: PhotoView(
-                    minScale: PhotoViewComputedScale.contained * 0.8,
+                    minScale: PhotoViewComputedScale.contained * 1,
                     maxScale: PhotoViewComputedScale.covered * 1.8,
                     backgroundDecoration: BoxDecoration(
                       color: Colors.white,
