@@ -1,13 +1,12 @@
+import 'package:appsam/src/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:getflutter/getflutter.dart';
 import 'package:intl/intl.dart';
-import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 
 import 'package:appsam/src/blocs/asistentes_bloc/create_edit_asistentes.dart';
-import 'package:appsam/src/models/usuario_model.dart';
 import 'package:appsam/src/utils/utils.dart';
 
 class FormEditarPage extends StatefulWidget {
@@ -20,13 +19,7 @@ class _FormEditarPageState extends State<FormEditarPage> {
   // bool _autoValidate = false;
 
   TextEditingController _inputFieldDateController = new TextEditingController();
-  TextEditingController _txtControllerIdentificacion =
-      new TextEditingController();
 
-  TextEditingController _controllerUsuario = new TextEditingController();
-  TextEditingController _txtControllerNombres = new TextEditingController();
-  TextEditingController _txtControllerPrimerApellido =
-      new TextEditingController();
   final bloc = new CrearEditarAsistentesBloc();
 
   @override
@@ -37,16 +30,7 @@ class _FormEditarPageState extends State<FormEditarPage> {
 
   @override
   Widget build(BuildContext context) {
-    final UsuarioModel _asistente = ModalRoute.of(context).settings.arguments;
-
-    MaskTextInputFormatter maskNumeroColegiado = new MaskTextInputFormatter(
-        mask: '#######', filter: {"#": RegExp(r'[0-9]')});
-    MaskTextInputFormatter maskIdentificacion = new MaskTextInputFormatter(
-        mask: '#############', filter: {"#": RegExp(r'[0-9]')});
-    _txtControllerIdentificacion.text = _asistente.identificacion;
-    _txtControllerNombres.text = _asistente.nombres;
-    _txtControllerPrimerApellido.text = _asistente.primerApellido;
-    _controllerUsuario.text = _asistente.userName;
+    final UserModel _asistente = ModalRoute.of(context).settings.arguments;
 
     return SingleChildScrollView(
       child: Form(
@@ -69,7 +53,7 @@ class _FormEditarPageState extends State<FormEditarPage> {
                 _espacio(),
                 _crearCampoSegundoAppellido(_asistente),
                 _espacio(),
-                _crearCampoIdentificacion(_asistente, maskIdentificacion),
+                _crearCampoIdentificacion(_asistente),
                 _espacio(),
                 _crearFecha(context, _asistente),
                 _espacio(),
@@ -90,7 +74,7 @@ class _FormEditarPageState extends State<FormEditarPage> {
                 _espacio(),
                 _crearCampoTelefono2(_asistente),
                 _espacio(),
-                _crearCampoColegioNumero(_asistente, maskNumeroColegiado),
+                _crearCampoColegioNumero(_asistente),
                 _espacio(),
                 _crearCampoEmail(_asistente),
                 _crearCampoUsuario(_asistente),
@@ -134,13 +118,13 @@ class _FormEditarPageState extends State<FormEditarPage> {
     );
   }
 
-  void _guardar(UsuarioModel _asistente, CrearEditarAsistentesBloc bloc) async {
+  void _guardar(UserModel _asistente, CrearEditarAsistentesBloc bloc) async {
     if (!_formKey.currentState.validate()) {
       mostrarFlushBar(context, Colors.black, 'Info',
           'El formulario no puede estar vacio', 3, Icons.info, Colors.white);
     } else {
       _formKey.currentState.save();
-      _asistente.identificacion = _txtControllerIdentificacion.text;
+
       final ProgressDialog _pr = new ProgressDialog(
         context,
         type: ProgressDialogType.Normal,
@@ -159,6 +143,7 @@ class _FormEditarPageState extends State<FormEditarPage> {
             color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600),
       );
       await _pr.show();
+
       final user = await bloc.updateUser(_asistente);
 
       if (user != null) {
@@ -197,12 +182,12 @@ class _FormEditarPageState extends State<FormEditarPage> {
     }
   }
 
-  _crearCampoNombre(UsuarioModel _asistente) {
+  _crearCampoNombre(UserModel _asistente) {
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
+        initialValue: _asistente.nombres,
         autovalidate: true,
-        controller: _txtControllerNombres,
         validator: validaTexto,
         decoration: inputsDecorations('Nombres', Icons.person),
         onSaved: (value) => _asistente.nombres = value,
@@ -210,12 +195,12 @@ class _FormEditarPageState extends State<FormEditarPage> {
     );
   }
 
-  _crearCampoPrimerAppellido(UsuarioModel _asistente) {
+  _crearCampoPrimerAppellido(UserModel _asistente) {
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
+        initialValue: _asistente.primerApellido,
         autovalidate: true,
-        controller: _txtControllerPrimerApellido,
         validator: validaTexto,
         decoration: inputsDecorations('Primer Apellido', Icons.person),
         onSaved: (value) => _asistente.primerApellido = value,
@@ -223,7 +208,7 @@ class _FormEditarPageState extends State<FormEditarPage> {
     );
   }
 
-  _crearCampoSegundoAppellido(UsuarioModel _asistente) {
+  _crearCampoSegundoAppellido(UserModel _asistente) {
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
@@ -242,15 +227,17 @@ class _FormEditarPageState extends State<FormEditarPage> {
     );
   }
 
-  _crearCampoIdentificacion(
-      UsuarioModel _asistente, MaskTextInputFormatter mask) {
+  _crearCampoIdentificacion(UserModel _asistente) {
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
-        controller: _txtControllerIdentificacion,
+        initialValue: _asistente.identificacion,
+        inputFormatters: [
+          LengthLimitingTextInputFormatter(13),
+          WhitelistingTextInputFormatter.digitsOnly
+        ],
         autovalidate: true,
         maxLength: 13,
-        inputFormatters: [mask],
         validator: (value) {
           if (value.length < 13) {
             return 'Campo obligatorio';
@@ -265,7 +252,7 @@ class _FormEditarPageState extends State<FormEditarPage> {
     );
   }
 
-  _crearCampoTelefono1(UsuarioModel _asistente) {
+  _crearCampoTelefono1(UserModel _asistente) {
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
@@ -277,7 +264,7 @@ class _FormEditarPageState extends State<FormEditarPage> {
             return null;
           }
         },
-        initialValue: _asistente.telefono1,
+        initialValue: _asistente.phoneNumber,
         keyboardType: TextInputType.number,
         inputFormatters: [
           LengthLimitingTextInputFormatter(8),
@@ -285,12 +272,12 @@ class _FormEditarPageState extends State<FormEditarPage> {
         ],
         maxLength: 8,
         decoration: inputsDecorations('Teléfono', Icons.phone_android),
-        onSaved: (value) => _asistente.telefono1 = value,
+        onSaved: (value) => _asistente.phoneNumber = value,
       ),
     );
   }
 
-  _crearCampoTelefono2(UsuarioModel _asistente) {
+  _crearCampoTelefono2(UserModel _asistente) {
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
@@ -309,15 +296,17 @@ class _FormEditarPageState extends State<FormEditarPage> {
     );
   }
 
-  _crearCampoColegioNumero(
-      UsuarioModel _asistente, MaskTextInputFormatter mask) {
+  _crearCampoColegioNumero(UserModel _asistente) {
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
+        inputFormatters: [
+          LengthLimitingTextInputFormatter(13),
+          WhitelistingTextInputFormatter.digitsOnly
+        ],
         autovalidate: true,
         validator: validaTexto,
         maxLength: 7,
-        inputFormatters: [mask],
         decoration:
             inputsDecorations('Numero Colegiado', FontAwesomeIcons.hashtag),
         initialValue:
@@ -327,27 +316,15 @@ class _FormEditarPageState extends State<FormEditarPage> {
     );
   }
 
-  Widget _crearCampoUsuario(UsuarioModel _asistente) {
+  Widget _crearCampoUsuario(UserModel _asistente) {
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
         autovalidate: true,
         validator: validaTexto,
-        controller: _controllerUsuario,
+        initialValue: _asistente.userName,
         keyboardType: TextInputType.text,
         decoration: InputDecoration(
-          suffixIcon: IconButton(
-              icon: Icon(
-                Icons.replay,
-                color: Colors.blue,
-              ),
-              onPressed: () {
-                final String val = generateUser(
-                    _txtControllerNombres.text,
-                    _txtControllerPrimerApellido.text,
-                    _txtControllerIdentificacion.text);
-                _controllerUsuario.text = val.toLowerCase();
-              }),
           prefixIcon: Icon(
             Icons.person,
             color: Colors.red,
@@ -361,7 +338,7 @@ class _FormEditarPageState extends State<FormEditarPage> {
     );
   }
 
-  _crearCampoEmail(UsuarioModel _asistente) {
+  _crearCampoEmail(UserModel _asistente) {
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
@@ -375,7 +352,7 @@ class _FormEditarPageState extends State<FormEditarPage> {
     );
   }
 
-  _crearCampoNotas(UsuarioModel _asistente) {
+  _crearCampoNotas(UserModel _asistente) {
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
@@ -387,7 +364,7 @@ class _FormEditarPageState extends State<FormEditarPage> {
     );
   }
 
-  Widget _crearFecha(BuildContext context, UsuarioModel _asistente) {
+  Widget _crearFecha(BuildContext context, UserModel _asistente) {
     var formato = DateFormat('dd/MM/yyyy');
     final _fechaNaci = formato.format(_asistente.fechaNacimiento);
     _inputFieldDateController.text = _fechaNaci;
@@ -407,7 +384,7 @@ class _FormEditarPageState extends State<FormEditarPage> {
     );
   }
 
-  _selectDate(BuildContext context, UsuarioModel _asistente) async {
+  _selectDate(BuildContext context, UserModel _asistente) async {
     DateTime picked = await showDatePicker(
         helpText: 'Seleccione fecha.',
         errorFormatText: 'Fecha invalida',
@@ -431,7 +408,7 @@ class _FormEditarPageState extends State<FormEditarPage> {
     }
   }
 
-  _crearSexo(value, String title, UsuarioModel _asistente) {
+  _crearSexo(value, String title, UserModel _asistente) {
     return RadioListTile(
         title: (Text(title)),
         value: value,

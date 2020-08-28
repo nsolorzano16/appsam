@@ -18,7 +18,7 @@ class ConsultaBloc with Validators {
   }
 
   Future<ConsultaModel> getDetalleConsulta(
-      int pacienteId, int doctorId, int preclinicaId) async {
+      int pacienteId, String doctorId, int preclinicaId) async {
     return await _consultaService.getDetalleConsulta(
         pacienteId, doctorId, preclinicaId);
   }
@@ -34,7 +34,7 @@ class ConsultaBloc with Validators {
   }
 
   Future<ConsultaGeneralModel> getConsultaGeneral(
-      int pacienteId, int doctorId, int preclinicaId) async {
+      int pacienteId, String doctorId, int preclinicaId) async {
     return await _consultaService.getConsultaGeneral(
         pacienteId, doctorId, preclinicaId);
   }

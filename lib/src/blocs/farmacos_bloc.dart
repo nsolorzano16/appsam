@@ -20,7 +20,7 @@ class FarmacosUsoActualBloc with Validators {
   }
 
   Future<List<FarmacosUsoActual>> getFarmacos(
-      int pacienteId, int doctorId) async {
+      int pacienteId, String doctorId) async {
     return await _farmacosService.getFarmacos(pacienteId);
   }
 

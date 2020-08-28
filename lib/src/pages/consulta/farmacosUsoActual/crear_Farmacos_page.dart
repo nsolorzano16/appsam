@@ -1,3 +1,4 @@
+import 'package:appsam/src/models/user_model.dart';
 import 'package:appsam/src/widgets/firebaseMessageWrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:progress_dialog/progress_dialog.dart';
@@ -5,7 +6,6 @@ import 'package:progress_dialog/progress_dialog.dart';
 import 'package:appsam/src/blocs/farmacos_bloc.dart';
 import 'package:appsam/src/models/farmacosUsoActual_model.dart';
 import 'package:appsam/src/models/paginados/preclinica_paginadoVM.dart';
-import 'package:appsam/src/models/usuario_model.dart';
 import 'package:appsam/src/utils/storage_util.dart';
 import 'package:appsam/src/utils/utils.dart';
 import 'package:appsam/src/widgets/drawer.dart';
@@ -19,8 +19,8 @@ class CrearFarmacosUsoActualPage extends StatefulWidget {
 
 class _CrearFarmacosUsoActualPageState
     extends State<CrearFarmacosUsoActualPage> {
-  final UsuarioModel _usuario =
-      usuarioModelFromJson(StorageUtil.getString('usuarioGlobal'));
+  final UserModel _usuario =
+      userModelFromJson(StorageUtil.getString('usuarioGlobal'));
   final List<FarmacosUsoActual> _listaFarmacos = new List<FarmacosUsoActual>();
   final FarmacosUsoActualBloc _farmacosBloc = new FarmacosUsoActualBloc();
 

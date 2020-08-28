@@ -13,7 +13,7 @@ class ConsultaService {
   final _apiURL = EnviromentVariables().getApiURL();
 
   Future<ConsultaModel> getDetalleConsulta(
-      int pacienteId, int doctorId, int preclinicaId) async {
+      int pacienteId, String doctorId, int preclinicaId) async {
     final String token = StorageUtil.getString('token');
     final headers = {
       "content-type": "application/json",
@@ -77,7 +77,7 @@ class ConsultaService {
   }
 
   Future<ConsultaGeneralModel> getConsultaGeneral(
-      int pacienteId, int doctorId, int preclinicaId) async {
+      int pacienteId, String doctorId, int preclinicaId) async {
     final String token = StorageUtil.getString('token');
     final headers = {
       "content-type": "application/json",
@@ -99,7 +99,7 @@ class ConsultaService {
   }
 
   Future<ExpedienteViewModel> getExpediente(
-      int pacienteId, int doctorId) async {
+      int pacienteId, String doctorId) async {
     final String token = StorageUtil.getString('token');
     final headers = {
       "content-type": "application/json",
@@ -120,7 +120,7 @@ class ConsultaService {
     return null;
   }
 
-  Future<File> getExpedientePDF(int pacienteId, int doctorId) async {
+  Future<File> getExpedientePDF(int pacienteId, String doctorId) async {
     final String token = StorageUtil.getString('token');
     final headers = {
       "content-type": "application/json",

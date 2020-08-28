@@ -12,7 +12,7 @@ String examenFisicoToJson(ExamenFisico data) => json.encode(data.toJson());
 class ExamenFisico {
   int examenFisicoId;
   int pacienteId;
-  int doctorId;
+  String doctorId;
   String aspectoGeneral;
   String pielFaneras;
   String cabeza;

@@ -1,8 +1,8 @@
+import 'package:appsam/src/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import 'package:appsam/src/blocs/provider.dart';
-import 'package:appsam/src/models/usuario_model.dart';
 import 'package:appsam/src/pages/asistentes/detalle_asistente.dart';
 import 'package:appsam/src/utils/storage_util.dart';
 
@@ -38,17 +38,16 @@ class DataSearch extends SearchDelegate {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    final UsuarioModel _usuario =
-        usuarioModelFromJson(StorageUtil.getString('usuarioGlobal'));
+    final UserModel _usuario =
+        userModelFromJson(StorageUtil.getString('usuarioGlobal'));
     // son las sugerencias que aparecen cuando la persona escribe
     final bloc = Provider.asistentesBloc(context);
     if (query.isEmpty) return Container();
 
-    bloc.cargarAsistentesPaginadoBusqueda(1, query, _usuario.usuarioId);
+    bloc.cargarAsistentesPaginadoBusqueda(1, query, _usuario.id);
     return StreamBuilder(
       stream: bloc.asistentesBusquedaStream,
-      builder:
-          (BuildContext context, AsyncSnapshot<List<UsuarioModel>> snapshot) {
+      builder: (BuildContext context, AsyncSnapshot<List<UserModel>> snapshot) {
         if (snapshot.hasData) {
           final asistentes = snapshot.data;
           return ListView(
@@ -66,7 +65,7 @@ class DataSearch extends SearchDelegate {
     );
   }
 
-  Widget _item(BuildContext context, UsuarioModel usuario) {
+  Widget _item(BuildContext context, UserModel usuario) {
     return Card(
       elevation: 10.0,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),

@@ -1,4 +1,5 @@
 import 'package:appsam/src/extensions/color_ext.dart';
+import 'package:appsam/src/models/user_model.dart';
 import 'package:appsam/src/providers/calendarioFecha_service.dart';
 import 'package:appsam/src/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +9,6 @@ import 'package:getflutter/getflutter.dart';
 import 'package:intl/intl.dart';
 
 import 'package:appsam/src/models/calendarioFecha_model.dart';
-import 'package:appsam/src/models/usuario_model.dart';
 import 'package:appsam/src/utils/storage_util.dart';
 import 'package:appsam/src/widgets/drawer.dart';
 import 'package:progress_dialog/progress_dialog.dart';
@@ -22,8 +22,8 @@ class CrearAgendaPage extends StatefulWidget {
 class _CrearAgendaPageState extends State<CrearAgendaPage> {
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
 
-  final UsuarioModel _usuario =
-      usuarioModelFromJson(StorageUtil.getString('usuarioGlobal'));
+  final UserModel _usuario =
+      userModelFromJson(StorageUtil.getString('usuarioGlobal'));
   final CalendarioFechaModel _evento = new CalendarioFechaModel();
   final formatHora = DateFormat.Hm('es_Es');
   final formatFecha = DateFormat.MMMMEEEEd('es_Es');
@@ -41,7 +41,7 @@ class _CrearAgendaPageState extends State<CrearAgendaPage> {
   @override
   void initState() {
     super.initState();
-    if (_usuario.rolId == 2) _evento.doctorId = _usuario.usuarioId;
+    if (_usuario.rolId == 2) _evento.doctorId = _usuario.id;
     if (_usuario.rolId == 3) _evento.doctorId = _usuario.asistenteId;
     _evento.activo = true;
     _evento.creadoPor = _usuario.userName;

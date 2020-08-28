@@ -1,5 +1,5 @@
 import 'package:appsam/src/models/eventos_model.dart';
-import 'package:appsam/src/models/usuario_model.dart';
+import 'package:appsam/src/models/user_model.dart';
 import 'package:appsam/src/providers/calendarioFecha_service.dart';
 import 'package:appsam/src/utils/storage_util.dart';
 import 'package:appsam/src/utils/utils.dart';
@@ -22,8 +22,8 @@ class _AgendaDetallePageState extends State<AgendaDetallePage> {
 
   @override
   Widget build(BuildContext context) {
-    final UsuarioModel _usuario =
-        usuarioModelFromJson(StorageUtil.getString('usuarioGlobal'));
+    final UserModel _usuario =
+        userModelFromJson(StorageUtil.getString('usuarioGlobal'));
     final evento = widget.evento;
     final formatHoras = DateFormat.Hm('es_Es');
     final formatDates = DateFormat.yMMMMEEEEd('es_Es');
@@ -153,7 +153,7 @@ class _AgendaDetallePageState extends State<AgendaDetallePage> {
   }
 
   void _confirmDesactivar(
-      BuildContext context, Event evento, UsuarioModel usuario) {
+      BuildContext context, Event evento, UserModel usuario) {
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
       title: Text("Información"),
@@ -185,7 +185,7 @@ class _AgendaDetallePageState extends State<AgendaDetallePage> {
         barrierDismissible: false);
   }
 
-  void _delete(Event evento, UsuarioModel usuario) async {
+  void _delete(Event evento, UserModel usuario) async {
     evento.activo = false;
     evento.modificadoPor = usuario.userName;
     final ProgressDialog _pr = new ProgressDialog(

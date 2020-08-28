@@ -17,7 +17,7 @@ class NotificacionesWebModel {
   });
 
   int total;
-  int doctorId;
+  String doctorId;
 
   factory NotificacionesWebModel.fromJson(Map<String, dynamic> json) =>
       NotificacionesWebModel(

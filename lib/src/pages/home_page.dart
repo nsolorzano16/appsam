@@ -1,12 +1,12 @@
 import 'dart:io';
 import 'package:appsam/src/models/dashboard/summaryCovid19_model.dart';
 import 'package:appsam/src/models/planes_model.dart';
+import 'package:appsam/src/models/user_model.dart';
 import 'package:appsam/src/providers/covid19_service.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
 import 'package:appsam/src/models/dashboard/total_pacientes_anio_mes.dart';
 import 'package:appsam/src/models/device_model.dart';
-import 'package:appsam/src/models/usuario_model.dart';
 import 'package:appsam/src/providers/FirebaseNotificationService.dart';
 import 'package:appsam/src/providers/dashboad_service.dart';
 import 'package:appsam/src/providers/devices_service.dart';
@@ -29,8 +29,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final UsuarioModel _usuario =
-      usuarioModelFromJson(StorageUtil.getString('usuarioGlobal'));
+  final UserModel _usuario =
+      userModelFromJson(StorageUtil.getString('usuarioGlobal'));
   final PlanesModel _plan =
       planesModelFromJson(StorageUtil.getString('planUsuario'));
   int consultasAtendidas = StorageUtil.getInt('consultasAtendidas');
@@ -42,7 +42,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    StorageUtil.putString('ultimaPagina', HomePage.routeName);
     //final _pushService = new Firebasem();
     // _pushService.initNotifications();
     FirebaseNotificationService.instance.sendDeviceToken();
@@ -51,11 +50,11 @@ class _HomePageState extends State<HomePage> {
     device.deviceId = 0;
 
     if (_usuario.rolId == 2) {
-      device.usuarioId = _usuario.usuarioId;
+      device.usuarioId = _usuario.id;
     } else if (_usuario.rolId == 3) {
       device.usuarioId = _usuario.asistenteId;
     } else {
-      device.usuarioId = 0;
+      device.usuarioId = '';
     }
     device.usuario = _usuario.userName;
     device.creadoFecha = DateTime.now();
@@ -422,54 +421,6 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-
-  // final FirebaseOptions options = const FirebaseOptions(
-  //   googleAppID: '1:830338990221:android:8382bb597361e56bcde2c4',
-  //   gcmSenderID: '830338990221',
-  //   apiKey: 'AIzaSyB_zGgdbaJtCSkM9GGYfu-1BTUThvOOSSo',
-  //   projectID: 'sam-app-446ee',
-  // );
-
-  // Future<void> configure() async {
-  //   final FirebaseApp app = await FirebaseApp.configure(
-  //     name: name,
-  //     options: options,
-  //   );
-  //   assert(app != null);
-
-  //   _firestore = Firestore(app: app);
-
-  //   // _firestore
-  //   //     .collection('agenda')
-  //   //     .document('1')
-  //   //     .snapshots()
-  //   //     .forEach((element) => print('${element.data}'));
-
-  //   _firestore.collection('agenda').getDocuments().then((value) {
-  //     value.documents.forEach((element) {
-  //       print(element.data);
-  //     });
-  //   });
-
-  //   _firestore.collection('consulta').getDocuments().then((value) {
-  //     value.documents.forEach((element) {
-  //       print(element.data);
-  //     });
-  //   });
-
-  //   print('Configured $app');
-  // }
-
-  // Future<void> allApps() async {
-  //   final List<FirebaseApp> apps = await FirebaseApp.allApps();
-  //   print('Currently configured apps: $apps');
-  // }
-
-  // Future<void> optiones() async {
-  //   final FirebaseApp app = await FirebaseApp.appNamed(name);
-  //   final FirebaseOptions options = await app?.options;
-  //   print('Current options for app $name: $options');
-  // }
 }
 
 class SimpleBarChart extends StatelessWidget {

@@ -25,7 +25,7 @@ class DiagnosticosBloc with Validators {
   }
 
   Future<List<DiagnosticosViewModel>> getDiagnosticos(
-      int pacienteId, int doctorId, int preclinicaId) async {
+      int pacienteId, String doctorId, int preclinicaId) async {
     return await _diagnosticosService.getDiagnosticos(
         pacienteId, doctorId, preclinicaId);
   }

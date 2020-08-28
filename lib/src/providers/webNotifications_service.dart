@@ -28,19 +28,7 @@ class WebNotificationService {
     return _instance;
   }
 
-  // Future<void> _configure() async {
-  //   // final FirebaseApp app = await FirebaseApp.configure(
-  //   //   name: name,
-  //   //   options: options,
-  //   // );
-  //   assert(app != null);
-
-  //   _firestore = Firestore(app: app);
-
-  //   //print('Configured $app');
-  // }
-
-  void loadNotificaciones(int doctorId) {
+  void loadNotificaciones(String doctorId) {
     _firestore
         .collection('agenda')
         .document('$doctorId')

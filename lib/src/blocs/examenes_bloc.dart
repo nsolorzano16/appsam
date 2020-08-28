@@ -50,7 +50,7 @@ class ExamenesBlocNoti extends ChangeNotifier {
   }
 
   Future<List<ExamenesIndicadosViewModel>> getDetalleExamenesIndicados(
-      int pacienteId, int doctorId, int preclinicaId) async {
+      int pacienteId, String doctorId, int preclinicaId) async {
     return await _examenService.getDetalleExamenesIndicados(
         pacienteId, doctorId, preclinicaId);
   }

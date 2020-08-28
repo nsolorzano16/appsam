@@ -4,7 +4,7 @@
 
 import 'dart:convert';
 
-import 'package:appsam/src/models/usuario_model.dart';
+import 'package:appsam/src/models/user_model.dart';
 
 AsistentesPaginadoModel asistentesPaginadoModelFromJson(String str) =>
     AsistentesPaginadoModel.fromJson(json.decode(str));
@@ -13,12 +13,6 @@ String asistentesPaginadoModelToJson(AsistentesPaginadoModel data) =>
     json.encode(data.toJson());
 
 class AsistentesPaginadoModel {
-  int totalItems;
-  int totalPages;
-  int currentPage;
-  int itemCount;
-  List<UsuarioModel> items;
-
   AsistentesPaginadoModel({
     this.totalItems,
     this.totalPages,
@@ -27,14 +21,20 @@ class AsistentesPaginadoModel {
     this.items,
   });
 
+  int totalItems;
+  int totalPages;
+  int currentPage;
+  int itemCount;
+  List<UserModel> items;
+
   factory AsistentesPaginadoModel.fromJson(Map<String, dynamic> json) =>
       AsistentesPaginadoModel(
         totalItems: json["totalItems"],
         totalPages: json["totalPages"],
         currentPage: json["currentPage"],
         itemCount: json["itemCount"],
-        items: List<UsuarioModel>.from(
-            json["items"].map((x) => UsuarioModel.fromJson(x))),
+        items: List<UserModel>.from(
+            json["items"].map((x) => UserModel.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {

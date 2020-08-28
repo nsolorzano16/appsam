@@ -13,7 +13,7 @@ String examenesIndicadosViewModelToJson(ExamenesIndicadosViewModel data) =>
 class ExamenesIndicadosViewModel {
   int examenIndicadoId;
   int pacienteId;
-  int doctorId;
+  String doctorId;
   int preclinicaId;
   int examenCategoriaId;
   int examenTipoId;

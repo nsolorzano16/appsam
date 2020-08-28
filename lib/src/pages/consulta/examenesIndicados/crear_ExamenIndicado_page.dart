@@ -2,7 +2,7 @@ import 'package:appsam/src/blocs/examenes_bloc.dart';
 import 'package:appsam/src/models/examenCategoria_model.dart';
 import 'package:appsam/src/models/examenIndicado_Model.dart';
 import 'package:appsam/src/models/paginados/preclinica_paginadoVM.dart';
-import 'package:appsam/src/models/usuario_model.dart';
+import 'package:appsam/src/models/user_model.dart';
 import 'package:appsam/src/providers/combos_service.dart';
 import 'package:appsam/src/utils/storage_util.dart';
 import 'package:appsam/src/utils/utils.dart';
@@ -30,8 +30,8 @@ class _CrearExamenIndicadoPageState extends State<CrearExamenIndicadoPage> {
 
   bool _habilitarNombre = true;
 
-  final UsuarioModel _usuario =
-      usuarioModelFromJson(StorageUtil.getString('usuarioGlobal'));
+  final UserModel _usuario =
+      userModelFromJson(StorageUtil.getString('usuarioGlobal'));
 
   final _combosService = new CombosService();
 

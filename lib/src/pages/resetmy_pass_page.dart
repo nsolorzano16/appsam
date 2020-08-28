@@ -1,3 +1,4 @@
+import 'package:appsam/src/models/user_model.dart';
 import 'package:appsam/src/widgets/firebaseMessageWrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -5,7 +6,6 @@ import 'package:getflutter/getflutter.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 
 import 'package:appsam/src/blocs/asistentes_bloc/create_edit_asistentes.dart';
-import 'package:appsam/src/models/usuario_model.dart';
 import 'package:appsam/src/utils/storage_util.dart';
 import 'package:appsam/src/utils/utils.dart';
 import 'package:appsam/src/widgets/drawer.dart';
@@ -18,8 +18,8 @@ class ResetMyPasswordPage extends StatelessWidget {
 
     final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
     final blocService = new CrearEditarAsistentesBloc();
-    final UsuarioModel _usuario =
-        usuarioModelFromJson(StorageUtil.getString('usuarioGlobal'));
+    final UserModel _usuario =
+        userModelFromJson(StorageUtil.getString('usuarioGlobal'));
     TextEditingController _passwordController = new TextEditingController();
     TextEditingController _passwordConfirmController =
         new TextEditingController();
@@ -30,7 +30,7 @@ class ResetMyPasswordPage extends StatelessWidget {
               backgroundColor: colorFondoApp(),
               drawer: MenuWidget(),
               appBar: AppBar(
-                title: Text('Cambiar mi contraseña'),
+                title: Text('Cambiar mi contraseña prr'),
                 actions: <Widget>[
                   IconButton(
                       icon: Icon(Icons.arrow_back_ios),
@@ -121,7 +121,7 @@ class ResetMyPasswordPage extends StatelessWidget {
   Widget _crearBoton(
       CrearEditarAsistentesBloc blocService,
       BuildContext context,
-      UsuarioModel usuario,
+      UserModel usuario,
       TextEditingController passwordController,
       TextEditingController confirmPassController,
       GlobalKey<FormState> formKey) {
@@ -165,7 +165,7 @@ class ResetMyPasswordPage extends StatelessWidget {
               var pass = confirmPassController.text;
               var modificadoPor = usuario.userName;
               final user = await blocService.resetPassword(
-                  usuario.usuarioId, pass, modificadoPor);
+                  usuario.id, pass, modificadoPor);
               if (user != null) {
                 await _pr.hide();
                 mostrarFlushBar(context, Colors.green, 'Info',

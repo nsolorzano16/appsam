@@ -75,7 +75,7 @@ class NotasService {
   }
 
   Future<List<Notas>> getNotas(
-      int pacienteId, int doctorId, int preclinicaId) async {
+      int pacienteId, String doctorId, int preclinicaId) async {
     final String token = StorageUtil.getString('token');
     final headers = {
       "content-type": "application/json",

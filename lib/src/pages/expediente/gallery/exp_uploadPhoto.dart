@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:appsam/src/models/usuario_model.dart';
+import 'package:appsam/src/models/user_model.dart';
 import 'package:appsam/src/pages/expediente/gallery/exp_gallery.dart';
 import 'package:appsam/src/providers/fotosPacienteService.dart';
 import 'package:appsam/src/utils/storage_util.dart';
@@ -12,7 +12,7 @@ import 'package:progress_dialog/progress_dialog.dart';
 
 class GalleryUploadPhotoPage extends StatefulWidget {
   final int pacienteId;
-  final int doctorId;
+  final String doctorId;
 
   const GalleryUploadPhotoPage(
       {Key key, @required this.pacienteId, @required this.doctorId})
@@ -26,11 +26,11 @@ class _GalleryUploadPhotoPageState extends State<GalleryUploadPhotoPage> {
   final TextEditingController _descripcionController = TextEditingController();
   File foto;
   final FotosPacienteService _fotosPacienteService = FotosPacienteService();
-  final UsuarioModel _usuario =
-      usuarioModelFromJson(StorageUtil.getString('usuarioGlobal'));
+  final UserModel _usuario =
+      userModelFromJson(StorageUtil.getString('usuarioGlobal'));
 
   int get _pacienteId => widget.pacienteId;
-  int get _doctorId => widget.doctorId;
+  String get _doctorId => widget.doctorId;
 
   @override
   Widget build(BuildContext context) {

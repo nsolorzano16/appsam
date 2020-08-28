@@ -10,7 +10,7 @@ import 'package:progress_dialog/progress_dialog.dart';
 class GalleryDetailPhotoUrlPage extends StatelessWidget {
   final FotosPacienteModel foto;
   final int pacienteId;
-  final int doctorId;
+  final String doctorId;
 
   const GalleryDetailPhotoUrlPage(
       {Key key,

@@ -8,7 +8,7 @@ import 'package:appsam/src/models/consulta_model.dart';
 import 'package:appsam/src/models/examenFisico_model.dart';
 import 'package:appsam/src/models/historialGinecoObstetra_model.dart';
 import 'package:appsam/src/models/paginados/preclinica_paginadoVM.dart';
-import 'package:appsam/src/models/usuario_model.dart';
+import 'package:appsam/src/models/user_model.dart';
 import 'package:appsam/src/pages/consulta/examenFisico/crear_ExamenFisico_page.dart';
 import 'package:appsam/src/pages/consulta/historialGinecoObstetra/crear_HistorialGineco_page.dart';
 import 'package:appsam/src/utils/storage_util.dart';
@@ -37,8 +37,8 @@ class _MenuConsultaPageState extends State<MenuConsultaPage>
   final PreclinicaBloc _preclinicaBloc = new PreclinicaBloc();
 
   Future<ConsultaModel> _consultaFuture;
-  final UsuarioModel _usuario =
-      usuarioModelFromJson(StorageUtil.getString('usuarioGlobal'));
+  final UserModel _usuario =
+      userModelFromJson(StorageUtil.getString('usuarioGlobal'));
 
   @override
   void dispose() {
@@ -325,7 +325,7 @@ class _MenuConsultaPageState extends State<MenuConsultaPage>
       String ruta,
       Color color,
       BuildContext context,
-      UsuarioModel usuario) {
+      UserModel usuario) {
     final _historialGinecoBloc = new HistorialGinecoObstetraBloc();
 
     final HistorialGinecoObstetra _historialEmpty =
@@ -431,7 +431,7 @@ class _MenuConsultaPageState extends State<MenuConsultaPage>
       String ruta,
       Color color,
       BuildContext context,
-      UsuarioModel usuario) {
+      UserModel usuario) {
     final _examenFisicoBloc = new ExamenFisicoBloc();
 
     final ExamenFisico _examenEmpty = new ExamenFisico();

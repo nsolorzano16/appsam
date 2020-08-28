@@ -1,5 +1,5 @@
 import 'package:appsam/src/models/menu_model.dart';
-import 'package:appsam/src/models/usuario_model.dart';
+import 'package:appsam/src/models/user_model.dart';
 import 'package:appsam/src/providers/menu_provider.dart';
 import 'package:appsam/src/utils/storage_util.dart';
 import 'package:flutter/material.dart';
@@ -11,8 +11,8 @@ import 'package:icons_helper/icons_helper.dart';
 class MenuWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final UsuarioModel usuario =
-        usuarioModelFromJson(StorageUtil.getString('usuarioGlobal'));
+    final UserModel usuario =
+        userModelFromJson(StorageUtil.getString('usuarioGlobal'));
 
     return Drawer(
         child: Column(
@@ -63,7 +63,7 @@ class MenuWidget extends StatelessWidget {
     ));
   }
 
-  Widget _lista(UsuarioModel usuario) {
+  Widget _lista(UserModel usuario) {
     // menuProvider.cargarData()
     return FutureBuilder(
       future: menuProvider.cargarData(),
@@ -80,7 +80,7 @@ class MenuWidget extends StatelessWidget {
     );
   }
 
-  Widget _fotoDelDrawer(UsuarioModel usuario) {
+  Widget _fotoDelDrawer(UserModel usuario) {
     if (usuario != null) {
       return UserAccountsDrawerHeader(
           accountName: Text(
@@ -105,7 +105,7 @@ class MenuWidget extends StatelessWidget {
   }
 
   List<Widget> _listaItems(
-    UsuarioModel usuario,
+    UserModel usuario,
     List<Ruta> data,
     BuildContext context,
   ) {

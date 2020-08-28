@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:appsam/src/models/municipio_model.dart';
+import 'package:appsam/src/models/user_model.dart';
 import 'package:appsam/src/widgets/firebaseMessageWrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -21,7 +22,6 @@ import 'package:appsam/src/models/pais_model.dart';
 import 'package:appsam/src/models/parentesco_model.dart';
 import 'package:appsam/src/models/profesion_model.dart';
 import 'package:appsam/src/models/religion_model.dart';
-import 'package:appsam/src/models/usuario_model.dart';
 import 'package:appsam/src/providers/combos_service.dart';
 import 'package:appsam/src/utils/storage_util.dart';
 import 'package:appsam/src/utils/utils.dart';
@@ -39,8 +39,8 @@ class EditarPacientePage extends StatefulWidget {
 
 class _EditarPacientePageState extends State<EditarPacientePage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  UsuarioModel _usuario =
-      usuarioModelFromJson(StorageUtil.getString('usuarioGlobal'));
+  UserModel _usuario =
+      userModelFromJson(StorageUtil.getString('usuarioGlobal'));
 
   DateTime picked;
 

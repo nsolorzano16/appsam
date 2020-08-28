@@ -40,14 +40,17 @@ class DetalleDiagnosticosPage extends StatelessWidget {
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
         title: GFListTile(
-            title: Text(
-              'Enfermedad',
-              style: estiloTitulos,
+          title: Text(
+            'Enfermedad: ${element.nombreCie.toLowerCase()}',
+            style: estiloTitulos,
+          ),
+          subTitle: Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: Text(
+              'Problema clínico: ${element.problemasClinicos} ',
+              textAlign: TextAlign.justify,
             ),
-            subtitleText: '${element.nombreCie.toLowerCase()}'),
-        content: Text(
-          'Problema clínico: ${element.problemasClinicos} ',
-          textAlign: TextAlign.justify,
+          ),
         ),
       );
       lista.add(itemTemp);

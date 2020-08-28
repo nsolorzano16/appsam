@@ -9,7 +9,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 class ExpGalleryPage extends StatefulWidget {
   final int pacienteId;
-  final int doctorId;
+  final String doctorId;
 
   const ExpGalleryPage(
       {Key key, @required this.pacienteId, @required this.doctorId})
@@ -21,7 +21,7 @@ class ExpGalleryPage extends StatefulWidget {
 
 class _ExpGalleryPageState extends State<ExpGalleryPage> {
   int get _pacienteId => widget.pacienteId;
-  int get _doctorId => widget.doctorId;
+  String get _doctorId => widget.doctorId;
   final FotosPacienteBloc bloc = FotosPacienteBloc();
   final _scrollController = new ScrollController();
 

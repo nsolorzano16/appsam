@@ -25,7 +25,7 @@ class Diagnosticos {
 
   int diagnosticoId;
   int pacienteId;
-  int doctorId;
+  String doctorId;
   int cieId;
   int preclinicaId;
   String problemasClinicos;

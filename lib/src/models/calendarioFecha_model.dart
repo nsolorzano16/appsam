@@ -12,7 +12,7 @@ String calendarioFechaModelToJson(CalendarioFechaModel data) =>
 
 class CalendarioFechaModel {
   int calendarioFechaId;
-  int doctorId;
+  String doctorId;
   DateTime inicio;
   DateTime fin;
   bool todoElDia;

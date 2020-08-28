@@ -13,7 +13,7 @@ String examenIndicadoModelToJson(ExamenIndicadoModel data) =>
 class ExamenIndicadoModel {
   int examenIndicadoId;
   int pacienteId;
-  int doctorId;
+  String doctorId;
   int preclinicaId;
   int examenCategoriaId;
   int examenTipoId;

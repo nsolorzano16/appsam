@@ -1,3 +1,4 @@
+import 'package:appsam/src/models/user_model.dart';
 import 'package:appsam/src/widgets/firebaseMessageWrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -8,7 +9,6 @@ import 'package:appsam/src/blocs/habitos_bloc.dart';
 import 'package:appsam/src/utils/utils.dart';
 import 'package:appsam/src/models/habitos_model.dart';
 import 'package:appsam/src/models/paginados/preclinica_paginadoVM.dart';
-import 'package:appsam/src/models/usuario_model.dart';
 import 'package:appsam/src/widgets/drawer.dart';
 import 'package:appsam/src/utils/storage_util.dart';
 
@@ -21,8 +21,8 @@ class CrearHabitosPage extends StatefulWidget {
 class _CrearHabitosPageState extends State<CrearHabitosPage> {
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
   final Habitos _habitos = new Habitos();
-  final UsuarioModel _usuario =
-      usuarioModelFromJson(StorageUtil.getString('usuarioGlobal'));
+  final UserModel _usuario =
+      userModelFromJson(StorageUtil.getString('usuarioGlobal'));
   final _habitosBloc = new HabitosBloc();
 
   final TextEditingController _notasController = new TextEditingController();

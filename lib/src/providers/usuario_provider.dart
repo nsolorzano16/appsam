@@ -1,11 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:appsam/src/models/create_user_viewmodel.dart';
+import 'package:appsam/src/models/myinfo_viewmodel.dart';
+import 'package:appsam/src/models/user_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:mime_type/mime_type.dart';
 
 import 'package:appsam/src/models/asistentes_paginado_model.dart';
-import 'package:appsam/src/models/usuario_model.dart';
 import 'package:appsam/src/utils/storage_util.dart';
 import 'package:appsam/src/utils/utils.dart';
 
@@ -16,43 +18,9 @@ class UsuarioProvider {
     "content-type": "application/json",
     "accept": "application/json",
   };
-  Future<Map<String, dynamic>> login(String usuario, String password) async {
-    final loginJson = {'Usuario': usuario, 'Password': password};
-
-    final resp = await http.post('$_apiURL/api/Usuarios/Login',
-        headers: headers, body: json.encode(loginJson));
-    Map<String, dynamic> decodeResp = json.decode(resp.body);
-
-    if (resp.statusCode == 200) {
-      if (decodeResp.containsKey('token')) {
-        StorageUtil.putString('token', decodeResp['token']);
-        // StorageUtil.putInt('usuarioId', decodeResp['usuarioId']);
-        // StorageUtil.putInt('rolId', decodeResp['rolId']);
-        // StorageUtil.putString('userName', decodeResp['userName']);
-        // StorageUtil.putString('email', decodeResp['email']);
-        // StorageUtil.putString('nombres', decodeResp['nombres']);
-        // StorageUtil.putString('primerApellido', decodeResp['primerApellido']);
-        // StorageUtil.putString('segundoApellido', decodeResp['segundoApellido']);
-        StorageUtil.putString('fotoUrl', decodeResp['fotoUrl']);
-
-        return {
-          'ok': true,
-          'usuario': decodeResp['usuario'],
-          'token': decodeResp['token'],
-          'plan': decodeResp['plan'],
-          'consultasAtendidas': decodeResp['consultasAtendidas']
-        };
-      }
-    }
-    return {
-      'ok': false,
-      'mensaje': 'Credenciales '
-          'incorrectas o el usuario no existe'
-    };
-  }
 
   Future<AsistentesPaginadoModel> getAsistentesPaginado(
-      int page, String filter, int doctorId) async {
+      int page, String filter, String doctorId) async {
     final String token = StorageUtil.getString('token');
     final headers = {
       "content-type": "application/json",
@@ -63,7 +31,7 @@ class UsuarioProvider {
     var httpClient = http.Client();
     try {
       var resp = await httpClient.get(
-          '$_apiURL/api/Usuarios/asistentes/page/$page/limit/50/doctorid/$doctorId?filter=$filter',
+          '$_apiURL/api/User/assistants/page/$page/limit/50/doctorid/$doctorId?filter=$filter',
           headers: headers);
       Map<String, dynamic> decodeResp = json.decode(resp.body);
       var asistentes = new AsistentesPaginadoModel();
@@ -74,46 +42,46 @@ class UsuarioProvider {
     }
   }
 
-  Future<bool> addAsistente(UsuarioModel usuario) async {
-    // final String token = StorageUtil.getString('token');
-    final headers = {
-      "content-type": "application/json",
-      "accept": "application/json",
-      //'authorization': 'Bearer $token',
-    };
-    final url = '$_apiURL/api/usuarios';
-
-    final resp = await http.post(url,
-        headers: headers, body: usuarioModelToJson(usuario));
-
-    if (resp.statusCode == 200) return true;
-
-    return false;
-  }
-
-  Future<UsuarioModel> updateAsistente(UsuarioModel usuario) async {
+  Future<bool> addAsistente(CreateUserViewModel usuario) async {
     final String token = StorageUtil.getString('token');
     final headers = {
       "content-type": "application/json",
       "accept": "application/json",
       'authorization': 'Bearer $token',
     };
-    final url = '$_apiURL/api/usuarios';
+    final url = '$_apiURL/api/User/create';
 
-    final resp = await http.put(url,
-        headers: headers, body: usuarioModelToJson(usuario));
+    final resp = await http.post(url,
+        headers: headers, body: createUserViewModelToJson(usuario));
+
+    if (resp.statusCode == 200) return true;
+
+    return false;
+  }
+
+  Future<UserModel> updateAsistente(UserModel usuario) async {
+    final String token = StorageUtil.getString('token');
+    final headers = {
+      "content-type": "application/json",
+      "accept": "application/json",
+      'authorization': 'Bearer $token',
+    };
+    final url = '$_apiURL/api/User/edit';
+
+    final resp =
+        await http.put(url, headers: headers, body: userModelToJson(usuario));
 
     if (resp.statusCode == 200 && resp.body.isNotEmpty) {
       final decodedData = json.decode(resp.body);
-      final usuario = new UsuarioModel.fromJson(decodedData);
+      final usuario = new UserModel.fromJson(decodedData);
       return usuario;
     }
 
     return null;
   }
 
-  Future<UsuarioModel> resetPassword(
-      int id, String password, String modificadoPor) async {
+  Future<UserModel> resetPassword(
+      String id, String password, String modificadoPor) async {
     final String token = StorageUtil.getString('token');
     final headersas = {
       "content-type": "application/json",
@@ -131,40 +99,41 @@ class UsuarioProvider {
 
     if (resp.statusCode == 200 && resp.body.isNotEmpty) {
       final decodedData = json.decode(resp.body);
-      final usuario = new UsuarioModel.fromJson(decodedData);
+      final usuario = new UserModel.fromJson(decodedData);
       return usuario;
     }
 
     return null;
   }
 
-  Future<UsuarioModel> getMyInfo(int id) async {
+  Future<MyInfoViewModel> getMyInfo(String id) async {
     final String token = StorageUtil.getString('token');
     final headers = {
       "content-type": "application/json",
       "accept": "application/json",
       'authorization': 'Bearer $token',
     };
+
     final resp =
-        await http.get('$_apiURL/api/Usuarios/info/$id', headers: headers);
+        await http.get('$_apiURL/api/User/myinfo/id/$id', headers: headers);
 
     if (resp.statusCode == 200 && resp.body.isNotEmpty) {
       final decodedData = json.decode(resp.body);
-      final usuario = new UsuarioModel.fromJson(decodedData);
-      return usuario;
+      final myInfo = new MyInfoViewModel.fromJson(decodedData);
+      return myInfo;
     }
 
     return null;
   }
 
-  Future<UsuarioModel> subirFotoApi(int id, File imagen) async {
+  Future<UserModel> subirFotoApi(String id, File imagen) async {
     final String token = StorageUtil.getString('token');
     final headers = {
       "content-type": "application/json",
       "accept": "application/json",
       'authorization': 'Bearer $token',
     };
-    final url = Uri.parse('$_apiURL/api/Usuarios/profilefoto/$id');
+    final url = Uri.parse('$_apiURL/api/User/profilephoto/$id');
     final mimeType = mime(imagen.path).split('/');
     final imageUploadRequest = http.MultipartRequest('POST', url);
 
@@ -178,7 +147,7 @@ class UsuarioProvider {
       return null;
     }
     final decodedData = json.decode(resp.body);
-    final usuario = new UsuarioModel.fromJson(decodedData);
+    final usuario = new UserModel.fromJson(decodedData);
     return usuario;
   }
 }

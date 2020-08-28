@@ -18,7 +18,7 @@ class NotasBloc with Validators {
   }
 
   Future<List<Notas>> getNotas(
-      int pacienteId, int doctorId, int preclinicaId) async {
+      int pacienteId, String doctorId, int preclinicaId) async {
     return await _notasService.getNotas(pacienteId, doctorId, preclinicaId);
   }
 

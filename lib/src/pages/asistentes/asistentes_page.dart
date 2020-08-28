@@ -1,11 +1,12 @@
 import 'dart:async';
+import 'package:appsam/src/models/create_user_viewmodel.dart';
+import 'package:appsam/src/models/user_model.dart';
 import 'package:appsam/src/utils/utils.dart';
 import 'package:appsam/src/widgets/firebaseMessageWrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 
 import 'package:appsam/src/blocs/asistentes_bloc.dart';
-import 'package:appsam/src/models/usuario_model.dart';
 import 'package:appsam/src/search/search_delegate.dart';
 import 'package:appsam/src/utils/storage_util.dart';
 import 'package:appsam/src/widgets/drawer.dart';
@@ -20,8 +21,8 @@ class _AsistentesPageState extends State<AsistentesPage> {
   AsistentesBloc asistentesBloc = new AsistentesBloc();
   ScrollController _scrollController = new ScrollController();
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-  final UsuarioModel _usuario =
-      usuarioModelFromJson(StorageUtil.getString('usuarioGlobal'));
+  final UserModel _usuario =
+      userModelFromJson(StorageUtil.getString('usuarioGlobal'));
 
   int _totalAsistententes;
 
@@ -37,7 +38,7 @@ class _AsistentesPageState extends State<AsistentesPage> {
   @override
   void initState() {
     StorageUtil.putString('ultimaPagina', AsistentesPage.routeName);
-    asistentesBloc.cargarAsistentesPaginado(1, '', _usuario.usuarioId);
+    asistentesBloc.cargarAsistentesPaginado(1, '', _usuario.id);
     super.initState();
   }
 
@@ -50,7 +51,7 @@ class _AsistentesPageState extends State<AsistentesPage> {
 
         if (asistentesBloc.currentPage != asistentesBloc.totalPages) {
           if (page <= asistentesBloc.totalPages) {
-            fetchData(page, _usuario.usuarioId);
+            fetchData(page, _usuario.id);
           }
         }
       }
@@ -96,7 +97,7 @@ class _AsistentesPageState extends State<AsistentesPage> {
         onWillPop: () async => false);
   }
 
-  Future<Null> fetchData(int page, int doctorId) async {
+  Future<Null> fetchData(int page, String doctorId) async {
     final ProgressDialog _pr = new ProgressDialog(
       context,
       type: ProgressDialogType.Normal,
@@ -121,7 +122,7 @@ class _AsistentesPageState extends State<AsistentesPage> {
   Widget _crearListaAsistentes(BuildContext context) {
     return StreamBuilder(
       stream: asistentesBloc.asistentesStream,
-      builder: (context, AsyncSnapshot<List<UsuarioModel>> snapshot) {
+      builder: (context, AsyncSnapshot<List<UserModel>> snapshot) {
         if (!snapshot.hasData) return loadingIndicator(context);
         final asistentes = snapshot.data;
         _totalAsistententes = asistentes.length;
@@ -141,7 +142,7 @@ class _AsistentesPageState extends State<AsistentesPage> {
 
   Widget _crearItem(
     BuildContext context,
-    UsuarioModel usuario,
+    UserModel usuario,
     int index,
   ) {
     index++;
@@ -182,7 +183,7 @@ class _AsistentesPageState extends State<AsistentesPage> {
     );
   }
 
-  Widget _crearSubtitle(UsuarioModel usuario) {
+  Widget _crearSubtitle(UserModel usuario) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -217,18 +218,13 @@ class _AsistentesPageState extends State<AsistentesPage> {
   }
 
   void _goToCrearAsistente() {
-    final _asistente = new UsuarioModel();
+    final _asistente = new CreateUserViewModel();
 
-    _asistente.usuarioId = 0;
     _asistente.rolId = 3;
-    _asistente.asistenteId = _usuario.usuarioId;
+    _asistente.asistenteId = _usuario.id;
     _asistente.sexo = 'M';
-    _asistente.edad = 0;
-    _asistente.activo = true;
-    _asistente.creadoFecha = new DateTime.now();
     _asistente.creadoPor = _usuario.userName;
-    _asistente.modificadoFecha = new DateTime.now();
-    _asistente.modificadoPor = _usuario.userName;
+    _asistente.planId = _usuario.planId;
 
     Navigator.pushReplacementNamed(context, 'crear-editar-asistente',
         arguments: _asistente);

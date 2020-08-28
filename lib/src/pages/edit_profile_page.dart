@@ -1,3 +1,4 @@
+import 'package:appsam/src/models/user_model.dart';
 import 'package:appsam/src/utils/storage_util.dart';
 import 'package:appsam/src/widgets/drawer.dart';
 import 'package:flutter/material.dart';
@@ -9,13 +10,12 @@ import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 
 import 'package:appsam/src/blocs/asistentes_bloc/create_edit_asistentes.dart';
-import 'package:appsam/src/models/usuario_model.dart';
 import 'package:appsam/src/utils/utils.dart';
 
 class EditarMiPerfilPage extends StatefulWidget {
   static final String routeName = 'editar_mi_perfil_page';
 
-  final UsuarioModel usuario;
+  final UserModel usuario;
 
   const EditarMiPerfilPage({@required this.usuario});
 
@@ -24,7 +24,7 @@ class EditarMiPerfilPage extends StatefulWidget {
 }
 
 class _EditarMiPerfilPageState extends State<EditarMiPerfilPage> {
-  UsuarioModel get usuario => widget.usuario;
+  UserModel get usuario => widget.usuario;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   // bool _autoValidate = false;
 
@@ -276,7 +276,7 @@ class _EditarMiPerfilPageState extends State<EditarMiPerfilPage> {
             return null;
           }
         },
-        initialValue: usuario.telefono1,
+        initialValue: usuario.phoneNumber,
         keyboardType: TextInputType.number,
         inputFormatters: [
           LengthLimitingTextInputFormatter(8),
@@ -284,7 +284,7 @@ class _EditarMiPerfilPageState extends State<EditarMiPerfilPage> {
         ],
         maxLength: 8,
         decoration: inputsDecorations('Teléfono', Icons.phone_android),
-        onSaved: (value) => usuario.telefono1 = value,
+        onSaved: (value) => usuario.phoneNumber = value,
       ),
     );
   }

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:appsam/src/models/user_model.dart';
 import 'package:appsam/src/widgets/drawer.dart';
 import 'package:appsam/src/widgets/firebaseMessageWrapper.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +10,6 @@ import 'package:progress_dialog/progress_dialog.dart';
 import 'package:appsam/src/blocs/consulta_bloc.dart';
 import 'package:appsam/src/blocs/preclinica_bloc.dart';
 import 'package:appsam/src/models/paginados/preclinica_paginadoVM.dart';
-import 'package:appsam/src/models/usuario_model.dart';
 import 'package:appsam/src/utils/storage_util.dart';
 import 'package:appsam/src/utils/utils.dart';
 
@@ -24,8 +24,8 @@ class _EditarPreclinicaPageState extends State<EditarPreclinicaPage> {
   ConsultaBloc blocConsulta = new ConsultaBloc();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final UsuarioModel _usuario =
-      usuarioModelFromJson(StorageUtil.getString('usuarioGlobal'));
+  final UserModel _usuario =
+      userModelFromJson(StorageUtil.getString('usuarioGlobal'));
 
   @override
   void initState() {
@@ -65,8 +65,7 @@ class _EditarPreclinicaPageState extends State<EditarPreclinicaPage> {
         onWillPop: () async => false);
   }
 
-  Widget _crearFormulario(
-      UsuarioModel usuario, PreclinicaViewModel preclinica) {
+  Widget _crearFormulario(UserModel usuario, PreclinicaViewModel preclinica) {
     return SingleChildScrollView(
         child: Column(
       children: <Widget>[

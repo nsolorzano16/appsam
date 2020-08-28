@@ -4,7 +4,7 @@ import 'package:flutter_full_pdf_viewer/flutter_full_pdf_viewer.dart';
 
 class ViewPDFPage extends StatefulWidget {
   final int pacienteId;
-  final int doctorId;
+  final String doctorId;
 
   const ViewPDFPage({@required this.pacienteId, @required this.doctorId});
 
@@ -14,7 +14,7 @@ class ViewPDFPage extends StatefulWidget {
 
 class _ViewPDFPageState extends State<ViewPDFPage> {
   int get _pacienteId => widget.pacienteId;
-  int get _doctorId => widget.doctorId;
+  String get _doctorId => widget.doctorId;
 
   final ConsultaService _consultaService = new ConsultaService();
   String pathPDf = '';

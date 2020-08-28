@@ -33,7 +33,7 @@ class DiagnosticosService {
     return [];
   }
 
-  Future<Diagnosticos> addDiagnosticos(diagnostico) async {
+  Future<Diagnosticos> addDiagnosticos(Diagnosticos diagnostico) async {
     final String token = StorageUtil.getString('token');
     final headers = {
       "content-type": "application/json",
@@ -98,7 +98,7 @@ class DiagnosticosService {
   }
 
   Future<List<DiagnosticosViewModel>> getDiagnosticos(
-      int pacienteId, int doctorId, int preclinicaId) async {
+      int pacienteId, String doctorId, int preclinicaId) async {
     final String token = StorageUtil.getString('token');
     final List<DiagnosticosViewModel> lista = new List();
     final headers = {

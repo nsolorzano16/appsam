@@ -11,7 +11,7 @@ String devicesModelToJson(DevicesModel data) => json.encode(data.toJson());
 
 class DevicesModel {
   int deviceId;
-  int usuarioId;
+  String usuarioId;
   String tokenDevice;
   String platform;
   DateTime creadoFecha;

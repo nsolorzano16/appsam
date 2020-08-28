@@ -39,14 +39,15 @@ class DetNotasPage extends StatelessWidget {
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
         title: GFListTile(
-            title: Padding(
-              padding: EdgeInsets.all(3),
-              child: Text(
-                'Notas',
-                style: estiloTitulos,
-              ),
-            ),
-            subtitleText: element.notas),
+          title: Text(
+            'Notas',
+            style: estiloTitulos,
+          ),
+          subTitle: Padding(
+            padding: const EdgeInsets.only(top: 8),
+            child: Text(element.notas),
+          ),
+        ),
       );
       lista.add(itemTemp);
     });

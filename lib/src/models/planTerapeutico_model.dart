@@ -13,7 +13,7 @@ String planTerapeuticoModelToJson(PlanTerapeuticoModel data) =>
 class PlanTerapeuticoModel {
   int planTerapeuticoId;
   int pacienteId;
-  int doctorId;
+  String doctorId;
   int viaAdministracionId;
   int preclinicaId;
   String nombreMedicamento;

@@ -1,7 +1,7 @@
 import 'package:appsam/src/blocs/consulta_bloc.dart';
 import 'package:appsam/src/models/consultaGeneral_model.dart';
 import 'package:appsam/src/models/paginados/preclinica_paginadoVM.dart';
-import 'package:appsam/src/models/usuario_model.dart';
+import 'package:appsam/src/models/user_model.dart';
 import 'package:appsam/src/utils/storage_util.dart';
 import 'package:appsam/src/utils/utils.dart';
 import 'package:appsam/src/widgets/firebaseMessageWrapper.dart';
@@ -23,8 +23,8 @@ class _CrearConsultaGeneralPageState extends State<CrearConsultaGeneralPage> {
   final ConsultaGeneralModel _consultaGeneral = new ConsultaGeneralModel();
 
   final _consultaBloc = new ConsultaBloc();
-  final UsuarioModel _usuario =
-      usuarioModelFromJson(StorageUtil.getString('usuarioGlobal'));
+  final UserModel _usuario =
+      userModelFromJson(StorageUtil.getString('usuarioGlobal'));
 
   final TextEditingController _motivoConsultaController =
       new TextEditingController();

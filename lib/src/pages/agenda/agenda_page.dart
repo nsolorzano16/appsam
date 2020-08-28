@@ -1,6 +1,6 @@
 import 'package:appsam/src/extensions/color_ext.dart';
 import 'package:appsam/src/models/eventos_model.dart';
-import 'package:appsam/src/models/usuario_model.dart';
+import 'package:appsam/src/models/user_model.dart';
 import 'package:appsam/src/pages/agenda/agendaDetalle_page.dart';
 import 'package:appsam/src/providers/calendarioFecha_service.dart';
 import 'package:appsam/src/utils/storage_util.dart';
@@ -24,8 +24,8 @@ class _AgendaPageState extends State<AgendaPage> with TickerProviderStateMixin {
   Map<DateTime, List> _events;
 
   List _selectedEvents;
-  final UsuarioModel _usuario =
-      usuarioModelFromJson(StorageUtil.getString('usuarioGlobal'));
+  final UserModel _usuario =
+      userModelFromJson(StorageUtil.getString('usuarioGlobal'));
   Future<List<EventosModel>> eventosFuture;
 
   final eventoService = new EventosService();
@@ -66,7 +66,7 @@ class _AgendaPageState extends State<AgendaPage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     if (_usuario.rolId == 2) {
-      eventosFuture = eventoService.getEventos(_usuario.usuarioId);
+      eventosFuture = eventoService.getEventos(_usuario.id);
     } else if (_usuario.rolId == 3) {
       eventosFuture = eventoService.getEventos(_usuario.asistenteId);
     }

@@ -20,6 +20,7 @@ class _MenuProvider {
                 ? 0
                 : WebNotificicationsStream.instance.consultaPendiente.total;
       } else if (element.texto == 'Agenda') {
+        element.notificaciones = 250;
         element.notificaciones =
             (WebNotificicationsStream.instance.agendaPendiente.total == null)
                 ? 0

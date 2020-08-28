@@ -32,7 +32,7 @@ class DiagnosticosViewModel {
   String nombreCie;
   int diagnosticoId;
   int pacienteId;
-  int doctorId;
+  String doctorId;
   int cieId;
   int preclinicaId;
   String problemasClinicos;

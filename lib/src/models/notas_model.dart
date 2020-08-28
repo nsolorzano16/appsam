@@ -9,7 +9,7 @@ String notasToJsonList(List<Notas> data) => json.encode(data);
 class Notas {
   int notaId;
   int pacienteId;
-  int doctorId;
+  String doctorId;
   int preclinicaId;
   bool activo;
   String creadoPor;

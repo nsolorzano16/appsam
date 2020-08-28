@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:appsam/src/models/user_model.dart';
 import 'package:appsam/src/pages/edit_profile_page.dart';
 import 'package:appsam/src/utils/utils.dart';
 import 'package:appsam/src/widgets/drawer.dart';
@@ -10,7 +11,6 @@ import 'package:progress_dialog/progress_dialog.dart';
 
 import 'package:appsam/src/blocs/asistentes_bloc/create_edit_asistentes.dart';
 import 'package:appsam/src/blocs/provider.dart';
-import 'package:appsam/src/models/usuario_model.dart';
 import 'package:appsam/src/utils/storage_util.dart';
 import 'package:unicorndial/unicorndial.dart';
 
@@ -32,8 +32,8 @@ class _MyProfilePageState extends State<MyProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    final UsuarioModel _usuario =
-        usuarioModelFromJson(StorageUtil.getString('usuarioGlobal'));
+    final UserModel _usuario =
+        userModelFromJson(StorageUtil.getString('usuarioGlobal'));
     final _screenSize = MediaQuery.of(context).size;
     final bloc = Provider.crearEditarAsistentesBloc(context);
 
@@ -93,7 +93,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
   }
 
   List<UnicornButton> botones(
-      CrearEditarAsistentesBloc bloc, UsuarioModel _usuario) {
+      CrearEditarAsistentesBloc bloc, UserModel _usuario) {
     var childButtons = List<UnicornButton>();
 
     childButtons.add(UnicornButton(
@@ -117,7 +117,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
     childButtons.add(UnicornButton(
         currentButton: FloatingActionButton(
       heroTag: 'editarmiperfil',
-      backgroundColor: Colors.red,
+      backgroundColor: Colors.amber,
       mini: true,
       child: Icon(Icons.edit),
       onPressed: () => Navigator.of(context).pushReplacement(PageRouteBuilder(
@@ -131,8 +131,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
     return childButtons;
   }
 
-  Widget _campoTexto(
-      UsuarioModel usuario, IconData icon, BuildContext context) {
+  Widget _campoTexto(UserModel usuario, IconData icon, BuildContext context) {
     final format = DateFormat.yMd('es_Es');
     final _fechaNac = format.format(usuario.fechaNacimiento);
     // final _screenSize = MediaQuery.of(context).size;
@@ -190,7 +189,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
               dense: true,
               leading: Icon(Icons.phone,
                   color: Theme.of(context).primaryColor, size: 22.0),
-              title: Text('${usuario.telefono1}'),
+              title: Text('${usuario.phoneNumber}'),
               subtitle: Text('Telefono'),
             ),
             ListTile(
@@ -240,26 +239,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
     );
   }
 
-  // Widget _imageLocalDefault() {
-  //   return Card(
-  //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100.0)),
-  //     child: Container(
-  //       child: ClipRRect(
-  //         borderRadius: BorderRadius.circular(100.0),
-  //         child: FadeInImage(
-  //             width: 150,
-  //             height: 150,
-  //             fit: BoxFit.cover,
-  //             placeholder: AssetImage('assets/jar-loading.gif'),
-  //             image: AssetImage(foto?.path ?? 'assets/no-image.png')),
-  //       ),
-  //     ),
-  //   );
-
-  //   // Ella no te ama 2:00 pm
-  // }
-
-  Widget _imageStorage(UsuarioModel _usuario) {
+  Widget _imageStorage(UserModel _usuario) {
     return Padding(
       padding: const EdgeInsets.all(15.0),
       child: ClipRRect(
@@ -274,7 +254,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
     );
   }
 
-  void _procesarImagen(ImageSource origen, UsuarioModel user,
+  void _procesarImagen(ImageSource origen, UserModel user,
       CrearEditarAsistentesBloc bloc) async {
     foto = await ImagePicker.pickImage(source: origen);
     if (foto != null) {
@@ -296,11 +276,10 @@ class _MyProfilePageState extends State<MyProfilePage> {
             color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600),
       );
       await _pr.show();
-      final UsuarioModel usuario =
-          await bloc.subirFotoApi(user.usuarioId, foto);
+      final UserModel usuario = await bloc.subirFotoApi(user.id, foto);
 
       setState(() {
-        StorageUtil.putString('usuarioGlobal', usuarioModelToJson(usuario));
+        StorageUtil.putString('usuarioGlobal', userModelToJson(usuario));
       });
 
       await _pr.hide();

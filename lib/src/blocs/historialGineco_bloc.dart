@@ -22,7 +22,7 @@ class HistorialGinecoObstetraBloc with Validators {
   }
 
   Future<HistorialGinecoObstetra> getHistorialGinecoObstetra(
-      int pacienteId, int doctorId) async {
+      int pacienteId, String doctorId) async {
     return await _historialService.getHistorialGinecoObstetra(pacienteId);
   }
 

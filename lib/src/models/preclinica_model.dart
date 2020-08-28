@@ -8,7 +8,7 @@ String preclinicaToJson(Preclinica data) => json.encode(data.toJson());
 class Preclinica {
   int preclinicaId;
   int pacienteId;
-  int doctorId;
+  String doctorId;
   double peso;
   double altura;
   double temperatura;

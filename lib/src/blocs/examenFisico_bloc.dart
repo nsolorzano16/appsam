@@ -14,7 +14,7 @@ class ExamenFisicoBloc with Validators {
   }
 
   Future<ExamenFisico> getExamenFisico(
-      int pacienteId, int doctorId, int preclinicaId) async {
+      int pacienteId, String doctorId, int preclinicaId) async {
     return await _examenFisicoService.getExamenFisico(
         pacienteId, doctorId, preclinicaId);
   }

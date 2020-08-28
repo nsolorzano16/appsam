@@ -20,7 +20,7 @@ import 'package:appsam/src/pages/asistentes/asistentes_page.dart';
 import 'package:appsam/src/pages/asistentes/crear_asistentes_page.dart';
 import 'package:appsam/src/pages/asistentes/detalle_asistente.dart';
 import 'package:appsam/src/pages/asistentes/editar_asistentes_page.dart';
-import 'package:appsam/src/pages/asistentes/tab_resetpassword_page.dart';
+
 import 'package:appsam/src/pages/consulta/antecedentesFamiliares/crear_antecedentes_page.dart';
 
 import 'package:appsam/src/pages/consulta/farmacosUsoActual/crear_Farmacos_page.dart';
@@ -52,7 +52,6 @@ Map<String, WidgetBuilder> getApplicationRoutes(ThemeBloc bloc) {
         CrearAsistentesPage(),
     EditarAsistentesPage.routeName: (BuildContext context) =>
         EditarAsistentesPage(),
-    ResetPasswordPage.routeName: (BuildContext context) => ResetPasswordPage(),
     SettingsPage.routeName: (BuildContext context) => SettingsPage(bloc),
     ResetMyPasswordPage.routeName: (BuildContext context) =>
         ResetMyPasswordPage(),

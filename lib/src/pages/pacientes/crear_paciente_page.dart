@@ -1,3 +1,4 @@
+import 'package:appsam/src/models/user_model.dart';
 import 'package:appsam/src/widgets/firebaseMessageWrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -19,7 +20,6 @@ import 'package:appsam/src/models/pais_model.dart';
 import 'package:appsam/src/models/parentesco_model.dart';
 import 'package:appsam/src/models/profesion_model.dart';
 import 'package:appsam/src/models/religion_model.dart';
-import 'package:appsam/src/models/usuario_model.dart';
 import 'package:appsam/src/providers/combos_service.dart';
 import 'package:appsam/src/utils/storage_util.dart';
 import 'package:appsam/src/utils/utils.dart';
@@ -34,8 +34,8 @@ class CrearPacientePage extends StatefulWidget {
 
 class _CrearPacientePageState extends State<CrearPacientePage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  UsuarioModel _usuario =
-      usuarioModelFromJson(StorageUtil.getString('usuarioGlobal'));
+  UserModel _usuario =
+      userModelFromJson(StorageUtil.getString('usuarioGlobal'));
   PacienteModel _paciente = new PacienteModel();
 
   DateTime picked;

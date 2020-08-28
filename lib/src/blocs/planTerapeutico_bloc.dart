@@ -16,7 +16,7 @@ class PlanTerapeuticoBloc with Validators {
   }
 
   Future<List<PlanTerapeuticoViewModel>> getPlanes(
-      int pacienteId, int doctorId, int preclinicaId) async {
+      int pacienteId, String doctorId, int preclinicaId) async {
     return await _planService.getPlanes(pacienteId, doctorId, preclinicaId);
   }
 

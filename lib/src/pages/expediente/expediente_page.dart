@@ -19,7 +19,7 @@ import 'package:unicorndial/unicorndial.dart';
 
 class ExpedientePage extends StatefulWidget {
   final int pacienteId;
-  final int doctorId;
+  final String doctorId;
 
   const ExpedientePage({@required this.pacienteId, @required this.doctorId});
 
@@ -33,7 +33,7 @@ class _ExpedientePageState extends State<ExpedientePage> {
   Future<ExpedienteViewModel> _expedienteFuture;
 
   int get _pacienteId => widget.pacienteId;
-  int get _doctorId => widget.doctorId;
+  String get _doctorId => widget.doctorId;
   int _selectedIndex = 0;
   PageController _pageController = PageController();
 

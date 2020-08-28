@@ -118,4 +118,14 @@ class PacientesBlocBusqueda extends ChangeNotifier {
       },
     );
   }
+
+  void initPacientesPaginado(int page, String filter) async {
+    loading = true;
+    notifyListeners();
+    final resp = await _pacienteService.getPacientesPaginado(page, filter);
+    pacientes = resp.items;
+
+    loading = false;
+    notifyListeners();
+  }
 }

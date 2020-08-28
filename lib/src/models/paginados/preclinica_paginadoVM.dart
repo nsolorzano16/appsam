@@ -53,7 +53,7 @@ class PreclinicaPaginadoViewModel {
 class PreclinicaViewModel {
   int preclinicaId;
   int pacienteId;
-  int doctorId;
+  String doctorId;
   double peso;
   double altura;
   double temperatura;
@@ -141,24 +141,33 @@ class PreclinicaViewModel {
         presionDiastolica: json["presionDiastolica"],
         imc: json["imc"].toDouble(),
         atendida: json["atendida"],
-        pesoDescripcion: json["pesoDescripcion"] == null ? "":json["pesoDescripcion"] ,
-        nombres: json["nombres"] == null ? "":json["nombres"],
-        primerApellido: json["primerApellido"] == null ? "" : json["primerApellido"],
-        segundoApellido: json["segundoApellido"] == null ? "": json["segundoApellido"],
-        identificacion: json["identificacion"]== null ? "": json["identificacion"],
-        email: json["email"] == null ? "": json["email"],
+        pesoDescripcion:
+            json["pesoDescripcion"] == null ? "" : json["pesoDescripcion"],
+        nombres: json["nombres"] == null ? "" : json["nombres"],
+        primerApellido:
+            json["primerApellido"] == null ? "" : json["primerApellido"],
+        segundoApellido:
+            json["segundoApellido"] == null ? "" : json["segundoApellido"],
+        identificacion:
+            json["identificacion"] == null ? "" : json["identificacion"],
+        email: json["email"] == null ? "" : json["email"],
         sexo: json["sexo"],
         fechaNacimiento: DateTime.parse(json["fechaNacimiento"]),
-        estadoCivil: json["estadoCivil"]== null ? "" : json["estadoCivil"],
+        estadoCivil: json["estadoCivil"] == null ? "" : json["estadoCivil"],
         edad: json["edad"],
-        menorDeEdad:  json["menorDeEdad"],
-        nombreMadre: json["nombreMadre"] == null ? "": json["nombreMadre"],
-        identificacionMadre: json["identificacionMadre"] == null ? "":json["identificacionMadre"],
-        nombrePadre: json["nombrePadre"]==null?"":json["nombrePadre"],
-        identificacionPadre: json["identificacionPadre"] == null ?  "" : json["identificacionPadre"],
+        menorDeEdad: json["menorDeEdad"],
+        nombreMadre: json["nombreMadre"] == null ? "" : json["nombreMadre"],
+        identificacionMadre: json["identificacionMadre"] == null
+            ? ""
+            : json["identificacionMadre"],
+        nombrePadre: json["nombrePadre"] == null ? "" : json["nombrePadre"],
+        identificacionPadre: json["identificacionPadre"] == null
+            ? ""
+            : json["identificacionPadre"],
         carneVacuna: json["carneVacuna"] == null ? "" : json["carneVacuna"],
         fotoUrl: json["fotoUrl"],
-        notasPaciente: json["notasPaciente"] == null ? "" :  json["notasPaciente"] ,
+        notasPaciente:
+            json["notasPaciente"] == null ? "" : json["notasPaciente"],
         activo: json["activo"],
         creadoPor: json["creadoPor"],
         creadoFecha: DateTime.parse(json["creadoFecha"]),

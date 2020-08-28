@@ -14,7 +14,7 @@ class PlanTerapeuticoViewModel {
   String viaAdministracion;
   int planTerapeuticoId;
   int pacienteId;
-  int doctorId;
+  String doctorId;
   int viaAdministracionId;
   int preclinicaId;
   String nombreMedicamento;

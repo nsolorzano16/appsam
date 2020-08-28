@@ -43,7 +43,7 @@ class HabitosBloc with Validators {
     return await _habitosService.updateHabitos(habitos);
   }
 
-  Future<Habitos> getHabito(int pacienteId, int doctorId) async {
+  Future<Habitos> getHabito(int pacienteId, String doctorId) async {
     return await _habitosService.getHabito(pacienteId);
   }
 

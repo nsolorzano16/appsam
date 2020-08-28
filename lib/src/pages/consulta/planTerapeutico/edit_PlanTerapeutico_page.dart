@@ -1,7 +1,7 @@
 import 'package:appsam/src/blocs/planTerapeutico_bloc.dart';
 import 'package:appsam/src/models/paginados/preclinica_paginadoVM.dart';
 import 'package:appsam/src/models/planTerapeutico_viewmodel.dart';
-import 'package:appsam/src/models/usuario_model.dart';
+import 'package:appsam/src/models/user_model.dart';
 import 'package:appsam/src/models/viaAdministracion_model.dart';
 import 'package:appsam/src/providers/combos_service.dart';
 import 'package:appsam/src/utils/storage_util.dart';
@@ -45,8 +45,8 @@ class _EditPlanTerapeuticoPageState extends State<EditPlanTerapeuticoPage> {
   @override
   void initState() {
     super.initState();
-    final UsuarioModel _usuario =
-        usuarioModelFromJson(StorageUtil.getString('usuarioGlobal'));
+    final UserModel _usuario =
+        userModelFromJson(StorageUtil.getString('usuarioGlobal'));
 
     _permanente = widget.plan.permanente;
     _nombreMedicamentoController.text = widget.plan.nombreMedicamento;

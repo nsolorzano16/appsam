@@ -1,7 +1,7 @@
 import 'package:appsam/src/blocs/diagnosticos_bloc.dart';
 import 'package:appsam/src/models/diagnosticos_model.dart';
 import 'package:appsam/src/models/paginados/preclinica_paginadoVM.dart';
-import 'package:appsam/src/models/usuario_model.dart';
+import 'package:appsam/src/models/user_model.dart';
 import 'package:appsam/src/utils/storage_util.dart';
 import 'package:appsam/src/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -26,8 +26,8 @@ class _CrearDiagnosticosPageState extends State<CrearDiagnosticosPage> {
   int get _cieId => widget.cieId;
   String get _enfermedad => widget.enfermedad;
   PreclinicaViewModel get _preclinica => widget.preclinica;
-  final UsuarioModel _usuario =
-      usuarioModelFromJson(StorageUtil.getString('usuarioGlobal'));
+  final UserModel _usuario =
+      userModelFromJson(StorageUtil.getString('usuarioGlobal'));
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
   final TextEditingController _problemaClinicoController =
       new TextEditingController();
@@ -39,7 +39,7 @@ class _CrearDiagnosticosPageState extends State<CrearDiagnosticosPage> {
   void initState() {
     _diagnostico.diagnosticoId = 0;
     _diagnostico.cieId = _cieId;
-    _diagnostico.doctorId = _usuario.usuarioId;
+    _diagnostico.doctorId = _usuario.id;
     _diagnostico.preclinicaId = _preclinica.preclinicaId;
     _diagnostico.pacienteId = _preclinica.pacienteId;
 

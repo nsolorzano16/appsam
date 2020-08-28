@@ -13,7 +13,7 @@ String consultaGeneralModelToJson(ConsultaGeneralModel data) =>
 class ConsultaGeneralModel {
   int consultaId;
   int pacienteId;
-  int doctorId;
+  String doctorId;
   int preclinicaId;
   String motivoConsulta;
   String fog;
@@ -47,15 +47,16 @@ class ConsultaGeneralModel {
         pacienteId: json["pacienteId"],
         doctorId: json["doctorId"],
         preclinicaId: json["preclinicaId"],
-        motivoConsulta: json["motivoConsulta"] == null ? "" : json["motivoConsulta"],
+        motivoConsulta:
+            json["motivoConsulta"] == null ? "" : json["motivoConsulta"],
         fog: json["fog"] == null ? "" : json["fog"],
-        hea: json["hea"] ==null ?"":json["hea"],
+        hea: json["hea"] == null ? "" : json["hea"],
         activo: json["activo"],
         creadoPor: json["creadoPor"],
         creadoFecha: DateTime.parse(json["creadoFecha"]),
         modificadoPor: json["modificadoPor"],
         modificadoFecha: DateTime.parse(json["modificadoFecha"]),
-        notas: json["notas"] == null ? "": json["notas"],
+        notas: json["notas"] == null ? "" : json["notas"],
       );
 
   Map<String, dynamic> toJson() => {

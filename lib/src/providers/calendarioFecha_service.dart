@@ -52,7 +52,7 @@ class EventosService {
     return null;
   }
 
-  Future<List<EventosModel>> getEventos(int doctorId) async {
+  Future<List<EventosModel>> getEventos(String doctorId) async {
     final String token = StorageUtil.getString('token');
     final headers = {
       "content-type": "application/json",

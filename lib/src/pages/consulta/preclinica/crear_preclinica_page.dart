@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'dart:math';
+import 'package:appsam/src/models/user_model.dart';
 import 'package:appsam/src/widgets/drawer.dart';
 import 'package:appsam/src/widgets/firebaseMessageWrapper.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:getflutter/getflutter.dart';
@@ -11,7 +13,6 @@ import 'package:getflutter/getflutter.dart';
 import 'package:appsam/src/blocs/preclinica_bloc.dart';
 import 'package:appsam/src/models/paginados/pacientesPaginado_model.dart';
 import 'package:appsam/src/models/preclinica_model.dart';
-import 'package:appsam/src/models/usuario_model.dart';
 import 'package:appsam/src/utils/storage_util.dart';
 import 'package:appsam/src/utils/utils.dart';
 
@@ -25,8 +26,8 @@ class _CrearPreclinicaPageState extends State<CrearPreclinicaPage> {
   PreclinicaBloc bloc = new PreclinicaBloc();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final UsuarioModel _usuario =
-      usuarioModelFromJson(StorageUtil.getString('usuarioGlobal'));
+  final UserModel _usuario =
+      userModelFromJson(StorageUtil.getString('usuarioGlobal'));
 
   final Preclinica _preclinica = new Preclinica();
 
@@ -67,7 +68,7 @@ class _CrearPreclinicaPageState extends State<CrearPreclinicaPage> {
         onWillPop: () async => false);
   }
 
-  Widget _crearFormulario(UsuarioModel usuario, PacientesViewModel paciente) {
+  Widget _crearFormulario(UserModel usuario, PacientesViewModel paciente) {
     return SingleChildScrollView(
         child: Column(
       children: <Widget>[
@@ -329,7 +330,7 @@ class _CrearPreclinicaPageState extends State<CrearPreclinicaPage> {
     _preclinica.pacienteId = paciente.pacienteId;
 
     if (_usuario.rolId == 2) {
-      _preclinica.doctorId = _usuario.usuarioId;
+      _preclinica.doctorId = _usuario.id;
     } else if (_usuario.rolId == 3) {
       _preclinica.doctorId = _usuario.asistenteId;
     }

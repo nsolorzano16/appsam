@@ -1,4 +1,7 @@
 import 'dart:async';
+import 'package:appsam/src/models/user_model.dart';
+import 'package:appsam/src/pages/reset_password_page.dart';
+import 'package:appsam/src/providers/auth_service.dart';
 import 'package:appsam/src/utils/utils.dart';
 import 'package:appsam/src/widgets/firebaseMessageWrapper.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +10,6 @@ import 'package:intl/intl.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 
 import 'package:appsam/src/blocs/asistentes_bloc/create_edit_asistentes.dart';
-import 'package:appsam/src/models/usuario_model.dart';
 import 'package:appsam/src/utils/storage_util.dart';
 import 'package:appsam/src/widgets/drawer.dart';
 
@@ -19,6 +21,7 @@ class AsistenteDetalle extends StatefulWidget {
 
 class _AsistenteDetalleState extends State<AsistenteDetalle> {
   final bloc = new CrearEditarAsistentesBloc();
+  final AuthService _authService = AuthService();
   @override
   void initState() {
     super.initState();
@@ -33,7 +36,7 @@ class _AsistenteDetalleState extends State<AsistenteDetalle> {
 
   @override
   Widget build(BuildContext context) {
-    final UsuarioModel _usuario = ModalRoute.of(context).settings.arguments;
+    final UserModel _usuario = ModalRoute.of(context).settings.arguments;
     final _screenSize = MediaQuery.of(context).size;
 
     return WillPopScope(
@@ -57,12 +60,15 @@ class _AsistenteDetalleState extends State<AsistenteDetalle> {
                         value: 1,
                       ),
                       PopupMenuItem(
-                          value: 2,
-                          child: (_usuario.activo)
-                              ? Text('Desactivar')
-                              : Text('Activar')),
-                      PopupMenuItem(
-                          value: 3, child: Text('Resetear Contraseña')),
+                        value: 2,
+                        child: (_usuario.activo)
+                            ? Text('Desactivar')
+                            : Text('Activar'),
+                      ),
+                      // PopupMenuItem(
+                      //   value: 3,
+                      //   child: Text('Resetear Contraseña'),
+                      // ),
                     ],
                     onSelected: (value) {
                       if (value == 1) {
@@ -70,11 +76,20 @@ class _AsistenteDetalleState extends State<AsistenteDetalle> {
                             arguments: _usuario);
                       } else if (value == 2) {
                         _desactivar(context, bloc, _usuario);
-                      } else if (value == 3) {
-                        Navigator.pushReplacementNamed(
-                            context, 'reset-password',
-                            arguments: _usuario);
                       }
+
+                      //  else if (value == 3) {
+                      //   _authService.resetPassword(_usuario.email).then(
+                      //         (resp) => Navigator.push(
+                      //           context,
+                      //           MaterialPageRoute(
+                      //             builder: (context) => ResetPasswordPage(
+                      //                 token: resp.tokenChangePassword,
+                      //                 userId: resp.userId),
+                      //           ),
+                      //         ),
+                      //       );
+                      // }
                     },
                   ),
                 ],
@@ -128,7 +143,7 @@ class _AsistenteDetalleState extends State<AsistenteDetalle> {
   }
 
   _desactivar(BuildContext context, CrearEditarAsistentesBloc bloc,
-      UsuarioModel usuario) async {
+      UserModel usuario) async {
     final _pr = new ProgressDialog(
       context,
       type: ProgressDialogType.Normal,
@@ -152,8 +167,7 @@ class _AsistenteDetalleState extends State<AsistenteDetalle> {
     });
   }
 
-  Widget _campoTexto(
-      UsuarioModel usuario, IconData icon, BuildContext context) {
+  Widget _campoTexto(UserModel usuario, IconData icon, BuildContext context) {
     final format = DateFormat.yMMMEd('es_Es');
     final _fechaNac = format.format(usuario.fechaNacimiento);
     // final _screenSize = MediaQuery.of(context).size;
@@ -215,7 +229,7 @@ class _AsistenteDetalleState extends State<AsistenteDetalle> {
             ListTile(
               dense: true,
               leading: Icon(Icons.phone, color: Colors.red, size: 22.0),
-              title: Text('${usuario.telefono1}'),
+              title: Text('${usuario.phoneNumber}'),
               subtitle: Text('Telefono'),
             ),
             ListTile(

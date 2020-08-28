@@ -1,12 +1,11 @@
 import 'package:appsam/src/models/paginados/pacientesPaginado_model.dart';
+import 'package:appsam/src/models/user_model.dart';
 import 'package:appsam/src/pages/expediente/expediente_page.dart';
 import 'package:appsam/src/utils/utils.dart';
 import 'package:appsam/src/widgets/firebaseMessageWrapper.dart';
 import 'package:flutter/material.dart';
 
 import 'package:appsam/src/blocs/pacientes_bloc/pacientes_bloc.dart';
-
-import 'package:appsam/src/models/usuario_model.dart';
 import 'package:appsam/src/utils/storage_util.dart';
 import 'package:appsam/src/widgets/drawer.dart';
 import 'package:flutter/services.dart';
@@ -20,8 +19,8 @@ class PacientesPage extends StatefulWidget {
 
 class _PacientesPageState extends State<PacientesPage> {
   PacientesBlocBusqueda blocBusqueda = new PacientesBlocBusqueda();
-  final UsuarioModel _usuario =
-      usuarioModelFromJson(StorageUtil.getString('usuarioGlobal'));
+  final UserModel _usuario =
+      userModelFromJson(StorageUtil.getString('usuarioGlobal'));
 
   int totalPages = 0;
   int page = 1;
@@ -33,8 +32,8 @@ class _PacientesPageState extends State<PacientesPage> {
 
   @override
   void initState() {
+    blocBusqueda.initPacientesPaginado(1, _usuario.creadoPor);
     super.initState();
-    StorageUtil.putString('ultimaPagina', PacientesPage.routeName);
   }
 
   @override
@@ -65,7 +64,6 @@ class _PacientesPageState extends State<PacientesPage> {
                           LengthLimitingTextInputFormatter(13),
                           WhitelistingTextInputFormatter.digitsOnly
                         ],
-                        //onChanged: bloc.onChangedText,
                         decoration: inputsDecorations('', Icons.search,
                             helperTexto:
                                 'Identificación paciente, identificación madre, identificación padre.',
@@ -102,7 +100,7 @@ class _PacientesPageState extends State<PacientesPage> {
         onWillPop: () async => false);
   }
 
-  void _goToCrearPaciente(UsuarioModel usuario) {
+  void _goToCrearPaciente(UserModel usuario) {
     Navigator.pushReplacementNamed(context, 'crear_paciente',
         arguments: usuario);
   }
@@ -177,7 +175,7 @@ class _PacientesPageState extends State<PacientesPage> {
                           opacity: animation,
                           child: ExpedientePage(
                               pacienteId: paciente.pacienteId,
-                              doctorId: _usuario.usuarioId),
+                              doctorId: _usuario.id),
                         )))
                 : mostrarFlushBar(
                     context,

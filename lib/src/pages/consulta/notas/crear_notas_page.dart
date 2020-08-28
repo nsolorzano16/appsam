@@ -1,10 +1,10 @@
+import 'package:appsam/src/models/user_model.dart';
 import 'package:appsam/src/widgets/firebaseMessageWrapper.dart';
 import 'package:flutter/material.dart';
 
 import 'package:appsam/src/blocs/notas_bloc.dart';
 import 'package:appsam/src/models/notas_model.dart';
 import 'package:appsam/src/models/paginados/preclinica_paginadoVM.dart';
-import 'package:appsam/src/models/usuario_model.dart';
 import 'package:appsam/src/utils/storage_util.dart';
 import 'package:appsam/src/utils/utils.dart';
 import 'package:appsam/src/widgets/drawer.dart';
@@ -18,8 +18,8 @@ class CrearNotasPage extends StatefulWidget {
 }
 
 class _CrearNotasPageState extends State<CrearNotasPage> {
-  final UsuarioModel _usuario =
-      usuarioModelFromJson(StorageUtil.getString('usuarioGlobal'));
+  final UserModel _usuario =
+      userModelFromJson(StorageUtil.getString('usuarioGlobal'));
   final List<Notas> _listaNotas = new List<Notas>();
   final NotasBloc _notasBloc = new NotasBloc();
 

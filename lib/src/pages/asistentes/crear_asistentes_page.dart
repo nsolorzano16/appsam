@@ -1,8 +1,11 @@
+import 'package:appsam/src/models/create_user_viewmodel.dart';
+
+import 'package:appsam/src/models/user_model.dart';
 import 'package:appsam/src/widgets/firebaseMessageWrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'dart:async';
+
 import 'package:getflutter/getflutter.dart';
 import 'package:intl/intl.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
@@ -10,7 +13,6 @@ import 'package:progress_dialog/progress_dialog.dart';
 
 import 'package:appsam/src/blocs/asistentes_bloc/create_edit_asistentes.dart';
 import 'package:appsam/src/blocs/provider.dart';
-import 'package:appsam/src/models/usuario_model.dart';
 import 'package:appsam/src/utils/storage_util.dart';
 import 'package:appsam/src/utils/utils.dart';
 import 'package:appsam/src/widgets/drawer.dart';
@@ -23,6 +25,7 @@ class CrearAsistentesPage extends StatefulWidget {
 
 class _CrearAsistentesPageState extends State<CrearAsistentesPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   // bool _autoValidate = false;
   String _fecha = '';
   String _sexo = 'M';
@@ -35,10 +38,8 @@ class _CrearAsistentesPageState extends State<CrearAsistentesPage> {
       new TextEditingController();
   TextEditingController _txtControllerIdentificacion =
       new TextEditingController();
-  final UsuarioModel _usuario =
-      usuarioModelFromJson(StorageUtil.getString('usuarioGlobal'));
-  MaskTextInputFormatter maskIdentificacion = new MaskTextInputFormatter(
-      mask: '#############', filter: {"#": RegExp(r'[0-9]')});
+  final UserModel _usuario =
+      userModelFromJson(StorageUtil.getString('usuarioGlobal'));
 
   @override
   void initState() {
@@ -48,7 +49,8 @@ class _CrearAsistentesPageState extends State<CrearAsistentesPage> {
 
   @override
   Widget build(BuildContext context) {
-    final UsuarioModel _asistente = ModalRoute.of(context).settings.arguments;
+    final CreateUserViewModel _asistente =
+        ModalRoute.of(context).settings.arguments;
     final GlobalKey<ScaffoldState> _scaffoldKey =
         new GlobalKey<ScaffoldState>();
 
@@ -96,11 +98,9 @@ class _CrearAsistentesPageState extends State<CrearAsistentesPage> {
                           _espacio(),
                           _crearCampoSegundoAppellido(_asistente),
                           _espacio(),
-                          _crearCampoIdentificacion(
-                              _asistente, maskIdentificacion),
+                          _crearCampoIdentificacion(_asistente),
                           _espacio(),
-                          _crearFecha(context, bloc.fechaNacimientoStream,
-                              bloc.changeFechaNacimiento),
+                          _crearFecha(context),
                           _espacio(),
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -157,7 +157,7 @@ class _CrearAsistentesPageState extends State<CrearAsistentesPage> {
     }
   }
 
-  _crearCampoNombre(UsuarioModel _asistente) {
+  _crearCampoNombre(CreateUserViewModel _asistente) {
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
@@ -170,7 +170,7 @@ class _CrearAsistentesPageState extends State<CrearAsistentesPage> {
     );
   }
 
-  _crearCampoPrimerAppellido(UsuarioModel _asistente) {
+  _crearCampoPrimerAppellido(CreateUserViewModel _asistente) {
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
@@ -183,7 +183,7 @@ class _CrearAsistentesPageState extends State<CrearAsistentesPage> {
     );
   }
 
-  _crearCampoSegundoAppellido(UsuarioModel _asistente) {
+  _crearCampoSegundoAppellido(CreateUserViewModel _asistente) {
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
@@ -201,8 +201,7 @@ class _CrearAsistentesPageState extends State<CrearAsistentesPage> {
     );
   }
 
-  _crearCampoIdentificacion(
-      UsuarioModel _asistente, MaskTextInputFormatter mask) {
+  _crearCampoIdentificacion(CreateUserViewModel _asistente) {
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
@@ -227,7 +226,7 @@ class _CrearAsistentesPageState extends State<CrearAsistentesPage> {
     );
   }
 
-  _crearCampoTelefono1(UsuarioModel _asistente) {
+  _crearCampoTelefono1(CreateUserViewModel _asistente) {
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
@@ -246,12 +245,12 @@ class _CrearAsistentesPageState extends State<CrearAsistentesPage> {
         ],
         maxLength: 8,
         decoration: inputsDecorations('Teléfono', Icons.phone_android),
-        onSaved: (value) => _asistente.telefono1 = value,
+        onSaved: (value) => _asistente.phoneNumber = value,
       ),
     );
   }
 
-  _crearCampoTelefono2(UsuarioModel _asistente) {
+  _crearCampoTelefono2(CreateUserViewModel _asistente) {
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
@@ -269,7 +268,7 @@ class _CrearAsistentesPageState extends State<CrearAsistentesPage> {
   }
 
   _crearCampoColegioNumero(
-      UsuarioModel _asistente, MaskTextInputFormatter mask) {
+      CreateUserViewModel _asistente, MaskTextInputFormatter mask) {
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
@@ -285,7 +284,7 @@ class _CrearAsistentesPageState extends State<CrearAsistentesPage> {
     );
   }
 
-  _crearCampoEmail(UsuarioModel _asistente) {
+  _crearCampoEmail(CreateUserViewModel _asistente) {
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
@@ -298,7 +297,7 @@ class _CrearAsistentesPageState extends State<CrearAsistentesPage> {
     );
   }
 
-  Widget _crearCampoUsuario(UsuarioModel _asistente) {
+  Widget _crearCampoUsuario(CreateUserViewModel _asistente) {
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
@@ -332,7 +331,7 @@ class _CrearAsistentesPageState extends State<CrearAsistentesPage> {
     );
   }
 
-  Widget _crearCampoPassword(UsuarioModel _asistente) {
+  Widget _crearCampoPassword(CreateUserViewModel _asistente) {
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
@@ -363,7 +362,7 @@ class _CrearAsistentesPageState extends State<CrearAsistentesPage> {
     );
   }
 
-  _crearCampoNotas(UsuarioModel _asistente) {
+  _crearCampoNotas(CreateUserViewModel _asistente) {
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
@@ -374,8 +373,7 @@ class _CrearAsistentesPageState extends State<CrearAsistentesPage> {
     );
   }
 
-  Widget _crearFecha(
-      BuildContext context, Stream stream, Function(String) func) {
+  Widget _crearFecha(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
@@ -428,7 +426,7 @@ class _CrearAsistentesPageState extends State<CrearAsistentesPage> {
   }
 
   Widget _crearBotones(
-      UsuarioModel _asistente, CrearEditarAsistentesBloc bloc) {
+      CreateUserViewModel _asistente, CrearEditarAsistentesBloc bloc) {
     if (_usuario != null) {
       return Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -465,7 +463,8 @@ class _CrearAsistentesPageState extends State<CrearAsistentesPage> {
     }
   }
 
-  void _guardar(UsuarioModel _asistente, CrearEditarAsistentesBloc bloc) async {
+  void _guardar(
+      CreateUserViewModel _asistente, CrearEditarAsistentesBloc bloc) async {
     if (!_formKey.currentState.validate()) {
       mostrarFlushBar(context, Colors.redAccent, 'Información',
           'Rellene todos los campos', 2, Icons.info, Colors.black);
@@ -490,8 +489,7 @@ class _CrearAsistentesPageState extends State<CrearAsistentesPage> {
       );
       await _pr.show();
       _asistente.fechaNacimiento = picked;
-      _asistente.identificacion = maskIdentificacion.getMaskedText();
-      print(usuarioModelToJson(_asistente));
+
       final resp = await bloc.addUser(_asistente);
       await _pr.hide();
       if (resp) {

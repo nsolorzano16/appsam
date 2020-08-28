@@ -10,7 +10,7 @@ class PreclinicaService {
   final _apiURL = EnviromentVariables().getApiURL();
 
   Future<PreclinicaPaginadoViewModel> getpreclinicasPaginado(
-      int page, int doctorId, int atendida) async {
+      int page, String doctorId, int atendida) async {
     final String token = StorageUtil.getString('token');
     final headers = {
       "content-type": "application/json",

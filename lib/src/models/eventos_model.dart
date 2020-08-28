@@ -34,7 +34,7 @@ class EventosModel {
 
 class Event {
   int calendarioFechaId;
-  int doctorId;
+  String doctorId;
   DateTime inicio;
   DateTime fin;
   bool todoElDia;
