@@ -87,7 +87,7 @@ class _HomePageState extends State<HomePage> {
               drawer: MenuWidget(),
               appBar: AppBar(
                 title:
-                    Text('Inicio -Release Date: 13 de agosto de 2020 7:00 p.m'),
+                    Text('Inicio -Release Date: 27 de agosto de 2020 7:00 p.m'),
               ),
               body: ListView(
                 physics: ClampingScrollPhysics(),
