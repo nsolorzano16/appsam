@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:appsam/src/models/create_user_viewmodel.dart';
+import 'package:appsam/src/models/planes_model.dart';
 import 'package:appsam/src/models/user_model.dart';
 import 'package:appsam/src/utils/utils.dart';
 import 'package:appsam/src/widgets/firebaseMessageWrapper.dart';
@@ -23,6 +24,8 @@ class _AsistentesPageState extends State<AsistentesPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   final UserModel _usuario =
       userModelFromJson(StorageUtil.getString('usuarioGlobal'));
+  final PlanesModel _plan =
+      planesModelFromJson(StorageUtil.getString('planUsuario'));
 
   int _totalAsistententes;
 
@@ -81,7 +84,7 @@ class _AsistentesPageState extends State<AsistentesPage> {
             floatingActionButton: FloatingActionButton(
               backgroundColor: Theme.of(context).primaryColor,
               child: Icon(Icons.add),
-              onPressed: () => (_totalAsistententes != 0)
+              onPressed: () => (_totalAsistententes > _plan.asistentes)
                   ? mostrarFlushBar(
                       context,
                       Colors.black,

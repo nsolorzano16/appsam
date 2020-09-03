@@ -64,205 +64,198 @@ class _MenuConsultaPageState extends State<MenuConsultaPage>
           child: DefaultTabController(
             initialIndex: StorageUtil.getInt('indexTabMenuConsulta'),
             length: 2,
-            child: Scaffold(
-                backgroundColor: colorFondoApp(),
-                appBar: AppBar(
-                  title: Text('Menu Consulta'),
-                ),
-                drawer: MenuWidget(),
-                body: TabBarView(children: [
-                  _tabHistorial(_preclinica),
-                  _tabConsulta(_preclinica)
-                ]),
-                floatingActionButton: FloatingActionButton(
-                  onPressed: () => _atendida(context, _preclinica),
-                  child: Icon(Icons.save),
-                  backgroundColor: Colors.pinkAccent,
-                ),
-                bottomNavigationBar: Container(
-                  color: Colors.red,
-                  child: TabBar(
-                      labelColor: Colors.white,
-                      indicatorColor: Colors.white,
-                      tabs: [
-                        Tab(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: <Widget>[
-                              Icon(Icons.watch_later),
-                              Text('Historial')
-                            ],
+            child: FutureBuilder(
+              future: _consultaFuture,
+              builder: (BuildContext context,
+                  AsyncSnapshot<ConsultaModel> snapshot) {
+                if (!snapshot.hasData)
+                  return Container(
+                      color: Colors.white, child: loadingIndicator(context));
+                final consultaGeneral = snapshot.data.consultaGeneral;
+
+                return Scaffold(
+                  backgroundColor: colorFondoApp(),
+                  appBar: AppBar(
+                    title: Text('Menu Consulta'),
+                  ),
+                  drawer: MenuWidget(),
+                  body: TabBarView(children: [
+                    _tabHistorial(_preclinica),
+                    _tabConsulta(_preclinica)
+                  ]),
+                  floatingActionButton: FloatingActionButton(
+                    onPressed: () => (consultaGeneral == null)
+                        ? mostrarFlushBar(
+                            context,
+                            Colors.black,
+                            'Info',
+                            'La consulta general es obligatoria',
+                            2,
+                            Icons.info,
+                            Colors.white)
+                        : _atendida(context, _preclinica),
+                    child: Icon(Icons.save),
+                    backgroundColor: Colors.pinkAccent,
+                  ),
+                  bottomNavigationBar: Container(
+                    color: Colors.red,
+                    child: TabBar(
+                        labelColor: Colors.white,
+                        indicatorColor: Colors.white,
+                        tabs: [
+                          Tab(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: <Widget>[
+                                Icon(Icons.watch_later),
+                                Text('Historial')
+                              ],
+                            ),
                           ),
-                        ),
-                        Tab(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: <Widget>[
-                              Icon(FontAwesomeIcons.notesMedical),
-                              Text('Consulta')
-                            ],
+                          Tab(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: <Widget>[
+                                Icon(FontAwesomeIcons.notesMedical),
+                                Text('Consulta')
+                              ],
+                            ),
                           ),
-                        ),
-                      ]),
-                )),
+                        ]),
+                  ),
+                );
+              },
+            ),
           ),
         ),
         onWillPop: () async => false);
   }
 
-  FutureBuilder<ConsultaModel> _tabHistorial(PreclinicaViewModel _preclinica) {
-    return FutureBuilder(
-      future: _consultaFuture,
-      builder: (BuildContext context, AsyncSnapshot<ConsultaModel> snapshot) {
-        if (snapshot.hasData) {
-          return SingleChildScrollView(
-            child: Column(
-              children: <Widget>[
-                SizedBox(
-                  height: 15.0,
+  _tabHistorial(PreclinicaViewModel _preclinica) {
+    return SingleChildScrollView(
+      child: Column(
+        children: <Widget>[
+          SizedBox(
+            height: 15.0,
+          ),
+          Table(
+            children: [
+              TableRow(children: [
+                FadeInLeft(
+                  child: _cardItem(
+                      _preclinica,
+                      FontAwesomeIcons.userMd,
+                      'Resumen de Consulta',
+                      'consulta_detalle',
+                      Colors.teal,
+                      context),
                 ),
-                Table(
-                  children: [
-                    TableRow(children: [
-                      FadeInLeft(
-                        child: _cardItem(
-                            _preclinica,
-                            FontAwesomeIcons.userMd,
-                            'Resumen de Consulta',
-                            'consulta_detalle',
-                            Colors.teal,
-                            context),
-                      ),
-                      FadeInRight(
-                        child: _cardItem(
-                            _preclinica,
-                            FontAwesomeIcons.capsules,
-                            'Farmacos',
-                            'crear_farmacos_uso_actual',
-                            Colors.orange,
-                            context),
-                      ),
-                    ]),
-                    TableRow(children: [
-                      FadeInLeft(
-                        child: _cardItem(
-                            _preclinica,
-                            FontAwesomeIcons.heartbeat,
-                            'Antecedentes Familiares',
-                            'crear_antecedentes',
-                            Colors.blue,
-                            context),
-                      ),
-                      FadeInRight(
-                        child: _cardItem(_preclinica, FontAwesomeIcons.coffee,
-                            'Habitos', 'crear_habitos', Colors.green, context),
-                      )
-                    ]),
-                    TableRow(children: [
-                      (_preclinica.sexo == 'F')
-                          ? FadeInLeft(
-                              child: _cardItemHistorialGineco(
-                                  _preclinica,
-                                  FontAwesomeIcons.baby,
-                                  'Antecedentes Ginecológicos',
-                                  'crear_historial_gineco',
-                                  Colors.blueGrey,
-                                  context,
-                                  _usuario),
-                            )
-                          : Container(),
-                      Container()
-                    ]),
-                  ],
+                FadeInRight(
+                  child: _cardItem(
+                      _preclinica,
+                      FontAwesomeIcons.capsules,
+                      'Farmacos',
+                      'crear_farmacos_uso_actual',
+                      Colors.orange,
+                      context),
+                ),
+              ]),
+              TableRow(children: [
+                FadeInLeft(
+                  child: _cardItem(
+                      _preclinica,
+                      FontAwesomeIcons.heartbeat,
+                      'Antecedentes Familiares',
+                      'crear_antecedentes',
+                      Colors.blue,
+                      context),
+                ),
+                FadeInRight(
+                  child: _cardItem(_preclinica, FontAwesomeIcons.coffee,
+                      'Habitos', 'crear_habitos', Colors.green, context),
                 )
-              ],
-            ),
-          );
-        } else {
-          return loadingIndicator(context);
-        }
-      },
+              ]),
+              TableRow(children: [
+                (_preclinica.sexo == 'F')
+                    ? FadeInLeft(
+                        child: _cardItemHistorialGineco(
+                            _preclinica,
+                            FontAwesomeIcons.baby,
+                            'Antecedentes Ginecológicos',
+                            'crear_historial_gineco',
+                            Colors.blueGrey,
+                            context,
+                            _usuario),
+                      )
+                    : Container(),
+                Container()
+              ]),
+            ],
+          )
+        ],
+      ),
     );
   }
 
-  FutureBuilder<ConsultaModel> _tabConsulta(PreclinicaViewModel _preclinica) {
-    return FutureBuilder(
-      future: _consultaFuture,
-      builder: (BuildContext context, AsyncSnapshot<ConsultaModel> snapshot) {
-        if (snapshot.hasData) {
-          return SingleChildScrollView(
-            child: Column(
-              children: <Widget>[
-                SizedBox(
-                  height: 15.0,
+  Widget _tabConsulta(PreclinicaViewModel _preclinica) {
+    return SingleChildScrollView(
+      child: Column(
+        children: <Widget>[
+          SizedBox(
+            height: 15.0,
+          ),
+          Table(
+            children: [
+              TableRow(children: [
+                FadeInLeft(
+                  child: _cardItem(
+                      _preclinica,
+                      FontAwesomeIcons.briefcaseMedical,
+                      'Consulta General',
+                      'crear_consulta_general',
+                      Colors.red,
+                      context),
                 ),
-                Table(
-                  children: [
-                    TableRow(children: [
-                      FadeInLeft(
-                        child: _cardItem(
-                            _preclinica,
-                            FontAwesomeIcons.briefcaseMedical,
-                            'Consulta General',
-                            'crear_consulta_general',
-                            Colors.red,
-                            context),
-                      ),
-                      FadeInRight(
-                        child: _cardItemExamenFisico(
-                            _preclinica,
-                            FontAwesomeIcons.diagnoses,
-                            'Examen Físico',
-                            'crear_examen_fisico',
-                            Colors.brown,
-                            context,
-                            _usuario),
-                      ),
-                    ]),
-                    TableRow(children: [
-                      FadeInLeft(
-                        child: _cardItem(
-                            _preclinica,
-                            FontAwesomeIcons.stickyNote,
-                            'Plan Terapeutico',
-                            'planes_terapeuticos',
-                            Colors.lightGreen,
-                            context),
-                      ),
-                      FadeInRight(
-                        child: _cardItem(
-                            _preclinica,
-                            FontAwesomeIcons.flask,
-                            'Examenes',
-                            'examenes_indicados',
-                            Colors.cyan,
-                            context),
-                      ),
-                    ]),
-                    TableRow(children: [
-                      FadeInLeft(
-                        child: _cardItem(
-                            _preclinica,
-                            Icons.note,
-                            'Diagnosticos',
-                            'diagnosticos',
-                            Colors.pink,
-                            context),
-                      ),
-                      FadeInRight(
-                        child: _cardItem(_preclinica, Icons.note_add, 'Notas',
-                            'crear_notas', Colors.deepPurple, context),
-                      ),
-                    ]),
-                  ],
-                )
-              ],
-            ),
-          );
-        } else {
-          return loadingIndicator(context);
-        }
-      },
+                FadeInRight(
+                  child: _cardItemExamenFisico(
+                      _preclinica,
+                      FontAwesomeIcons.diagnoses,
+                      'Examen Físico',
+                      'crear_examen_fisico',
+                      Colors.brown,
+                      context,
+                      _usuario),
+                ),
+              ]),
+              TableRow(children: [
+                FadeInLeft(
+                  child: _cardItem(
+                      _preclinica,
+                      FontAwesomeIcons.stickyNote,
+                      'Plan Terapeutico',
+                      'planes_terapeuticos',
+                      Colors.lightGreen,
+                      context),
+                ),
+                FadeInRight(
+                  child: _cardItem(_preclinica, FontAwesomeIcons.flask,
+                      'Examenes', 'examenes_indicados', Colors.cyan, context),
+                ),
+              ]),
+              TableRow(children: [
+                FadeInLeft(
+                  child: _cardItem(_preclinica, Icons.note, 'Diagnosticos',
+                      'diagnosticos', Colors.pink, context),
+                ),
+                FadeInRight(
+                  child: _cardItem(_preclinica, Icons.note_add, 'Notas',
+                      'crear_notas', Colors.deepPurple, context),
+                ),
+              ]),
+            ],
+          )
+        ],
+      ),
     );
   }
 

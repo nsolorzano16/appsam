@@ -14,6 +14,8 @@ class FotosPacienteModel {
   FotosPacienteModel({
     this.fotoId,
     this.pacienteId,
+    this.usuarioId,
+    this.asistenteId,
     this.fotoUrl,
     this.activo,
     this.creadoPor,
@@ -25,6 +27,8 @@ class FotosPacienteModel {
 
   int fotoId;
   int pacienteId;
+  String usuarioId;
+  String asistenteId;
   String fotoUrl;
   bool activo;
   String creadoPor;
@@ -36,6 +40,8 @@ class FotosPacienteModel {
   factory FotosPacienteModel.fromJson(Map<String, dynamic> json) =>
       FotosPacienteModel(
         fotoId: json["fotoId"],
+        usuarioId: json["usuarioId"],
+        asistenteId: json["asistenteId"],
         pacienteId: json["pacienteId"],
         fotoUrl: json["fotoUrl"],
         activo: json["activo"],
@@ -48,6 +54,8 @@ class FotosPacienteModel {
 
   Map<String, dynamic> toJson() => {
         "fotoId": fotoId,
+        "usuarioId": usuarioId,
+        "asistenteId": asistenteId,
         "pacienteId": pacienteId,
         "fotoUrl": fotoUrl,
         "activo": activo,

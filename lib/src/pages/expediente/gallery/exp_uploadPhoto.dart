@@ -161,7 +161,12 @@ class _GalleryUploadPhotoPageState extends State<GalleryUploadPhotoPage> {
       await _pr.show();
 
       final resp = await _fotosPacienteService.addFotoPaciente(
-          _pacienteId, foto, _descripcionController.text, _usuario.userName);
+          _pacienteId,
+          foto,
+          _descripcionController.text,
+          _usuario.userName,
+          _usuario.id,
+          _usuario.asistenteId);
       await _pr.hide();
 
       if (resp != null) {

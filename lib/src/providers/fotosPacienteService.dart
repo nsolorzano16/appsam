@@ -58,8 +58,8 @@ class FotosPacienteService {
     }
   }
 
-  Future<FotosPacienteModel> addFotoPaciente(
-      int pacienteId, File imagen, String notas, String username) async {
+  Future<FotosPacienteModel> addFotoPaciente(int pacienteId, File imagen,
+      String notas, String username, String userId, String asistenteid) async {
     final String token = StorageUtil.getString('token');
     final headers = {
       "content-type": "application/json",
@@ -72,7 +72,7 @@ class FotosPacienteService {
     };
 
     final url = Uri.parse(
-        '$_apiURL/api/FotosPaciente/pacienteid/$pacienteId/username/$username');
+        '$_apiURL/api/FotosPaciente/pacienteid/$pacienteId/username/$username/usuarioid/$userId/asistenteid/$asistenteid');
     final mimeType = mime(imagen.path).split('/');
     final imageUploadRequest = http.MultipartRequest('POST', url);
     imageUploadRequest.headers.addAll(headers);

@@ -75,12 +75,14 @@ class UserModel {
         planId: json["planId"],
         nombres: json["nombres"],
         primerApellido: json["primerApellido"],
-        segundoApellido: json["segundoApellido"],
-        identificacion: json["identificacion"],
+        segundoApellido:
+            json["segundoApellido"] == null ? '' : json["segundoApellido"],
+        identificacion:
+            json["identificacion"] == null ? '' : json["identificacion"],
         fechaNacimiento: DateTime.parse(json["fechaNacimiento"]),
         edad: json["edad"],
         sexo: json["sexo"],
-        telefono2: json["telefono2"],
+        telefono2: json["telefono2"] == null ? '' : json["telefono2"],
         colegioNumero: json["colegioNumero"],
         fotoUrl: json["fotoUrl"],
         activo: json["activo"],
@@ -88,7 +90,7 @@ class UserModel {
         creadoFecha: DateTime.parse(json["creadoFecha"]),
         modificadoPor: json["modificadoPor"],
         modificadoFecha: DateTime.parse(json["modificadoFecha"]),
-        notas: json["notas"],
+        notas: json["notas"] == null ? '' : json["notas"],
         lockoutEnd: json["lockoutEnd"] == null ? null : json["lockoutEnd"],
         accessFailedCount:
             json["accessFailedCount"] == null ? 0 : json["accessFailedCount"],

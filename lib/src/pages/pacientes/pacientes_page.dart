@@ -1,4 +1,5 @@
 import 'package:appsam/src/models/paginados/pacientesPaginado_model.dart';
+import 'package:appsam/src/models/planes_model.dart';
 import 'package:appsam/src/models/user_model.dart';
 import 'package:appsam/src/pages/expediente/expediente_page.dart';
 import 'package:appsam/src/utils/utils.dart';
@@ -21,6 +22,9 @@ class _PacientesPageState extends State<PacientesPage> {
   PacientesBlocBusqueda blocBusqueda = new PacientesBlocBusqueda();
   final UserModel _usuario =
       userModelFromJson(StorageUtil.getString('usuarioGlobal'));
+  final PlanesModel _plan =
+      planesModelFromJson(StorageUtil.getString('planUsuario'));
+  int consultasAtendidas = StorageUtil.getInt('consultasAtendidas');
 
   int totalPages = 0;
   int page = 1;
@@ -197,14 +201,15 @@ class _PacientesPageState extends State<PacientesPage> {
               size: 20.0,
               color: Theme.of(context).primaryColor,
             ),
-            onTap: () => (paciente.preclinicasPendientes == 0)
+            onTap: () => (paciente.preclinicasPendientes == 0 &&
+                    consultasAtendidas <= _plan.consultas)
                 ? Navigator.pushReplacementNamed(context, 'crear_preclinica',
                     arguments: paciente)
                 : mostrarFlushBar(
                     context,
                     Colors.lightGreen[700],
                     'Info',
-                    'Paciente con preclinicas pendientes',
+                    'Paciente con preclinicas pendientes ó ud llego al limite de consultas',
                     2,
                     Icons.info,
                     Colors.white),

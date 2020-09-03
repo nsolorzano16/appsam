@@ -1,5 +1,4 @@
 import 'package:appsam/src/models/change_password_model.dart';
-import 'package:appsam/src/pages/forgot_password_page.dart';
 import 'package:appsam/src/providers/auth_service.dart';
 import 'package:appsam/src/utils/utils.dart';
 import 'package:flutter/material.dart';

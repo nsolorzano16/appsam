@@ -18,22 +18,26 @@ class MyInfoViewModel {
     this.plan,
     this.usuario,
     this.consultasAtendidas,
+    this.imagenesConsumidas,
   });
 
   PlanesModel plan;
   UserModel usuario;
   int consultasAtendidas;
+  int imagenesConsumidas;
 
   factory MyInfoViewModel.fromJson(Map<String, dynamic> json) =>
       MyInfoViewModel(
         plan: PlanesModel.fromJson(json["plan"]),
         usuario: UserModel.fromJson(json["usuario"]),
         consultasAtendidas: json["consultasAtendidas"],
+        imagenesConsumidas: json["imagenesConsumidas"],
       );
 
   Map<String, dynamic> toJson() => {
         "plan": plan.toJson(),
         "usuario": usuario.toJson(),
         "consultasAtendidas": consultasAtendidas,
+        "imagenesConsumidas": imagenesConsumidas,
       };
 }

@@ -1,7 +1,11 @@
 import 'package:appsam/src/blocs/fotosPaciente_bloc.dart';
+import 'package:appsam/src/models/planes_model.dart';
 import 'package:appsam/src/pages/expediente/expediente_page.dart';
 import 'package:appsam/src/pages/expediente/gallery/exp_galleryDetail.dart';
 import 'package:appsam/src/pages/expediente/gallery/exp_uploadPhoto.dart';
+import 'package:appsam/src/utils/storage_util.dart';
+import 'package:appsam/src/utils/utils.dart';
+
 import 'package:appsam/src/widgets/drawer.dart';
 
 import 'package:flutter/material.dart';
@@ -24,13 +28,16 @@ class _ExpGalleryPageState extends State<ExpGalleryPage> {
   String get _doctorId => widget.doctorId;
   final FotosPacienteBloc bloc = FotosPacienteBloc();
   final _scrollController = new ScrollController();
+  final PlanesModel _plan =
+      planesModelFromJson(StorageUtil.getString('planUsuario'));
 
   int page = 1;
 
   @override
   void initState() {
-    bloc.loadData(page, '', _pacienteId);
+    bloc.loadData(page, '', _pacienteId, _doctorId);
     _scrollController.addListener(_onListener);
+
     super.initState();
   }
 
@@ -41,7 +48,7 @@ class _ExpGalleryPageState extends State<ExpGalleryPage> {
       page++;
 
       if (page <= bloc.totalPages) {
-        bloc.loadData(page, '', _pacienteId);
+        bloc.loadData(page, '', _pacienteId, _doctorId);
       }
     }
   }
@@ -58,7 +65,7 @@ class _ExpGalleryPageState extends State<ExpGalleryPage> {
       onWillPop: () async => false,
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Galeria '),
+          title: Text('Galeria'),
           actions: <Widget>[
             IconButton(
                 icon: Icon(Icons.arrow_back_ios),
@@ -82,96 +89,108 @@ class _ExpGalleryPageState extends State<ExpGalleryPage> {
         body: AnimatedBuilder(
           animation: bloc,
           builder: (BuildContext context, Widget child) {
-            return Column(
-              children: <Widget>[
-                Expanded(
-                  child: StaggeredGridView.countBuilder(
-                    controller: _scrollController,
-                    physics: ClampingScrollPhysics(),
-                    crossAxisCount: 4,
-                    itemCount: bloc.listPhotos.length,
-                    itemBuilder: (BuildContext context, int index) => Padding(
-                        padding: const EdgeInsets.all(5.0),
-                        child: GestureDetector(
-                          onTap: () => Navigator.of(context).push(
-                            PageRouteBuilder(
-                              transitionDuration:
-                                  const Duration(milliseconds: 500),
-                              pageBuilder: (_, animation, __) =>
-                                  SlideTransition(
-                                position: Tween<Offset>(
-                                  begin: Offset(0.0, 1.0),
-                                  end: Offset(0.0, 0.0),
-                                ).animate(animation),
-                                child: GalleryDetailPhotoUrlPage(
-                                  foto: bloc.listPhotos[index],
-                                  pacienteId: widget.pacienteId,
-                                  doctorId: widget.doctorId,
-                                ),
-                              ),
-                            ),
-                          ),
-                          child: Container(
-                            decoration: BoxDecoration(boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.5),
-                                spreadRadius: 1,
-                                blurRadius: 5,
-                                offset:
-                                    Offset(0, 1), // changes position of shadow
-                              ),
-                            ]),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(10.0),
-                              child: FadeInImage(
-                                fit: BoxFit.cover,
-                                imageErrorBuilder: (context, error,
-                                        stackTrace) =>
-                                    Text('No se ha podido cargar la imagen'),
-                                placeholder:
-                                    AssetImage('assets/jar-loading.gif'),
-                                image: NetworkImage(
-                                    bloc.listPhotos[index].fotoUrl),
-                              ),
-                            ),
-                          ),
-                        )),
-                    staggeredTileBuilder: (int index) =>
-                        new StaggeredTile.count(2, index.isEven ? 2 : 3),
-                    mainAxisSpacing: 4.0,
-                    crossAxisSpacing: 4.0,
-                  ),
-                ),
-                bloc.loading
-                    ? Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: CircularProgressIndicator(),
-                      )
-                    : Container(),
-              ],
-            );
-
-            // PinterestGrid(
-            //     lista: bloc.listPhotos,
-            //   );
+            return (bloc.listPhotos.length > 0)
+                ? Column(
+                    children: <Widget>[
+                      Expanded(
+                        child: StaggeredGridView.countBuilder(
+                          controller: _scrollController,
+                          physics: ClampingScrollPhysics(),
+                          crossAxisCount: 4,
+                          itemCount: bloc.listPhotos.length,
+                          itemBuilder: (BuildContext context, int index) =>
+                              Padding(
+                                  padding: const EdgeInsets.all(5.0),
+                                  child: GestureDetector(
+                                    onTap: () => Navigator.of(context).push(
+                                      PageRouteBuilder(
+                                        transitionDuration:
+                                            const Duration(milliseconds: 500),
+                                        pageBuilder: (_, animation, __) =>
+                                            SlideTransition(
+                                          position: Tween<Offset>(
+                                            begin: Offset(0.0, 1.0),
+                                            end: Offset(0.0, 0.0),
+                                          ).animate(animation),
+                                          child: GalleryDetailPhotoUrlPage(
+                                            foto: bloc.listPhotos[index],
+                                            pacienteId: widget.pacienteId,
+                                            doctorId: widget.doctorId,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    child: Container(
+                                      decoration: BoxDecoration(boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.grey.withOpacity(0.5),
+                                          spreadRadius: 1,
+                                          blurRadius: 5,
+                                          offset: Offset(0,
+                                              1), // changes position of shadow
+                                        ),
+                                      ]),
+                                      child: ClipRRect(
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
+                                        child: FadeInImage(
+                                          fit: BoxFit.cover,
+                                          imageErrorBuilder: (context, error,
+                                                  stackTrace) =>
+                                              Text(
+                                                  'No se ha podido cargar la imagen'),
+                                          placeholder: AssetImage(
+                                              'assets/jar-loading.gif'),
+                                          image: NetworkImage(
+                                              bloc.listPhotos[index].fotoUrl),
+                                        ),
+                                      ),
+                                    ),
+                                  )),
+                          staggeredTileBuilder: (int index) =>
+                              new StaggeredTile.count(2, index.isEven ? 2 : 3),
+                          mainAxisSpacing: 4.0,
+                          crossAxisSpacing: 4.0,
+                        ),
+                      ),
+                      bloc.loading
+                          ? Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: CircularProgressIndicator(),
+                            )
+                          : Container(),
+                    ],
+                  )
+                : Center(
+                    child: Text('No se han agreado imagenes.'),
+                  );
           },
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: () => Navigator.of(context).push(
-            PageRouteBuilder(
-              transitionDuration: const Duration(milliseconds: 400),
-              pageBuilder: (_, animation, __) => SlideTransition(
-                position: Tween<Offset>(
-                  begin: Offset(0.0, 1.0),
-                  end: Offset(0.0, 0.0),
-                ).animate(animation),
-                child: GalleryUploadPhotoPage(
-                  doctorId: _doctorId,
-                  pacienteId: _pacienteId,
-                ),
-              ),
-            ),
-          ),
+          onPressed: () => (bloc.imagenesConsumidas <= _plan.imagenes)
+              ? Navigator.of(context).push(
+                  PageRouteBuilder(
+                    transitionDuration: const Duration(milliseconds: 400),
+                    pageBuilder: (_, animation, __) => SlideTransition(
+                      position: Tween<Offset>(
+                        begin: Offset(0.0, 1.0),
+                        end: Offset(0.0, 0.0),
+                      ).animate(animation),
+                      child: GalleryUploadPhotoPage(
+                        doctorId: _doctorId,
+                        pacienteId: _pacienteId,
+                      ),
+                    ),
+                  ),
+                )
+              : mostrarFlushBar(
+                  context,
+                  Colors.black,
+                  'Info',
+                  'Ha llegado al limite de imagenes',
+                  2,
+                  Icons.info,
+                  Colors.white),
           child: Icon(Icons.add),
         ),
       ),

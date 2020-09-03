@@ -251,7 +251,7 @@ class _LoginPageState extends State<LoginPage> {
 
       await _pr.show();
       authService.login(usuario, password).then((authResp) async {
-        if (authResp.resultado.succeeded) {
+        if (authResp.resultado.succeeded && authResp.token.isNotEmpty) {
           StorageUtil.putString('token', authResp.token);
 
           Map<String, dynamic> payload = decodeJwt(authResp.token);
@@ -266,6 +266,7 @@ class _LoginPageState extends State<LoginPage> {
                   'planUsuario', planesModelToJson(userInfo.plan));
               StorageUtil.putInt(
                   'consultasAtendidas', userInfo.consultasAtendidas);
+
               WebNotificationService.instance.loadNotificaciones(userId);
               Navigator.pushReplacementNamed(context, 'home');
             }
@@ -298,12 +299,13 @@ class _LoginPageState extends State<LoginPage> {
               Icons.info,
               Colors.white);
         } else {
+          await _pr.hide();
           mostrarFlushBar(
               context,
               Colors.black,
               'Info',
-              'A ocurrido un error o el usuario no existe.',
-              2,
+              'A ocurrido un error ó el usuario no existe ó el email no se ha confirmado.',
+              3,
               Icons.info,
               Colors.white);
         }

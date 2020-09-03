@@ -1,7 +1,5 @@
 import 'dart:async';
 import 'package:appsam/src/models/user_model.dart';
-import 'package:appsam/src/pages/reset_password_page.dart';
-import 'package:appsam/src/providers/auth_service.dart';
 import 'package:appsam/src/utils/utils.dart';
 import 'package:appsam/src/widgets/firebaseMessageWrapper.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +19,7 @@ class AsistenteDetalle extends StatefulWidget {
 
 class _AsistenteDetalleState extends State<AsistenteDetalle> {
   final bloc = new CrearEditarAsistentesBloc();
-  final AuthService _authService = AuthService();
+  //final AuthService _authService = AuthService();
   @override
   void initState() {
     super.initState();
