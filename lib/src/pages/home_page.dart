@@ -86,8 +86,7 @@ class _HomePageState extends State<HomePage> {
               backgroundColor: colorFondoApp(),
               drawer: MenuWidget(),
               appBar: AppBar(
-                title:
-                    Text('Inicio -Release Date: 27 de agosto de 2020 7:00 p.m'),
+                title: Text('Inicio -Release Date: 2 de Sept. de 2020'),
               ),
               body: ListView(
                 physics: ClampingScrollPhysics(),
