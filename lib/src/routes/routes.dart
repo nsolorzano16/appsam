@@ -39,7 +39,7 @@ import 'package:appsam/src/pages/pacientes/edit_paciente_page.dart';
 
 import 'package:appsam/src/pages/pacientes/paciente_detalle_page.dart';
 import 'package:appsam/src/pages/pacientes/pacientes_page.dart';
-import 'package:appsam/src/pages/resetmy_pass_page.dart';
+
 import 'package:appsam/src/pages/settings_page.dart';
 
 Map<String, WidgetBuilder> getApplicationRoutes(ThemeBloc bloc) {
@@ -53,8 +53,6 @@ Map<String, WidgetBuilder> getApplicationRoutes(ThemeBloc bloc) {
     EditarAsistentesPage.routeName: (BuildContext context) =>
         EditarAsistentesPage(),
     SettingsPage.routeName: (BuildContext context) => SettingsPage(bloc),
-    ResetMyPasswordPage.routeName: (BuildContext context) =>
-        ResetMyPasswordPage(),
     MyProfilePage.routeName: (BuildContext context) => MyProfilePage(),
     PacientesPage.routeName: (BuildContext context) => PacientesPage(),
     PacienteDetalle.routeName: (BuildContext context) => PacienteDetalle(),

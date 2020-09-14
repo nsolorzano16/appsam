@@ -1,5 +1,5 @@
 import 'package:appsam/src/models/user_model.dart';
-import 'package:appsam/src/pages/reset_password_page.dart';
+import 'package:appsam/src/pages/reset_password_user_page.dart';
 import 'package:appsam/src/providers/auth_service.dart';
 import 'package:appsam/src/utils/utils.dart';
 import 'package:appsam/src/widgets/firebaseMessageWrapper.dart';
@@ -104,7 +104,7 @@ class _SettingsPageState extends State<SettingsPage> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => ResetPasswordPage(
+          builder: (context) => ResetPasswordUserPage(
               token: resp.tokenChangePassword, userId: resp.userId),
         ),
       );

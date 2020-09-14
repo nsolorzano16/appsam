@@ -1,5 +1,4 @@
 import 'package:appsam/src/models/change_password_model.dart';
-import 'package:appsam/src/pages/forgot_password_page.dart';
 import 'package:appsam/src/providers/auth_service.dart';
 import 'package:appsam/src/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -7,19 +6,19 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:getflutter/getflutter.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 
-class ResetPasswordPage extends StatefulWidget {
+class ResetPasswordUserPage extends StatefulWidget {
   final String token;
   final String userId;
 
-  const ResetPasswordPage(
+  const ResetPasswordUserPage(
       {Key key, @required this.token, @required this.userId})
       : super(key: key);
 
   @override
-  _ResetPasswordPageState createState() => _ResetPasswordPageState();
+  _ResetPasswordUserPageState createState() => _ResetPasswordUserPageState();
 }
 
-class _ResetPasswordPageState extends State<ResetPasswordPage> {
+class _ResetPasswordUserPageState extends State<ResetPasswordUserPage> {
   String get userId => widget.userId;
   String get token => widget.token;
 
@@ -38,12 +37,8 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
         appBar: AppBar(
           leading: IconButton(
             icon: Icon(Icons.arrow_back),
-            onPressed: () => Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ForgotPasswordPage(),
-              ),
-            ),
+            onPressed: () =>
+                Navigator.pushReplacementNamed(context, 'settings'),
           ),
           title: Text('Resetear contraseña'),
         ),

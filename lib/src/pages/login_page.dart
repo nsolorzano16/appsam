@@ -274,7 +274,6 @@ class _LoginPageState extends State<LoginPage> {
         } else if (!authResp.resultado.succeeded &&
             !authResp.resultado.isLockedOut) {
           await _pr.hide();
-          _formKey.currentState.reset();
 
           final totalIntentos = 3 - authResp.intentos;
           mostrarFlushBar(
@@ -312,6 +311,14 @@ class _LoginPageState extends State<LoginPage> {
       }).catchError((e) async {
         await _pr.hide();
         print('EL ERROR PRRRO ${e.toString()}');
+        mostrarFlushBar(
+            context,
+            Colors.black,
+            'Info',
+            'A ocurrido un error ó el usuario no existe ó el email no se ha confirmado.',
+            3,
+            Icons.info,
+            Colors.white);
       });
       setState(() {
         logueando = false;

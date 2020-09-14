@@ -1,4 +1,5 @@
 import 'package:appsam/src/models/reset_password_response_model.dart';
+
 import 'package:appsam/src/pages/reset_password_page.dart';
 import 'package:appsam/src/providers/auth_service.dart';
 import 'package:appsam/src/utils/utils.dart';
@@ -20,9 +21,9 @@ class ForgotPasswordPage extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           leading: IconButton(
-              icon: Icon(Icons.arrow_back),
-              onPressed: () =>
-                  Navigator.pushReplacementNamed(context, 'login')),
+            icon: Icon(Icons.arrow_back),
+            onPressed: () => Navigator.pushReplacementNamed(context, 'login'),
+          ),
           title: Text('Recuperar contraseña'),
         ),
         body: GFCard(
@@ -118,7 +119,7 @@ class ForgotPasswordPage extends StatelessWidget {
 
       await _pr.hide();
       if (resp != null) {
-        Navigator.push(
+        Navigator.pushReplacement(
           context,
           PageRouteBuilder(
             pageBuilder: (context, animation, secondaryAnimation) {
