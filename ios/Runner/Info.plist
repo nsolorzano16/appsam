@@ -23,11 +23,11 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>Necesito acceso a la camara</string>
+	<string>Esta aplicacion necesita el acceso a la camara para cambiar la fotografia, la cual es usada como fotografia de perfil de usuario.</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>Necesito acceso al microfono</string>
+	<string>Esta aplicacion necesita acceso al micrófono.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Necesito acceso al carrete</string>
+	<string>Esta aplicacion necesita el acceso a su carrete para cambiar la fotografia, la cual es usada como fotografia de perfil de usuario.</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
