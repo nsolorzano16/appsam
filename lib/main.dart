@@ -56,7 +56,7 @@ class _MyAppState extends State<MyApp> {
               const Locale('en', 'US'), // English
               const Locale('es', 'ES'),
             ],
-            title: 'Material App',
+            title: 'SAM',
             initialRoute: 'login',
             routes: getApplicationRoutes(bloc),
             onGenerateRoute: (RouteSettings settings) {
