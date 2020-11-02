@@ -6,8 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:getflutter/getflutter.dart';
 
-import 'package:icons_helper/icons_helper.dart';
-
 class MenuWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -119,7 +117,7 @@ class MenuWidget extends StatelessWidget {
           widgetTemp = ListTile(
             title: Text(opt.texto),
             leading: Icon(
-              getIconUsingPrefix(name: opt.icon),
+              Icons.check,
               color: Theme.of(context).primaryColor,
             ),
             trailing: (opt.texto == 'Consulta' || opt.texto == 'Agenda')
