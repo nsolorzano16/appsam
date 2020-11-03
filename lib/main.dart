@@ -45,28 +45,29 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return Provider(
-        child: MaterialApp(
-            debugShowCheckedModeBanner: false,
-            localizationsDelegates: [
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              CustomLocalizationDelegate(),
-            ],
-            supportedLocales: [
-              const Locale('en', 'US'), // English
-              const Locale('es', 'ES'),
-            ],
-            title: 'SAM',
-            initialRoute: 'login',
-            routes: getApplicationRoutes(bloc),
-            onGenerateRoute: (RouteSettings settings) {
-              return MaterialPageRoute(
-                  builder: (context) => ErrorPageNotFound());
-            },
-            theme: ThemeData(
-                primaryColor: Colors.red,
-                brightness: Brightness.light,
-                primarySwatch: Colors.red)));
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        localizationsDelegates: [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          CustomLocalizationDelegate(),
+        ],
+        supportedLocales: [
+          const Locale('en', 'US'), // English
+          const Locale('es', 'ES'),
+        ],
+        title: 'SAM',
+        initialRoute: 'login',
+        routes: getApplicationRoutes(bloc),
+        onGenerateRoute: (RouteSettings settings) {
+          return MaterialPageRoute(builder: (context) => ErrorPageNotFound());
+        },
+        theme: ThemeData(
+            primaryColor: Colors.red,
+            brightness: Brightness.light,
+            primarySwatch: Colors.red),
+      ),
+    );
   }
 }
 
