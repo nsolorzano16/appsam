@@ -71,7 +71,6 @@ class _MyAppState extends State<MyApp> {
   }
 }
 
-// otro mas
 class CustomLocalizationDelegate
     extends LocalizationsDelegate<MaterialLocalizations> {
   const CustomLocalizationDelegate();

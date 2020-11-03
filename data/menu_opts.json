@@ -3,7 +3,7 @@
   "rutas": [
     {
       "ruta": "home",
-      "icon": "add_alert",
+      "icon": "home_filled",
       "texto": "Inicio",
       "roles": [
         {

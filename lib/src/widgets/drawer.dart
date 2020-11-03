@@ -1,3 +1,4 @@
+import 'package:appsam/src/helpers/icon_strings.dart';
 import 'package:appsam/src/models/menu_model.dart';
 import 'package:appsam/src/models/user_model.dart';
 import 'package:appsam/src/providers/menu_provider.dart';
@@ -12,53 +13,55 @@ class MenuWidget extends StatelessWidget {
     final UserModel usuario =
         userModelFromJson(StorageUtil.getString('usuarioGlobal'));
 
-    return Drawer(
-        child: Column(
-      children: <Widget>[
-        Expanded(child: _lista(usuario)),
-        Divider(),
-        ListTile(
-          title: Text('Salir'),
-          leading: Icon(
-            FontAwesomeIcons.signOutAlt,
-            color: Colors.red,
-          ),
-          onTap: () {
-            // set up the AlertDialog
-            AlertDialog alert = AlertDialog(
-              title: Text("Información"),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Text('Desea completar esta acción?'),
+    return SafeArea(
+      child: Drawer(
+          child: Column(
+        children: <Widget>[
+          Expanded(child: _lista(usuario)),
+          Divider(),
+          ListTile(
+            title: Text('Salir'),
+            leading: Icon(
+              FontAwesomeIcons.signOutAlt,
+              color: Colors.red,
+            ),
+            onTap: () {
+              // set up the AlertDialog
+              AlertDialog alert = AlertDialog(
+                title: Text("Información"),
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Text('Desea completar esta acción?'),
+                  ],
+                ),
+                elevation: 24.0,
+                actions: [
+                  FlatButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: Text('Cancelar')),
+                  FlatButton(
+                      onPressed: () {
+                        //WebNotificicationsStream.instance.dispose();
+                        Navigator.of(context).pushNamedAndRemoveUntil(
+                            'login', (Route<dynamic> route) => false);
+                      },
+                      child: Text('Aceptar'))
                 ],
-              ),
-              elevation: 24.0,
-              actions: [
-                FlatButton(
-                    onPressed: () => Navigator.pop(context),
-                    child: Text('Cancelar')),
-                FlatButton(
-                    onPressed: () {
-                      //WebNotificicationsStream.instance.dispose();
-                      Navigator.of(context).pushNamedAndRemoveUntil(
-                          'login', (Route<dynamic> route) => false);
-                    },
-                    child: Text('Aceptar'))
-              ],
-            );
+              );
 
-            // show the dialog
-            showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return alert;
-                },
-                barrierDismissible: false);
-          },
-        ),
-      ],
-    ));
+              // show the dialog
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return alert;
+                  },
+                  barrierDismissible: false);
+            },
+          ),
+        ],
+      )),
+    );
   }
 
   Widget _lista(UserModel usuario) {
@@ -116,10 +119,7 @@ class MenuWidget extends StatelessWidget {
         if (rol.autorizados == usuario.rolId) {
           widgetTemp = ListTile(
             title: Text(opt.texto),
-            leading: Icon(
-              Icons.check,
-              color: Theme.of(context).primaryColor,
-            ),
+            leading: getIcon(context, opt.icon),
             trailing: (opt.texto == 'Consulta' || opt.texto == 'Agenda')
                 ? GFBadge(
                     child: Text('${opt.notificaciones}'),
