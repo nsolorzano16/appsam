@@ -57,10 +57,12 @@ class _MyAppState extends State<MyApp> {
           const Locale('es', 'ES'),
         ],
         title: 'SAM',
-        initialRoute: 'login',
+        initialRoute: 'splashpage',
         routes: getApplicationRoutes(bloc),
         onGenerateRoute: (RouteSettings settings) {
-          return MaterialPageRoute(builder: (context) => ErrorPageNotFound());
+          return MaterialPageRoute(
+            builder: (context) => ErrorPageNotFound(),
+          );
         },
         theme: ThemeData(
             primaryColor: Colors.red,

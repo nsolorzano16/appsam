@@ -219,7 +219,7 @@ class _CrearAgendaPageState extends State<CrearAgendaPage> {
     return Padding(
       padding: EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
-        autovalidate: true,
+        autovalidateMode: AutovalidateMode.always,
         validator: validaTexto,
         enableInteractiveSelection: false,
         controller: _fechaInicioController,
@@ -246,7 +246,7 @@ class _CrearAgendaPageState extends State<CrearAgendaPage> {
     return Padding(
       padding: EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
-        autovalidate: true,
+        autovalidateMode: AutovalidateMode.always,
         validator: validaTexto,
         enableInteractiveSelection: false,
         controller: _fechaFinController,
@@ -273,7 +273,7 @@ class _CrearAgendaPageState extends State<CrearAgendaPage> {
     return Padding(
       padding: EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
-        autovalidate: true,
+        autovalidateMode: AutovalidateMode.always,
         validator: validaTexto,
         controller: _notasController,
         onSaved: (value) => _evento.notas = value,

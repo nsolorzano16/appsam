@@ -44,8 +44,6 @@
 // }
 
 import 'dart:io';
-
-import 'package:appsam/src/blocs/notifications_bloc/messageStream.dart';
 import 'package:appsam/src/utils/storage_util.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
@@ -64,8 +62,6 @@ class FirebaseNotificationService {
     return _instance;
   }
 
-  // get the message stream
-  MessageStream _messageStream = MessageStream.instance;
   FirebaseMessaging _firebaseMessaging;
 
   // getter for firebase messaging client
@@ -74,7 +70,6 @@ class FirebaseNotificationService {
   // method for getting the messaging token
   void sendDeviceToken() {
     _firebaseMessaging.getToken().then((token) {
-      print("MESSAGING TOKEN: " + token);
       StorageUtil.putString('tokenDevice', token);
     });
   }
@@ -83,18 +78,9 @@ class FirebaseNotificationService {
     if (Platform.isIOS) getIOSPermission();
 
     _firebaseMessaging.configure(
-      onMessage: (Map<String, dynamic> message) async {
-        print('on message $message');
-
-        // add message to stream
-        _messageStream.addMessage(message);
-      },
-      onResume: (Map<String, dynamic> message) async {
-        print('on resume $message');
-      },
-      onLaunch: (Map<String, dynamic> message) async {
-        print('on launch $message');
-      },
+      onMessage: (Map<String, dynamic> message) async {},
+      onResume: (Map<String, dynamic> message) async {},
+      onLaunch: (Map<String, dynamic> message) async {},
     );
   }
 
@@ -102,8 +88,6 @@ class FirebaseNotificationService {
     _firebaseMessaging.requestNotificationPermissions(
         IosNotificationSettings(sound: true, badge: true, alert: true));
     _firebaseMessaging.onIosSettingsRegistered
-        .listen((IosNotificationSettings settings) {
-      print("Settings registered: $settings");
-    });
+        .listen((IosNotificationSettings settings) {});
   }
 }

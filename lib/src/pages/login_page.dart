@@ -1,16 +1,17 @@
 import 'package:appsam/src/models/planes_model.dart';
 import 'package:appsam/src/models/user_model.dart';
+import 'package:appsam/src/pages/home_page.dart';
+import 'package:appsam/src/providers/webNotifications_service.dart';
+import 'package:flutter/material.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:progress_dialog/progress_dialog.dart';
+
 import 'package:appsam/src/pages/forgot_password_page.dart';
 import 'package:appsam/src/providers/auth_service.dart';
 import 'package:appsam/src/providers/usuario_provider.dart';
-import 'package:appsam/src/providers/webNotifications_service.dart';
 import 'package:appsam/src/utils/storage_util.dart';
-import 'package:flutter/material.dart';
-import 'package:jwt_decode_token/jwt_decode_token.dart';
-import 'package:progress_dialog/progress_dialog.dart';
 import 'package:appsam/src/utils/utils.dart';
 
-// coments
 class LoginPage extends StatefulWidget {
   static final String routeName = 'login';
   @override
@@ -29,26 +30,18 @@ class _LoginPageState extends State<LoginPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: Stack(
-      // fit: StackFit.expand,
-      alignment: Alignment.center,
-      children: <Widget>[
-        _crearFondo(context),
-        _fondoBlanco(context),
-      ],
-    ));
+    return SafeArea(
+      child: Scaffold(
+          body: Stack(
+        // fit: StackFit.expand,
+        alignment: Alignment.center,
+        children: <Widget>[
+          _crearFondo(context),
+          _fondoBlanco(context),
+        ],
+      )),
+    );
   }
 
   Widget _crearFondo(BuildContext context) {
@@ -57,13 +50,15 @@ class _LoginPageState extends State<LoginPage> {
       height: size.height,
       width: double.infinity,
       decoration: BoxDecoration(
-          gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: <Color>[
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: <Color>[
             Color.fromRGBO(0, 0, 77, 1.0),
             Color.fromRGBO(255, 0, 0, 1.0),
-          ])),
+          ],
+        ),
+      ),
     );
     final circulo = Container(
       width: 100.0,
@@ -104,10 +99,13 @@ class _LoginPageState extends State<LoginPage> {
       child: ListView(
         children: [
           Padding(
-            padding: const EdgeInsets.all(15.0),
-            child: Image(
-              image: AssetImage('assets/samlogo.png'),
-              fit: BoxFit.cover,
+            padding: const EdgeInsets.symmetric(horizontal: 50),
+            child: Container(
+              padding: EdgeInsets.only(top: 25),
+              child: Image(
+                image: AssetImage('assets/samlogo.png'),
+                fit: BoxFit.cover,
+              ),
             ),
           ),
           SizedBox(
@@ -149,11 +147,12 @@ class _LoginPageState extends State<LoginPage> {
     return Padding(
       padding: const EdgeInsets.all(12.0),
       child: TextFormField(
-          onSaved: (value) => usuario = value,
-          autovalidate: true,
-          validator: validaTexto,
-          keyboardType: TextInputType.text,
-          decoration: inputsDecorations('Usuario', Icons.account_circle)),
+        onSaved: (value) => usuario = value,
+        autovalidateMode: AutovalidateMode.always,
+        validator: validaTexto,
+        keyboardType: TextInputType.text,
+        decoration: inputsDecorations('Usuario', Icons.account_circle),
+      ),
     );
   }
 
@@ -170,7 +169,7 @@ class _LoginPageState extends State<LoginPage> {
       padding: const EdgeInsets.all(12.0),
       child: TextFormField(
         onSaved: (value) => password = value,
-        autovalidate: true,
+        autovalidateMode: AutovalidateMode.always,
         validator: validaTexto,
         obscureText: verPass,
         decoration: InputDecoration(
@@ -253,24 +252,21 @@ class _LoginPageState extends State<LoginPage> {
       authService.login(usuario, password).then((authResp) async {
         if (authResp.resultado.succeeded && authResp.token.isNotEmpty) {
           StorageUtil.putString('token', authResp.token);
-
-          Map<String, dynamic> payload = decodeJwt(authResp.token);
+          Map<String, dynamic> payload = JwtDecoder.decode(
+            StorageUtil.getString('token'),
+          );
 
           String userId = payload['nameid'];
-          await usuarioService.getMyInfo(userId).then((userInfo) async {
-            await _pr.hide();
-            if (userInfo != null) {
-              StorageUtil.putString(
-                  'usuarioGlobal', userModelToJson(userInfo.usuario));
-              StorageUtil.putString(
-                  'planUsuario', planesModelToJson(userInfo.plan));
-              StorageUtil.putInt(
-                  'consultasAtendidas', userInfo.consultasAtendidas);
-
-              WebNotificationService.instance.loadNotificaciones(userId);
-              Navigator.pushReplacementNamed(context, 'home');
-            }
-          });
+          final userInfo = await usuarioService.getMyInfo(userId);
+          if (userInfo != null) {
+            StorageUtil.putString(
+                'usuarioGlobal', userModelToJson(userInfo.usuario));
+            StorageUtil.putString(
+                'planUsuario', planesModelToJson(userInfo.plan));
+            StorageUtil.putInt(
+                'consultasAtendidas', userInfo.consultasAtendidas);
+          }
+          Navigator.pushReplacementNamed(context, HomePage.routeName);
         } else if (!authResp.resultado.succeeded &&
             !authResp.resultado.isLockedOut) {
           await _pr.hide();

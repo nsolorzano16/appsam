@@ -50,20 +50,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.2.0-nullsafety.1"
-  charts_common:
-    dependency: transitive
-    description:
-      name: charts_common
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.9.0"
-  charts_flutter:
-    dependency: "direct main"
-    description:
-      name: charts_flutter
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.9.0"
   clock:
     dependency: transitive
     description:
@@ -303,20 +289,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.6.2"
-  jwt_decode_token:
+  jwt_decoder:
     dependency: "direct main"
     description:
-      name: jwt_decode_token
+      name: jwt_decoder
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.0"
-  logging:
-    dependency: transitive
-    description:
-      name: logging
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.11.4"
+    version: "1.0.3"
   mask_text_input_formatter:
     dependency: "direct main"
     description:

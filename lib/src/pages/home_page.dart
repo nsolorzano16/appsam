@@ -8,6 +8,8 @@ import 'package:appsam/src/models/device_model.dart';
 import 'package:appsam/src/providers/FirebaseNotificationService.dart';
 import 'package:appsam/src/providers/dashboad_service.dart';
 import 'package:appsam/src/providers/devices_service.dart';
+import 'package:appsam/src/providers/usuario_provider.dart';
+import 'package:appsam/src/providers/webNotifications_service.dart';
 import 'package:appsam/src/utils/utils.dart';
 import 'package:appsam/src/widgets/firebaseMessageWrapper.dart';
 
@@ -18,6 +20,7 @@ import 'package:appsam/src/widgets/drawer.dart';
 import 'package:getflutter/components/card/gf_card.dart';
 import 'package:getflutter/components/list_tile/gf_list_tile.dart';
 import 'package:getflutter/components/progress_bar/gf_progress_bar.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 
 class HomePage extends StatefulWidget {
   static final String routeName = 'home';
@@ -35,12 +38,13 @@ class _HomePageState extends State<HomePage> {
   final DashboardService _dashboardService = DashboardService();
   final PageController _controller =
       PageController(initialPage: 0, viewportFraction: 0.8);
+  final usuarioService = new UsuarioProvider();
 
   @override
   void initState() {
-    //final _pushService = new Firebasem();
-    // _pushService.initNotifications();
+    super.initState();
     FirebaseNotificationService.instance.sendDeviceToken();
+
     final _devicesService = new DevicesService();
     final device = new DevicesModel();
     device.deviceId = 0;
@@ -57,11 +61,9 @@ class _HomePageState extends State<HomePage> {
     device.tokenDevice = StorageUtil.getString('tokenDevice');
     device.platform = Platform.operatingSystem;
     _devicesService.addDevice(device);
-
-    super.initState();
+    WebNotificationService.instance.loadNotificaciones(_usuario.id);
   }
 
-//23 de julio 7pm mac
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;

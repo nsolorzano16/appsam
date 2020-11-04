@@ -234,9 +234,9 @@ class _FormEditarPageState extends State<FormEditarPage> {
         initialValue: _asistente.identificacion,
         inputFormatters: [
           LengthLimitingTextInputFormatter(13),
-          WhitelistingTextInputFormatter.digitsOnly
+          FilteringTextInputFormatter.digitsOnly,
         ],
-        autovalidate: true,
+        autovalidateMode: AutovalidateMode.always,
         maxLength: 13,
         validator: (value) {
           if (value.length < 13) {
@@ -246,7 +246,7 @@ class _FormEditarPageState extends State<FormEditarPage> {
           }
         },
         keyboardType: TextInputType.number,
-        decoration: inputsDecorations('Identificación', Icons.credit_card),
+        decoration: inputsDecorations('Identificación sa', Icons.credit_card),
         onSaved: (value) => _asistente.identificacion = value,
       ),
     );

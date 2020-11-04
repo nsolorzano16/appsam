@@ -44,6 +44,7 @@ class MenuWidget extends StatelessWidget {
                   FlatButton(
                       onPressed: () {
                         //WebNotificicationsStream.instance.dispose();
+                        StorageUtil.removeUsuario();
                         Navigator.of(context).pushNamedAndRemoveUntil(
                             'login', (Route<dynamic> route) => false);
                       },

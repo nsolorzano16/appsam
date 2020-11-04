@@ -11,6 +11,7 @@ import 'package:appsam/src/pages/consulta/menuConsulta_page.dart';
 import 'package:appsam/src/pages/consulta/notas/crear_notas_page.dart';
 import 'package:appsam/src/pages/consulta/planTerapeutico/crear_PlanTerapeutico_page.dart';
 import 'package:appsam/src/pages/consulta/planTerapeutico/planesTerapeuticos_page.dart';
+import 'package:appsam/src/pages/splash_page.dart';
 
 import 'package:flutter/material.dart';
 import 'package:appsam/src/pages/home_page.dart';
@@ -88,5 +89,6 @@ Map<String, WidgetBuilder> getApplicationRoutes(ThemeBloc bloc) {
         CrearPlanTerapeuticoPage(),
     AgendaPage.routeName: (BuildContext context) => AgendaPage(),
     CrearAgendaPage.routeName: (BuildContext context) => CrearAgendaPage(),
+    'splashpage': (BuildContext context) => SplashPage(),
   };
 }

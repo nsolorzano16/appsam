@@ -161,7 +161,7 @@ class _CrearAsistentesPageState extends State<CrearAsistentesPage> {
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
-        autovalidate: true,
+        autovalidateMode: AutovalidateMode.always,
         controller: _txtControllerNombres,
         validator: validaTexto,
         decoration: inputsDecorations('Nombre', Icons.person),
@@ -174,7 +174,7 @@ class _CrearAsistentesPageState extends State<CrearAsistentesPage> {
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
-        autovalidate: true,
+        autovalidateMode: AutovalidateMode.always,
         validator: validaTexto,
         controller: _txtControllerPrimerApellido,
         decoration: inputsDecorations('Primer Apellido', Icons.person),
@@ -187,7 +187,7 @@ class _CrearAsistentesPageState extends State<CrearAsistentesPage> {
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
-        autovalidate: true,
+        autovalidateMode: AutovalidateMode.always,
         validator: validaTexto,
         decoration: inputsDecorations('Segundo Apellido', Icons.person),
         onSaved: (value) => _asistente.segundoApellido = value,
@@ -206,11 +206,11 @@ class _CrearAsistentesPageState extends State<CrearAsistentesPage> {
       padding: const EdgeInsets.only(left: 8.0, right: 8.0),
       child: TextFormField(
         controller: _txtControllerIdentificacion,
-        autovalidate: true,
+        autovalidateMode: AutovalidateMode.always,
         maxLength: 13,
         inputFormatters: [
           LengthLimitingTextInputFormatter(13),
-          WhitelistingTextInputFormatter.digitsOnly
+          FilteringTextInputFormatter.digitsOnly,
         ],
         validator: (value) {
           if (value.length < 13) {

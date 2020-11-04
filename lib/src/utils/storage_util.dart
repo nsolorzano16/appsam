@@ -70,5 +70,6 @@ class StorageUtil {
     _preferences.remove('tokenDevice');
     _preferences.remove('consultasAtendidas');
     _preferences.remove('planUsuario');
+    _preferences.clear();
   }
 }
