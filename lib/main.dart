@@ -53,7 +53,7 @@ class _MyAppState extends State<MyApp> {
           CustomLocalizationDelegate(),
         ],
         supportedLocales: [
-          const Locale('en', 'US'), // English
+          const Locale('en', 'US'),
           const Locale('es', 'ES'),
         ],
         title: 'SAM',
